@@ -47,7 +47,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                             <div class="d-sm-none d-lg-inline-block" style="font-size:15px;">Hello, <?php
                                                                                                     $data['user'] = $this->db->get_where('admin', ['email' =>
                                                                                                     $this->session->userdata('email')])->row_array();
-                                                                                                    echo $data['user'];
+                                                                                                    echo $data['user']['username'];
                                                                                                     ?></div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
@@ -81,7 +81,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                 <span>Siswa</span></a>
                             <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/data_siswa') ?>">Data Siswa</a></li>
-                                <li><a class="nav-link" href="<?= base_url('admin/add_siswa') ?>">Tambah Data Guru</a>
+                                <li><a class="nav-link" href="<?= base_url('admin/add_siswa') ?>">Tambah Data siswa</a>
                                     </li>
                             </ul>
                         </li>

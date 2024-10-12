@@ -21,7 +21,7 @@
     <div class="container">
         <div class="main_title">
             <h2 data-aos="fade-up" data-aos-duration="1600" style="font-size: 33px !important;">Tentang Learnify - Web Edukasi Open Source</h2>
-            <p data-aos="fade-up" data-aos-duration="1800">Learnify adalah Web Edukasi Open-Source yang dibuat oleh <a href="https://web.facebook.com/syaaauqi">Syauqi Zaidan Khairan Khalaf.</a> Website
+            <p data-aos="fade-up" data-aos-duration="1800">Learnify adalah Web Edukasi Open-Source yang dibuat oleh <a href="https://web.facebook.com/andikafahrezi">Andika Fahrezi.</a> Website
                 pembelajaran dimana para siswa dapat belajar dimana saja dan kapan saja.
                 Guru dapat mengupload video dirinya sendiri sedang mengajar, sehingga tanpa takut adanya jam
                 kosong atau pun keadaan yang tidak terduga apapun karena Learnify dapat diakses dimana saja dan
