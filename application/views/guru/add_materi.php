@@ -362,19 +362,19 @@ echo $data['user']['nama_guru'];
                                         <div class="form-group col-md-12">
                                             <label for="inputEmail4">Nama Guru</label>
                                             <input required type="text" readonly name="nama_guru" value="<?php
-$data['user'] = $this->db->get_where('guru', ['email' =>
-    $this->session->userdata('email')])->row_array();
-echo $data['user']['nama_guru'];?>" class="form-control" id="inputEmail4">
-                                        </div>
+                                            $data['user'] = $this->db->get_where('guru', ['email' =>
+                                                $this->session->userdata('email')])->row_array();
+                                            echo $data['user']['nama_guru'];?>" class="form-control" id="inputEmail4">
+                                                                                    </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
                                             <label for="inputEmail4">Nama Mata Pelajaran</label>
                                             <input required type="text" readonly name="nama_mapel" value="<?php
-$data['user'] = $this->db->get_where('guru', ['email' =>
-    $this->session->userdata('email')])->row_array();
-echo $data['user']['nama_mapel'];?>" class="form-control" id="inputEmail4">
-                                        </div>
+                                                $data['user'] = $this->db->get_where('guru', ['email' =>
+                                                    $this->session->userdata('email')])->row_array();
+                                                echo $data['user']['nama_mapel'];?>" class="form-control" id="inputEmail4">
+                                                                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="input-group">
@@ -390,6 +390,10 @@ echo $data['user']['nama_mapel'];?>" class="form-control" id="inputEmail4">
                                         <label for="exampleFormControlTextarea1">Deskripsi Materi</label>
                                         <textarea class="form-control" required name="deskripsi"
                                             id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">Link Google Form</label>
+                                        <a href="" class="form-control" required name="linkform" id="exampleLinkForm"></a>
                                     </div>
                                     <div class="form-group">
                                         <label for="inputState">Kelas</label>

@@ -174,6 +174,11 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                         <?= $u->deskripsi ?></textarea>
                                     </div>
                                     <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">Link Google Form</label>
+                                        <textarea class="form-control txtarea" name="linkform" id="exampleLinkForm">
+                                        <?= $u->deskripsi ?></textarea>
+                                    </div>
+                                    <div class="form-group">
                                         <button type="submit" class="btn btn-success btn-lg btn-block">
                                             Update ⭢
                                         </button>

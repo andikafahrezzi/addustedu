@@ -11,15 +11,15 @@ class User extends CI_Controller
         // if (!$this->session->userdata('email')) {
         //     redirect('welcome');
     }
-
     public function index()
     {
         $data['user'] = $this->db->get_where('siswa', ['email' =>
             $this->session->userdata('email')])->row_array();
-
-        $this->load->view('user/index');
+    
+        $this->load->view('user/index', $data); // Oper data ke view
         $this->load->view('template/footer');
     }
+    
 
     public function kelas10()
     {

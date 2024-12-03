@@ -196,6 +196,10 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                                 <textarea class="form-control" required name="deskripsi" id="exampleFormControlTextarea1" rows="3"></textarea>
                                             </div>
                                             <div class="form-group">
+                                                <label for="exampleFormControlTextarea1">Link Google Form</label>
+                                                <a href="" class="form-control" required name="linkform" id="examplelinkform"></a>
+                                            </div>
+                                            <div class="form-group">
                                                 <label for="inputState">Kelas</label>
                                                 <select required id="inputState" name="kelas" class="form-control">
                                                     <option selected>Pilih disini</option>

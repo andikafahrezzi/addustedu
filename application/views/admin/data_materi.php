@@ -154,6 +154,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                                 <th scope="col">Nama Guru</th>
                                                 <th scope="col">Nama Mapel</th>
                                                 <th scope="col">Deskripsi</th>
+                                                <th scope="col">Link Google Form</th>
                                                 <th scope="col">Kelas</th>
                                                 <th scope="col">Option</th>
                                             </tr>

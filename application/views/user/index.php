@@ -66,12 +66,12 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                         <ul class="nav navbar-nav menu_nav ml-auto">
-                            <li class="nav-item "><a class="nav-link" href="javascript:void(0)">Hai, <?php
+                            <!-- <li class="nav-item "><a class="nav-link" href="javascript:void(0)">Hai, <?php
                                                                                                         $data['user'] = $this->db->get_where('siswa', ['email' =>
                                                                                                         $this->session->userdata('email')])->row_array();
                                                                                                         echo $data['user']['nama'];
                                                                                                         ?></a>
-                            </li>
+                            </li> -->
                             <li class="nav-item active"><a class="nav-link" href="<?= base_url('user') ?>">Beranda</a>
                             </li>
                             <li class=" nav-item "><a class=" nav-link text-danger" href="<?= base_url('welcome/logout') ?>">Log Out</a>
@@ -101,7 +101,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                                                                                 $data['user'] = $this->db->get_where('siswa', ['email' =>
                                                                                                 $this->session->userdata('email')])->row_array();
                                                                                                 echo $data['user']['nama'];
-                                                                                                ?> - Learnify Students</h3>
+                                                                                                ?> - Learnify Students</h4>
                         <p data-aos="fade-down" data-aos-duration="1800">Silahkan pilih kelas yang akan kamu akses
                             dibawah
                             ini!

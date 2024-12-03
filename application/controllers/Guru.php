@@ -50,6 +50,7 @@ class Guru extends CI_Controller
                 'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
                 'video' => $video,
                 'deskripsi' => htmlspecialchars($this->input->post('deskripsi', true)),
+                'linkform' => htmlspecialchars($this->input->post('linkform', true)),
                 'kelas' => htmlspecialchars($this->input->post('kelas', true)),
             ];
 

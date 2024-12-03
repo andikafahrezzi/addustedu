@@ -15,7 +15,7 @@
 | Usage: Specify your forum shortname as string.
 |
  */
-$config['disqus_shortname'] = 'learnify-1'; // sesuaikan dengan url disqus kalian.
+$config['disqus_shortname'] = 'addust'; // sesuaikan dengan url disqus kalian.
 
 /*
 |--------------------------------------------------------------------------

@@ -1,0 +1,8 @@
+TODO
+
+- Membuat link google form di setiap materi
+- Membuat kolom link gform pada tabel materi untuk menyimpan data gform
+
+
+PR
+ href="" class="form-control" required name="linkform" id="examplelinkform"
