@@ -80,26 +80,6 @@ Berikut adalah daftar layanan dan aplikasi yang wajib dan diperlukan selama anda
 
 <p></p>
 
-<h2 id="download">🐱‍💻 Panduan Menjalankan & Install Aplikasi</h2>
-
-Untuk menjalankan aplikasi atau web ini kamu harus install XAMPP dan mempunyai setidaknya satu web browser yang terinstall di komputer anda.
-
-```bash
-# Clone repository ini atau download di
-$ git clone https://github.com/syauqi/learnify.git
-
-# Buat database
-Buat database dengan nama "learnify" di DMBS [phpmyadmin, dll]
-
-# Upload database
-Arahkan folder ke learnify/database/learnify.sql & upload ke dbms [phpmyadmin]
-
-# Buka browser
-http://localhost/learnify/welcome
-
-# Enjoy, jika ingin login maka liat panduan akun diatas
-```
-
 <p></p>
 
 <h2 id="dukungan">💌 Dukungan</h2>
@@ -108,23 +88,6 @@ Kalian bisa mendukung saya di platform trakteer! Dukungan kalian akan sangat mem
 
 <p></p>
 
-<a href="https://trakteer.id/syaufy" target="_blank"><img id="wse-buttons-preview" src="https://cdn.trakteer.id/images/embed/trbtn-red-5.png" height="40" style="border:0px;height:40px;" alt="Trakteer Saya"></a>
+<a href="paypal.me/AndikaFahrezi" target="_blank"><img id="wse-buttons-preview" src="https://cdn.trakteer.id/images/embed/trbtn-red-5.png" height="40" style="border:0px;height:40px;" alt="Trakteer Saya"></a>
 
 <p></p>
-
-<h2 id="kontribusi">🤝 Kontribusi</h2>
-
-Contributions, issues and feature requests sangat saya apresiasi karena aplikasi ini jauh dari kata sempurna. Jangan ragu untuk pull request dan membuat perubahan pada project ini.
-
-Berhubung Project ini saya selesaikan sendiri, namun banyak fitur dan banyak hal yang bisa diperbaiki maka bantuan kalian sangat saya apresiasi.
-
-<p></p>
-
-<h2 id="lisensi">📝 Lisensi</h2>
-
-- Copyright © 2022 SYAUQIZAIDAN KHAIRAN KHALAF
-- Learnify adalah aplikasi web open-source yang berlisensi dibawah lisensi MIT
-
----
-
-**<p align="center">Made with ❤️ by SYAUQIZAIDAN KHAIRAN KHALAF</p>**
