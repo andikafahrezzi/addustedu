@@ -16,6 +16,7 @@ class User extends CI_Controller
         $data['user'] = $this->db->get_where('siswa', ['email' =>
             $this->session->userdata('email')])->row_array();
     
+        $this->load->view('user/navu'); // Oper data ke view
         $this->load->view('user/index', $data); // Oper data ke view
         $this->load->view('template/footer');
     }
@@ -26,6 +27,7 @@ class User extends CI_Controller
         $data['user'] = $this->db->get_where('siswa', ['email' =>
             $this->session->userdata('email')])->row_array();
 
+        $this->load->view('user/navu');
         $this->load->view('user/kelas10');
         $this->load->view('template/footer');
     }
@@ -35,6 +37,7 @@ class User extends CI_Controller
         $data['user'] = $this->db->get_where('siswa', ['email' =>
             $this->session->userdata('email')])->row_array();
 
+        $this->load->view('user/navu');
         $this->load->view('user/kelas11');
         $this->load->view('template/footer');
     }
@@ -43,7 +46,8 @@ class User extends CI_Controller
     {
         $data['user'] = $this->db->get_where('siswa', ['email' =>
             $this->session->userdata('email')])->row_array();
-
+        
+        $this->load->view('user/navu');
         $this->load->view('user/kelas12');
         $this->load->view('template/footer');
     }

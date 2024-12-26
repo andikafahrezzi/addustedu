@@ -33,6 +33,7 @@ class Materi extends CI_Controller
         $data['materi'] = $this->list_materi[$materi];
         $data['user'] = $this->db->get_where('siswa', ['email' =>
             $this->session->userdata('email')])->row_array();
+        $this->load->view('materi/navm');
         $this->load->view('materi/'.str_replace('_', '-', $materi), $data);
         $this->load->view('template/footer');
     }
@@ -43,6 +44,7 @@ class Materi extends CI_Controller
         $detail = $this->m_materi->belajar($id);
         $data['detail'] = $detail;
         $data['disqus'] = $this->disqus->get_html();
+        $this->load->view('materi/navm');
         $this->load->view('materi/belajar', $data);
     }
 
