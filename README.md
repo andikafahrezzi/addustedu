@@ -1,6 +1,6 @@
-<h1 align="center">Selamat datang di repository Learnify! 👋🏻</h1>
+<h1 align="center">Selamat datang di repository addustedu! 👋🏻</h1>
 
-![learnify-preview](https://user-images.githubusercontent.com/46257169/173141000-0a2346bf-adbc-41cb-9699-e7ffff1cba8e.png)
+![addustedu-preview](https://user-images.githubusercontent.com/46257169/173141000-0a2346bf-adbc-41cb-9699-e7ffff1cba8e.png)
 
 <p></p>
 
@@ -10,10 +10,10 @@
 <p></p>
 
 <p align="center">
-	<img src="https://img.shields.io/github/issues/syauqi/learnify?style=flat-square">
-	<img src="https://img.shields.io/github/stars/syauqi/learnify?style=flat-square"> 
-	<img src="https://img.shields.io/github/forks/syauqi/learnify?style=flat-square">
-	<img src="https://img.shields.io/github/license/syauqi/learnify?style=flat-square">
+	<img src="https://img.shields.io/github/issues/syauqi/addustedu?style=flat-square">
+	<img src="https://img.shields.io/github/stars/syauqi/addustedu?style=flat-square"> 
+	<img src="https://img.shields.io/github/forks/syauqi/addustedu?style=flat-square">
+	<img src="https://img.shields.io/github/license/syauqi/addustedu?style=flat-square">
 	<img src="https://img.shields.io/badge/maintained%3F-no-red.svg?style=flat-square">
 	<img src="https://img.shields.io/github/followers/syauqi.svg?style=flat-square&label=followers">
 </p>
@@ -29,9 +29,9 @@
 
 <p></p>
 
-<h2 id="tentang">👨🏻‍🏫 Tentang Learnify</h2>
+<h2 id="tentang">👨🏻‍🏫 Tentang addustedu</h2>
 
-Website edukasi yang dibuat dalam rangka mengatasi solusi pembelajaran kala pandemi, learnify dibuat agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
+Website edukasi yang dibuat dalam rangka mengatasi solusi pembelajaran kala pandemi, addustedu dibuat agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
 
 <p></p>
 
@@ -53,7 +53,7 @@ Website edukasi yang dibuat dalam rangka mengatasi solusi pembelajaran kala pand
 
 Halaman demo untuk sementara tidak ada dikarenakan layanan hosting yang tidak tersedia untuk deploy aplikasi ini, kalian dapat mendownload aplikasi ini lalu menjalankan secara local di komputer anda.
 
-Update: anda dapat mengakses di http://programmer.smkn1ciamis.id/learnify/ namun tolong berikan issues jika website tersebut tidak berjalan
+Update: anda dapat mengakses di http://programmer.smkn1ciamis.id/addustedu/ namun tolong berikan issues jika website tersebut tidak berjalan
 
 <p></p>
 
@@ -61,17 +61,17 @@ Update: anda dapat mengakses di http://programmer.smkn1ciamis.id/learnify/ namun
 
 Berikut adalah daftar akun untuk keperluan testing saat anda mencoba aplikasi pertama kali, namun anda juga bisa membuat akun dengan daftar di halaman pendaftaran
 
-| Role  | Email                  | Password | URL                                     |
-| ----- | ---------------------- | -------- | --------------------------------------- |
-| Admin | admin@gmail.com        | admin    | http://localhost/learnify/welcome/admin |
-| Siswa | zaidanline67@gmail.com | 123456   | http://localhost/learnify/welcome       |
-| Guru  | zaidanline67@gmail.com | 123456   | http://localhost/learnify/welcome/guru  |
+| Role  | Email                  | Password | URL                                      |
+| ----- | ---------------------- | -------- | ---------------------------------------- |
+| Admin | admin@gmail.com        | admin    | http://localhost/addustedu/welcome/admin |
+| Siswa | zaidanline67@gmail.com | 123456   | http://localhost/addustedu/welcome       |
+| Guru  | zaidanline67@gmail.com | 123456   | http://localhost/addustedu/welcome/guru  |
 
 <p></p>
 
 <h2 id="syarat">💾 Prasyarat yang Diperlukan</h2>
 
-Berikut adalah daftar layanan dan aplikasi yang wajib dan diperlukan selama anda menjalankan aplikasi learnify jika anda belum menginstall nya maka disarankan untuk menginstall nya terlebih dahulu
+Berikut adalah daftar layanan dan aplikasi yang wajib dan diperlukan selama anda menjalankan aplikasi addustedu jika anda belum menginstall nya maka disarankan untuk menginstall nya terlebih dahulu
 
 - PHP 7, 8 & Web Server [XAMPP, LAMPP, MAMP]
 - Web Browser [Chrome, Firefox, Safari & Opera]

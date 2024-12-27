@@ -29,12 +29,12 @@ class Admin extends CI_Controller
         $this->load->view('admin/about_developer');
     }
 
-    public function about_learnify()
+    public function about_addustedu()
     {
         $data['user'] = $this->db->get_where('admin', ['email' =>
             $this->session->userdata('email')])->row_array();
 
-        $this->load->view('admin/about_learnify');
+        $this->load->view('admin/about_addustedu');
     }
 
     // Management Siswa

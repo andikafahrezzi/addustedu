@@ -1,13 +1,13 @@
 <!--
-@Project: Learnify
+@Project: addustedu
 @Programmer: Syauqi Zaidan Khairan Khalaf
 @Website: https://linktr.ee/syauqi
 @Email : syaokay@gmail.com
 
-@About-Learnify :
+@About-addustedu :
 Web Edukasi Open Source yang dibuat oleh Syauqi Zaidan Khairan Khalaf.
-Learnify adalah Web edukasi yang dilengkapi video, materi dan sistem ujian
-yang tersedia secara gratis. Learnify dibuat ditujukan agar para siswa dan
+addustedu adalah Web edukasi yang dilengkapi video, materi dan sistem ujian
+yang tersedia secara gratis. addustedu dibuat ditujukan agar para siswa dan
 guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
 -->
 
@@ -133,7 +133,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                                                     <tr>
                                                                         <td style="width:600px;"> <a href="https://google.com" target="_blank">
 
-                                                                                <img alt="" height="auto" src="https://res.cloudinary.com/dc0rn8rch/image/upload/v1584968561/header-top-learnify_ldyrss.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="600">
+                                                                                <img alt="" height="auto" src="https://res.cloudinary.com/dc0rn8rch/image/upload/v1584968561/header-top-addustedu_ldyrss.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="600">
 
                                                                             </a> </td>
                                                                     </tr>
@@ -194,7 +194,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                                     <tr>
                                                         <td style="width:600px;"> <a href="https://google.com" target="_blank">
 
-                                                                <img alt="" height="auto" src="https://res.cloudinary.com/dc0rn8rch/image/upload/v1584969678/header-bottom-learnify_vw6bmf.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="600">
+                                                                <img alt="" height="auto" src="https://res.cloudinary.com/dc0rn8rch/image/upload/v1584969678/header-bottom-addustedu_vw6bmf.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="600">
 
                                                             </a> </td>
                                                     </tr>
@@ -265,7 +265,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                                         <tr>
                                                             <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                                                                 <div style="font-family: 'Poppins', sans-serif !important;font-size:20px;font-weight:bold;line-height:24px;text-align:left;color:#212b35;">
-                                                                    Learnify - Verifikasi Akun</div>
+                                                                    addustedu - Verifikasi Akun</div>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -277,7 +277,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                                         <tr>
                                                             <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                                                                 <div style="font-family: 'Poppins', sans-serif !important;font-size:16px;font-weight:400;line-height:24px;text-align:left;color:#637381;">
-                                                                    Sebelum resmi menjadi siswa di website Learnify,
+                                                                    Sebelum resmi menjadi siswa di website addustedu,
                                                                     Kamu harus terlebih dahulu memverifikasi akun kamu.
                                                                     dengan begitu kami mengetahui kalau kamu bukan
                                                                     robot dan bisa belajar deh!</div>
@@ -288,7 +288,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                                                 <div style="font-family: 'Poppins', sans-serif !important;font-size:16px;font-weight:400;line-height:24px;text-align:left;color:#637381;">
                                                                     Cukup klik tombol dibawah untuk memverifikasi akun
                                                                     kamu, dan akan langsung kami arahakan ke website
-                                                                    Learnify!
+                                                                    addustedu!
                                                                 </div>
                                                             </td>
                                                         </tr>

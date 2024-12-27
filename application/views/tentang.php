@@ -5,7 +5,7 @@
         </div>
         <div class="container">
             <div class="banner_content text-center">
-                <h2 data-aos="fade-up" data-aos-duration="1600">Tentang Learnify</h2>
+                <h2 data-aos="fade-up" data-aos-duration="1600">Tentang addustedu</h2>
                 <div data-aos="fade-up" data-aos-duration="1800" class="page_link">
                     <a href="<?= base_url('welcome') ?>">Beranda</a>
                     <a href="">Tentang</a>
@@ -20,11 +20,11 @@
 <section class="about_area p_60">
     <div class="container">
         <div class="main_title">
-            <h2 data-aos="fade-up" data-aos-duration="1600" style="font-size: 33px !important;">Tentang Learnify - Web Edukasi Open Source</h2>
-            <p data-aos="fade-up" data-aos-duration="1800">Learnify adalah Web Edukasi Open-Source yang dibuat oleh <a href="https://web.facebook.com/andikafahrezi">Andika Fahrezi.</a> Website
+            <h2 data-aos="fade-up" data-aos-duration="1600" style="font-size: 33px !important;">Tentang addustedu - Web Edukasi Open Source</h2>
+            <p data-aos="fade-up" data-aos-duration="1800">addustedu adalah Web Edukasi Open-Source yang dibuat oleh <a href="https://web.facebook.com/andikafahrezi">Andika Fahrezi.</a> Website
                 pembelajaran dimana para siswa dapat belajar dimana saja dan kapan saja.
                 Guru dapat mengupload video dirinya sendiri sedang mengajar, sehingga tanpa takut adanya jam
-                kosong atau pun keadaan yang tidak terduga apapun karena Learnify dapat diakses dimana saja dan
+                kosong atau pun keadaan yang tidak terduga apapun karena addustedu dapat diakses dimana saja dan
                 kapan saja.
             </p>
         </div>
@@ -111,7 +111,7 @@
 <section class="team_area p_20">
     <div class="container">
         <div class="main_title">
-            <h2 data-aos="fade-up" data-aos-duration="1800">Testimonial Para Siswa Learnify</h2>
+            <h2 data-aos="fade-up" data-aos-duration="1800">Testimonial Para Siswa addustedu</h2>
             <p data-aos="fade-up" data-aos-duration="2000">Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free.</p>
         </div>
         <section class="testimonials_area p_20">

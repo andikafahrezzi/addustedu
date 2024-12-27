@@ -1,13 +1,13 @@
 <!--
-@Project: Learnify
+@Project: addustedu
 @Programmer: Syauqi Zaidan Khairan Khalaf
 @Website: https://linktr.ee/syauqi
 @Email : syaokay@gmail.com
 
-@About-Learnify :
+@About-addustedu :
 Web Edukasi Open Source yang dibuat oleh Syauqi Zaidan Khairan Khalaf.
-Learnify adalah Web edukasi yang dilengkapi video, materi dan sistem ujian
-yang tersedia secara gratis. Learnify dibuat ditujukan agar para siswa dan
+addustedu adalah Web edukasi yang dilengkapi video, materi dan sistem ujian
+yang tersedia secara gratis. addustedu dibuat ditujukan agar para siswa dan
 guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
 -->
 
@@ -20,9 +20,9 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                 <div class="single-footer-widget tp_widgets">
                     <h6 class="footer_title">Tentang Kami</h6>
                     <ul class="list">
-                        <li><a href="<?= base_url('welcome/tentang') ?>">Tentang Learnify</a></li>
-                        <li><a href="<?= base_url('welcome/materi') ?>">Materi Learnify</a></li>
-                        <li><a href="<?= base_url('welcome/kontak') ?>">Kontak Learnify</a></li>
+                        <li><a href="<?= base_url('welcome/tentang') ?>">Tentang addustedu</a></li>
+                        <li><a href="<?= base_url('welcome/materi') ?>">Materi addustedu</a></li>
+                        <li><a href="<?= base_url('welcome/kontak') ?>">Kontak addustedu</a></li>
                         <li><a href="http://smkn1ciamis.id/">Website Resmi Sekolah</a></li>
                     </ul>
                 </div>
@@ -57,9 +57,9 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 col-sm-6">
-                <h4 class="footer_title">Tentang Learnify</h4>
+                <h4 class="footer_title">Tentang addustedu</h4>
                 <p>
-                    Web Edukasi Open Source yang dibuat oleh Syauqi Zaidan Khairan Khalaf. Learnify adalah Web edukasi yang dilengkapi video, materi dan sistem ujian yang tersedia secara gratis. Learnify dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
+                    Web Edukasi Open Source yang dibuat oleh Syauqi Zaidan Khairan Khalaf. addustedu adalah Web edukasi yang dilengkapi video, materi dan sistem ujian yang tersedia secara gratis. addustedu dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                 </p>
             </div>
         </div>
@@ -69,7 +69,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                 Copyright &copy;<script>
                     document.write(new Date().getFullYear());
                 </script> All rights reserved | This template is made with <span class="text-danger"> &#10084;</span> by
-                <a href="https://colorlib.com" target="_blank">Colorlib</a> <br> Learnify is made with <span class="text-danger"> &#10084;</span> by <a href="https://github.com/syauqi">andikafahrezzi</a> with MIT License
+                <a href="https://colorlib.com" target="_blank">Colorlib</a> <br> addustedu is made with <span class="text-danger"> &#10084;</span> by <a href="https://github.com/syauqi">andikafahrezzi</a> with MIT License
                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
             </p>
             <div class="col-lg-4 col-md-4 footer-social">
@@ -92,7 +92,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title text-dark font-weight-bold" style="color:#212529 !important;" id="exampleModalCenterTitle">
-                    Learnify - Masuk Sekarang</h2>
+                    addustedu - Masuk Sekarang</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

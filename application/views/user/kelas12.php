@@ -1,13 +1,13 @@
 <!--
-@Project: Learnify
+@Project: addustedu
 @Programmer: Syauqi Zaidan Khairan Khalaf
 @Website: https://linktr.ee/syauqi
 @Email : syaokay@gmail.com
 
-@About-Learnify :
+@About-addustedu :
 Web Edukasi Open Source yang dibuat oleh Syauqi Zaidan Khairan Khalaf.
-Learnify adalah Web edukasi yang dilengkapi video, materi dan sistem ujian
-yang tersedia secara gratis. Learnify dibuat ditujukan agar para siswa dan
+addustedu adalah Web edukasi yang dilengkapi video, materi dan sistem ujian
+yang tersedia secara gratis. addustedu dibuat ditujukan agar para siswa dan
 guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
 -->
 
@@ -25,7 +25,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                 <div class="col-md-12 mt-1">
                     <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="1400">Silahkan pilih mata pelajaran !
                     </h1>
-                    <p>Hello Students! , Ini merupakan halaman mapel learnify ! Silahkan pilih mapel yang akan kamu
+                    <p>Hello Students! , Ini merupakan halaman mapel addustedu ! Silahkan pilih mapel yang akan kamu
                         akses
                         dan taddaa video dan materi siap disaksikan! Selamat belajar ya students!</p>
                     <hr>
@@ -33,7 +33,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                                                         $data['user'] = $this->db->get_where('siswa', ['email' =>
                                                                         $this->session->userdata('email')])->row_array();
                                                                         echo $data['user']['nama'];
-                                                                        ?> - Learnify Students</h3>
+                                                                        ?> - addustedu Students</h3>
                         <h5>Mata Pelajaran Kelas XII</h5>
                 </div>
             </div>
