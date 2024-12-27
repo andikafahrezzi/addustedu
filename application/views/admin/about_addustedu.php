@@ -2,24 +2,24 @@
 			<!-- Main Content -->
 			<div class="main-content">
 				<section class="section">
+					<div class="section-header">
+						<h1 style="font-size: 27px; letter-spacing:-0.5px; color:black;">Tentang Project addustedu </h1>
+					</div>
 					<div class="">
-						<div class="hero text-white hero-bg-image" data-background="https://images.unsplash.com/photo-1492571350019-22de08371fd3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=649&q=80">
-							<div class="col-md-4 mx-auto rounded-circle bg-white p-3" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px;">
-								<img src="<?= base_url('assets/img/') ?>Syauqi.jpg" class="card-img-top rounded-circle img-responsive" alt="...">
-							</div>
-						</div>
+						<video class="afterglow" autoplay id="myvideo" width="1280" height="720">
+							<source type="video/mp4" src="<?= base_url('assets/videos/') ?>trailer.mp4" />
+						</video>
 					</div>
 					<br>
 					<div class="">
 						<div class="card" style="width:100%;">
 							<div class="card-body">
-								<h2 class="card-title" style="color: black;">Syauqi Zaidan Khairan Khalaf</h2>
+								<h2 class="card-title" style="color: black;">Tentang addustedu</h2>
 								<hr>
-								<p class="card-text">Perfectionist Web Developer with one years of experience as a Web Developer and Web Designer. Skilled at Designing and developing Websites. Excellent written and oral communication skills; capable of explaining complex software issues in easy-to-understand terms. </p>
+								<p class="card-text">Web Edukasi Open Source yang dibuat oleh Syauqi Zaidan Khairan Khalaf. <br> addustedu adalah Web edukasi yang dilengkapi video, materi dan sistem ujian yang tersedia secara gratis. <br> addustedu dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja. </p>
 							</div>
 						</div>
 					</div>
-					<br>
 				</section>
 			</div>
 			<!-- End Main Content -->

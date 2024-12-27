@@ -1,6 +1,6 @@
 <!--
 @Project: addustedu
-@Programmer: Syauqi Zaidan Khairan Khalaf
+@Programmer: SAndika Fahrezi
 @Website: https://linktr.ee/syauqi
 @Email : syaokay@gmail.com
 

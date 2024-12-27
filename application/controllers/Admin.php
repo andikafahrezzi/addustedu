@@ -18,6 +18,7 @@ class Admin extends CI_Controller
         $data['user'] = $this->db->get_where('admin', ['email' =>
             $this->session->userdata('email')])->row_array();
 
+        $this->load->view('admin/nava');
         $this->load->view('admin/index');
     }
 
@@ -26,6 +27,7 @@ class Admin extends CI_Controller
         $data['user'] = $this->db->get_where('admin', ['email' =>
             $this->session->userdata('email')])->row_array();
 
+        $this->load->view('admin/nava');
         $this->load->view('admin/about_developer');
     }
 
@@ -33,7 +35,8 @@ class Admin extends CI_Controller
     {
         $data['user'] = $this->db->get_where('admin', ['email' =>
             $this->session->userdata('email')])->row_array();
-
+        
+        $this->load->view('admin/nava');
         $this->load->view('admin/about_addustedu');
     }
 
@@ -47,6 +50,7 @@ class Admin extends CI_Controller
             $this->session->userdata('email')])->row_array();
 
         $data['user'] = $this->m_siswa->tampil_data()->result();
+        $this->load->view('admin/nava');
         $this->load->view('admin/data_siswa', $data);
     }
 
@@ -108,6 +112,7 @@ class Admin extends CI_Controller
         $this->load->model('m_siswa');
         $where = array('id' => $id);
         $data['user'] = $this->m_siswa->update_siswa($where, 'siswa')->result();
+        $this->load->view('admin/nava');
         $this->load->view('admin/update_siswa', $data);
     }
 
@@ -146,6 +151,7 @@ class Admin extends CI_Controller
             'id' => $id,
         );
 
+        $this->load->view('admin/nava');
         $this->m_siswa->update_data($where, $data, 'siswa');
         $this->session->set_flashdata('success-edit', 'berhasil');
         redirect('admin/data_siswa');
@@ -169,6 +175,7 @@ class Admin extends CI_Controller
             $this->session->userdata('email')])->row_array();
 
         $data['user'] = $this->m_guru->tampil_data()->result();
+        $this->load->view('admin/nava');
         $this->load->view('admin/data_guru', $data);
     }
 
@@ -178,6 +185,7 @@ class Admin extends CI_Controller
         $where = array('nip' => $nip);
         $detail = $this->m_guru->detail_guru($nip);
         $data['detail'] = $detail;
+        $this->load->view('admin/nava');
         $this->load->view('admin/detail_guru', $data);
     }
 
@@ -186,6 +194,7 @@ class Admin extends CI_Controller
         $this->load->model('m_guru');
         $where = array('nip' => $nip);
         $data['user'] = $this->m_guru->update_guru($where, 'guru')->result();
+        $this->load->view('admin/nava');
         $this->load->view('admin/update_guru', $data);
     }
 
@@ -210,6 +219,7 @@ class Admin extends CI_Controller
         $this->m_guru->update_data($where, $data, 'guru');
         $this->session->set_flashdata('success-edit', 'berhasil');
         redirect('admin/data_guru');
+        $this->load->view('admin/nava');
     }
 
     public function update_materi($id)
@@ -217,6 +227,7 @@ class Admin extends CI_Controller
         $this->load->model('m_materi');
         $where = array('id' => $id);
         $data['user'] = $this->m_materi->update_materi($where, 'materi')->result();
+        $this->load->view('admin/nava');
         $this->load->view('admin/update_materi', $data);
     }
 
@@ -243,6 +254,7 @@ class Admin extends CI_Controller
         $this->m_materi->update_data($where, $data, 'materi');
         $this->session->set_flashdata('success-edit', 'berhasil');
         redirect('admin/data_materi');
+        $this->load->view('admin/nava');
     }
 
     public function delete_guru($nip)
@@ -296,6 +308,7 @@ class Admin extends CI_Controller
 
             $this->session->set_flashdata('success-reg', 'Berhasil!');
             redirect(base_url('admin/data_guru'));
+            $this->load->view('admin/nava');
         }
     }
 
@@ -309,6 +322,7 @@ class Admin extends CI_Controller
             $this->session->userdata('email')])->row_array();
 
         $data['user'] = $this->m_materi->tampil_data()->result();
+        $this->load->view('admin/nava');
         $this->load->view('admin/data_materi', $data);
     }
 
@@ -321,7 +335,7 @@ class Admin extends CI_Controller
         redirect('admin/data_materi');
     }
 
-    public function tambah_materi()
+    public function add_materi()
     {
         $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required|trim|min_length[1]', [
             'required' => 'Harap isi kolom deskripsi.',
@@ -357,5 +371,6 @@ class Admin extends CI_Controller
             $this->session->set_flashdata('success-reg', 'Berhasil!');
             redirect(base_url('admin/data_materi'));
         }
+        $this->load->view('admin/nava');
     }
 }
