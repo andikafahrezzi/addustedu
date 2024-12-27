@@ -27,7 +27,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Library -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.4/dist/sweetalert2.all.min.js"></script>
-
+    <script src="<?= base_url('assets/') ?>js/jquery-3.3.1.min.js"></script>
+    <script src="<?= base_url('assets/') ?>js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(() => {
+            $("#nav<?= $this->uri->segment(2); ?>").addClass('active')
+        })
+    </script>
 </head>
 
 <body style="overflow-x:hidden;background-color:#fbf9fa;">
