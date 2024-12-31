@@ -33,6 +33,10 @@
                 <video class="afterglow" autoplay id="myvideo" width="1280" height="720">
                     <source type="video/mp4" autoplay src="<?= base_url() . 'assets/materi_video/' . $detail->video; ?>" />
                 </video>
+                <input type="range" id="progress-bar" value="0" step="0.1" style="width: 100%;">
+                <button onclick="playVideo()">Play</button>
+                <button onclick="pauseVideo()">Pause</button>
+                <button onclick="rewindVideo()">Rewind 10s</button>  
             </div>
         </div>
     </div>
@@ -84,5 +88,31 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
+    </script>
+    <script>
+        // Ambil elemen video dan slider
+        const video = document.getElementById('myvideo');
+        const progressBar = document.getElementById('progress-bar');
+
+        // Update slider saat video diputar
+        video.addEventListener('timeupdate', () => {
+            const progress = (video.currentTime / video.duration) * 100;
+            progressBar.value = progress;
+        });
+
+        // Update waktu video saat slider diubah
+        progressBar.addEventListener('input', () => {
+            const newTime = (progressBar.value / 100) * video.duration;
+            video.currentTime = newTime;
+        });
+
+        function playVideo() {
+    video.play();
+}
+
+// Fungsi untuk pause video
+function pauseVideo() {
+    video.pause();
+}
     </script>
     <!-- End Animate On Scroll -->
