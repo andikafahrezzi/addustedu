@@ -1,9 +1,6 @@
 TODO
 
-- Membuat link google form di setiap materi
-- Membuat kolom link gform pada tabel materi untuk menyimpan data gform
+ menambahkan style untuk button pause play pada video materi
 
 
 PR
- href="" class="form-control" required name="linkform" id="examplelinkform"
- logo pada header admin tidak bisa tampil
