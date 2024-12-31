@@ -14,9 +14,10 @@
                                                                         ?> - addustedu Students</h3>
                         <p><?= $detail->nama_mapel ?> - Kelas <?= $detail->kelas ?></p>
                         <hr align="left" width="600;">
+                        <p style="line-height: 3px;">Link Latihan</p>
+                        <p class="font-weight-bold mt--5"><a href="<?= substr($detail->linkform, 0, 120); ?>" target="_blank"><?= substr($detail->linkform, 0, 120); ?></a>
                         <p style="line-height: 3px;">Kita akan mempelajari tentang</p>
-                        <p class="font-weight-bold mt--5">
-                            <?= substr($detail->deskripsi, 0, 120); ?>
+                            
 
                         </p>
                 </div>

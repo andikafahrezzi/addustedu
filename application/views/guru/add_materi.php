@@ -393,7 +393,7 @@ echo $data['user']['nama_guru'];
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleFormControlTextarea1">Link Google Form</label>
-                                        <a href="" class="form-control" required name="linkform" id="exampleLinkForm"></a>
+                                        <textarea class="form-control" required name="linkform" id="exampleLinkForm"> </textarea>
                                     </div>
                                     <div class="form-group">
                                         <label for="inputState">Kelas</label>
