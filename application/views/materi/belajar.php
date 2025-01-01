@@ -28,19 +28,25 @@
 
 
     <!-- Start Video Player -->
-    <div class="container">
+    <div class="container mt-4">
         <div class="row">
-            <div class="col-md-12 mx-auto mt-4">
-                <video class="afterglow" autoplay id="myvideo" width="1280" height="720">
-                    <source type="video/mp4" autoplay src="<?= base_url() . 'assets/materi_video/' . $detail->video; ?>" />
+            <div class="col-md-12 mx-auto text-center">
+                <video id="myvideo" width="100%" height="auto" controls>
+                    <source src="<?= base_url() . 'assets/materi_video/' . $detail->video; ?>" type="video/mp4">
+                    Your browser does not support the video tag.
                 </video>
-                <input type="range" id="progress-bar" value="0" step="0.1" style="width: 100%;">
-                <button onclick="playVideo()">Play</button>
-                <button onclick="pauseVideo()">Pause</button>
-                <button onclick="rewindVideo()">Rewind 10s</button>  
+                <!-- <input type="range" id="progress-bar" value="0" step="0.1" style="width: 100%;">
+                <div class="mt-3">
+                    <button onclick="playVideo()" class="btn btn-primary"><i class="fa fa-play"></i></button>
+                    <button onclick="pauseVideo()" class="btn btn-danger"><i class="fa fa-pause"></i></button>
+                    <button onclick="rewindVideo()" class="btn btn-secondary"><i class="fa fa-backward"></i></button>
+                </div> -->
             </div>
         </div>
     </div>
+
+    <!-- Scripts -->
+    
     <!-- End Video Player -->
     <!-- Start Deskripsi Materi -->
     <div class="container">
@@ -91,29 +97,34 @@
         AOS.init();
     </script>
     <script>
-        // Ambil elemen video dan slider
         const video = document.getElementById('myvideo');
         const progressBar = document.getElementById('progress-bar');
 
-        // Update slider saat video diputar
+        // Play video
+        function playVideo() {
+            video.play();
+        }
+
+        // Pause video
+        function pauseVideo() {
+            video.pause();
+        }
+
+        // Rewind video (10 seconds back)
+        function rewindVideo() {
+            video.currentTime -= 10;
+        }
+
+        // Update progress bar
         video.addEventListener('timeupdate', () => {
             const progress = (video.currentTime / video.duration) * 100;
             progressBar.value = progress;
         });
 
-        // Update waktu video saat slider diubah
+        // Seek video
         progressBar.addEventListener('input', () => {
-            const newTime = (progressBar.value / 100) * video.duration;
-            video.currentTime = newTime;
+            const seekTime = (progressBar.value / 100) * video.duration;
+            video.currentTime = seekTime;
         });
-
-        function playVideo() {
-    video.play();
-}
-
-// Fungsi untuk pause video
-function pauseVideo() {
-    video.pause();
-}
     </script>
     <!-- End Animate On Scroll -->
