@@ -21,6 +21,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
     <title>addustedu - Tambah Materi</title>
     <meta name="description" content="Latest updates and statistic charts">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="<?= base_url('assets/') ?>img/logoh.png" type="image/png">
 
     <!--begin::Fonts -->
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
@@ -42,7 +43,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
         type="text/css" />
 
     <!--end::Page Vendors Styles -->
-
+    <link rel="stylesheet" href="<?= base_url('assets/') ?>css/custom.css">
     <!--begin:: Global Mandatory Vendors -->
     <link href="<?=base_url('assets')?>/assets/vendors/general/perfect-scrollbar/css/perfect-scrollbar.css"
         rel="stylesheet" type="text/css" />
@@ -128,7 +129,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
     <div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
         <div class="kt-header-mobile__logo">
             <a href="<?=base_url('guru')?>">
-                <img alt="Logo" src="<?=base_url('assets')?>/img/logo.png" width="90px;" />
+                <img alt="Logo" src="<?=base_url('assets')?>/img/logou.png" width="90px;" />
             </a>
         </div>
         <div class="kt-header-mobile__toolbar">
@@ -153,7 +154,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                 <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
                     <div class="kt-aside__brand-logo">
                         <a href="<?=base_url('guru')?>">
-                            <img alt="Logo" width="35px;" src="<?=base_url('assets')?>/img/favicon.png" />
+                            <img alt="Logo" width="35px;" src="<?=base_url('assets')?>/img/logou.png" id="logo-ads" />
                         </a>
                     </div>
                 </div>

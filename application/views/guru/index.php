@@ -21,6 +21,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
     <title>addustedu - Teacher Page</title>
     <meta name="description" content="Latest updates and statistic charts">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="<?= base_url('assets/') ?>img/logoh.png" type="image/png">
 
     <!--begin::Fonts -->
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
@@ -42,6 +43,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
         type="text/css" />
 
     <!--end::Page Vendors Styles -->
+    <link rel="stylesheet" href="<?= base_url('assets/') ?>css/custom.css">
 
     <!--begin:: Global Mandatory Vendors -->
     <link href="<?=base_url('assets')?>/assets/vendors/general/perfect-scrollbar/css/perfect-scrollbar.css"
@@ -112,7 +114,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
     <!--begin::Layout Skins(used by all pages) -->
 
     <!--end::Layout Skins -->
-    <link rel="shortcut icon" href="<?=base_url('assets')?>/img/favicon.png" />
+    <link rel="shortcut icon" href="<?=base_url('assets')?>/img/logoh.png" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.0/dist/sweetalert2.all.min.js"></script>
 </head>
 
@@ -154,7 +156,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                 <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
                     <div class="kt-aside__brand-logo">
                         <a href="<?=base_url('guru')?>">
-                            <img alt="Logo" width="35px;" src="<?=base_url('assets')?>/img/favicon.png" />
+                            <img alt="Logo" width="35px;" src="<?=base_url('assets')?>/img/logou.png" id="logo-ads" />
                         </a>
                     </div>
                 </div>
@@ -420,11 +422,11 @@ echo $data['user']['nama_guru'];
                         <!-- begin:: Footer -->
                         <div class="kt-footer kt-grid__item kt-grid kt-grid--desktop kt-grid--ver-desktop">
                             <div class="kt-footer__copyright">
-                                2020&nbsp;&copy;&nbsp;<a href="https://syauqizaidan.github.io/" target="_blank"
-                                    class="kt-link">Syaauqi Zaaidan & Descienfy</a>
+                                2024&nbsp;&copy;&nbsp;<a href="https://github.com/Andikafahrezi" target="_blank"
+                                    class="kt-link">Andika Fahrezi</a>
                             </div>
                             <div class="kt-footer__menu">
-                                Made with &nbsp; <span class="" style="color: red"> &#10084;</span> &nbsp; by Syaauqi
+                                Made with &nbsp; <span class="" style="color: red"> &#10084;</span> &nbsp; by AndikaFahrezi
                             </div>
                         </div>
 

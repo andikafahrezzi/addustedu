@@ -1,0 +1,9 @@
+#logo-ads{
+    width: 100px; /* Sesuaikan ukuran sesuai kebutuhan */
+    height: auto;
+}
+@media (max-width: 768px) {
+    #logo-img {
+        width: 80px;
+    }
+}
