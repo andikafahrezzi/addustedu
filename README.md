@@ -91,3 +91,6 @@ Kalian bisa mendukung saya di platform trakteer! Dukungan kalian akan sangat mem
 <a href="paypal.me/AndikaFahrezi" target="_blank"><img id="wse-buttons-preview" src="https://cdn.trakteer.id/images/embed/trbtn-red-5.png" height="40" style="border:0px;height:40px;" alt="Trakteer Saya"></a>
 
 <p></p>
+
+image for backup schemas
+![alt text](image.png)
