@@ -1,3 +1,4 @@
 TODO
+ - change login email -> nip
 
 PR
