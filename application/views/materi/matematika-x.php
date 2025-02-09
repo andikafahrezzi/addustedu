@@ -9,8 +9,8 @@
                         kamu pelajari !
                     </h1>
                     <h4 data-aos="fade-down" data-aos-duration="1700"><?php
-                                                                        $data['user'] = $this->db->get_where('siswa', ['email' =>
-                                                                        $this->session->userdata('email')])->row_array();
+                                                                        $data['user'] = $this->db->get_where('siswa', ['nis' =>
+                                                                        $this->session->userdata('nis')])->row_array();
                                                                         echo $data['user']['nama'];
                                                                         ?> - addustedu Students</h4>
                     <p>Matematika - Kelas X</p>

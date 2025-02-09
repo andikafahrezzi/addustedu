@@ -13,8 +13,8 @@ class User extends CI_Controller
     }
     public function index()
     {
-        $data['user'] = $this->db->get_where('siswa', ['email' =>
-            $this->session->userdata('email')])->row_array();
+        $data['user'] = $this->db->get_where('siswa', ['nis' =>
+            $this->session->userdata('nis')])->row_array();
     
         $this->load->view('user/navu'); // Oper data ke view
         $this->load->view('user/index', $data); // Oper data ke view
@@ -24,8 +24,8 @@ class User extends CI_Controller
 
     public function kelas10()
     {
-        $data['user'] = $this->db->get_where('siswa', ['email' =>
-            $this->session->userdata('email')])->row_array();
+        $data['user'] = $this->db->get_where('siswa', ['nis' =>
+            $this->session->userdata('nis')])->row_array();
 
         $this->load->view('user/navu');
         $this->load->view('user/kelas10');
@@ -34,8 +34,8 @@ class User extends CI_Controller
 
     public function kelas11()
     {
-        $data['user'] = $this->db->get_where('siswa', ['email' =>
-            $this->session->userdata('email')])->row_array();
+        $data['user'] = $this->db->get_where('siswa', ['nis' =>
+            $this->session->userdata('nis')])->row_array();
 
         $this->load->view('user/navu');
         $this->load->view('user/kelas11');
@@ -44,8 +44,8 @@ class User extends CI_Controller
 
     public function kelas12()
     {
-        $data['user'] = $this->db->get_where('siswa', ['email' =>
-            $this->session->userdata('email')])->row_array();
+        $data['user'] = $this->db->get_where('siswa', ['nis' =>
+            $this->session->userdata('nis')])->row_array();
         
         $this->load->view('user/navu');
         $this->load->view('user/kelas12');
@@ -60,12 +60,16 @@ class User extends CI_Controller
 
     public function registration_act()
     {
+        $this->form_validation->set_rules('nis', 'Nis', 'min_length[5]|trim|numeric|is_unique[siswa.nis]', [
+            'is_unique' => 'nis ini telah digunakan!',
+            'numeric' => 'NIS harus berupa angka!',
+            'min_length' => 'NIS minimal 5 angka!'
+        ]);
         $this->form_validation->set_rules('nama', 'Nama', 'required|trim|min_length[4]', [
             'required' => 'Harap isi kolom username.',
             'min_length' => 'Nama terlalu pendek.',
         ]);
-        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[siswa.email]', [
-            'is_unique' => 'Email ini telah digunakan!',
+        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email', [
             'required' => 'Harap isi kolom email.',
             'valid_email' => 'Masukan email yang valid.',
         ]);
@@ -83,8 +87,9 @@ class User extends CI_Controller
             $this->load->view('user/registration');
             $this->load->view('template/footer');
         } else {
-            $email = $this->input->post('email', true);
+            $nis = $this->input->post('nis', true);
             $data = [
+                'nis' => htmlspecialchars($nis),
                 'nama' => htmlspecialchars($this->input->post('nama', true)),
                 'email' => htmlspecialchars($email),
                 'image' => 'default.jpg',
@@ -97,7 +102,7 @@ class User extends CI_Controller
 
             // $token = base64_encode(random_bytes(32));
             // $user_token = [
-            //     'email' => $email,
+            //     'nis' => $email,
             //     'token' => $token,
             //     'date_created' => time(),
             // ];

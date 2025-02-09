@@ -8,8 +8,8 @@
                     <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="1400">Selamat Belajar !
                     </h1>
                     <h4 data-aos="fade-down" data-aos-duration="1700"><?php
-                                                                        $data['user'] = $this->db->get_where('siswa', ['email' =>
-                                                                        $this->session->userdata('email')])->row_array();
+                                                                        $data['user'] = $this->db->get_where('siswa', ['nis' =>
+                                                                        $this->session->userdata('nis')])->row_array();
                                                                         echo $data['user']['nama'];
                                                                         ?> - addustedu Students</h3>
                         <p><?= $detail->nama_mapel ?> - Kelas <?= $detail->kelas ?></p>

@@ -13,9 +13,10 @@ class Welcome extends CI_Controller
 
     public function validateLogin()
     {
-        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email', [
-            'required' => 'Harap isi bidang email!',
-            'valid_email' => 'Email tidak valid!',
+        $this->form_validation->set_rules('nis', 'NIS', 'trim|required|numeric|min_length[5]', [
+            'required' => 'Harap isi bidang NIS!',
+            'numeric' => 'NIS harus berupa angka!',
+            'min_length' => 'NIS minimal 5 angka!'
         ]);
         $this->form_validation->set_rules('password', 'Password', 'trim|required', [
             'required' => 'Harap isi bidang password!',
@@ -33,17 +34,17 @@ class Welcome extends CI_Controller
 
     public function logout()
     {
-        $this->session->unset_userdata('email');
+        $this->session->unset_userdata('nis');
         $this->session->set_flashdata('success-logout', 'Berhasil!');
         redirect(base_url('welcome'));
     }
 
     private function login()
     {
-        $email = $this->input->post('email');
+        $nis = $this->input->post('nis');
         $password = $this->input->post('password');
 
-        $user = $this->db->get_where('siswa', ['email' => $email])->row_array();
+        $user = $this->db->get_where('siswa', ['nis' => $nis])->row_array();
 
         if ($user) {
             //user ada
@@ -51,7 +52,7 @@ class Welcome extends CI_Controller
                 //cek password
                 if (password_verify($password, $user['password'])) {
                     $data = [
-                        'email' => $user['email'],
+                        'nis' => $user['nis'],
                     ];
 
                     $this->session->set_userdata($data);

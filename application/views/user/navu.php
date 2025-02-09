@@ -9,8 +9,8 @@
     <link rel="icon" href="<?= base_url('assets/') ?>img/logoh.png" type="image/png">
     <!-- Title -->
     <title>Selamat datang - <?php
-                            $data['user'] = $this->db->get_where('siswa', ['email' =>
-                            $this->session->userdata('email')])->row_array();
+                            $data['user'] = $this->db->get_where('siswa', ['nis' =>
+                            $this->session->userdata('nis')])->row_array();
                             echo $data['user']['nama'];
                             ?> - addustedu Student Page</title>
     <!-- Bootstrap CSS -->
@@ -61,8 +61,8 @@
                     <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                         <ul class="nav navbar-nav menu_nav ml-auto">
                             <!-- <li class="nav-item "><a class="nav-link" href="javascript:void(0)">Hai, <?php
-                                                                                                        $data['user'] = $this->db->get_where('siswa', ['email' =>
-                                                                                                        $this->session->userdata('email')])->row_array();
+                                                                                                        $data['user'] = $this->db->get_where('siswa', ['nis' =>
+                                                                                                        $this->session->userdata('nis')])->row_array();
                                                                                                         echo $data['user']['nama'];
                                                                                                         ?></a>
                             </li> -->

@@ -22,8 +22,8 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
     <link rel="icon" href="<?= base_url('assets/') ?>img/favicon.png" type="image/png">
     <!-- Title -->
     <title>Selamat datang - <?php
-                            $data['user'] = $this->db->get_where('siswa', ['email' =>
-                            $this->session->userdata('email')])->row_array();
+                            $data['user'] = $this->db->get_where('siswa', ['nis' =>
+                            $this->session->userdata('nis')])->row_array();
                             echo $data['user']['nama'];
                             ?> - addustedu Student Page</title>
     <!-- Bootstrap CSS -->
@@ -64,13 +64,13 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                     <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="1400">Selamat Datang
                         di addustedu <span style="font-size: 40px;">👋🏻
                         </span> </h1>
-                    <p>Hello Students! , Ini merupakan halaman utama addustedu ! Silahkan pilih kelas yang akan kamu
+                    <p>Hello Studentss! , Ini merupakan halaman utama addustedu ! Silahkan pilih kelas yang akan kamu
                         akses
                         dan pilih mata pelajaran yang ingin kamu pelajari. Selamat belajar ya students!</p>
                     <hr>
                     <h4 style="line-height: 4px;" data-aos="fade-down" data-aos-duration="1700"><?php
-                                                                                                $data['user'] = $this->db->get_where('siswa', ['email' =>
-                                                                                                $this->session->userdata('email')])->row_array();
+                                                                                                $data['user'] = $this->db->get_where('siswa', ['nis' =>
+                                                                                                $this->session->userdata('nis')])->row_array();
                                                                                                 echo $data['user']['nama'];
                                                                                                 ?> - addustedu Students</h4>
                         <p data-aos="fade-down" data-aos-duration="1800">Silahkan pilih kelas yang akan kamu akses

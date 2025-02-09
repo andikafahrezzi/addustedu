@@ -114,6 +114,11 @@
             </div>
             <div class="col-md-6 mx-auto my-auto mt--5">
                 <form action="<?= base_url('user/registration_act') ?>" method="post">
+                <div class="form-group">
+                        <label for="nis" class="label-font-register">nis</label>
+                        <input type="number" class="form-control" name="nis" id="nis" value="<?= set_value('nis'); ?>">
+                        <?= form_error('nis', '<small class="text-danger">', '</small>'); ?>
+                    </div>
                     <div class="form-group">
                         <label for="nama_lengkap" class="label-font-register">Nama lengkap</label>
                         <input type="text" autocomplete="off" class="form-control effect-9" name="nama" id="nama_lengkap" value="<?= set_value('nama'); ?>">

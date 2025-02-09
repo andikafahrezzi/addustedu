@@ -9,7 +9,7 @@ class M_siswa extends CI_Model
 
     public function detail_siswa($id = null)
     {
-        $query = $this->db->get_where('siswa', array('id' => $id))->row();
+        $query = $this->db->get_where('siswa', array('nis' => $id))->row();
         return $query;
     }
 
