@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 27, 2024 at 11:17 AM
+-- Generation Time: Feb 14, 2025 at 03:39 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -138,7 +138,7 @@ INSERT INTO `materi` (`id`, `nama_guru`, `nama_mapel`, `video`, `deskripsi`, `ke
 --
 
 CREATE TABLE `siswa` (
-  `id` int(64) NOT NULL,
+  `nis` int(64) NOT NULL,
   `nama` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `email` varchar(128) NOT NULL,
@@ -151,10 +151,11 @@ CREATE TABLE `siswa` (
 -- Dumping data for table `siswa`
 --
 
-INSERT INTO `siswa` (`id`, `nama`, `password`, `email`, `image`, `is_active`, `date_created`) VALUES
+INSERT INTO `siswa` (`nis`, `nama`, `password`, `email`, `image`, `is_active`, `date_created`) VALUES
 (39, 'Syaauqi Zaaidan', '$2y$10$djI2M/FQH2k3H7b6tLK5X.MZG1R.wrARoR6NerH3tsScNnsNCnexa', 'zaidanline67@gmail.com', '73349393_156861225523800_2119508204152772215_n_(1)6.jpg', 1, 1586163321),
 (47, 'andikafahrezi', '$2y$10$Elu2/9GQ0xS41Q3iLxSet.mOe9fa5HCJaUNw6s6m.v4Gp9YDh3GQu', 'andikafahrezi10@gmail.com', 'default.jpg', 1, 1734259635),
-(48, 'user', '$2y$10$6o.1PVKeTRO9gRBObACpYe8cbkP19daJYQVYNv7v4HnCyqjoLpp96', 'user@gmail.com', 'default.jpg', 1, 1735200089);
+(123456, 'user', '$2y$10$6o.1PVKeTRO9gRBObACpYe8cbkP19daJYQVYNv7v4HnCyqjoLpp96', 'user@gmail.com', 'default.jpg', 1, 1735200089),
+(456789, 'nasi gile', '$2y$10$LwYTyg0Usc1SNcQe50HY3.7ZWcRIy926dKlbLA8bZrWtgFMoTZMvq', '', 'default.jpg', 1, 1739114168);
 
 -- --------------------------------------------------------
 
@@ -201,7 +202,7 @@ ALTER TABLE `materi`
 -- Indexes for table `siswa`
 --
 ALTER TABLE `siswa`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`nis`);
 
 --
 -- Indexes for table `token`
@@ -218,12 +219,6 @@ ALTER TABLE `token`
 --
 ALTER TABLE `materi`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
-
---
--- AUTO_INCREMENT for table `siswa`
---
-ALTER TABLE `siswa`
-  MODIFY `id` int(64) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `token`
