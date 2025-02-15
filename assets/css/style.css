@@ -4073,8 +4073,12 @@ h6 {
 
 .about_inner .accordion .card .card-header {
 	padding: 0px;
-	border: none;
+	border-style: double;
 	background: transparent;
+}
+
+.about_inner .accordion .card .card-header .kotakp{
+margin-left: 7rem;
 }
 
 .about_inner .accordion .card .card-header button {
