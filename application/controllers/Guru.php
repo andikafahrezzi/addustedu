@@ -8,15 +8,15 @@ class Guru extends CI_Controller
         parent::__construct();
         $this->load->helper('url');
         $this->session->set_flashdata('not-login', 'Gagal!');
-        if (!$this->session->userdata('email')) {
+        if (!$this->session->userdata('nip')) {
             redirect('welcome/guru');
         }
     }
 
     public function index()
     {
-        $data['user'] = $this->db->get_where('guru', ['email' =>
-            $this->session->userdata('email')])->row_array();
+        $data['user'] = $this->db->get_where('guru', ['nip' =>
+            $this->session->userdata('nip')])->row_array();
 
         $this->load->view('guru/index');
     }

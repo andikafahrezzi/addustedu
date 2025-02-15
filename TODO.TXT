@@ -1,7 +1,8 @@
 TODO
 -  change class user. if user class X, user can only view class X 
+- change style belajar(like e-learning unpam)
 PR
 
 next can be a problem
 - change id at database siswa to nis
-- login and register with nis, no longer use email
+- login and register siswa with nis, no longer use email

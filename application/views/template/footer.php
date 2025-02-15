@@ -108,7 +108,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                     <label class="label-font" for="
                                         exampleFormControlInput1">
                                         Nomer Induk Siswa</label>
-                                    <input type="number" value="<?= set_value('nis'); ?>" class="form-control" name="nis" autocomplete="off" id="nis" placeholder="Masukan email mu disini ..">
+                                    <input type="text" value="<?= set_value('nis'); ?>" class="form-control" name="nis" autocomplete="off" id="nis" placeholder="Masukan Nis mu disini ..">
                                     <small class="text-danger"></small>
                                 </div>
                                 <div class="form-group">
