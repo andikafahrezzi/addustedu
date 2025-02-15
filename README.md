@@ -64,8 +64,8 @@ Berikut adalah daftar akun untuk keperluan testing saat anda mencoba aplikasi pe
 | Role  | Email                  | Password | URL                                      |
 | ----- | ---------------------- | -------- | ---------------------------------------- |
 | Admin | admin@gmail.com        | admin    | http://localhost/addustedu/welcome/admin |
-| Siswa | zaidanline67@gmail.com | 123456   | http://localhost/addustedu/welcome       |
-| Guru  | zaidanline67@gmail.com | 123456   | http://localhost/addustedu/welcome/guru  |
+| Siswa | 123456                 | 123456   | http://localhost/addustedu/welcome       |
+| Guru  | 21010240               | 123456   | http://localhost/addustedu/welcome/guru  |
 
 <p></p>
 
