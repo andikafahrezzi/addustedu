@@ -34,6 +34,7 @@
             $("#nav<?= $this->uri->segment(2); ?>").addClass('active')
         })
     </script>
+    
 </head>
 
 <body style="overflow-x:hidden;background-color:#fbf9fa;">

@@ -17,7 +17,7 @@
                         <p style="line-height: 3px;">Link Latihan</p>
                         <p class="font-weight-bold mt--5"><a href="<?= substr($detail->linkform, 0, 120); ?>" target="_blank"><?= substr($detail->linkform, 0, 120); ?></a>
                         <p style="line-height: 3px;">Kita akan mempelajari tentang</p>
-                            
+                        
 
                         </p>
                 </div>
@@ -25,7 +25,26 @@
         </div>
     </div>
     <!-- End Greeting Cards -->
-
+    <div class="row about_inner">
+                        <div class="col-lg-12">
+                            <div class="accordion" id="accordionExample">
+                                <div class="card">
+                                    <div class="card-header" id="headingOne">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <p class="kotakp">Link Tugas</p>
+                                            <i class="lnr lnr-chevron-down"></i>
+                                            <i class="lnr lnr-chevron-up"></i>
+                                        </button>
+                                    </div>
+                                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                        <p class="font-weight-bold"><a href="<?= substr($detail->linkform, 0, 120); ?>" target="_blank"><?= substr($detail->linkform, 0, 120); ?></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+        </div>
 
     <!-- Start Video Player -->
     <div class="container mt-4">
@@ -44,6 +63,8 @@
             </div>
         </div>
     </div>
+    
+    
 
     <!-- Scripts -->
     
