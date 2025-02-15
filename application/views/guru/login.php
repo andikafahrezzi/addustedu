@@ -49,8 +49,8 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                             guru. silahkan isi data dibawah untuk melanjutkan.</p>
                         <form method="post" action="<?= base_url('welcome/guru') ?>" class="needs-validation" novalidate="">
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>
+                                <label for="nip">Nomer Induk Pegawai</label>
+                                <input id="nip" type="text" class="form-control" name="nip" tabindex="1" required autofocus>
                                 <div class="invalid-feedback">
                                     Harap isi bidang email
                                 </div>

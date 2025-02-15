@@ -66,7 +66,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                             </li>
                             <li class="nav-item active"><a class="nav-link" href="<?= base_url('user') ?>">Beranda</a>
                             </li>
-                            <li class=" nav-item "><a class=" nav-link text-danger" href="<?= base_url('welcome/logout') ?>">Log Out</a>
+                            <li class=" nav-item "><a class=" nav-link text-danger" href="<?= base_url('welcome/logouts') ?>">Loga Out</a>
                             </li>
                         </ul>
                     </div>

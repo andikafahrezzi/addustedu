@@ -11,6 +11,7 @@ class Welcome extends CI_Controller
       $this->load->view('template/footer');
     }
 
+    //login siswa 
     public function validateLogin()
     {
         $this->form_validation->set_rules('nis', 'NIS', 'trim|required|numeric|min_length[5]', [
@@ -30,13 +31,6 @@ class Welcome extends CI_Controller
             //validasi sukses
             $this->login();
         }
-    }
-
-    public function logout()
-    {
-        $this->session->unset_userdata('nis');
-        $this->session->set_flashdata('success-logout', 'Berhasil!');
-        redirect(base_url('welcome'));
     }
 
     private function login()
@@ -70,6 +64,55 @@ class Welcome extends CI_Controller
             redirect(base_url('welcome'));
         }
     }
+
+        // login Guru
+        public function guru()
+        {
+            $this->form_validation->set_rules('nip', 'Nip', 'trim|required|numeric|min_length[5]', [
+                'required' => 'Harap isi bidang email!',
+                'numeric' => 'NIP harus berupa angka!',
+                'min_length' => 'NIP minimal 5 angka!',
+            ]);
+            $this->form_validation->set_rules('password', 'Password', 'trim|required', [
+                'required' => 'Harap isi bidang password!',
+            ]);
+            if ($this->form_validation->run() == false) {
+                $this->load->view('guru/login');
+            } else {
+                //validasi sukses
+                $this->guru_login_process();
+            }
+        }
+    
+        private function guru_login_process()
+        {
+            $nip = $this->input->post('nip');
+            $password = $this->input->post('password');
+    
+            $user = $this->db->get_where('guru', ['nip' => $nip])->row_array();
+    
+            if ($user) {
+                //cek password
+                if (password_verify($password, $user['password'])) {
+                    $data = [
+    
+                        'nip' => $user['nip'],
+                        'nama_guru' => $user['nama_guru'],
+    
+                    ];
+                    $this->session->set_userdata($data);
+                    redirect(base_url('guru'));
+                } else {
+    
+                    $this->session->set_flashdata('fail-pass', 'Gagal!');
+                    redirect(base_url('welcome/guru'));
+                }
+            } else {
+    
+                $this->session->set_flashdata('fail-login', 'Gagal!');
+                redirect(base_url('welcome/guru'));
+            }
+        }
 
     public function admin()
     {
@@ -173,57 +216,28 @@ class Welcome extends CI_Controller
         }
     }
 
-    // Guru
-    public function guru()
-    {
-        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email', [
-            'required' => 'Harap isi bidang email!',
-            'valid_email' => 'Email tidak valid!',
-        ]);
-        $this->form_validation->set_rules('password', 'Password', 'trim|required', [
-            'required' => 'Harap isi bidang password!',
-        ]);
-        if ($this->form_validation->run() == false) {
-            $this->load->view('guru/login');
-        } else {
-            //validasi sukses
-            $this->guru_login_process();
-        }
-    }
-
-    private function guru_login_process()
-    {
-        $email = $this->input->post('email');
-        $password = $this->input->post('password');
-
-        $user = $this->db->get_where('guru', ['email' => $email])->row_array();
-
-        if ($user) {
-            //cek password
-            if (password_verify($password, $user['password'])) {
-                $data = [
-
-                    'email' => $user['email'],
-                    'nama_guru' => $user['nama_guru'],
-
-                ];
-                $this->session->set_userdata($data);
-                redirect(base_url('guru'));
-            } else {
-
-                $this->session->set_flashdata('fail-pass', 'Gagal!');
-                redirect(base_url('welcome/guru'));
-            }
-        } else {
-
-            $this->session->set_flashdata('fail-login', 'Gagal!');
-            redirect(base_url('welcome/guru'));
-        }
-    }
 
     public function email()
     {
         $this->load->view('template/email-template');
     }
 
+    public function logout()
+    {
+        $this->session->unset_userdata('email');
+        $this->session->set_flashdata('success-logout', 'Berhasil!');
+        redirect(base_url('welcome/admin'));
+    }
+    public function logouts()
+    {
+        $this->session->unset_userdata('nis');
+        $this->session->set_flashdata('success-logout', 'Berhasil!');
+        redirect(base_url('welcome'));
+    }
+    public function logoutg()
+    {
+        $this->session->unset_userdata('nip');
+        $this->session->set_flashdata('success-logout', 'Berhasil!');
+        redirect(base_url('welcome/guru'));
+    }
 }

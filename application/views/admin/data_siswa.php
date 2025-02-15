@@ -36,7 +36,7 @@
                                                 <tr class="text-center">
 
                                                     <th scope="row">
-                                                        <?php echo $u->id ?>
+                                                        <?php echo $u->nis ?>
                                                     </th>
 
                                                     <td>
@@ -56,13 +56,13 @@
                                                     </td>
 
                                                     <td class="text-center">
-                                                        <a href="<?php echo site_url('admin/detail_siswa/' . $u->id); ?>" class="btn btn-success">Detail ⭢</a>
+                                                        <a href="<?php echo site_url('admin/detail_siswa/' . $u->nis); ?>" class="btn btn-success">Detail ⭢</a>
                                                     </td>
 
                                                     <td class="text-center">
-                                                        <a href="<?php echo site_url('admin/update_siswa/' . $u->id); ?>" class="btn btn-info">Update ⭢</a>
+                                                        <a href="<?php echo site_url('admin/update_siswa/' . $u->nis); ?>" class="btn btn-info">Update ⭢</a>
 
-                                                        <a href="<?php echo site_url('admin/delete_siswa/' . $u->id); ?>" class="btn btn-danger remove">Delete ✖</a>
+                                                        <a href="<?php echo site_url('admin/delete_siswa/' . $u->nis); ?>" class="btn btn-danger remove">Delete ✖</a>
                                                     </td>
 
                                                 </tr>

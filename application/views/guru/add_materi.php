@@ -266,10 +266,10 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                     </div>
                                     <div class="kt-user-card__name font-weight-bold">
                                         Hai!, &nbsp;<?php
-$data['user'] = $this->db->get_where('guru', ['email' =>
-    $this->session->userdata('email')])->row_array();
-echo $data['user']['nama_guru'];
-?>
+                                        $data['user'] = $this->db->get_where('guru', ['email' =>
+                                            $this->session->userdata('email')])->row_array();
+                                        echo $data['user']['nama_guru'];
+                                        ?>
                                     </div>
                                 </div>
 
@@ -363,8 +363,8 @@ echo $data['user']['nama_guru'];
                                         <div class="form-group col-md-12">
                                             <label for="inputEmail4">Nama Guru</label>
                                             <input required type="text" readonly name="nama_guru" value="<?php
-                                            $data['user'] = $this->db->get_where('guru', ['email' =>
-                                                $this->session->userdata('email')])->row_array();
+                                            $data['user'] = $this->db->get_where('guru', ['nip' =>
+                                                $this->session->userdata('nip')])->row_array();
                                             echo $data['user']['nama_guru'];?>" class="form-control" id="inputEmail4">
                                                                                     </div>
                                     </div>
@@ -372,8 +372,8 @@ echo $data['user']['nama_guru'];
                                         <div class="form-group col-md-12">
                                             <label for="inputEmail4">Nama Mata Pelajaran</label>
                                             <input required type="text" readonly name="nama_mapel" value="<?php
-                                                $data['user'] = $this->db->get_where('guru', ['email' =>
-                                                    $this->session->userdata('email')])->row_array();
+                                                $data['user'] = $this->db->get_where('guru', ['nip' =>
+                                                    $this->session->userdata('nip')])->row_array();
                                                 echo $data['user']['nama_mapel'];?>" class="form-control" id="inputEmail4">
                                                                                         </div>
                                     </div>
