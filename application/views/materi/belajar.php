@@ -14,9 +14,7 @@
                                                                         ?> - addustedu Students</h3>
                         <p><?= $detail->nama_mapel ?> - Kelas <?= $detail->kelas ?></p>
                         <hr align="left" width="600;">
-                        <p style="line-height: 3px;">Link Latihan</p>
-                        <p class="font-weight-bold mt--5"><a href="<?= substr($detail->linkform, 0, 120); ?>" target="_blank"><?= substr($detail->linkform, 0, 120); ?></a>
-                        <p style="line-height: 3px;">Kita akan mempelajari tentang</p>
+                       
                         
 
                         </p>
@@ -26,12 +24,12 @@
     </div>
     <!-- End Greeting Cards -->
     <div class="row about_inner">
-                        <div class="col-lg-12">
+                        <div class="col-lg-10 ml-lg-5">
                             <div class="accordion" id="accordionExample">
                                 <div class="card">
                                     <div class="card-header" id="headingOne">
                                         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            <p class="kotakp">Link Tugas</p>
+                                            <p class="kotakp"><span class="lnr lnr-file-empty font-size-4"></span> Link Tugas</p>
                                             <i class="lnr lnr-chevron-down"></i>
                                             <i class="lnr lnr-chevron-up"></i>
                                         </button>
@@ -42,68 +40,84 @@
                                         </div>
                                     </div>
                                 </div>
+                                <br>
+                                <div class="card">
+                                    <div class="card-header" id="headingTwo">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            <p class="kotakp"><span class="lnr lnr-users"></span> Forum Diskusi</p>
+                                            <i class="lnr lnr-chevron-down"></i>
+                                            <i class="lnr lnr-chevron-up"></i>
+                                        </button>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                        <p style="line-height: 3px;">Kita akan mempelajari tentang</p>
+                                                <!-- Start Video Player -->
+                                        <div class="container mt-4">
+                                            <div class="row">
+                                                <div class="col-md-12 mx-auto text-center">
+                                                    <video id="myvideo" width="100%" height="auto" controls>
+                                                        <source src="<?= base_url() . 'assets/materi_video/' . $detail->video; ?>" type="video/mp4">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                    <!-- <input type="range" id="progress-bar" value="0" step="0.1" style="width: 100%;">
+                                                    <div class="mt-3">
+                                                        <button onclick="playVideo()" class="btn btn-primary"><i class="fa fa-play"></i></button>
+                                                        <button onclick="pauseVideo()" class="btn btn-danger"><i class="fa fa-pause"></i></button>
+                                                        <button onclick="rewindVideo()" class="btn btn-secondary"><i class="fa fa-backward"></i></button>
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+
+                                        <!-- Scripts -->
+                                        
+                                        <!-- End Video Player -->
+                                        <!-- Start Deskripsi Materi -->
+                                        <div class="container">
+                                            <div class="row mt-4">
+                                                <div class="col-md-12 w-150 mb-4">
+                                                    <div class="card materi border-0">
+                                                        <div class="card-body p-5">
+                                                            <h1 class="card-title display-4"><?= $detail->nama_guru; ?></h1>
+                                                            <hr style="background-color: white;">
+                                                            <h5 class="card-text"><?= $detail->nama_mapel; ?></h5>
+                                                            <p class="card-text"> Deskripsi materi pelajaran : <br> <?= $detail->deskripsi; ?></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- End Deskripsi Materi -->
+
+
+                                        <br>
+
+
+                                        <!-- Start Disqus Comment -->
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="card komen w-150 border-0">
+                                                        <div class="card-body p-5" style="font-family: 'Poppins', sans-serif !important;">
+                                                            <h1 style="color: black; font-size:44px !important;">Apa komentarmu ?</h1>
+                                                            <br>
+                                                            <?php echo $disqus ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
         </div>
 
-    <!-- Start Video Player -->
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-12 mx-auto text-center">
-                <video id="myvideo" width="100%" height="auto" controls>
-                    <source src="<?= base_url() . 'assets/materi_video/' . $detail->video; ?>" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <!-- <input type="range" id="progress-bar" value="0" step="0.1" style="width: 100%;">
-                <div class="mt-3">
-                    <button onclick="playVideo()" class="btn btn-primary"><i class="fa fa-play"></i></button>
-                    <button onclick="pauseVideo()" class="btn btn-danger"><i class="fa fa-pause"></i></button>
-                    <button onclick="rewindVideo()" class="btn btn-secondary"><i class="fa fa-backward"></i></button>
-                </div> -->
-            </div>
-        </div>
-    </div>
-    
-    
 
-    <!-- Scripts -->
-    
-    <!-- End Video Player -->
-    <!-- Start Deskripsi Materi -->
-    <div class="container">
-        <div class="row mt-4">
-            <div class="col-md-12 w-150 mb-4">
-                <div class="card materi border-0">
-                    <div class="card-body p-5">
-                        <h1 class="card-title display-4"><?= $detail->nama_guru; ?></h1>
-                        <hr style="background-color: white;">
-                        <h5 class="card-text"><?= $detail->nama_mapel; ?></h5>
-                        <p class="card-text"> Deskripsi materi pelajaran : <br> <?= $detail->deskripsi; ?></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Deskripsi Materi -->
-
-
-    <br>
-
-
-    <!-- Start Disqus Comment -->
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card komen w-150 border-0">
-                    <div class="card-body p-5" style="font-family: 'Poppins', sans-serif !important;">
-                        <h1 style="color: black; font-size:44px !important;">Apa komentarmu ?</h1>
-                        <br>
-                        <?php echo $disqus ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- Start Disqus Comment -->
 
 

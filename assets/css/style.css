@@ -4078,7 +4078,8 @@ h6 {
 }
 
 .about_inner .accordion .card .card-header .kotakp{
-margin-left: 7rem;
+margin-left: 3rem;
+font-size: 2rem;
 }
 
 .about_inner .accordion .card .card-header button {
@@ -4101,6 +4102,7 @@ margin-left: 7rem;
 	background: #4dbf1c;
 	color: #fff;
 }
+
 
 .about_inner .accordion .card .card-header button i {
 	position: absolute;
@@ -4133,7 +4135,7 @@ margin-left: 7rem;
 }
 
 .video_area {
-	float: right;
+	float: none;
 	display: inline-block;
 	position: relative;
 }
