@@ -15,7 +15,17 @@ class User extends CI_Controller
     {
         $data['user'] = $this->db->get_where('siswa', ['nis' =>
             $this->session->userdata('nis')])->row_array();
+            if ($data['user']) {
+                // Ambil kelas siswa
+                $data['kelas_siswa'] = $data['user']['kelas'];
     
+                // Ambil materi sesuai kelas siswa
+                $data['materi'] = $this->db->get_where('materi', ['kelas' => $data['kelas_siswa']])->result_array();
+            } else {
+                // Jika user tidak ditemukan, redirect ke halaman login
+                redirect('welcome/');
+            }
+            log_message('error', 'Kelas siswa: ' . $data['kelas_siswa']);
         $this->load->view('user/navu'); // Oper data ke view
         $this->load->view('user/index', $data); // Oper data ke view
         $this->load->view('template/footer');

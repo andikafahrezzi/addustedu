@@ -1,6 +1,5 @@
 TODO
--  change class user. if user class X, user can only view class X 
-- change style belajar(like e-learning unpam)
+- membenarkan banner pada materi per mapel
 PR
 
 next can be a problem

@@ -68,55 +68,57 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                         akses
                         dan pilih mata pelajaran yang ingin kamu pelajari. Selamat belajar ya students!</p>
                     <hr>
-                    <h4 style="line-height: 4px;" data-aos="fade-down" data-aos-duration="1700"><?php
+                    <h4 style="line-height: 4px;" data-aos="fade-down" data-aos-duration="1700"> Hai, <?php
                                                                                                 $data['user'] = $this->db->get_where('siswa', ['nis' =>
                                                                                                 $this->session->userdata('nis')])->row_array();
                                                                                                 echo $data['user']['nama'];
+                                                                                                ?> </h4>
+                        <p data-aos="fade-down" data-aos-duration="1800">Kelas, <?php
+                                                                                                $data['user'] = $this->db->get_where('siswa', ['nis' =>
+                                                                                                $this->session->userdata('nis')])->row_array();
+                                                                                                echo $data['user']['kelas'];
                                                                                                 ?> - addustedu Students</h4>
-                        <p data-aos="fade-down" data-aos-duration="1800">Silahkan pilih kelas yang akan kamu akses
-                            dibawah
-                            ini!
-                        </p>
+                        
+                        
                 </div>
             </div>
         </div>
     </div>
     <!-- End Greetings Card -->
 
-
+    <?php $data['materi'] = $this->db->get_where('materi', ['kelas' => $kelas_siswa])->result_array();?>
     <br>
 
 
-    <!-- Start Class Card -->
+    <?php if (isset($kelas_siswa) && !empty($kelas_siswa)) { ?>
+    <p>Kelas siswa: <?= $kelas_siswa; ?></p>
     <div class="container">
         <div class="row mt-4 mb-5 justify-content-center">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-sm-4 mb-2 d-flex justify-content-center " data-aos-duration="1900" data-aos="fade-right">
-                        <a href="<?= base_url('user/kelas10') ?>">
-                            <div class="card-kelas text-center">
-                                <img src="<?= base_url('assets/') ?>img/kelas10.png" style="object-fit: cover;" class="card-img-top img-fluid" alt="...">
+                    <?php if (!empty($materi)) { ?>
+                        <?php foreach ($materi as $m) { ?>
+                            <div class="col-sm-4 mb-2 d-flex justify-content-center" data-aos-duration="1900" data-aos="fade-up">
+                                <a href="<?= base_url('materi/belajar/' . $m['id']) ?>">
+                                    <div class="card-kelas">
+                                        <img src="<?= base_url('assets/') ?>img/kelas<?= $m['kelas'] ?>.png" class="card-img-top" alt="Kelas <?= $m['kelas'] ?>">
+                                    </div>
+                                </a>
                             </div>
-                        </a>
-                    </div>
-                    <div class="col-sm-4 mb-2 d-flex justify-content-center " data-aos-duration="1900" data-aos="fade-down">
-                        <a href="<?= base_url('user/kelas11') ?>">
-                            <div class="card-kelas">
-                                <img src="<?= base_url('assets/') ?>img/kelas11.png" class="card-img-top" alt="...">
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-sm-4 mb-2 d-flex justify-content-center" data-aos-duration="1900" data-aos="fade-left">
-                        <a href="<?= base_url('user/kelas12') ?>">
-                            <div class="card-kelas">
-                                <img src="<?= base_url('assets/') ?>img/kelas12.png" class="card-img-top" alt="...">
-                            </div>
-                        </a>
-                    </div>
+                        <?php } ?>
+                    <?php } else { ?>
+                        <p>Tidak ada materi untuk kelas ini.</p>
+                    <?php } ?>
                 </div>
             </div>
         </div>
     </div>
+<?php } else { ?>
+    <p>Kelas siswa tidak ditemukan.</p>
+<?php } ?>
+
+    <!-- Start Class Card -->
+    
     <!-- End Class Card -->
 
 
