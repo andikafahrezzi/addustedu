@@ -90,35 +90,63 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
     <br>
 
 
-    <?php if (isset($kelas_siswa) && !empty($kelas_siswa)) { ?>
-    <p>Kelas siswa: <?= $kelas_siswa; ?></p>
+
+
+    <!-- Start Class Card -->
+<?php
+$materi_per_mapel = [];
+
+foreach ($data['materi'] as $m) {
+    $materi_per_mapel[$m['nama_mapel']][] = $m;
+}
+?>
+
+<?php if (isset($kelas_siswa) && !empty($kelas_siswa)) { ?>
     <div class="container">
+        <h2 class="text-center">Mata Pelajaran Kelas <?= $kelas_siswa ?></h2>
         <div class="row mt-4 mb-5 justify-content-center">
             <div class="col-md-12">
-                <div class="row">
-                    <?php if (!empty($materi)) { ?>
-                        <?php foreach ($materi as $m) { ?>
-                            <div class="col-sm-4 mb-2 d-flex justify-content-center" data-aos-duration="1900" data-aos="fade-up">
-                                <a href="<?= base_url('materi/belajar/' . $m['id']) ?>">
-                                    <div class="card-kelas">
-                                        <img src="<?= base_url('assets/') ?>img/kelas<?= $m['kelas'] ?>.png" class="card-img-top" alt="Kelas <?= $m['kelas'] ?>">
-                                    </div>
-                                </a>
+                <div class="accordion" id="accordionExample">
+                    <?php foreach ($materi_per_mapel as $mapel => $materi_list) { 
+                        $mapel_id = preg_replace('/\s+/', '', strtolower($mapel)); // Buat ID unik dari nama mapel
+                    ?>
+                        <div class="card mb-3">
+                            <div class="card-header" id="heading<?= $mapel_id ?>">
+                                <button class="btn btn-link w-100 text-left" type="button" data-toggle="collapse" data-target="#collapse<?= $mapel_id ?>" aria-expanded="false" aria-controls="collapse<?= $mapel_id ?>">
+                                    <h3 class="mb-0"><?= $mapel ?></h3>
+                                    <i class="lnr lnr-chevron-down float-right"></i>
+                                </button>
                             </div>
-                        <?php } ?>
-                    <?php } else { ?>
-                        <p>Tidak ada materi untuk kelas ini.</p>
+                            <div id="collapse<?= $mapel_id ?>" class="collapse" aria-labelledby="heading<?= $mapel_id ?>" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <?php foreach ($materi_list as $m) { ?>
+                                            <div class="col-md-4 mb-3">
+                                                <a href="<?= base_url('materi/belajar/' . $m['id']) ?>">
+                                                    <div class="card shadow-sm">
+                                                        <img src="<?= base_url('assets/img/' . $m['nama_mapel'] . '.png') ?>" class="card-img-top" alt="<?= $m['nama_mapel'] ?>">
+                                                        <div class="card-body text-center">
+                                                        <?= implode(' ', array_slice(explode(' ', $m['deskripsi']), 0, 10)) . '...'; ?>
+                                                            <br>
+                                                            <p class="card-text"><?= $m['nama_guru'] ?></p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        <?php } ?>
+                                    </div>                            
+                                </div>
+                            </div>
+                        </div>
                     <?php } ?>
                 </div>
             </div>
         </div>
     </div>
 <?php } else { ?>
-    <p>Kelas siswa tidak ditemukan.</p>
+    <p class="text-center">Kelas siswa tidak ditemukan.</p>
 <?php } ?>
 
-    <!-- Start Class Card -->
-    
     <!-- End Class Card -->
 
 
