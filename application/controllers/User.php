@@ -15,7 +15,17 @@ class User extends CI_Controller
     {
         $data['user'] = $this->db->get_where('siswa', ['nis' =>
             $this->session->userdata('nis')])->row_array();
+            if ($data['user']) {
+                // Ambil kelas siswa
+                $data['kelas_siswa'] = $data['user']['kelas'];
     
+                // Ambil materi sesuai kelas siswa
+                $data['materi'] = $this->db->get_where('materi', ['kelas' => $data['kelas_siswa']])->result_array();
+            } else {
+                // Jika user tidak ditemukan, redirect ke halaman login
+                redirect('welcome/');
+            }
+            log_message('error', 'Kelas siswa: ' . $data['kelas_siswa']);
         $this->load->view('user/navu'); // Oper data ke view
         $this->load->view('user/index', $data); // Oper data ke view
         $this->load->view('template/footer');
@@ -81,7 +91,6 @@ class User extends CI_Controller
         $this->form_validation->set_rules('retype_password', 'Password', 'required|trim|matches[password]', [
             'matches' => 'Password tidak sama!',
         ]);
-
         if ($this->form_validation->run() == false) {
             $this->load->view('template/nav');
             $this->load->view('user/registration');
@@ -91,7 +100,8 @@ class User extends CI_Controller
             $data = [
                 'nis' => htmlspecialchars($nis),
                 'nama' => htmlspecialchars($this->input->post('nama', true)),
-                'email' => htmlspecialchars($email),
+                'email' => htmlspecialchars($this->input->post('email', true)),
+                'kelas' => htmlspecialchars($this->input->post('kelas', true)),
                 'image' => 'default.jpg',
                 'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
                 'is_active' => 1,
@@ -113,7 +123,7 @@ class User extends CI_Controller
             // $this->_sendEmail($token, 'verify');
 
             $this->session->set_flashdata('success-reg', 'Berhasil!');
-            redirect(base_url('welcome'));
+            redirect(base_url('admin'));
         }
     }
 

@@ -1,7 +1,7 @@
 TODO
--  change class user. if user class X, user can only view class X 
-- change style belajar(like e-learning unpam)
+- membenarkan banner pada materi per mapel
 PR
+- saat admin menambahkan data siswa, emailnya tidak bisa di baca di database
 
 next can be a problem
 - change id at database siswa to nis
