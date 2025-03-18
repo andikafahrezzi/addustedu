@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 17, 2025 at 06:25 PM
+-- Generation Time: Mar 18, 2025 at 12:24 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -145,7 +145,7 @@ CREATE TABLE `siswa` (
   `image` varchar(255) NOT NULL,
   `is_active` int(1) NOT NULL,
   `date_created` int(64) NOT NULL,
-  `kelas` varchar(5) DEFAULT NULL
+  `kelas` varchar(5) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -153,9 +153,13 @@ CREATE TABLE `siswa` (
 --
 
 INSERT INTO `siswa` (`nis`, `nama`, `password`, `email`, `image`, `is_active`, `date_created`, `kelas`) VALUES
+(0, 'addust', '$2y$10$cYm/i5rWupzWKrc92nX4EublfQgeyyZl4AQyu2e4rbKFQUwc8iv9u', '', 'default.jpg', 1, 1742275981, ''),
 (39, 'Syaauqi Zaaidan', '$2y$10$djI2M/FQH2k3H7b6tLK5X.MZG1R.wrARoR6NerH3tsScNnsNCnexa', 'zaidanline67@gmail.com', '73349393_156861225523800_2119508204152772215_n_(1)6.jpg', 1, 1586163321, 'X'),
 (47, 'andikafahrezi', '$2y$10$Elu2/9GQ0xS41Q3iLxSet.mOe9fa5HCJaUNw6s6m.v4Gp9YDh3GQu', 'andikafahrezi10@gmail.com', 'default.jpg', 1, 1734259635, 'X'),
 (123456, 'user', '$2y$10$6o.1PVKeTRO9gRBObACpYe8cbkP19daJYQVYNv7v4HnCyqjoLpp96', 'user@gmail.com', 'default.jpg', 1, 1735200089, 'XI'),
+(181816, 'qsqwdqwd', '$2y$10$YJppxwZ1JOt3s1/Xf9rgWewsjN8ZIhK1b.F39GcTmVS0uy5oOlhDK', 'testwd@gmail.com', 'default.jpg', 1, 1742296726, 'X'),
+(211011, 'addust', '$2y$10$jxtWU6XSRAaV/kU0UqlUeurzzcp9EFVEuXJmwiGUrOSLjK9oSvjB6', '', 'default.jpg', 1, 1742276422, ''),
+(232332, 'aasdadee qw', '$2y$10$XGjEhDkyCFYClYrBgClGH.Qou1LLCa4ptAVm2ufTw0ErdITzn9P2K', 'testwewe1@gmail.com', 'default.jpg', 1, 1742295476, ''),
 (456789, 'nasi gile', '$2y$10$LwYTyg0Usc1SNcQe50HY3.7ZWcRIy926dKlbLA8bZrWtgFMoTZMvq', '', 'default.jpg', 1, 1739114168, 'XII');
 
 -- --------------------------------------------------------
