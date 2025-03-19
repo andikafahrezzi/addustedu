@@ -1,5 +1,8 @@
 TODO
 - membenarkan banner pada materi per mapel
+- membenarkan card link materi siswa
+- forum diskusi, per belajar beda-beda forum diskusinya
+
 PR
 - saat admin menambahkan data siswa, emailnya tidak bisa di baca di database
 
