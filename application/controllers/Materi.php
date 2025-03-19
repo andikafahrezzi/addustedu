@@ -27,7 +27,19 @@ class Materi extends CI_Controller
         $this->list_materi['agama_xi'] = $this->m_materi->agama_xi()->result();
         $this->list_materi['agama_xii'] = $this->m_materi->agama_xii()->result();
     }
+    public function index() 
+    {
+        $query = $this->db->get_where('materi', ['id' => $id]);
 
+                if ($query->num_rows() > 0) {
+                    $data['materi'] = $query->row();
+                } else {
+                    $data['materi'] = null; // Set null jika tidak ditemukan
+                }
+
+                $this->load->view('materi/belajar', $data);
+
+    }
     function generateMateri($materi){
     
         $data['materi'] = $this->list_materi[$materi];
@@ -42,7 +54,8 @@ class Materi extends CI_Controller
     {
         $where = array('id' => $id);
         $detail = $this->m_materi->belajar($id);
-        $data['detail'] = $detail;
+        $data['detail'] = $this->db->get_where('materi', ['id' => $id])->row();
+        
         $data['disqus'] = $this->disqus->get_html();
         $this->load->view('materi/navm');
         $this->load->view('materi/belajar', $data);
