@@ -14,10 +14,7 @@
                                                                         ?> - addustedu Students</h3>
                         <p><?= $detail->nama_mapel ?> - Kelas <?= $detail->kelas ?></p>
                         <hr align="left" width="600;">
-                       
                         
-
-                        </p>
                 </div>
             </div>
         </div>
@@ -37,9 +34,32 @@
                                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                                         <div class="card-body">
                                         <p class="font-weight-bold"><a href="<?= substr($detail->linkform, 0, 120); ?>" target="_blank"><?= substr($detail->linkform, 0, 120); ?></a>
+                                        
                                         </div>
                                     </div>
                                 </div>
+                                <br>
+                                <div class="card">
+                                    <div class="card-header" id="headingTwo">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            <p class="kotakp"><span class="lnr lnr-users"></span> Link Materi</p>
+                                            <i class="lnr lnr-chevron-down"></i>
+                                            <i class="lnr lnr-chevron-up"></i>
+                                        </button>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                        <div class="font-weight-bold">
+                                            <?php if (!empty($detail->modul) && file_exists(FCPATH . $detail->modul)): ?>
+                                                <a href="<?= base_url($detail->modul) ?>" target="_blank" class="btn btn-primary">📖 Lihat Modul</a> <br>
+                                                <a href="<?= base_url($detail->modul) ?>" download class="btn btn-success">⬇️ Download Modul</a>
+                                            <?php else: ?>
+                                                <p class="text-danger">❌ Modul belum tersedia</p>
+                                            <?php endif; ?>
+                                        </div>
+
+                                        </div>
+                                    </div>
                                 <br>
                                 <div class="card">
                                     <div class="card-header" id="headingTwo">
@@ -51,7 +71,9 @@
                                     </div>
                                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                                         <div class="card-body">
-                                        <p style="line-height: 3px;">Kita akan mempelajari tentang</p>
+                                            <p style="line-height: 3px;">Kita akan mempelajari tentang</p>
+                                            
+
                                                 <!-- Start Video Player -->
                                         <div class="container mt-4">
                                             <div class="row">

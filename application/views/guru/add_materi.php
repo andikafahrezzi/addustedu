@@ -388,6 +388,16 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label>Upload File Materi (PDF, Word, JPG)</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" name="modul" class="custom-file-input" required>
+                                                <label class="custom-file-label">Pilih file</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="exampleFormControlTextarea1">Deskripsi Materi</label>
                                         <textarea class="form-control" required name="deskripsi"
                                             id="exampleFormControlTextarea1" rows="3"></textarea>
@@ -421,11 +431,11 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                 <!-- begin:: Footer -->
                 <div class="kt-footer kt-grid__item kt-grid kt-grid--desktop kt-grid--ver-desktop">
                     <div class="kt-footer__copyright">
-                        2019&nbsp;&copy;&nbsp;<a href="https://syauqizaidan.github.io/" target="_blank"
-                            class="kt-link">Syaauqi Zaaidan & Descienfy</a>
+                        2025&nbsp;&copy;&nbsp;<a href="https://Andikafahrezi.github.io/" target="_blank"
+                            class="kt-link">Andika Fahrezi</a>
                     </div>
                     <div class="kt-footer__menu">
-                        Made with &nbsp; <span class="" style="color: red"> &#10084;</span> &nbsp; by Syaauqi
+                        Made with &nbsp; <span class="" style="color: red"> &#10084;</span> &nbsp; by Dika
                     </div>
                 </div>
 
