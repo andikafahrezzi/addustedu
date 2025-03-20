@@ -36,14 +36,14 @@ class Guru extends CI_Controller
         $video_materi = '';
         if (!empty($_FILES['video']['name'])) {
             $config_video['upload_path']   = './assets/materi_video/';
-            $config_video['allowed_types'] = 'mp4|avi|mov|wmv';
+            $config_video['allowed_types'] = 'mp4|avi|mov|wmv|mkv|webm';
             $config_video['max_size']      = 100000;
 
             $this->upload->initialize($config_video);
 
             if ($this->upload->do_upload('video')) {
                 $upload_data = $this->upload->data();
-                $video_materi = 'assets/materi_video/' . $upload_data['file_name'];
+                $video_materi = '' . $upload_data['file_name'];
             } else {
                 $this->session->set_flashdata('error', 'Gagal upload video: ' . $this->upload->display_errors());
                 redirect('guru/add_materi');
@@ -61,7 +61,7 @@ class Guru extends CI_Controller
 
             if ($this->upload->do_upload('modul')) {
                 $upload_data = $this->upload->data();
-                $modul = 'assets/materi_modul/' . $upload_data['file_name'];
+                $modul = '' . $upload_data['file_name'];
             } else {
                 $this->session->set_flashdata('error', 'Gagal upload file materi: ' . $this->upload->display_errors());
                 redirect('guru/add_materi');
