@@ -1,10 +1,11 @@
 TODO
 - membenarkan banner pada materi per mapel
 - membenarkan card link materi siswa
-- forum diskusi, per belajar beda-beda forum diskusinya
+- membuat forum diskusi yang bisa dibalas komentarnya
+- admin bisa edit hapus komentarnya
 
 PR
-- saat admin menambahkan data siswa, emailnya tidak bisa di baca di database
+
 
 next can be a problem
 - change id at database siswa to nis

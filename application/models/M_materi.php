@@ -12,7 +12,14 @@ class M_materi extends CI_Model
         $query = $this->db->get_where('materi', array('id' => $id))->row();
         return $query;
     }
+    public function get_materi_by_id($id) {
+        $this->db->where('id', $id);
+        $query = $this->db->get('materi');
 
+        // Debug: Tampilkan query SQL
+        echo $this->db->last_query();
+        return $query->row();
+    }
     public function detail_materi($id = null)
     {
         $query = $this->db->get_where('materi', array('id' => $id))->row();

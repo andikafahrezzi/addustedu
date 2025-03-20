@@ -52,10 +52,24 @@ class Materi extends CI_Controller
 
     public function belajar($id)
     {
+        $this->load->model('M_materi');
+        $this->load->model('Forum_model');
+        $nama_user = $this->session->userdata('nis');
+        if (!$nama_user) {
+            echo "Error: Nama user tidak ditemukan di session!";
+            return;
+        }
+
+        $data['materi'] = $this->M_materi->get_materi_by_id($id);
+        if (!$data['materi']) {
+            show_error("Materi tidak ditemukan.", 404);
+            return;
+        }
+
         $where = array('id' => $id);
         $detail = $this->m_materi->belajar($id);
         $data['detail'] = $this->db->get_where('materi', ['id' => $id])->row();
-        
+        $data['forum'] = $this->Forum_model->get_komentar_by_materi($id);
         $data['disqus'] = $this->disqus->get_html();
         $this->load->view('materi/navm');
         $this->load->view('materi/belajar', $data);
