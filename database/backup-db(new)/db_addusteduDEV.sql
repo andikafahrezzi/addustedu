@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 20, 2025 at 04:54 AM
+-- Generation Time: Mar 20, 2025 at 08:33 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -40,6 +40,68 @@ CREATE TABLE `admin` (
 
 INSERT INTO `admin` (`id`, `username`, `password`, `email`) VALUES
 (0, 'admin', '$2y$10$EX0L5MeIQldpkCuTZW.mjujTaj.Yy20IW0GOluecU/c.es.9r6E5.', 'admin@gmail.com');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forum`
+--
+
+CREATE TABLE `forum` (
+  `id` int(11) NOT NULL,
+  `materi_id` int(11) DEFAULT NULL,
+  `judul` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forum_diskusi`
+--
+
+CREATE TABLE `forum_diskusi` (
+  `id` int(11) NOT NULL,
+  `materi_id` int(11) NOT NULL,
+  `user` varchar(100) NOT NULL,
+  `komentar` text NOT NULL,
+  `tanggal` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `forum_diskusi`
+--
+
+INSERT INTO `forum_diskusi` (`id`, `materi_id`, `user`, `komentar`, `tanggal`) VALUES
+(1, 89, 'asep', 'aku', '2025-03-20 00:28:44'),
+(2, 44, 'rere', 'erer', '2025-03-20 00:30:04'),
+(3, 43, '123456', 'sqsqssqsq', '2025-03-20 00:57:53'),
+(4, 43, '123456', 'test', '2025-03-20 00:58:09'),
+(5, 43, '123456', 'betul bang', '2025-03-20 00:59:47'),
+(6, 43, '123456', 'betul bang', '2025-03-20 00:59:47'),
+(7, 43, '18883', 'aku bang', '2025-03-20 01:05:00'),
+(8, 43, '18883', 'aku bang', '2025-03-20 01:05:00'),
+(9, 43, '18883', 'est bang\r\n', '2025-03-20 01:05:58'),
+(10, 43, '18883', 'sss', '2025-03-20 01:09:54'),
+(11, 43, '18883', 's', '2025-03-20 01:19:20'),
+(12, 43, 'addusttt', 's', '2025-03-20 01:23:57'),
+(13, 43, 'addusttt', 'grgrg', '2025-03-20 01:24:04'),
+(14, 43, 'addusttt', 'emng iya\r\n', '2025-03-20 01:24:22'),
+(15, 52, 'addusttt', 'test dikit', '2025-03-20 01:29:53');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forum_komentar`
+--
+
+CREATE TABLE `forum_komentar` (
+  `id` int(11) NOT NULL,
+  `forum_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `komentar` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -160,6 +222,7 @@ INSERT INTO `siswa` (`nis`, `nama`, `password`, `email`, `image`, `is_active`, `
 (0, 'addust', '$2y$10$cYm/i5rWupzWKrc92nX4EublfQgeyyZl4AQyu2e4rbKFQUwc8iv9u', '', 'default.jpg', 1, 1742275981, ''),
 (39, 'Syaauqi Zaaidan', '$2y$10$djI2M/FQH2k3H7b6tLK5X.MZG1R.wrARoR6NerH3tsScNnsNCnexa', 'zaidanline67@gmail.com', '73349393_156861225523800_2119508204152772215_n_(1)6.jpg', 1, 1586163321, 'X'),
 (47, 'andikafahrezi', '$2y$10$Elu2/9GQ0xS41Q3iLxSet.mOe9fa5HCJaUNw6s6m.v4Gp9YDh3GQu', 'andikafahrezi10@gmail.com', 'default.jpg', 1, 1734259635, 'X'),
+(18883, 'addusttt', '$2y$10$X10AlJrzNt6KT6MqPhfTlOsjv5ZKYtj.3YqtNZwLnif0pfUeDzX82', 'addust1@gmail.com', 'default.jpg', 1, 1742454210, 'XI'),
 (123456, 'user', '$2y$10$6o.1PVKeTRO9gRBObACpYe8cbkP19daJYQVYNv7v4HnCyqjoLpp96', 'user@gmail.com', 'default.jpg', 1, 1735200089, 'XI'),
 (181816, 'qsqwdqwd', '$2y$10$YJppxwZ1JOt3s1/Xf9rgWewsjN8ZIhK1b.F39GcTmVS0uy5oOlhDK', 'testwd@gmail.com', 'default.jpg', 1, 1742296726, 'X'),
 (211011, 'addust', '$2y$10$jxtWU6XSRAaV/kU0UqlUeurzzcp9EFVEuXJmwiGUrOSLjK9oSvjB6', '', 'default.jpg', 1, 1742276422, ''),
@@ -188,6 +251,27 @@ CREATE TABLE `token` (
 --
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `forum`
+--
+ALTER TABLE `forum`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `materi_id` (`materi_id`);
+
+--
+-- Indexes for table `forum_diskusi`
+--
+ALTER TABLE `forum_diskusi`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `materi_id` (`materi_id`);
+
+--
+-- Indexes for table `forum_komentar`
+--
+ALTER TABLE `forum_komentar`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `forum_id` (`forum_id`);
 
 --
 -- Indexes for table `guru`
@@ -224,6 +308,24 @@ ALTER TABLE `token`
 --
 
 --
+-- AUTO_INCREMENT for table `forum`
+--
+ALTER TABLE `forum`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `forum_diskusi`
+--
+ALTER TABLE `forum_diskusi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `forum_komentar`
+--
+ALTER TABLE `forum_komentar`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `materi`
 --
 ALTER TABLE `materi`
@@ -234,6 +336,28 @@ ALTER TABLE `materi`
 --
 ALTER TABLE `token`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `forum`
+--
+ALTER TABLE `forum`
+  ADD CONSTRAINT `forum_ibfk_1` FOREIGN KEY (`materi_id`) REFERENCES `materi` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `forum_diskusi`
+--
+ALTER TABLE `forum_diskusi`
+  ADD CONSTRAINT `forum_diskusi_ibfk_1` FOREIGN KEY (`materi_id`) REFERENCES `materi` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `forum_komentar`
+--
+ALTER TABLE `forum_komentar`
+  ADD CONSTRAINT `forum_komentar_ibfk_1` FOREIGN KEY (`forum_id`) REFERENCES `forum` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
