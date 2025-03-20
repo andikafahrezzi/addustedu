@@ -29,6 +29,11 @@ class M_materi extends CI_Model
     {
         return $this->db->get_where($table, $where);
     }
+    public function update_matery($id, $data)
+{
+    $this->db->where('id', $id);
+    return $this->db->update('materi', $data);
+}
 
     public function update_data($where, $data, $table)
     {

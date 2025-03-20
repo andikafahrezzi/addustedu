@@ -234,24 +234,69 @@ class Admin extends CI_Controller
     public function materi_edit()
     {
         $this->load->model('m_materi');
-
         $id = $this->input->post('id');
+
+        // Konfigurasi upload video
+        $config['upload_path']   = './assets/materi_video/';
+        $config['allowed_types'] = 'mp4|avi|mov';
+        $config['max_size']      = 102400; // 100MB
+
+        $this->load->library('upload', $config);
+
+        if ($this->upload->do_upload('video')) {
+            $video = $this->upload->data('file_name');
+        } else {
+            $this->upload->display_errors();
+        }
+
+        // Konfigurasi upload modul
+        $config['upload_path']   = './assets/materi_modul/';
+        $config['allowed_types'] = 'pdf|doc|docx|jpg|jpeg|png';
+        $config['max_size']      = 5120; // 5MB
+
+        $this->upload->initialize($config);
+
+        if ($this->upload->do_upload('modul')) {
+            $modul = $this->upload->data('file_name');
+        } else {
+            $this->upload->display_errors();
+        }// Hentikan eksekusi untuk melihat hasilnya
+
+
         $nama_guru = $this->input->post('nama_guru');
         $nama_mapel = $this->input->post('nama_mapel');
         $deskripsi = $this->input->post('deskripsi');
-
+        $linkform = $this->input->post('linkform');
+        
         $data = array(
             'nama_guru' => $nama_guru,
             'nama_mapel' => $nama_mapel,
             'deskripsi' => $deskripsi,
-
+            'linkform' => $linkform,
+            'video'     => $video,
+            'modul'     => $modul
         );
 
         $where = array(
             'id' => $id,
         );
 
+        $query = $this->db->get_where('materi', array('id' => $id));
+
+        $existing_data = $this->db->get_where('materi', array('id' => $id))->row_array();
+        if ($existing_data) {
+            $difference = array_diff_assoc($data, $existing_data);
+            if (empty($difference)) {
+                echo "❌ Tidak ada perubahan data, update dibatalkan!";
+                exit;
+            }
+        }
+
+
         $this->m_materi->update_data($where, $data, 'materi');
+
+        $this->m_materi->update_data($where, $data, 'materi');
+     
         $this->session->set_flashdata('success-edit', 'berhasil');
         redirect('admin/data_materi');
         $this->load->view('admin/nava');
