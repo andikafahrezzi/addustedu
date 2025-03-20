@@ -50,6 +50,7 @@
                                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                                         <div class="card-body">
                                         <div class="font-weight-bold">
+<<<<<<< HEAD
                                             <?php 
                                                 $modulPath = 'assets/materi_modul/' . trim($detail->modul); // Path relatif
                                                 if (!empty($detail->modul) && file_exists(FCPATH . $modulPath)): 
@@ -60,6 +61,18 @@
                                                 <p class="text-danger">❌ Modul belum tersedia</p>
                                             <?php endif; ?>
                                         </div>
+=======
+                                        <?php 
+                                            $modulPath = 'assets/materi_modul/' . trim($detail->modul); // Path relatif
+                                            if (!empty($detail->modul) && file_exists(FCPATH . $modulPath)): 
+                                        ?>
+                                            <a href="<?= base_url($modulPath) ?>" target="_blank" class="btn btn-primary">📖 Lihat Modul</a> <br>
+                                            <a href="<?= base_url($modulPath) ?>" download class="btn btn-success">⬇️ Download Modul</a>
+                                        <?php else: ?>
+                                            <p class="text-danger">❌ Modul belum tersedia</p>
+                                        <?php endif; ?>
+                                    </div>
+>>>>>>> development
 
                                         </div>
                                     </div>
@@ -105,6 +118,55 @@
                                                             <h5 class="card-text"><?= $detail->nama_mapel; ?></h5>
                                                             <p class="card-text"> Deskripsi materi pelajaran : <br> <?= $detail->deskripsi; ?></p>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="container">
+                                            <div class="row mt-4">
+                                                <div class="col-md-12 w-150 mb-4">
+                                                    <div class="card materi border-0">
+                                                        <div class="card-body p-5">
+                                                            <h1 class="card-title display-4"><?= $detail->nama_guru; ?></h1>
+                                                            <hr style="background-color: white;">
+                                                            <h5 class="card-text"><?= $detail->nama_mapel; ?></h5>
+                                                            <h2>Forum Diskusi</h2>
+
+<!-- Form Tambah Komentar -->
+<form method="POST" action="<?= base_url('forum/tambah_komentar') ?>">
+    <input type="hidden" name="materi_id" value="<?= $materi->id ?>">
+    <input type="hidden" name="user" value="<?= $this->session->userdata('nama') ?>">
+    
+    <div class="form-group">
+        <label for="komentar">Komentar:</label>
+        <textarea class="form-control" name="komentar" required></textarea>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Kirim</button>
+</form>
+
+
+<hr>
+
+<!-- Tampilkan Komentar -->
+<h3>Komentar:</h3>
+<?php if (!empty($forum)): ?>
+    <?php foreach ($forum as $komen): ?>
+        <div class="card mt-2">
+            <div class="card-body">
+                <p class="komentarku">
+                    <strong><?= $komen->user ?></strong> (<?= $komen->tanggal ?>) <br>
+                </p>
+
+                <p class="komentarku"><?= $komen->komentar ?></p>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <p>Belum ada komentar.</p>
+<?php endif; ?>
+
+                                                            </div>
                                                     </div>
                                                 </div>
                                             </div>
