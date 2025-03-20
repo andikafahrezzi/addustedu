@@ -382,38 +382,64 @@ class Admin extends CI_Controller
 
     public function add_materi()
     {
-        $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required|trim|min_length[1]', [
-            'required' => 'Harap isi kolom deskripsi.',
-            'min_length' => 'deskripsi terlalu pendek.',
-        ]);
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_mapel', 'Nama Mata Pelajaran', 'required');
+        
         if ($this->form_validation->run() == false) {
             $this->load->view('admin/add_materi');
         } else {
-            $upload_video = $_FILES['video'];
-
-            if ($upload_video) {
-                $config['allowed_types'] = 'mp4|mkv|mov';
-                $config['max_size'] = '0';
-                $config['upload_path'] = './assets/materi_video';
-
-                $this->load->library('upload', $config);
-
+            // Load library upload terlebih dahulu
+            $this->load->library('upload');
+    
+            // **1️⃣ Proses Upload Video**
+            $video_materi = '';
+            if (!empty($_FILES['video']['name'])) {
+                $config_video['upload_path']   = './assets/materi_video/';
+                $config_video['allowed_types'] = 'mp4|avi|mov|wmv|mkv|webm';
+                $config_video['max_size']      = 100000;
+    
+                $this->upload->initialize($config_video);
+    
                 if ($this->upload->do_upload('video')) {
-                    $video = $this->upload->data('file_name');
+                    $upload_data = $this->upload->data();
+                    $video_materi = '' . $upload_data['file_name'];
                 } else {
-                    $this->upload->display_errors();
+                    $this->session->set_flashdata('error', 'Gagal upload video: ' . $this->upload->display_errors());
+                    redirect('admin/add_materi');
                 }
             }
+    
+            // **2️⃣ Proses Upload File Materi (PDF, Word, JPG)**
+            $modul = '';
+            if (!empty($_FILES['modul']['name'])) {
+                $config_modul['upload_path']   = './assets/materi_modul/';
+                $config_modul['allowed_types'] = 'pdf|doc|docx|jpg|jpeg|png';
+                $config_modul['max_size']      = 2048;
+    
+                $this->upload->initialize($config_modul);
+    
+                if ($this->upload->do_upload('modul')) {
+                    $upload_data = $this->upload->data();
+                    $modul = '' . $upload_data['file_name'];
+                } else {
+                    $this->session->set_flashdata('error', 'Gagal upload file materi: ' . $this->upload->display_errors());
+                    redirect('admin/add_materi');
+                }
+            }
+    
+            // **3️⃣ Simpan Data ke Database**
             $data = [
-                'nama_guru' => htmlspecialchars($this->input->post('nama_guru', true)),
-                'nama_mapel' => htmlspecialchars($this->input->post('nama_mapel', true)),
-                'video' => $video,
-                'deskripsi' => htmlspecialchars($this->input->post('deskripsi', true)),
-                'kelas' => htmlspecialchars($this->input->post('kelas', true)),
+                'nama_guru'   => htmlspecialchars($this->input->post('nama_guru', true)),
+                'nama_mapel'  => htmlspecialchars($this->input->post('nama_mapel', true)),
+                'video'       => $video_materi,
+                'modul'       => $modul,
+                'deskripsi'   => htmlspecialchars($this->input->post('deskripsi', true)),
+                'linkform'    => htmlspecialchars($this->input->post('linkform', true)),
+                'kelas'       => htmlspecialchars($this->input->post('kelas', true))
             ];
-
+    
             $this->db->insert('materi', $data);
-            $this->session->set_flashdata('success-reg', 'Berhasil!');
+            $this->session->set_flashdata('success', 'Materi berhasil ditambahkan!');
             redirect(base_url('admin/data_materi'));
         }
         $this->load->view('admin/nava');

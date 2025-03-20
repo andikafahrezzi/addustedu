@@ -53,6 +53,7 @@
                                                     disana.</small>
                                             </div>
                                             <div class="form-group">
+                                                <label for="">Upload Video Materi</label>
                                                 <div class="input-group">
                                                     <div class="custom-file">
                                                         <input required type="file" name="video" required class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
@@ -63,13 +64,22 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
+                                        <label>Upload File Materi (PDF, Word, JPG)</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" name="modul" class="custom-file-input" required>
+                                                <label class="custom-file-label">Pilih file</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                            <div class="form-group">
                                                 <label for="exampleFormControlTextarea1">Deskripsi Materi</label>
                                                 <textarea class="form-control" required name="deskripsi" id="exampleFormControlTextarea1" rows="3"></textarea>
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleFormControlTextarea1">Link Google Form</label>
-                                                <a href="" class="form-control" required name="linkform" id="examplelinkform"></a>
-                                            </div>
+                                                <textarea class="form-control" required name="linkform" id="exampleLinkForm"> </textarea>
+                                                </div>
                                             <div class="form-group">
                                                 <label for="inputState">Kelas</label>
                                                 <select required id="inputState" name="kelas" class="form-control">
