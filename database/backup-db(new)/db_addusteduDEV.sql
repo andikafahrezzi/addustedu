@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 19, 2025 at 06:23 AM
+-- Generation Time: Mar 20, 2025 at 04:54 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -101,7 +101,7 @@ CREATE TABLE `materi` (
 INSERT INTO `materi` (`id`, `nama_guru`, `nama_mapel`, `video`, `deskripsi`, `kelas`, `linkform`, `modul`) VALUES
 (38, 'Saauky', 'Matematika', 'Matematika_-_Dummy_-_1.mp4', '                                        RG Squad, siapa yang pernah dengar kata aljabar? Ini merupakan satu cabang matematika dalam pemecahan masalah dengan menggunakan huruf-huruf untuk mewakili angka-angka. Berasal dari bahasa Arab, al-jabr yang artinya penyelesaian. Kamu tahu siapa penemunya? Ia merupakan cendikiawan bernama Al-Khawarizmi. Sekarang, mari kita simak lebih lanjut tentang definisi dan bentuk-bentuk aljabar secara lebih mendalam ya! s', 'X', NULL, ''),
 (42, 'Saauky', 'Matematika', 'Matematika_-_Dummy_-_1.mp4', 'Dalam matematika dan ilmu komputer, Aljabar Boolean adalah struktur aljabar yang &quot;mencakup intisari&quot; operasi logika AND, OR, NOR, dan NAND dan juga teori himpunan untuk operasi union, interseksi dan komplemen. Penamaan Aljabar Boolean sendiri berasal dari nama seorang matematikawan asal Inggris, bernama George Boole.', 'X', NULL, ''),
-(43, 'Saauky', 'Matematika', 'Matematika_-_Dummy_-_2.mp4', 'Aljabar linear adalah bidang studi matematika yang mempelajari sistem persamaan linear dan solusinya, vektor, serta transformasi linear. Matriks dan operasinya juga merupakan hal yang berkaitan erat dengan bidang aljabar linear.', 'XI', NULL, ''),
+(43, 'Saauky', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef1509514.mp4', '                                        Aljabar linear adalah bidang studi matematika yang mempelajari sistem persamaan linear dan solusinya, vektor, serta transformasi linear. Matriks dan operasinya juga merupakan hal yang berkaitan erat dengan bidang aljabar linear.', 'XI', 'TEST.COM', 'WhatsApp_Image_2025-03-10_at_15_18_13_af7dc58414.jpg'),
 (44, 'Saauky', 'Matematika', 'Matematika_-_Dummy_3.mp4', 'Vektor merupakan kajian aljabar yang biasanya digunakan untuk memecahkan permasalahan fisika seperti gerak, gaya, dan sebagainya. ... Sebuah vektor bisa dinyatakan dalam bentuk geometri yang digambarkan sebagai sebuah ruas garis dengan arah tertentu dimana salah satunya merupakan pangkal dan satunya lagi merupakan ujung.', 'XI', NULL, ''),
 (45, 'Saauky', 'Matematika', 'Matematika_-_Dummy_4.mp4', 'Vektor dalam matematika dan fisika adalah objek geometri yang memiliki besar dan arah. Vektor jika dilambangkan dengan tanda panah. Besar vektor proporsional dengan panjang panah dan arahnya bertepatan dengan arah panah. Vektor dapat melambangkan perpindahan dari titik A ke B. Vektor sering ditandai sebagai', 'XII', NULL, ''),
 (46, 'Saauky', 'Matematika', 'Matematika_-_Dummy_5.mp4', 'Pecahan, atau disebut fraksi adalah istilah dalam matematika yang terdiri dari pembilang dan penyebut. Hakikat transaksi dalam bilangan pecahan adalah bagaimana cara menyederhanakan pembilang dan penyebut.', 'XII', NULL, ''),
@@ -131,14 +131,9 @@ INSERT INTO `materi` (`id`, `nama_guru`, `nama_mapel`, `video`, `deskripsi`, `ke
 (76, 'Ahmad Saugi', 'Pendidikan Agama Islam', 'Agama_Islam_-_Dummy_-_6.mp4', 'Islam adalah salah satu agama dari kelompok agama yang diterima oleh seorang nabi yang mengajarkan monoteisme tanpa kompromi, iman terhadap wahyu, iman terhadap akhir zaman, dan tanggung jawab. Bersama para pengikut Yudaisme dan Kekristenan, seluruh muslim–pengikut ajaran Islam–adalah anak turun Ibrahim.', 'XII', NULL, ''),
 (77, 'Saauky', 'Matematika', 'Agama_Islam_-_Dummy_-_6.mp4', 'Test', 'X', NULL, ''),
 (78, 'guru terbaik', 'Matematika', 'WIN_20241104_17_06_10_Pro4.mp4', 'ewfew', 'X', 'https://www.petanikode.com/git-branch/', ''),
-(79, 'guru terbaik', 'Matematika', 'assets/materi_video/WIN_20241104_17_06_10_Pro5.mp4', 'test feature upload modul', 'XII', ' https://www.youtube.com/', ''),
-(80, 'guru terbaik', 'Matematika', 'assets/materi_video/WIN_20241104_17_06_10_Pro6.mp4', 'qdsqwd', 'X', ' qwddwqdqwd', ''),
-(81, 'guru terbaik', 'Matematika', 'assets/materi_video/WIN_20241104_17_06_10_Pro7.mp4', 'wgewg', 'XII', ' wgw', ''),
-(82, 'guru terbaik', 'Matematika', 'assets/materi_video/WIN_20241104_17_06_10_Pro8.mp4', 'qwdqwdw', 'XII', ' dqwqwdqw', ''),
-(83, 'guru terbaik', 'Matematika', 'assets/materi_video/WIN_20241104_17_06_10_Pro9.mp4', 'boohihioh', 'XII', ' 32fwef', ''),
-(84, 'guru terbaik', 'Matematika', 'assets/materi_video/WIN_20241104_17_06_10_Pro10.mp4', 'grge', 'XII', ' ergreg', ''),
-(85, 'guru terbaik', 'Matematika', 'assets/materi_video/WIN_20241104_17_06_10_Pro14.mp4', 'fw', 'XII', ' ewf', 'assets/materi_modul/4845-17134-1-PB.pdf'),
-(86, 'guru terbaik', 'Matematika', 'assets/materi_video/WIN_20241104_17_06_10_Pro15.mp4', 'fwqwdqwd', 'XI', ' ewfqdwqwd', 'assets/materi_modul/559_+Alvaro+Alexander+22507-22513.pdf');
+(88, 'guru terbaik', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef1509513.mp4', 'AS', 'XI', 'WW', 'WhatsApp_Image_2025-03-10_at_15_18_13_af7dc58413.jpg'),
+(89, 'guru terbaik', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef1509511.mp4', '                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     dwdwdwd                                                       QSQS    trtrtrtrtwdwdwrtggrdqwdqwqwddwdw', 'XI', '                                                                      WDWD                          ', 'WhatsApp_Image_2025-03-10_at_15_18_13_af7dc58411.jpg'),
+(90, 'guru terbaik', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef1509515.mp4', 'grgrg', 'XI', ' grgrg', 'WhatsApp_Image_2025-03-10_at_15_18_13_af7dc58415.jpg');
 
 -- --------------------------------------------------------
 
@@ -232,7 +227,7 @@ ALTER TABLE `token`
 -- AUTO_INCREMENT for table `materi`
 --
 ALTER TABLE `materi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT for table `token`
