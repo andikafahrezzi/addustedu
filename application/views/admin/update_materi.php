@@ -24,7 +24,7 @@
                         </div>
                         <?php foreach ($user as $u) { ?>
                             <div class="card-body">
-                                <form method="POST" action="<?= base_url('admin/materi_edit') ?>">
+                                <form method="POST" action="<?= base_url('admin/materi_edit') ?>" enctype="multipart/form-data">
                                     <input type="hidden" name="id" value="<?= $u->id ?>">
                                     <div class="form-group">
                                         <label for="nip">Nama Guru</label>
@@ -41,14 +41,38 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input required type="file" name="video" class="custom-file-input"
+                                                    id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                                                <label class="custom-file-label" for="inputGroupFile01"> <?= $u->video ?> Upload Video
+                                                    Materi Disini</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Upload File Materi (PDF, Word, JPG)</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" name="modul" class="custom-file-input" required>
+                                                <label class="custom-file-label"> <?= $u->modul ?>Pilih file</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <input type="hidden" name="old_video" value="<?= $u->video ?>">
+                                    <input type="hidden" name="old_modul" value="<?= $u->modul ?>">
+
+                                    <input type="file" name="video">
+                                    <input type="file" name="modul"> -->
+                                    <div class="form-group">
                                         <label for="exampleFormControlTextarea1">Deskripsi Materi</label>
                                         <textarea class="form-control txtarea" name="deskripsi" id="exampleFormControlTextarea1" rows="3">
                                         <?= $u->deskripsi ?></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleFormControlTextarea1">Link Google Form</label>
-                                        <textarea class="form-control txtarea" name="linkform" id="exampleLinkForm">
-                                        <?= $u->deskripsi ?></textarea>
+                                        <textarea class="form-control txtarea" name="linkform" id="exampleFormControlTextarea1">
+                                        <?= $u->linkform ?></textarea>
                                     </div>
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-success btn-lg btn-block">
