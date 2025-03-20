@@ -50,29 +50,29 @@
                                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                                         <div class="card-body">
                                         <div class="font-weight-bold">
-    <?php 
-        $modulPath = 'assets/materi_modul/' . trim($detail->modul); // Path relatif
-        if (!empty($detail->modul) && file_exists(FCPATH . $modulPath)): 
-    ?>
-        <a href="<?= base_url($modulPath) ?>" target="_blank" class="btn btn-primary">📖 Lihat Modul</a> <br>
-        <a href="<?= base_url($modulPath) ?>" download class="btn btn-success">⬇️ Download Modul</a>
-    <?php else: ?>
-        <p class="text-danger">❌ Modul belum tersedia</p>
-    <?php endif; ?>
-</div>
+                                            <?php 
+                                                $modulPath = 'assets/materi_modul/' . trim($detail->modul); // Path relatif
+                                                if (!empty($detail->modul) && file_exists(FCPATH . $modulPath)): 
+                                            ?>
+                                                <a href="<?= base_url($modulPath) ?>" target="_blank" class="btn btn-primary">📖 Lihat Modul</a> <br>
+                                                <a href="<?= base_url($modulPath) ?>" download class="btn btn-success">⬇️ Download Modul</a>
+                                            <?php else: ?>
+                                                <p class="text-danger">❌ Modul belum tersedia</p>
+                                            <?php endif; ?>
+                                        </div>
 
                                         </div>
                                     </div>
                                 <br>
                                 <div class="card">
-                                    <div class="card-header" id="headingTwo">
-                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <div class="card-header" id="headingThree">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                             <p class="kotakp"><span class="lnr lnr-users"></span> Forum Diskusi</p>
                                             <i class="lnr lnr-chevron-down"></i>
                                             <i class="lnr lnr-chevron-up"></i>
                                         </button>
                                     </div>
-                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
                                         <div class="card-body">
                                             <p style="line-height: 3px;">Kita akan mempelajari tentang</p>
                                             
