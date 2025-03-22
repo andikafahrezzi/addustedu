@@ -65,14 +65,14 @@
                                     </div>
                                 <br>
                                 <div class="card">
-                                    <div class="card-header" id="headingTwo">
-                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <div class="card-header" id="headingThree">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                             <p class="kotakp"><span class="lnr lnr-users"></span> Forum Diskusi</p>
                                             <i class="lnr lnr-chevron-down"></i>
                                             <i class="lnr lnr-chevron-up"></i>
                                         </button>
                                     </div>
-                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
                                         <div class="card-body">
                                             <p style="line-height: 3px;">Kita akan mempelajari tentang</p>
                                             
