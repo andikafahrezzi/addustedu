@@ -50,7 +50,6 @@
                                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                                         <div class="card-body">
                                         <div class="font-weight-bold">
-<<<<<<< HEAD
                                             <?php 
                                                 $modulPath = 'assets/materi_modul/' . trim($detail->modul); // Path relatif
                                                 if (!empty($detail->modul) && file_exists(FCPATH . $modulPath)): 
@@ -61,19 +60,6 @@
                                                 <p class="text-danger">❌ Modul belum tersedia</p>
                                             <?php endif; ?>
                                         </div>
-=======
-                                        <?php 
-                                            $modulPath = 'assets/materi_modul/' . trim($detail->modul); // Path relatif
-                                            if (!empty($detail->modul) && file_exists(FCPATH . $modulPath)): 
-                                        ?>
-                                            <a href="<?= base_url($modulPath) ?>" target="_blank" class="btn btn-primary">📖 Lihat Modul</a> <br>
-                                            <a href="<?= base_url($modulPath) ?>" download class="btn btn-success">⬇️ Download Modul</a>
-                                        <?php else: ?>
-                                            <p class="text-danger">❌ Modul belum tersedia</p>
-                                        <?php endif; ?>
-                                    </div>
->>>>>>> development
-
                                         </div>
                                     </div>
                                 <br>
