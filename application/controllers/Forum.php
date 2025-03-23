@@ -52,6 +52,7 @@ class Forum extends CI_Controller {
             'materi_id' => $this->input->post('materi_id'), // Pastikan ini ada di tabel
             'user'      => $nama,
             'komentar'  => $this->input->post('komentar'),
+            'parent_id' => $this->input->post('parent_id') ?: NULL,
             'tanggal'   => date('Y-m-d H:i:s')
         ];
         $this->db->insert('forum_diskusi', $data);
@@ -68,5 +69,17 @@ class Forum extends CI_Controller {
         $siswa = $this->db->get_where('siswa', ['nis' => $nis])->row();
         return $siswa ? $siswa->nama : "Nama tidak ditemukan";
     }
+    public function diskusi($materi_id) {
+        $data['forum'] = $this->Forum_model->get_komentar_by_materi($materi_id);
+    
+        // Debugging: Cek apakah data duplikat
+        echo "<pre>";
+        print_r($data['forum']);
+        echo "</pre>";
+        exit(); // Hentikan sementara untuk melihat hasil
+    
+        $this->load->view('materi/belajar', $data);
+    }
+    
 
 }

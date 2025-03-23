@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 20, 2025 at 08:33 AM
+-- Generation Time: Mar 23, 2025 at 09:07 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -65,6 +65,7 @@ CREATE TABLE `forum_diskusi` (
   `materi_id` int(11) NOT NULL,
   `user` varchar(100) NOT NULL,
   `komentar` text NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
   `tanggal` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -72,22 +73,29 @@ CREATE TABLE `forum_diskusi` (
 -- Dumping data for table `forum_diskusi`
 --
 
-INSERT INTO `forum_diskusi` (`id`, `materi_id`, `user`, `komentar`, `tanggal`) VALUES
-(1, 89, 'asep', 'aku', '2025-03-20 00:28:44'),
-(2, 44, 'rere', 'erer', '2025-03-20 00:30:04'),
-(3, 43, '123456', 'sqsqssqsq', '2025-03-20 00:57:53'),
-(4, 43, '123456', 'test', '2025-03-20 00:58:09'),
-(5, 43, '123456', 'betul bang', '2025-03-20 00:59:47'),
-(6, 43, '123456', 'betul bang', '2025-03-20 00:59:47'),
-(7, 43, '18883', 'aku bang', '2025-03-20 01:05:00'),
-(8, 43, '18883', 'aku bang', '2025-03-20 01:05:00'),
-(9, 43, '18883', 'est bang\r\n', '2025-03-20 01:05:58'),
-(10, 43, '18883', 'sss', '2025-03-20 01:09:54'),
-(11, 43, '18883', 's', '2025-03-20 01:19:20'),
-(12, 43, 'addusttt', 's', '2025-03-20 01:23:57'),
-(13, 43, 'addusttt', 'grgrg', '2025-03-20 01:24:04'),
-(14, 43, 'addusttt', 'emng iya\r\n', '2025-03-20 01:24:22'),
-(15, 52, 'addusttt', 'test dikit', '2025-03-20 01:29:53');
+INSERT INTO `forum_diskusi` (`id`, `materi_id`, `user`, `komentar`, `parent_id`, `tanggal`) VALUES
+(1, 43, 'user', 's', NULL, '2025-03-22 02:02:23'),
+(2, 43, 'user', 's', NULL, '2025-03-22 23:31:36'),
+(4, 43, 'user', 'WDWDWD', NULL, '2025-03-22 23:59:14'),
+(5, 43, 'user', 'DEWDWEFEWF', NULL, '2025-03-22 23:59:27'),
+(6, 43, 'user', 'WDWDW', NULL, '2025-03-23 00:01:16'),
+(7, 43, 'user', 's', NULL, '2025-03-23 00:05:46'),
+(8, 43, 'user', 'qsqs', NULL, '2025-03-23 00:07:31'),
+(9, 43, 'user', 'sq', NULL, '2025-03-23 00:10:34'),
+(10, 43, 'user', 'test', NULL, '2025-03-23 00:23:23'),
+(11, 43, 'user', 'dwdwd', 1, '2025-03-23 00:38:52'),
+(12, 43, 'user', 'dqwqdqdqwfqwqwr22 3t34', 1, '2025-03-23 00:39:06'),
+(13, 43, 'user', 'asa', 1, '2025-03-23 00:43:37'),
+(14, 43, 'user', 'feef', NULL, '2025-03-23 00:49:43'),
+(15, 43, 'user', 'dwdw', NULL, '2025-03-23 00:50:57'),
+(16, 43, 'user', 'qq', NULL, '2025-03-23 00:57:30'),
+(17, 43, 'user', 'ss', NULL, '2025-03-23 01:15:32'),
+(18, 43, 'user', 'S', NULL, '2025-03-23 01:20:31'),
+(19, 43, 'user', 'SQQS', NULL, '2025-03-23 01:34:29'),
+(20, 43, 'user', 'SQQ', 1, '2025-03-23 01:42:57'),
+(21, 43, 'user', 'S', 1, '2025-03-23 01:44:47'),
+(22, 43, 'user', 's', 19, '2025-03-23 02:02:02'),
+(23, 43, 'user', 'sqqsqfwqq', 5, '2025-03-23 02:02:45');
 
 -- --------------------------------------------------------
 
@@ -264,7 +272,8 @@ ALTER TABLE `forum`
 --
 ALTER TABLE `forum_diskusi`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `materi_id` (`materi_id`);
+  ADD KEY `materi_id` (`materi_id`),
+  ADD KEY `fk_parent` (`parent_id`);
 
 --
 -- Indexes for table `forum_komentar`
@@ -317,7 +326,7 @@ ALTER TABLE `forum`
 -- AUTO_INCREMENT for table `forum_diskusi`
 --
 ALTER TABLE `forum_diskusi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `forum_komentar`
@@ -351,6 +360,7 @@ ALTER TABLE `forum`
 -- Constraints for table `forum_diskusi`
 --
 ALTER TABLE `forum_diskusi`
+  ADD CONSTRAINT `fk_parent` FOREIGN KEY (`parent_id`) REFERENCES `forum_diskusi` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `forum_diskusi_ibfk_1` FOREIGN KEY (`materi_id`) REFERENCES `materi` (`id`) ON DELETE CASCADE;
 
 --

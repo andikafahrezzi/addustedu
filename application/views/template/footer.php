@@ -286,6 +286,18 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
 <script>
     AOS.init();
 </script>
+<script>
+function toggleReplyForm(commentId) {
+    var form = document.getElementById("reply-form-" + commentId);
+    if (form) {
+        form.style.display = (form.style.display === "none") ? "block" : "none";
+    } else {
+        console.error("Form reply dengan ID " + commentId + " tidak ditemukan!");
+    }
+}
+</script>
+
+    <!-- <script>
 
 </body>
 
