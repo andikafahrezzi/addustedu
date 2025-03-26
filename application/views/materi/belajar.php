@@ -12,7 +12,7 @@
                                                                         $this->session->userdata('nis')])->row_array();
                                                                         echo $data['user']['nama'];
                                                                         ?> - addustedu Students</h3>
-                        <p><?= $detail->nama_mapel ?> - Kelas <?= $detail->kelas ?></p>
+                        <p><?= $materi->nama_mapel ?> - Kelas <?= $materi->kelas ?></p>
                         <hr align="left" width="600;">
                         
                 </div>
@@ -33,7 +33,7 @@
                                     </div>
                                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                                         <div class="card-body">
-                                        <p class="font-weight-bold"><a href="<?= substr($detail->linkform, 0, 120); ?>" target="_blank"><?= substr($detail->linkform, 0, 120); ?></a>
+                                        <p class="font-weight-bold"><a href="<?= substr($materi->linkform, 0, 120); ?>" target="_blank"><?= substr($materi->linkform, 0, 120); ?></a>
                                         
                                         </div>
                                     </div>
@@ -51,8 +51,8 @@
                                         <div class="card-body">
                                         <div class="font-weight-bold">
                                             <?php 
-                                                $modulPath = 'assets/materi_modul/' . trim($detail->modul); // Path relatif
-                                                if (!empty($detail->modul) && file_exists(FCPATH . $modulPath)): 
+                                                $modulPath = 'assets/materi_modul/' . trim($materi->modul); // Path relatif
+                                                if (!empty($materi->modul) && file_exists(FCPATH . $modulPath)): 
                                             ?>
                                                 <a href="<?= base_url($modulPath) ?>" target="_blank" class="btn btn-primary">📖 Lihat Modul</a> <br>
                                                 <a href="<?= base_url($modulPath) ?>" download class="btn btn-success">⬇️ Download Modul</a>
@@ -81,7 +81,7 @@
                                             <div class="row">
                                                 <div class="col-md-12 mx-auto text-center">
                                                     <video id="myvideo" width="100%" height="auto" controls>
-                                                        <source src="<?= base_url() . 'assets/materi_video/' . $detail->video; ?>" type="video/mp4">
+                                                        <source src="<?= base_url() . 'assets/materi_video/' . $materi->video; ?>" type="video/mp4">
                                                         Your browser does not support the video tag.
                                                     </video>
                                                 </div>
@@ -99,29 +99,32 @@
                                                 <div class="col-md-12 w-150 mb-4">
                                                     <div class="card materi border-0">
                                                         <div class="card-body p-5">
-                                                            <h1 class="card-title display-4"><?= $detail->nama_guru; ?></h1>
+                                                            <h1 class="card-title display-4"><?= $materi->nama_guru; ?></h1>
                                                             <hr style="background-color: white;">
-                                                            <h5 class="card-text"><?= $detail->nama_mapel; ?></h5>
-                                                            <p class="card-text"> Deskripsi materi pelajaran : <br> <?= $detail->deskripsi; ?></p>
+                                                            <h5 class="card-text"><?= $materi->nama_mapel; ?></h5>
+                                                            <p class="card-text"> Deskripsi materi pelajaran : <br> <?= $materi->deskripsi; ?></p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="container">
-                                            <div class="row mt-4">
-                                                <div class="col-md-12 w-150 mb-4">
-                                                    <div class="card materi border-0">
-                                                        <div class="card-body p-5">
-                                                            <h1 class="card-title display-4"><?= $detail->nama_guru; ?></h1>
-                                                            <hr style="background-color: white;">
-                                                            <h5 class="card-text"><?= $detail->nama_mapel; ?></h5>
-                                                            <h2>Forum Diskusi</h2>
+
+                                       <!-- Forum Diskusi -->
+<div class="container">
+    <div class="card mt-4">
+        <div class="card-body">
+            <h2>Forum Diskusi</h2>
+            <?php 
+// Pastikan $materi ada sebelum mengakses propertinya
+if(!isset($materi) || !is_object($materi)) {
+    die('Data materi tidak valid');
+}
+?>
 
 <!-- Form Tambah Komentar -->
 <form method="POST" action="<?= base_url('forum/tambah_komentar') ?>">
     <input type="hidden" name="materi_id" value="<?= $materi->id ?>">
-    <input type="hidden" name="user" value="<?= $this->session->userdata('nama') ?>">
+    <input type="hidden" name="parent_id" value="">
     
     <div class="form-group">
         <label for="komentar">Komentar:</label>
@@ -130,45 +133,73 @@
     
     <button type="submit" class="btn btn-primary">Kirim</button>
 </form>
-<?php foreach ($forum as $komen): ?>
-    <div class="card mt-2">
-        <div class="card-body">
-            <p class="komentarku">
-                <strong><?= htmlspecialchars($komen->user) ?></strong> (<?= $komen->tanggal ?>) <br>
-            </p>
-            <p class="komentarku"><?= nl2br(htmlspecialchars($komen->komentar)) ?></p>
-            <button class="btn btn-sm btn-link" onclick="toggleReplyForm(<?= $komen->id ?>)">Balas</button>
 
-            <!-- Form balas komentar (default hidden) -->
-            <form method="POST" action="<?= base_url('forum/tambah_komentar') ?>" id="reply-form-<?= $komen->id ?>" style="display: none;">
-                <input type="hidden" name="materi_id" value="<?= $komen->materi_id ?>">
-                <input type="hidden" name="parent_id" value="<?= $komen->id ?>">
-                <input type="hidden" name="user" value="<?= $this->session->userdata('nama') ?>">
+<!-- Fungsi tampil komentar -->
+<?php 
+function display_comments($comments, $materi_id, $level = 0) {
+    foreach ($comments as $comment) {
+        $margin = $level * 20;
+?>
+        <div class="card mt-2" style="margin-left: <?= $margin ?>px;">
+            <div class="card-body">
+                <p><strong><?= htmlspecialchars($comment->user) ?></strong> (<?= $comment->tanggal ?>)</p>
+                <p><?= nl2br(htmlspecialchars($comment->komentar)) ?></p>
+                
+                <button class="btn btn-sm btn-link" onclick="toggleReplyForm(<?= $comment->id ?>)">
+                    Balas
+                </button>
 
-                <div class="form-group">
-                    <textarea class="form-control" name="komentar" required></textarea>
+                <div id="reply-form-<?= $comment->id ?>" style="display: none;">
+                    <form method="POST" action="<?= base_url('forum/tambah_komentar') ?>">
+                        <input type="hidden" name="materi_id" value="<?= $materi_id ?>">
+                        <input type="hidden" name="parent_id" value="<?= $comment->id ?>">
+                        
+                        <div class="form-group mt-2">
+                            <textarea class="form-control" name="komentar" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-sm">Kirim Balasan</button>
+                    </form>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-sm">Kirim</button>
-            </form>
+                <?php if (!empty($comment->replies)): ?>
+                    <?php display_comments($comment->replies, $materi_id, $level + 1); ?>
+                <?php endif; ?>
+            </div>
+        </div>
+<?php
+    }
+}
+
+// Panggil fungsi tampil komentar
+if (!empty($forum)) {
+    display_comments($forum, $materi->id);
+} else {
+    echo "<p class='mt-3'>Belum ada komentar.</p>";
+}
+?>
+
+<script>
+function toggleReplyForm(commentId) {
+    var form = document.getElementById("reply-form-" + commentId);
+    if (form) {
+        form.style.display = (form.style.display === "none") ? "block" : "none";
+    }
+}
+</script>
+            
         </div>
     </div>
-<?php endforeach; ?>
+</div>
 
-
-
-<hr>
-
-
-
-
-
-
-                                                            </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+<script>
+function toggleReplyForm(commentId) {
+    var form = document.getElementById("reply-form-" + commentId);
+    if (form) {
+        form.style.display = (form.style.display === "none") ? "block" : "none";
+    }
+}
+</script>
                                         <!-- End Deskripsi Materi -->
 
 

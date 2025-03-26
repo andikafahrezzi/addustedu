@@ -50,38 +50,21 @@ class Materi extends CI_Controller
         $this->load->view('template/footer');
     }
 
-    public function belajar($id)
-    {
-        $this->load->model('M_materi');
-        $this->load->model('Forum_model');
-    
-        // Ambil Nama User dari Session
-        $nama_user = $this->session->userdata('nis');
-        if (!$nama_user) {
-            show_error("Error: Nama user tidak ditemukan di session!", 500);
-            return;
-        }
-    
-        // Ambil Data Materi
-        $data['materi'] = $this->M_materi->get_materi_by_id($id);
-        if (!$data['materi']) {
-            show_error("Materi tidak ditemukan.", 404);
-            return;
-        }
-    
-        // Ambil Detail Materi
-        $data['detail'] = $this->db->get_where('materi', ['id' => $id])->row();
+    public function belajar($id) {
+        $this->load->model(['M_materi', 'Forum_model']);
         
-        // Ambil Komentar Forum
+        // Ambil data
+        $data['materi'] = $this->M_materi->get_materi_by_id($id);
+        $data['user'] = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row_array();
         $data['forum'] = $this->Forum_model->get_komentar_by_materi($id);
-    
-        // Disqus (jika digunakan)
         $data['disqus'] = $this->disqus->get_html();
-    
-        // Kirim `materi_id` ke View
-        $data['materi_id'] = $id;
-    
-        // Load View
+        
+        // Debug akhir sebelum load view
+        if(empty($data['materi'])) {
+            show_404();
+            return;
+        }
+        
         $this->load->view('materi/navm');
         $this->load->view('materi/belajar', $data);
     }

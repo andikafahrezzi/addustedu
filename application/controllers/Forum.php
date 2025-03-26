@@ -33,31 +33,47 @@ class Forum extends CI_Controller {
         $data['forum'] = $this->Forum_model->get_forum_comments($forum_id);
         $this->load->view('forum/komentar', $data);
     }
-
-    public function tambah_komentar()
-    {
-        $nama_user = $this->session->userdata('nis');
-        
-        $siswa = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row_array();
-        $nama = $siswa['nama']; // Ambil nama dari array
-        // Tampilkan nama
-
-
-        if (!$nama_user) {
-            echo "Error: Nama user tidak ditemukan di session!";
-            return;
+        public function tambah_komentar() {
+            // Validasi session
+            if (!$this->session->userdata('nis')) {
+                redirect('auth');
+            }
+    
+            // Ambil data siswa
+            $siswa = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row_array();
+            if (!$siswa) {
+                $this->session->set_flashdata('error', 'Data siswa tidak ditemukan');
+                redirect('auth');
+            }
+    
+            // Validasi input
+            $this->form_validation->set_rules('komentar', 'Komentar', 'required');
+            $this->form_validation->set_rules('materi_id', 'Materi ID', 'required|numeric');
+            
+            if ($this->form_validation->run() == FALSE) {
+                $this->session->set_flashdata('error', validation_errors());
+                redirect('materi/belajar/' . $this->input->post('materi_id'));
+            }
+    
+            // Siapkan data komentar
+            $data = [
+                'materi_id' => $this->input->post('materi_id'),
+                'user'      => $siswa['nama'],
+                'komentar'  => $this->input->post('komentar'),
+                'parent_id' => $this->input->post('parent_id') ?: NULL,
+                'tanggal'   => date('Y-m-d H:i:s')
+            ];
+    
+            // Simpan ke database
+            if ($this->Forum_model->tambah_komentar($data)) {
+                $this->session->set_flashdata('success', 'Komentar berhasil ditambahkan');
+            } else {
+                $this->session->set_flashdata('error', 'Gagal menambahkan komentar');
+            }
+    
+            redirect('materi/belajar/' . $data['materi_id']);
         }
-
-        $data = [
-            'materi_id' => $this->input->post('materi_id'), // Pastikan ini ada di tabel
-            'user'      => $nama,
-            'komentar'  => $this->input->post('komentar'),
-            'parent_id' => $this->input->post('parent_id') ?: NULL,
-            'tanggal'   => date('Y-m-d H:i:s')
-        ];
-        $this->db->insert('forum_diskusi', $data);
-        redirect('materi/belajar/' . $data['materi_id']);
-    }
+    
 
     public function get_nama_siswa()
     {

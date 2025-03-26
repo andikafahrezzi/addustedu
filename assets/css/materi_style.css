@@ -36,7 +36,18 @@ body {
 	width: 100%;
 }
 .komentarku {
-	color: red;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.card {
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.btn-link {
+    color: #007bff;
+    text-decoration: none;
 }
 .btn-white {
 	background-color: white;
