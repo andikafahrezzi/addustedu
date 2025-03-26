@@ -1,0 +1,375 @@
+-- phpMyAdmin SQL Dump
+-- version 5.1.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Mar 23, 2025 at 09:07 AM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 7.4.16
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `db_addustedu`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `id` int(64) NOT NULL,
+  `username` varchar(128) NOT NULL,
+  `password` varchar(128) NOT NULL,
+  `email` varchar(128) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id`, `username`, `password`, `email`) VALUES
+(0, 'admin', '$2y$10$EX0L5MeIQldpkCuTZW.mjujTaj.Yy20IW0GOluecU/c.es.9r6E5.', 'admin@gmail.com');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forum`
+--
+
+CREATE TABLE `forum` (
+  `id` int(11) NOT NULL,
+  `materi_id` int(11) DEFAULT NULL,
+  `judul` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forum_diskusi`
+--
+
+CREATE TABLE `forum_diskusi` (
+  `id` int(11) NOT NULL,
+  `materi_id` int(11) NOT NULL,
+  `user` varchar(100) NOT NULL,
+  `komentar` text NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `tanggal` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `forum_diskusi`
+--
+
+INSERT INTO `forum_diskusi` (`id`, `materi_id`, `user`, `komentar`, `parent_id`, `tanggal`) VALUES
+(1, 43, 'user', 's', NULL, '2025-03-22 02:02:23'),
+(2, 43, 'user', 's', NULL, '2025-03-22 23:31:36'),
+(4, 43, 'user', 'WDWDWD', NULL, '2025-03-22 23:59:14'),
+(5, 43, 'user', 'DEWDWEFEWF', NULL, '2025-03-22 23:59:27'),
+(6, 43, 'user', 'WDWDW', NULL, '2025-03-23 00:01:16'),
+(7, 43, 'user', 's', NULL, '2025-03-23 00:05:46'),
+(8, 43, 'user', 'qsqs', NULL, '2025-03-23 00:07:31'),
+(9, 43, 'user', 'sq', NULL, '2025-03-23 00:10:34'),
+(10, 43, 'user', 'test', NULL, '2025-03-23 00:23:23'),
+(11, 43, 'user', 'dwdwd', 1, '2025-03-23 00:38:52'),
+(12, 43, 'user', 'dqwqdqdqwfqwqwr22 3t34', 1, '2025-03-23 00:39:06'),
+(13, 43, 'user', 'asa', 1, '2025-03-23 00:43:37'),
+(14, 43, 'user', 'feef', NULL, '2025-03-23 00:49:43'),
+(15, 43, 'user', 'dwdw', NULL, '2025-03-23 00:50:57'),
+(16, 43, 'user', 'qq', NULL, '2025-03-23 00:57:30'),
+(17, 43, 'user', 'ss', NULL, '2025-03-23 01:15:32'),
+(18, 43, 'user', 'S', NULL, '2025-03-23 01:20:31'),
+(19, 43, 'user', 'SQQS', NULL, '2025-03-23 01:34:29'),
+(20, 43, 'user', 'SQQ', 1, '2025-03-23 01:42:57'),
+(21, 43, 'user', 'S', 1, '2025-03-23 01:44:47'),
+(22, 43, 'user', 's', 19, '2025-03-23 02:02:02'),
+(23, 43, 'user', 'sqqsqfwqq', 5, '2025-03-23 02:02:45');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forum_komentar`
+--
+
+CREATE TABLE `forum_komentar` (
+  `id` int(11) NOT NULL,
+  `forum_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `komentar` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `guru`
+--
+
+CREATE TABLE `guru` (
+  `nip` int(64) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `nama_guru` varchar(128) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `nama_mapel` varchar(64) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `guru`
+--
+
+INSERT INTO `guru` (`nip`, `email`, `nama_guru`, `password`, `nama_mapel`) VALUES
+(21010240, 'guru1@gmail.com', 'guru terbaik', '$2y$10$5b/MJhDxwMBoOBZ0m4nofOCPrwn9XM/RZu7xuG528R7P71k629SUS', 'Matematika'),
+(214748364, 'Dummy@gmail.com', 'Ahmad Saugi', '', 'Pendidikan Agama Islam'),
+(214748365, 'zaidanline67@gmail.com', 'Saauky', '$2y$10$3qQ2TYrtQHy44LblPMexnu4ZQrCWD.dYh20P.sOL5cyo6Z48fJQEq', 'Matematika'),
+(1819107728, 'imas@gmail.com', 'Imas Kartika', '$2y$10$wCSBYTaCpSJaEX/1VUo1p.YU88vbgr7PeW.j1OkmD2xnKjIbB7SD6', 'Matematika');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kelas`
+--
+
+CREATE TABLE `kelas` (
+  `id` int(255) NOT NULL,
+  `kelas` varchar(128) NOT NULL,
+  `nama_siswa` varchar(128) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `materi`
+--
+
+CREATE TABLE `materi` (
+  `id` int(11) NOT NULL,
+  `nama_guru` varchar(128) NOT NULL,
+  `nama_mapel` varchar(128) NOT NULL,
+  `video` varchar(255) NOT NULL,
+  `deskripsi` varchar(1024) NOT NULL,
+  `kelas` varchar(128) NOT NULL,
+  `linkform` varchar(100) DEFAULT NULL,
+  `modul` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `materi`
+--
+
+INSERT INTO `materi` (`id`, `nama_guru`, `nama_mapel`, `video`, `deskripsi`, `kelas`, `linkform`, `modul`) VALUES
+(38, 'Saauky', 'Matematika', 'Matematika_-_Dummy_-_1.mp4', '                                        RG Squad, siapa yang pernah dengar kata aljabar? Ini merupakan satu cabang matematika dalam pemecahan masalah dengan menggunakan huruf-huruf untuk mewakili angka-angka. Berasal dari bahasa Arab, al-jabr yang artinya penyelesaian. Kamu tahu siapa penemunya? Ia merupakan cendikiawan bernama Al-Khawarizmi. Sekarang, mari kita simak lebih lanjut tentang definisi dan bentuk-bentuk aljabar secara lebih mendalam ya! s', 'X', NULL, ''),
+(42, 'Saauky', 'Matematika', 'Matematika_-_Dummy_-_1.mp4', 'Dalam matematika dan ilmu komputer, Aljabar Boolean adalah struktur aljabar yang &quot;mencakup intisari&quot; operasi logika AND, OR, NOR, dan NAND dan juga teori himpunan untuk operasi union, interseksi dan komplemen. Penamaan Aljabar Boolean sendiri berasal dari nama seorang matematikawan asal Inggris, bernama George Boole.', 'X', NULL, ''),
+(43, 'Saauky', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef1509514.mp4', '                                        Aljabar linear adalah bidang studi matematika yang mempelajari sistem persamaan linear dan solusinya, vektor, serta transformasi linear. Matriks dan operasinya juga merupakan hal yang berkaitan erat dengan bidang aljabar linear.', 'XI', 'TEST.COM', 'WhatsApp_Image_2025-03-10_at_15_18_13_af7dc58414.jpg'),
+(44, 'Saauky', 'Matematika', 'Matematika_-_Dummy_3.mp4', 'Vektor merupakan kajian aljabar yang biasanya digunakan untuk memecahkan permasalahan fisika seperti gerak, gaya, dan sebagainya. ... Sebuah vektor bisa dinyatakan dalam bentuk geometri yang digambarkan sebagai sebuah ruas garis dengan arah tertentu dimana salah satunya merupakan pangkal dan satunya lagi merupakan ujung.', 'XI', NULL, ''),
+(45, 'Saauky', 'Matematika', 'Matematika_-_Dummy_4.mp4', 'Vektor dalam matematika dan fisika adalah objek geometri yang memiliki besar dan arah. Vektor jika dilambangkan dengan tanda panah. Besar vektor proporsional dengan panjang panah dan arahnya bertepatan dengan arah panah. Vektor dapat melambangkan perpindahan dari titik A ke B. Vektor sering ditandai sebagai', 'XII', NULL, ''),
+(46, 'Saauky', 'Matematika', 'Matematika_-_Dummy_5.mp4', 'Pecahan, atau disebut fraksi adalah istilah dalam matematika yang terdiri dari pembilang dan penyebut. Hakikat transaksi dalam bilangan pecahan adalah bagaimana cara menyederhanakan pembilang dan penyebut.', 'XII', NULL, ''),
+(47, 'Zaaidan', 'IPA', 'IPA_-_Dummy_1.mp4', 'Fisika adalah salah satu disiplin akademik paling tua, mungkin yang tertua melalui astronomi yang juga termasuk di dalamnya.[6] Lebih dari dua milenia, fisika menjadi bagian dari Ilmu Alam bersama dengan kimia, biologi, dan cabang tertentu matematika, tetapi ketika munculnya revolusi ilmiah pada abad ke-17, ilmu alam berkembang sebagai program penelitian sendiri.[b] Fisika berkembang dengan banyak spesialisasi bidang ilmu lain, seperti biofisika dan kimia kuantum, dan batasan fisiknya tidak didefinisikan dengan jelas. Ilmu baru dalam fisika terkadang digunakan untuk menjelaskan mekanisme dasar sains lainnya[3] serta membuka jalan area penelitian lainnya seperti matematika dan filsafat.', 'X', NULL, ''),
+(50, 'Zaaidan', 'IPA', 'IPA_-_Dummy_2.mp4', 'Kristalisasi adalah proses pembentukan bahan padat dari pengendapan larutan, melt, atau lebih jarang pengendapan langsung dari gas. Kristalisasi juga merupakan teknik pemisahan kimia antara bahan padat-cair, di mana terjadi perpindahan massa dari suat zat terlarut dari cairan larutan ke fase kristal padat', 'X', NULL, ''),
+(51, 'Zaaidan', 'IPA', 'IPA_-_Dummy_3.mp4', 'Peleburan adalah proses reduksi bijih sehingga menjadi logam unsur yang dapat digunakan berbagai macam zat seperti karbid, hidrogen, logam aktif atau dengan cara elektrolisis. Pemilihan zat pereduksi ini tergantung dari kereaktifan masing-masing zat.', 'XI', NULL, ''),
+(52, 'Zaaidan', 'IPA', 'IPA_-_Dummy_4.mp4', 'Pencairan, pelelehan atau Peleburan adalah proses yang menghasilkan perubahan fase zat dari padat ke cair. Energi internal dari zat padat meningkat mencapai temperatur tertentu saat zat ini berubah menjadi cair.Benda yang telah mencair sepenuhnya disebut benda cair.', 'XI', NULL, ''),
+(53, 'Zaaidan', 'IPA', 'IPA_-_Dummy_5.mp4', 'Dalam ilmu fisika dan kimia, pembekuan adalah proses di mana cairan berubah menjadi padatan. Titik beku adalah temperatur di mana hal ini terjadi. Peleburan, adalah proses kebalikan dari pembekuan di mana padatan berubah manjadi cairan. Pada sebagian besar zat, titik beku dan titik lebur biasanya sama.', 'XII', NULL, ''),
+(54, 'Zaaidan', 'IPA', 'IPA_-_Dummy_6.mp4', 'Teknologi pembekuan makanan adalah teknologi mengawetkan makanan dengan menurunkan temperaturnya hingga di bawah titik beku air.', 'XII', NULL, ''),
+(55, 'Khaairan', 'Bahasa Inggris', 'Inggris_-_Dummy_1.mp4', 'Bahasa Inggris adalah bahasa Jermanik yang pertama kali dituturkan di Inggris pada Abad Pertengahan Awal dan saat ini merupakan bahasa yang paling umum digunakan di seluruh dunia.[4] Bahasa Inggris dituturkan sebagai bahasa pertama oleh mayoritas penduduk di berbagai negara, termasuk Britania Raya, Irlandia, Amerika Serikat, Kanada, Australia, Selandia Baru, dan sejumlah negara-negara Karibia; serta menjadi bahasa resmi di hampir 60 negara berdaulat. Bahasa Inggris adalah bahasa ibu ketiga yang paling banyak dituturkan di seluruh dunia, setelah bahasa Mandarin dan bahasa Spanyol.[5] Bahasa Inggris juga digunakan sebagai bahasa kedua dan bahasa resmi oleh Uni Eropa, Negara Persemakmuran, dan Perserikatan Bangsa-Bangsa, serta beragam organisasi lainnya.', 'X', NULL, ''),
+(56, 'Khaairan', 'Bahasa Inggris', 'Inggris_-_Dummy_2.mp4', 'Bahasa Inggris berkembang pertama kali di Kerajaan Anglo-Saxon Inggris dan di wilayah yang saat ini membentuk Skotlandia tenggara. Setelah meluasnya pengaruh Britania Raya pada abad ke-17 dan ke-20 melalui Imperium Britania, bahasa Inggris tersebar luas di seluruh dunia.[6][7][8] Di samping itu, luasnya penggunaan bahasa Inggris juga disebabkan oleh penyebaran kebudayaan dan teknologi Amerika Serikat yang mendominasi di sepanjang abad ke-20.[9] Hal-hal tersebut telah menyebabkan bahasa Inggris saat ini menjadi bahasa utama dan secara tidak resmi (de facto) dianggap sebagai lingua franca di berbagai belahan dunia.[10][11]', 'X', NULL, ''),
+(57, 'Khaairan', 'Bahasa Inggris', 'Inggris_-_Dummy_3.mp4', 'Menurut sejarahnya, bahasa Inggris berasal dari peleburan beragam dialek terkait, yang saat ini secara kolektif dikenal sebagai bahasa Inggris Kuno, yang dibawa ke pantai timur Pulau Britania oleh pendatang Jermanik (Anglo-Saxons) pada abad ke-5; kata English\' berasal dari nama Angles.[12] Suku Anglo-Saxons ini sendiri berasal dari wilayah Angeln (saat ini Schleswig-Holstein, Jerman). Bahasa Inggris awal juga dipengaruhi oleh bahasa Norse Kuno setelah Viking menaklukkan Inggris pada abad ke-9 dan ke-10.', 'XI', NULL, ''),
+(58, 'Khaairan', 'Bahasa Inggris', 'Inggris_-_Dummy_4.mp4', 'Penaklukan Normandia terhadap Inggris pada abad ke-11 menyebabkan bahasa Inggris juga mendapat pengaruh dari bahasa Prancis Norman, dan kosakata serta ejaan dalam bahasa Inggris mulai dipengaruhi oleh bahasa Latin Romawi (meskipun bahasa Inggris sendiri bukanlah rumpun bahasa Romawi),[13][14] yang kemudian dikenal dengan bahasa Inggris Pertengahan. Pergeseran Vokal yang dimulai di Inggris bagian selatan pada abad ke-15 adalah salah satu peristiwa bersejarah yang menandai peralihan bahasa Inggris Pertengahan menjadi bahasa Inggris Modern.', 'XI', NULL, ''),
+(59, 'Khaairan', 'Bahasa Inggris', 'Inggris_-_Dummy_5.mp4', 'Selain Anglo-Saxons dan Prancis Norman, sejumlah besar kata dalam bahasa Inggris juga berakar dari bahasa Latin, karena Latin adalah lingua franca Gereja Kristen dan bahasa utama di kalangan intelektual Eropa,[15] dan telah menjadi dasar kosakata bagi bahasa Inggris modern.', 'XII', NULL, ''),
+(60, 'Khaairan', 'Bahasa Inggris', 'Inggris_-_Dummy_6.mp4', 'Karena telah mengalami perpaduan beragam kata dari berbagai bahasa di sepanjang sejarah, bahasa Inggris modern memiliki kosakata yang sangat banyak, dengan pengejaan yang kompleks dan tidak teratur (irregular), khususnya vokal. Bahasa Inggris modern tidak hanya merupakan perpaduan dari bahasa-bahasa Eropa, tetapi juga dari berbagai bahasa di seluruh dunia. Oxford English Dictionary memuat daftar lebih dari 250.000 kata berbeda, tidak termasuk istilah-istilah teknis, sains, dan bahasa gaul yang jumlahnya juga sangat banyak.[16][17]', 'XII', NULL, ''),
+(61, 'Khairi Firdaus', 'Bahasa Indonesia', 'Indonesia_-_Dummy_1.mp4', 'Bahasa Indonesia adalah bahasa Melayu yang dijadikan sebagai bahasa resmi Republik Indonesia[1] dan bahasa persatuan bangsa Indonesia.[2] Bahasa Indonesia diresmikan penggunaannya setelah Proklamasi Kemerdekaan Indonesia, tepatnya sehari sesudahnya, bersamaan dengan mulai berlakunya konstitusi. Di Timor Leste, bahasa Indonesia berstatus sebagai bahasa kerja.', 'X', NULL, ''),
+(62, 'Khairi Firdaus', 'Bahasa Indonesia', 'Indonesia_-_Dummy_2.mp4', 'Dari sudut pandang linguistik, bahasa Indonesia adalah salah satu dari banyak varietas bahasa Melayu.[3] Dasar yang dipakai sebagai dasar bahasa Indonesia baku adalah bahasa Melayu Tinggi (&quot;Riau&quot;).[4][5] Dalam perkembangannya, ia mengalami perubahan akibat penggunaannya sebagai bahasa kerja di lingkungan administrasi kolonial dan berbagai proses pembakuan sejak awal abad ke-20. Penamaan &quot;bahasa Indonesia&quot; diawali sejak dicanangkannya Sumpah Pemuda, 28 Oktober 1928, untuk menghindari kesan &quot;imperialisme bahasa&quot; apabila nama bahasa Melayu tetap digunakan.[6] Proses ini menyebabkan berbedanya bahasa Indonesia saat ini dari varian bahasa Melayu yang digunakan di Riau maupun Semenanjung Malaya. Hingga saat ini, bahasa Indonesia merupakan bahasa yang hidup, yang terus menghasilkan kata-kata baru, baik melalui penciptaan maupun penyerapan dari bahasa daerah dan bahasa asing.', 'X', NULL, ''),
+(63, 'Khairi Firdaus', 'Bahasa Indonesia', 'Indonesia_-_Dummy_3.mp4', 'Meskipun dipahami dan dituturkan oleh lebih dari 90% warga Indonesia, bahasa Indonesia bukanlah bahasa ibu bagi kebanyakan penuturnya. Sebagian besar warga Indonesia menggunakan salah satu dari 748 bahasa yang ada di Indonesia sebagai bahasa ibu.[7] Istilah &quot;bahasa Indonesia&quot; paling umum dikaitkan dengan bahasa baku yang digunakan dalam situasi formal.[4] Ragam bahasa baku tersebut berhubungan diglosik dengan bentuk-bentuk bahasa Melayu vernacular yang digunakan sebagai peranti komunikasi sehari-hari.[4] Artinya, penutur bahasa Indonesia kerap kali menggunakan versi sehari-hari (colloquial) dan/atau mencampuradukkan dengan dialek Melayu lainnya atau bahasa ibunya. Meskipun demikian, bahasa Indonesia digunakan sangat luas di perguruan-perguruan, di media massa, sastra, perangkat lunak, surat-menyurat resmi, dan berbagai forum publik lainnya,[8] sehingga dapatlah dikatakan bahwa bahasa Indonesia digunakan oleh semua warga Indonesia.', 'XI', NULL, ''),
+(64, 'Khairi Firdaus', 'Bahasa Indonesia', 'Indonesia_-_Dummy_4.mp4', 'Aksara pertama dalam bahasa Melayu atau Jawi ditemukan di pesisir tenggara Pulau Sumatra, menunjukkan bahwa bahasa ini menyebar ke berbagai tempat di Nusantara dari wilayah ini, berkat penggunaannya oleh Kerajaan Sriwijaya yang menguasai jalur perdagangan. Istilah Melayu atau sebutan bagi wilayahnya sebagai Malaya sendiri berasal dari Kerajaan Malayu yang bertempat di Batang Hari, Jambi.', 'XI', NULL, ''),
+(65, 'Khairi Firdaus', 'Bahasa Indonesia', 'Indonesia_-_Dummy_5.mp4', 'stilah Melayu atau Malayu berasal dari Kerajaan Malayu, sebuah kerajaan Hindu-Buddha pada abad ke-7 di hulu sungai Batanghari, Jambi di pulau Sumatra, jadi secara geografis semula hanya mengacu kepada wilayah kerajaan tersebut yang merupakan sebagian dari wilayah pulau Sumatra. Dalam perkembangannya, pemakaian istilah Melayu mencakup wilayah geografis yang lebih luas dari wilayah Kerajaan Malayu tersebut, mencakup negeri-negeri di pulau Sumatra sehingga pulau tersebut disebut juga Bumi Melayu seperti disebutkan dalam Kakawin Nagarakretagama.', 'XII', NULL, ''),
+(67, 'Khairi Firdaus', 'Bahasa Indonesia', 'Indonesia_-_Dummy_6.mp4', 'Ibu kota Kerajaan Melayu semakin mundur ke pedalaman karena serangan Sriwijaya dan masyarakatnya diaspora keluar Bumi Melayu, belakangan masyarakat pendukungnya yang mundur ke pedalaman berasimilasi ke dalam masyarakat Minangkabau menjadi klan Malayu (suku Melayu Minangkabau) yang merupakan salah satu marga di Sumatra Barat. Sriwijaya berpengaruh luas hingga ke Filipina membawa penyebaran Bahasa Melayu semakin meluas, tampak dalam prasasti Keping Tembaga Laguna.\r\n\r\nBahasa Melayu kuno yang berkembang di Bumi Melayu tersebut berlogat &quot;o&quot; seperti Melayu Jambi, Minangkabau, Kerinci, Palembang dan Bengkulu. Semenanjung Malaka dalam Nagarakretagama disebut Hujung Medini artinya Semenanjung Medini.', 'XII', NULL, ''),
+(69, 'Ahmad Saugi', 'Pendidikan Agama Islam', 'Agama_Islam_-_Dummy_-_1.mp4', 'Islam (bahasa Arab: ???????, translit. al-isl?m?, Tentang suara ini dengarkan) adalah salah satu agama dari kelompok agama yang diterima oleh seorang nabi (agama samawi) yang mengajarkan monoteisme tanpa kompromi, iman terhadap wahyu, iman terhadap akhir zaman, dan tanggung jawab.[1] Bersama para pengikut Yudaisme dan Kekristenan, seluruh muslim–pengikut ajaran Islam–adalah anak turun Ibrahim.[2] Islam diikuti oleh 1,8 miliar orang di seluruh dunia sehingga menjadi agama terbesar kedua setelah Kristen.[3]', 'X', NULL, ''),
+(70, 'Ahmad Saugi', 'Pendidikan Agama Islam', 'Agama_Islam_-_Dummy_-_2.mp4', 'Kata “isl?m” berasal dari bahasa Arab aslama - yuslimu dengan arti semantik sebagai berikut: tunduk dan patuh (khadha‘a wa istaslama), berserah diri, menyerahkan, memasrahkan (sallama), mengikuti (atba‘a), menunaikan, menyampaikan (add?), masuk dalam kedamaian, keselamatan, atau kemurnian (dakhala fi al-salm au al-silm au al-sal?m).[4] Dari istilah-istilah lain yang akar katanya sama, “isl?m” berhubungan erat dengan makna keselamatan, kedamaian, dan kemurnian.[5]', 'X', NULL, ''),
+(71, 'Ahmad Saugi', 'Pendidikan Agama Islam', 'Agama_Islam_-_Dummy_-_3.mp4', 'Islam dapat juga disebut dengan iman, millah, dan syariah dalam pengertiannya sebagai aturan yang diturunkan oleh Allah melalui para utusan yang mencakup kepercayaan, keyakinan, adab, akhlak, perintah, dan larangan.[9] Agama Islam berdasarkan kewajiban untuk berserah diri dan menunaikan ajarannya disebut islam; jika dilihat berdasarkan kepercayaan terhadap Allah dan yang Dia turunkan, maka disebut iman; karena Islam itu diktatif dan terdokumentasikan, maka disebut millah; dan karena sumber hukumnya adalah Allah, maka disebut syariah.[9]', 'XI', NULL, ''),
+(72, 'Ahmad Saugi', 'Pendidikan Agama Islam', 'Agama_Islam_-_Dummy_-_4.mp4', 'Allah, menurut ajaran Islam, adalah satu-satunya Tuhan yang berhak disembah, memiliki nama-nama terbaik, dan memiliki sifat dan karakter tertinggi.[11] Ajaran monoteisme Islam disebut tauhid, yang didefinisikan sebagai pengesaan Allah dalam hal-hal yang menjadi kekhususan Tuhan dan yang Dia wajibkan.[12] Pengesaan Allah dalam hal-hal kekhususan Tuhan dibagi menjadi dua bahasan: tauhid rububiyah dan tauhid asma\' wash-shifat, sedangkan pengesaan Allah dalam hal-hal yang Dia wajibkan dibahas dalam tauhid uluhiyah.[13]', 'XI', NULL, ''),
+(73, 'Ahmad Saugi', 'Pendidikan Agama Islam', 'Agama_Islam_-_Dummy_-_4.mp4', 'Dalam tauhid rububiyah, Allah diakui sebagai satu-satunya Rabb (Yang Menguasai), sehingga semua selain Allah adalah ‘abd (hamba/budak/yang dikuasai).[14] Allah adalah Rabb Yang Berkuasa dalam penciptaan, pengurusan, dan kerajaan alam semesta.[15] Allah sebagai satu-satunya Pencipta adalah juga Yang Memberi rezeki, Yang Menghidupkan, Yang Mematikan, serta Yang Memberi kebaikan dan keburukan.[16] Allah yang mengurus segala sesuatu; semua urusan yang Dia tangani adalah kebaikan; dan Allah Mahakuasa terhadap apa yang Dia kehendaki.[16] Dalilnya adalah ayat dalam Alquran, “Segala penciptaan dan urusan menjadi hak-Nya.”[Al-A\'raf:54][15]', 'XII', NULL, ''),
+(76, 'Ahmad Saugi', 'Pendidikan Agama Islam', 'Agama_Islam_-_Dummy_-_6.mp4', 'Islam adalah salah satu agama dari kelompok agama yang diterima oleh seorang nabi yang mengajarkan monoteisme tanpa kompromi, iman terhadap wahyu, iman terhadap akhir zaman, dan tanggung jawab. Bersama para pengikut Yudaisme dan Kekristenan, seluruh muslim–pengikut ajaran Islam–adalah anak turun Ibrahim.', 'XII', NULL, ''),
+(77, 'Saauky', 'Matematika', 'Agama_Islam_-_Dummy_-_6.mp4', 'Test', 'X', NULL, ''),
+(78, 'guru terbaik', 'Matematika', 'WIN_20241104_17_06_10_Pro4.mp4', 'ewfew', 'X', 'https://www.petanikode.com/git-branch/', ''),
+(88, 'guru terbaik', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef1509513.mp4', 'AS', 'XI', 'WW', 'WhatsApp_Image_2025-03-10_at_15_18_13_af7dc58413.jpg'),
+(89, 'guru terbaik', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef1509511.mp4', '                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     dwdwdwd                                                       QSQS    trtrtrtrtwdwdwrtggrdqwdqwqwddwdw', 'XI', '                                                                      WDWD                          ', 'WhatsApp_Image_2025-03-10_at_15_18_13_af7dc58411.jpg'),
+(90, 'guru terbaik', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef1509515.mp4', 'grgrg', 'XI', ' grgrg', 'WhatsApp_Image_2025-03-10_at_15_18_13_af7dc58415.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `siswa`
+--
+
+CREATE TABLE `siswa` (
+  `nis` int(64) NOT NULL,
+  `nama` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(128) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `is_active` int(1) NOT NULL,
+  `date_created` int(64) NOT NULL,
+  `kelas` varchar(5) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `siswa`
+--
+
+INSERT INTO `siswa` (`nis`, `nama`, `password`, `email`, `image`, `is_active`, `date_created`, `kelas`) VALUES
+(0, 'addust', '$2y$10$cYm/i5rWupzWKrc92nX4EublfQgeyyZl4AQyu2e4rbKFQUwc8iv9u', '', 'default.jpg', 1, 1742275981, ''),
+(39, 'Syaauqi Zaaidan', '$2y$10$djI2M/FQH2k3H7b6tLK5X.MZG1R.wrARoR6NerH3tsScNnsNCnexa', 'zaidanline67@gmail.com', '73349393_156861225523800_2119508204152772215_n_(1)6.jpg', 1, 1586163321, 'X'),
+(47, 'andikafahrezi', '$2y$10$Elu2/9GQ0xS41Q3iLxSet.mOe9fa5HCJaUNw6s6m.v4Gp9YDh3GQu', 'andikafahrezi10@gmail.com', 'default.jpg', 1, 1734259635, 'X'),
+(18883, 'addusttt', '$2y$10$X10AlJrzNt6KT6MqPhfTlOsjv5ZKYtj.3YqtNZwLnif0pfUeDzX82', 'addust1@gmail.com', 'default.jpg', 1, 1742454210, 'XI'),
+(123456, 'user', '$2y$10$6o.1PVKeTRO9gRBObACpYe8cbkP19daJYQVYNv7v4HnCyqjoLpp96', 'user@gmail.com', 'default.jpg', 1, 1735200089, 'XI'),
+(181816, 'qsqwdqwd', '$2y$10$YJppxwZ1JOt3s1/Xf9rgWewsjN8ZIhK1b.F39GcTmVS0uy5oOlhDK', 'testwd@gmail.com', 'default.jpg', 1, 1742296726, 'X'),
+(211011, 'addust', '$2y$10$jxtWU6XSRAaV/kU0UqlUeurzzcp9EFVEuXJmwiGUrOSLjK9oSvjB6', '', 'default.jpg', 1, 1742276422, ''),
+(232332, 'aasdadee qw', '$2y$10$XGjEhDkyCFYClYrBgClGH.Qou1LLCa4ptAVm2ufTw0ErdITzn9P2K', 'testwewe1@gmail.com', 'default.jpg', 1, 1742295476, ''),
+(456789, 'nasi gile', '$2y$10$LwYTyg0Usc1SNcQe50HY3.7ZWcRIy926dKlbLA8bZrWtgFMoTZMvq', '', 'default.jpg', 1, 1739114168, 'XII');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `token`
+--
+
+CREATE TABLE `token` (
+  `id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `date_created` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `forum`
+--
+ALTER TABLE `forum`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `materi_id` (`materi_id`);
+
+--
+-- Indexes for table `forum_diskusi`
+--
+ALTER TABLE `forum_diskusi`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `materi_id` (`materi_id`),
+  ADD KEY `fk_parent` (`parent_id`);
+
+--
+-- Indexes for table `forum_komentar`
+--
+ALTER TABLE `forum_komentar`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `forum_id` (`forum_id`);
+
+--
+-- Indexes for table `guru`
+--
+ALTER TABLE `guru`
+  ADD PRIMARY KEY (`nip`);
+
+--
+-- Indexes for table `kelas`
+--
+ALTER TABLE `kelas`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `materi`
+--
+ALTER TABLE `materi`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `siswa`
+--
+ALTER TABLE `siswa`
+  ADD PRIMARY KEY (`nis`);
+
+--
+-- Indexes for table `token`
+--
+ALTER TABLE `token`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `forum`
+--
+ALTER TABLE `forum`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `forum_diskusi`
+--
+ALTER TABLE `forum_diskusi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- AUTO_INCREMENT for table `forum_komentar`
+--
+ALTER TABLE `forum_komentar`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `materi`
+--
+ALTER TABLE `materi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+
+--
+-- AUTO_INCREMENT for table `token`
+--
+ALTER TABLE `token`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `forum`
+--
+ALTER TABLE `forum`
+  ADD CONSTRAINT `forum_ibfk_1` FOREIGN KEY (`materi_id`) REFERENCES `materi` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `forum_diskusi`
+--
+ALTER TABLE `forum_diskusi`
+  ADD CONSTRAINT `fk_parent` FOREIGN KEY (`parent_id`) REFERENCES `forum_diskusi` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `forum_diskusi_ibfk_1` FOREIGN KEY (`materi_id`) REFERENCES `materi` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `forum_komentar`
+--
+ALTER TABLE `forum_komentar`
+  ADD CONSTRAINT `forum_komentar_ibfk_1` FOREIGN KEY (`forum_id`) REFERENCES `forum` (`id`) ON DELETE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -50,17 +50,16 @@
                                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                                         <div class="card-body">
                                         <div class="font-weight-bold">
-                                        <?php 
-                                            $modulPath = 'assets/materi_modul/' . trim($detail->modul); // Path relatif
-                                            if (!empty($detail->modul) && file_exists(FCPATH . $modulPath)): 
-                                        ?>
-                                            <a href="<?= base_url($modulPath) ?>" target="_blank" class="btn btn-primary">📖 Lihat Modul</a> <br>
-                                            <a href="<?= base_url($modulPath) ?>" download class="btn btn-success">⬇️ Download Modul</a>
-                                        <?php else: ?>
-                                            <p class="text-danger">❌ Modul belum tersedia</p>
-                                        <?php endif; ?>
-                                    </div>
-
+                                            <?php 
+                                                $modulPath = 'assets/materi_modul/' . trim($detail->modul); // Path relatif
+                                                if (!empty($detail->modul) && file_exists(FCPATH . $modulPath)): 
+                                            ?>
+                                                <a href="<?= base_url($modulPath) ?>" target="_blank" class="btn btn-primary">📖 Lihat Modul</a> <br>
+                                                <a href="<?= base_url($modulPath) ?>" download class="btn btn-success">⬇️ Download Modul</a>
+                                            <?php else: ?>
+                                                <p class="text-danger">❌ Modul belum tersedia</p>
+                                            <?php endif; ?>
+                                        </div>
                                         </div>
                                     </div>
                                 <br>
@@ -131,27 +130,39 @@
     
     <button type="submit" class="btn btn-primary">Kirim</button>
 </form>
+<?php foreach ($forum as $komen): ?>
+    <div class="card mt-2">
+        <div class="card-body">
+            <p class="komentarku">
+                <strong><?= htmlspecialchars($komen->user) ?></strong> (<?= $komen->tanggal ?>) <br>
+            </p>
+            <p class="komentarku"><?= nl2br(htmlspecialchars($komen->komentar)) ?></p>
+            <button class="btn btn-sm btn-link" onclick="toggleReplyForm(<?= $komen->id ?>)">Balas</button>
+
+            <!-- Form balas komentar (default hidden) -->
+            <form method="POST" action="<?= base_url('forum/tambah_komentar') ?>" id="reply-form-<?= $komen->id ?>" style="display: none;">
+                <input type="hidden" name="materi_id" value="<?= $komen->materi_id ?>">
+                <input type="hidden" name="parent_id" value="<?= $komen->id ?>">
+                <input type="hidden" name="user" value="<?= $this->session->userdata('nama') ?>">
+
+                <div class="form-group">
+                    <textarea class="form-control" name="komentar" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-sm">Kirim</button>
+            </form>
+        </div>
+    </div>
+<?php endforeach; ?>
+
 
 
 <hr>
 
-<!-- Tampilkan Komentar -->
-<h3>Komentar:</h3>
-<?php if (!empty($forum)): ?>
-    <?php foreach ($forum as $komen): ?>
-        <div class="card mt-2">
-            <div class="card-body">
-                <p class="komentarku">
-                    <strong><?= $komen->user ?></strong> (<?= $komen->tanggal ?>) <br>
-                </p>
 
-                <p class="komentarku"><?= $komen->komentar ?></p>
-            </div>
-        </div>
-    <?php endforeach; ?>
-<?php else: ?>
-    <p>Belum ada komentar.</p>
-<?php endif; ?>
+
+
+
 
                                                             </div>
                                                     </div>
@@ -199,6 +210,17 @@
     <script>
         AOS.init();
     </script>
+    <script>
+function toggleReplyForm(commentId) {
+    var form = document.getElementById("reply-form-" + commentId);
+    if (form) {
+        form.style.display = (form.style.display === "none") ? "block" : "none";
+    } else {
+        console.error("Form reply dengan ID " + commentId + " tidak ditemukan!");
+    }
+}
+</script>
+
     <!-- <script>
         const video = document.getElementById('myvideo');
         const progressBar = document.getElementById('progress-bar');

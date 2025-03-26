@@ -10,22 +10,22 @@ class Materi extends CI_Controller
         parent::__construct();
         $this->load->library('form_validation');
         $this->load->library('disqus');
-        $this->load->model('m_materi');
-        $this->list_materi['matematika_x'] = $this->m_materi->matematika_x()->result();
-        $this->list_materi['matematika_xi'] = $this->m_materi->matematika_xi()->result();
-        $this->list_materi['matematika_xii'] = $this->m_materi->matematika_xii()->result();
-        $this->list_materi['ipa_x'] = $this->m_materi->ipa_x()->result();
-        $this->list_materi['ipa_xi'] = $this->m_materi->ipa_xi()->result();
-        $this->list_materi['ipa_xii'] = $this->m_materi->ipa_xii()->result();
-        $this->list_materi['indo_x'] = $this->m_materi->indo_x()->result();
-        $this->list_materi['indo_xi'] = $this->m_materi->indo_xi()->result();
-        $this->list_materi['indo_xii'] = $this->m_materi->indo_xii()->result();
-        $this->list_materi['inggris_x'] = $this->m_materi->inggris_x()->result();
-        $this->list_materi['inggris_xi'] = $this->m_materi->inggris_xi()->result();
-        $this->list_materi['inggris_xii'] = $this->m_materi->inggris_xii()->result();
-        $this->list_materi['agama_x'] = $this->m_materi->agama_x()->result();
-        $this->list_materi['agama_xi'] = $this->m_materi->agama_xi()->result();
-        $this->list_materi['agama_xii'] = $this->m_materi->agama_xii()->result();
+        $this->load->model('M_materi');
+        $this->list_materi['matematika_x'] = $this->M_materi->matematika_x()->result();
+        $this->list_materi['matematika_xi'] = $this->M_materi->matematika_xi()->result();
+        $this->list_materi['matematika_xii'] = $this->M_materi->matematika_xii()->result();
+        $this->list_materi['ipa_x'] = $this->M_materi->ipa_x()->result();
+        $this->list_materi['ipa_xi'] = $this->M_materi->ipa_xi()->result();
+        $this->list_materi['ipa_xii'] = $this->M_materi->ipa_xii()->result();
+        $this->list_materi['indo_x'] = $this->M_materi->indo_x()->result();
+        $this->list_materi['indo_xi'] = $this->M_materi->indo_xi()->result();
+        $this->list_materi['indo_xii'] = $this->M_materi->indo_xii()->result();
+        $this->list_materi['inggris_x'] = $this->M_materi->inggris_x()->result();
+        $this->list_materi['inggris_xi'] = $this->M_materi->inggris_xi()->result();
+        $this->list_materi['inggris_xii'] = $this->M_materi->inggris_xii()->result();
+        $this->list_materi['agama_x'] = $this->M_materi->agama_x()->result();
+        $this->list_materi['agama_xi'] = $this->M_materi->agama_xi()->result();
+        $this->list_materi['agama_xii'] = $this->M_materi->agama_xii()->result();
     }
     public function index() 
     {
@@ -54,23 +54,34 @@ class Materi extends CI_Controller
     {
         $this->load->model('M_materi');
         $this->load->model('Forum_model');
+    
+        // Ambil Nama User dari Session
         $nama_user = $this->session->userdata('nis');
         if (!$nama_user) {
-            echo "Error: Nama user tidak ditemukan di session!";
+            show_error("Error: Nama user tidak ditemukan di session!", 500);
             return;
         }
-
+    
+        // Ambil Data Materi
         $data['materi'] = $this->M_materi->get_materi_by_id($id);
         if (!$data['materi']) {
             show_error("Materi tidak ditemukan.", 404);
             return;
         }
-
-        $where = array('id' => $id);
-        $detail = $this->m_materi->belajar($id);
+    
+        // Ambil Detail Materi
         $data['detail'] = $this->db->get_where('materi', ['id' => $id])->row();
+        
+        // Ambil Komentar Forum
         $data['forum'] = $this->Forum_model->get_komentar_by_materi($id);
+    
+        // Disqus (jika digunakan)
         $data['disqus'] = $this->disqus->get_html();
+    
+        // Kirim `materi_id` ke View
+        $data['materi_id'] = $id;
+    
+        // Load View
         $this->load->view('materi/navm');
         $this->load->view('materi/belajar', $data);
     }
