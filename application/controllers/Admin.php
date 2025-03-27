@@ -7,6 +7,8 @@ class Admin extends CI_Controller
     {
         parent::__construct();
         $this->load->helper('url');
+        $this->load->library('form_validation');
+        $this->load->model(['M_materi', 'Forum_model']);
         $this->session->set_flashdata('not-login', 'Gagal!');
         if (!$this->session->userdata('email')) {
             redirect('welcome/admin');
@@ -443,5 +445,32 @@ class Admin extends CI_Controller
             redirect(base_url('admin/data_materi'));
         }
         $this->load->view('admin/nava');
+    }
+
+    public function hapus_forum($materi_id) {
+        $this->load->model('Forum_model');
+        
+        // Cek apakah forum ada
+        $forum = $this->Forum_model->get_forum_by_materi($materi_id);
+        if(empty($forum)) {
+            $this->session->set_flashdata('error', 'Forum tidak ditemukan');
+            redirect('admin/list_materi');
+        }
+    
+        // Proses penghapusan
+        if($this->Forum_model->hapus_forum_by_materi($materi_id)) {
+            $this->session->set_flashdata('success', 'Forum diskusi berhasil dihapus');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus forum');
+        }
+        redirect('admin/list_materi');
+    }
+    public function list_materi() {
+        // Cek role admin
+    
+        $this->load->model('M_materi');
+        $data['materi'] = $this->M_materi->get_all_materi();
+        
+        $this->load->view('admin/list_materi', $data);
     }
 }

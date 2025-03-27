@@ -1,0 +1,170 @@
+/* CSS untuk Layout Admin yang Responsif */
+.addust{
+    font-size: 30px;
+    font-weight:900;
+    font-family: 'Poppins', sans-serif;
+    color: #f93154;
+    padding-top: 30px;
+}
+.addust a{
+    color: white;
+    font-weight: bold;
+}
+.main-content {
+    margin-left: 10px; /* Sesuaikan dengan lebar sidebar */
+    padding: 30px;
+    margin-top: 70px; /* Tinggi navbar */
+    min-height: calc(100vh - 70px);
+    transition: all 0.3s;
+    background-color: #f4f6f9;
+}
+
+@media (max-width: 1199px) {
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* Container Tabel */
+.table-responsive-container {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+/* Styling Tabel */
+.admin-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.admin-table thead tr {
+    background: linear-gradient(135deg, #6777ef 0%, #5a6fdb 100%);
+    color: white;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+}
+
+.admin-table th {
+    padding: 15px 20px;
+    font-weight: 600;
+    text-align: left;
+    font-size: 14px;
+}
+
+.admin-table td {
+    padding: 12px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+    font-size: 13px;
+    color: #4d4d4d;
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #f8f9ff;
+}
+
+/* Kolom Deskripsi */
+.truncate-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+    line-height: 1.5;
+}
+
+/* Tombol Aksi */
+.btn-table-action {
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #fc4b6c 0%, #f93154 100%);
+    border: none;
+    color: white;
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(249, 49, 84, 0.3);
+    color: white;
+}
+/* Dropdown Fix */
+.navbar .dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 4px;
+}
+
+.navbar .dropdown-item {
+    padding: 8px 20px;
+    font-size: 14px;
+}
+
+.navbar .dropdown-item.has-icon {
+    display: flex;
+    align-items: center;
+}
+
+.navbar .dropdown-item.has-icon i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+.navbar .dropdown-title {
+    padding: 10px 20px;
+    font-size: 12px;
+    color: #6c757d;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* Responsif untuk Mobile */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 15px;
+        margin-top: 60px;
+    }
+    
+    .table-responsive-container {
+        padding: 15px;
+    }
+    
+    .admin-table th, 
+    .admin-table td {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+    
+    .btn-table-action {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    .truncate-text {
+        max-width: 150px;
+    }
+}
+
+/* Scroll Horizontal untuk Tabel */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
