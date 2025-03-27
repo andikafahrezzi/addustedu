@@ -3415,8 +3415,9 @@ h6 {
 }
 
 .testi_slider .testi_item img {
-	width: auto;
+	width: 100px;
 	margin: auto;
+	border-radius: 100px;
 	margin-top: -50px;
 }
 

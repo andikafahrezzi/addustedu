@@ -115,54 +115,54 @@
             <p data-aos="fade-up" data-aos-duration="2000">Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free.</p>
         </div>
         <section class="testimonials_area p_20">
-            <div class="container">
-                <div class="testi_slider owl-carousel">
-                    <div class="item">
-                        <div class="testi_item">
-                            <img src="<?= base_url('assets/') ?>img/testimonials/testi-3.png" alt="">
-                            <h4>Syauqi Zaidan Khairan Khalaf</h4>
-                            <ul class="list">
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                            </ul>
-                            <p>Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free. Abstract chaos snare play truth ultimate good self. God overcome sexuality pious abstract good decieve revaluation aversion good. Virtues chaos overcome society holiest truth.</p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="testi_item">
-                            <img src="<?= base_url('assets/') ?>img/testimonials/testi-2.png" alt="">
-                            <h4>Taupik Hidayat</h4>
-                            <ul class="list">
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                            </ul>
-                            <p>Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free. Abstract chaos snare play truth ultimate good self. God overcome sexuality pious abstract good decieve revaluation aversion good. Virtues chaos overcome society holiest truth.</p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="testi_item">
-                            <img src="<?= base_url('assets/') ?>img/testimonials/testi-1.png" alt="">
-                            <h4>Diki Ramdani</h4>
-                            <ul class="list">
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                            </ul>
-                            <p>Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free. Abstract chaos snare play truth ultimate good self. God overcome sexuality pious abstract good decieve revaluation aversion good. Virtues chaos overcome society holiest truth.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+			<div class="container">
+				<div class="testi_slider owl-carousel">
+					<div class="item">
+						<div class="testi_item">
+							<img src="<?= base_url('assets/') ?>img/testimonials/wangochun.jpg" alt="">
+							<h4>Wang Ochun</h4>
+							<ul class="list">
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+							</ul>
+							<p>Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free. Abstract chaos snare play truth ultimate good self. God overcome sexuality pious abstract good decieve revaluation aversion good. Virtues chaos overcome society holiest truth.</p>
+						</div>
+					</div>
+					<div class="item">
+						<div class="testi_item">
+							<img src="<?= base_url('assets/') ?>img/testimonials/phss.jpeg" alt="">
+							<h4>Park Hyung Seok</h4>
+							<ul class="list">
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+							</ul>
+							<p>Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free. Abstract chaos snare play truth ultimate good self. God overcome sexuality pious abstract good decieve revaluation aversion good. Virtues chaos overcome society holiest truth.</p>
+						</div>
+					</div>
+					<div class="item">
+						<div class="testi_item">
+							<img src="<?= base_url('assets/') ?>img/testimonials/jonggun.jpeg" alt="">
+							<h4>Diki Ramdani</h4>
+							<ul class="list">
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+								<li><a href="#"><i class="fa fa-star"></i></a></li>
+							</ul>
+							<p>Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free. Abstract chaos snare play truth ultimate good self. God overcome sexuality pious abstract good decieve revaluation aversion good. Virtues chaos overcome society holiest truth.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
     </div>
 </section>
 <!--================End Team Area =================-->
