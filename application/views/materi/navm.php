@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/') ?>vendors/popup/magnific-popup.css">
     <!-- Main CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/style.css">
+    <link rel="stylesheet" href="<?= base_url('assets/') ?>css/custom.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/materi_style.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/responsive.css">
     <!-- Fonts -->
@@ -44,7 +45,7 @@
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container">
                     <!-- Brand and toggle get grouped for better mobile display -->
-                    <a class="navbar-brand logo_h" href="<?= base_url('user') ?>"><img src="<?= base_url('assets/') ?>img/logo.png" alt=""></a>
+                    <a class="navbar-brand logo_h" href="<?= base_url('user') ?>"><img src="<?= base_url('assets/') ?>img/logou.png" alt="logo" id="logo-ads"></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>

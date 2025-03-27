@@ -8,7 +8,7 @@
 				<h3 data-aos="fade-up" data-aos-duration="1600">Belajar Dimana Saja & Kapan Saja <br /> Mudah Dengan addustedu</h3>
 				<p data-aos="fade-up" data-aos-duration="1900">Dengan addustedu kemudahan kegiatan belajar mengajar dapat terpenuhi. Para guru dan siswa dapat
 					belajar meski banyak halangan atau rintangan. Nikmati Pembelajaran terstruktur dan efektif menggunakan addustedu serta kemudahan belajar dengan menggunakan aplikasi kami. </p>
-				<a data-aos="fade-up" data-aos-duration="2000" class="main_btn" href="<?= base_url('user/registration') ?>#registration">Bergabung Sekarang <span class="lnr lnr-arrow-right"></span></a>
+				<a data-aos="fade-up" data-aos-duration="2000" class="main_btn" href="#" data-toggle="modal" data-target="#exampleModalCenter">Login Sekarang <span class="lnr lnr-arrow-right"></span></a>
 			</div>
 		</div>
 	</div>
@@ -85,7 +85,7 @@
 				<div class="main_title">
 					<h2 data-aos="fade-up" data-aos-duration="2000">addustedu Dibuat Untuk Meningkatkan Kualitas Pembelajaran Di Indonesia</h2>
 					<p data-aos="fade-up" data-aos-duration="2200">Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free.</p>
-					<a href="https://github.com/syauqi/addustedu"><button data-aos="fade-up" data-aos-duration="2400" class="bubbly-button">Download addustedu <span class="lnr lnr-arrow-right"></span></button></a>
+					<a href="https://github.com/andikafahrezzi/addustedu"><button data-aos="fade-up" data-aos-duration="2400" class="bubbly-button">Download addustedu <span class="lnr lnr-arrow-right"></span></button></a>
 				</div>
 			</div>
 		</div>
@@ -204,8 +204,8 @@
 				<div class="testi_slider owl-carousel">
 					<div class="item">
 						<div class="testi_item">
-							<img src="<?= base_url('assets/') ?>img/testimonials/testi-3.png" alt="">
-							<h4>Syauqi Zaidan Khairan Khalaf</h4>
+							<img src="<?= base_url('assets/') ?>img/testimonials/wangochun.jpg" alt="">
+							<h4>Wang Ochun</h4>
 							<ul class="list">
 								<li><a href="#"><i class="fa fa-star"></i></a></li>
 								<li><a href="#"><i class="fa fa-star"></i></a></li>
@@ -218,8 +218,8 @@
 					</div>
 					<div class="item">
 						<div class="testi_item">
-							<img src="<?= base_url('assets/') ?>img/testimonials/testi-2.png" alt="">
-							<h4>Taupik Hidayat</h4>
+							<img src="<?= base_url('assets/') ?>img/testimonials/phss.jpeg" alt="">
+							<h4>Park Hyung Seok</h4>
 							<ul class="list">
 								<li><a href="#"><i class="fa fa-star"></i></a></li>
 								<li><a href="#"><i class="fa fa-star"></i></a></li>
@@ -232,7 +232,7 @@
 					</div>
 					<div class="item">
 						<div class="testi_item">
-							<img src="<?= base_url('assets/') ?>img/testimonials/testi-1.png" alt="">
+							<img src="<?= base_url('assets/') ?>img/testimonials/jonggun.jpeg" alt="">
 							<h4>Diki Ramdani</h4>
 							<ul class="list">
 								<li><a href="#"><i class="fa fa-star"></i></a></li>
