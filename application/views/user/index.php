@@ -103,7 +103,7 @@ foreach ($data['materi'] as $m) {
 
 <?php if (isset($kelas_siswa) && !empty($kelas_siswa)) { ?>
     <div class="container">
-        <h2 class="text-center">Mata Pelajaran Kelas <?= $kelas_siswa ?></h2>
+        <h2 class="text-center" id="judul">Mata Pelajaran Kelas <?= $kelas_siswa ?></h2>
         <div class="row mt-4 mb-5 justify-content-center">
             <div class="col-md-12">
                 <div class="accordion" id="accordionExample">
@@ -118,25 +118,53 @@ foreach ($data['materi'] as $m) {
                                 </button>
                             </div>
                             <div id="collapse<?= $mapel_id ?>" class="collapse" aria-labelledby="heading<?= $mapel_id ?>" data-parent="#accordionExample">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <?php foreach ($materi_list as $m) { ?>
-                                            <div class="col-md-4 mb-3">
-                                                <a href="<?= base_url('materi/belajar/' . $m['id']) ?>">
-                                                    <div class="card shadow-sm">
-                                                        <img src="<?= base_url('assets/img/' . $m['nama_mapel'] . '.png') ?>" class="card-img-top" alt="<?= $m['nama_mapel'] ?>">
-                                                        <div class="card-body text-center">
-                                                        <?= implode(' ', array_slice(explode(' ', $m['deskripsi']), 0, 10)) . '...'; ?>
-                                                            <br>
-                                                            <p class="card-text"><?= $m['nama_guru'] ?></p>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        <?php } ?>
-                                    </div>                            
+    <div class="card-body">
+        <div class="row">
+            <?php foreach ($materi_list as $m) { ?>
+                <div class="col-md-4 mb-4">
+                    <div class="card materi-card shadow-lg h-100">
+                        <div class="card-img-container">
+                            <img src="<?= base_url('assets/img/' . $m['nama_mapel'] . '.png') ?>" 
+                                 class="card-img-top" 
+                                 alt="<?= $m['nama_mapel'] ?>"
+                                 onerror="this.src='<?= base_url('assets/img/default-subject.png') ?>'">
+                            <div class="card-img-overlay d-flex justify-content-center align-items-center">
+                            <a href="<?= base_url('materi/belajar/' . $m['id']) ?>" 
+                                       class="btn badge badge-pill badge-primary">
+                                        Pelajari <i class="lnr lnr-arrow-right"></i>
+                                    </a>
+                            </div>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-truncate"><?= $m['nama_mapel'] ?></h5>
+                            <div class="card-text flex-grow-1">
+                                <?= implode(' ', array_slice(explode(' ', $m['deskripsi']), 0, 10)) ?>
+                                <?php if (str_word_count($m['deskripsi']) > 10): ?>
+                                    <span class="text-muted">...</span>
+                                <?php endif; ?>
+                            </div>
+                            <div class="mt-auto">
+                                <hr class="divider">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="teacher-badge">
+                                        <i class="fas fa-chalkboard-teacher mr-1"></i>
+                                        <?= $m['nama_guru'] ?>
+                                    </span>
+                                    <a href="<?= base_url('materi/belajar/' . $m['id']) ?>" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        Pelajari <i class="lnr lnr-arrow-right"></i>
+                                    </a>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>                            
+    </div>
+</div>
+
+
                         </div>
                     <?php } ?>
                 </div>

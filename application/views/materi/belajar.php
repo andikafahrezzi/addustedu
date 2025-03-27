@@ -33,7 +33,17 @@
                                     </div>
                                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                                         <div class="card-body">
-                                        <p class="font-weight-bold"><a href="<?= substr($materi->linkform, 0, 120); ?>" target="_blank"><?= substr($materi->linkform, 0, 120); ?></a>
+                                        <?php if(!empty($materi->linkform)): ?>
+                                            <p class="font-weight-bold">
+                                                <a href="<?= htmlspecialchars(substr($materi->linkform, 0, 120)) ?>" 
+                                                target="_blank" 
+                                                rel="noopener noreferrer">
+                                                <?= htmlspecialchars(substr($materi->linkform, 0, 120)) ?>
+                                                </a>
+                                            </p>
+                                        <?php else: ?>
+                                            <p class="text-danger">❌ Link Google Form belum tersedia</p>
+                                        <?php endif; ?>
                                         
                                         </div>
                                     </div>

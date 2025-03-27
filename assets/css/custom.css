@@ -2,6 +2,9 @@
     width: 100px; /* Sesuaikan ukuran sesuai kebutuhan */
     height: auto;
 }
+#judul {
+    color:black
+}
 @media (max-width: 768px) {
     #logo-img {
         width: 80px;
