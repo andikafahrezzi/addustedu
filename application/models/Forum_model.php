@@ -38,6 +38,19 @@ class Forum_model extends CI_Model {
         $this->db->where('materi_id', $materi_id);
         return $this->db->count_all_results('forum_diskusi');
     }
+    public function hapus_forum_by_materi($materi_id) {
+        // Validasi input
+        if(!is_numeric($materi_id)) return false;
+        
+        $this->db->where('materi_id', $materi_id);
+        return $this->db->delete('forum_diskusi');
+    }
+    
+    public function get_forum_by_materi($materi_id) {
+        $this->db->where('materi_id', $materi_id);
+        return $this->db->get('forum_diskusi')->result();
+    }
+    
 
     // Hapus method yang tidak digunakan
     // public function add_forum() dan add_comment() bisa dihapus jika tidak digunakan

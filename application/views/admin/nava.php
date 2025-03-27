@@ -69,7 +69,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                         </div>
                     </div>
                     <div class="sidebar-brand sidebar-brand-sm">
-                        <a href="<?= base_url('admin') ?>">LY <sup>3</sup></a>
+                        <a href="<?= base_url('admin') ?>">AE <sup>3</sup></a>
                     </div>
                     <ul class="sidebar-menu">
                         <li class="menu-header ">Dashboard</li>
@@ -105,6 +105,8 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                 <li><a class="nav-link" href="<?= base_url('admin/data_materi') ?>">Data Materi</a>
                                 </li>
                                 <li><a class="nav-link" href="<?= base_url('admin/add_materi') ?>">Tambah Materi</a>
+                                </li>
+                                <li><a class="nav-link" href="<?= base_url('admin/list_materi') ?>">List Materi</a>
                                 </li>
                             </ul>
                         </li>

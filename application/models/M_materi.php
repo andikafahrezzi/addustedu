@@ -34,6 +34,12 @@ class M_materi extends CI_Model
         $this->db->delete($table);
     }
 
+    public function get_all_materi() {
+        $this->db->order_by('kelas', 'asc');
+        $this->db->order_by('nama_mapel', 'asc');
+        return $this->db->get('materi')->result();
+    }
+
     public function update_materi($where, $table)
     {
         return $this->db->get_where($table, $where);
