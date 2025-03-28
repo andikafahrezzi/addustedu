@@ -36,13 +36,15 @@ class Materi extends CI_Controller
     }
 
     public function belajar($id) {
-        $this->load->model(['M_materi', 'Forum_model']);
+        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model']);
         
         // Ambil data
         $data['materi'] = $this->M_materi->get_materi_by_id($id);
         $data['user'] = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row_array();
         $data['forum'] = $this->Forum_model->get_komentar_by_materi($id);
         $data['disqus'] = $this->disqus->get_html();
+        $data['quizzes'] = $this->Quiz_model->get_quizzes_by_materi($id);
+
         
         // Debug akhir sebelum load view
         if(empty($data['materi'])) {
@@ -53,4 +55,124 @@ class Materi extends CI_Controller
         $this->load->view('materi/navm');
         $this->load->view('materi/belajar', $data);
     }
+    public function list_quiz()
+{
+    // Ambil data siswa dari session
+    $siswa_id = $this->session->userdata('siswa_id');
+    $kelas = $this->session->userdata('kelas');
+    
+    $this->load->model('Quiz_model');
+    $data['quizzes'] = $this->Quiz_model->get_available_quizzes($kelas);
+    
+    $this->load->view('materi/navm');;
+    $this->load->view('materi/belajar', $data);
+}
+
+public function start_quiz($quiz_id)
+{
+    $this->load->model('Quiz_model');
+    
+    // Cek apakah quiz tersedia untuk siswa ini
+    $quiz = $this->Quiz_model->get_quiz_with_questions($quiz_id);
+    $kelas_siswa = $this->session->userdata('kelas');
+    
+    if(!$quiz || $quiz->materi->kelas != $kelas_siswa) {
+        show_404();
+    }
+    
+    // Mulai quiz
+    $quiz_siswa_id = $this->Quiz_model->start_quiz(
+        $quiz_id, 
+        $this->session->userdata('siswa_id'),
+        $quiz->waktu_pengerjaan
+    );
+    
+    redirect("materi/do_quiz/{$quiz_siswa_id}");
+}
+
+public function do_quiz($quiz_siswa_id)
+{
+    $this->load->model('Quiz_model');
+    
+    // Ambil data quiz siswa
+    $quiz_siswa = $this->db->get_where('quiz_siswa', ['id' => $quiz_siswa_id])->row();
+    
+    // Validasi
+    if(!$quiz_siswa || $quiz_siswa->siswa_id != $this->session->userdata('siswa_id')) {
+        show_404();
+    }
+    
+    // Cek waktu
+    if(strtotime($quiz_siswa->end_time) < time()) {
+        redirect("materi/quiz_completed/{$quiz_siswa_id}");
+    }
+    
+    // Ambil data quiz
+    $data['quiz'] = $this->Quiz_model->get_quiz_with_questions($quiz_siswa->quiz_id);
+    $data['quiz_siswa_id'] = $quiz_siswa_id;
+    $data['time_left'] = strtotime($quiz_siswa->end_time) - time();
+    
+    $this->load->view('materi/navm');;
+    $this->load->view('materi/do_quiz', $data);
+}
+
+public function submit_quiz()
+{
+    $this->load->model('Quiz_model');
+    
+    $quiz_siswa_id = $this->input->post('quiz_siswa_id');
+    $quiz_id = $this->input->post('quiz_id');
+    
+    // Proses jawaban
+    $questions = $this->db->get_where('quiz_questions', ['quiz_id' => $quiz_id])->result();
+    $total_score = 0;
+    
+    foreach($questions as $question) {
+        $jawaban = $this->input->post('jawaban_'.$question->id);
+        $poin = 0;
+        
+        if($question->tipe == 'pilihan' && $jawaban == $question->jawaban) {
+            $poin = $question->poin;
+        }
+        
+        $this->Quiz_model->submit_answer([
+            'quiz_siswa_id' => $quiz_siswa_id,
+            'question_id' => $question->id,
+            'jawaban' => $jawaban,
+            'poin_diperoleh' => $poin
+        ]);
+        
+        $total_score += $poin;
+    }
+    
+    // Hitung nilai akhir
+    $max_score = array_sum(array_column($questions, 'poin'));
+    $final_score = ($max_score > 0) ? ($total_score / $max_score) * 100 : 0;
+    
+    // Selesaikan quiz
+    $this->Quiz_model->complete_quiz($quiz_siswa_id, $final_score);
+    
+    redirect("materi/quiz_completed/{$quiz_siswa_id}");
+}
+
+public function quiz_completed($quiz_siswa_id)
+{
+    $this->load->model('Quiz_model');
+    
+    $data['result'] = $this->db->select('quiz_siswa.*, quiz.judul, materi.nama_mapel')
+                              ->from('quiz_siswa')
+                              ->join('quiz', 'quiz.id = quiz_siswa.quiz_id')
+                              ->join('materi', 'materi.id = quiz.materi_id')
+                              ->where('quiz_siswa.id', $quiz_siswa_id)
+                              ->where('quiz_siswa.siswa_id', $this->session->userdata('siswa_id'))
+                              ->get()
+                              ->row();
+    
+    if(!$data['result']) {
+        show_404();
+    }
+    
+    $this->load->view('materi/navm');
+    $this->load->view('materi/quiz_result', $data);
+}
 }

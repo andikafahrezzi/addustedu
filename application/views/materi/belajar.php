@@ -33,6 +33,58 @@
                                     </div>
                                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                                         <div class="card-body">
+                                        <div class="container mb-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4><i class="fas fa-tasks mr-2"></i>Quiz Pembelajaran</h4>
+        </div>
+        
+        <div class="card-body">
+            <?php if(empty($quizzes)): ?>
+                <div class="alert alert-info">
+                    Belum ada quiz untuk materi ini
+                </div>
+            <?php else: ?>
+                <div class="list-group">
+                    <?php foreach($quizzes as $quiz): 
+                        $result = $this->Quiz_model->get_quiz_result($quiz->id, $user['nis']);
+                    ?>
+                    <div class="list-group-item list-group-item-action">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-1"><?= $quiz->judul ?></h5>
+                                <small class="text-muted">
+                                    <?= $quiz->jumlah_soal ?> soal | Waktu: <?= $quiz->waktu_pengerjaan ?> menit
+                                </small>
+                            </div>
+                            
+                            <div>
+                                <?php if($result): ?>
+                                    <?php if($result->status == 'completed'): ?>
+                                        <span class="badge badge-<?= $result->score >= 70 ? 'success' : 'danger' ?> p-2">
+                                            Nilai: <?= number_format($result->score, 2) ?>
+                                        </span>
+                                    <?php else: ?>
+                                        <a href="<?= site_url('siswa/lanjutkan_quiz/'.$result->id) ?>" 
+                                           class="btn btn-warning btn-sm">
+                                            Lanjutkan
+                                        </a>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <a href="<?= site_url('siswa/start_quiz/'.$quiz->id) ?>" 
+                                       class="btn btn-primary btn-sm">
+                                        Mulai Quiz
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
                                         <?php if(!empty($materi->linkform)): ?>
                                             <p class="font-weight-bold">
                                                 <a href="<?= htmlspecialchars(substr($materi->linkform, 0, 120)) ?>" 
@@ -41,6 +93,7 @@
                                                 <?= htmlspecialchars(substr($materi->linkform, 0, 120)) ?>
                                                 </a>
                                             </p>
+                                            
                                         <?php else: ?>
                                             <p class="text-danger">❌ Link Google Form belum tersedia</p>
                                         <?php endif; ?>
