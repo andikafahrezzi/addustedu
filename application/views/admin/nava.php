@@ -107,6 +107,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                 <li><a class="nav-link" href="<?= base_url('admin/add_materi') ?>">Tambah Materi</a>
                                 </li>
                                 <li><a class="nav-link" href="<?= base_url('admin/list_materi') ?>">List Materi</a>
+                                <li><a class="nav-link" href="<?= base_url('admin/buat_quiz') ?>">Create Quiz</a>
                                 </li>
                             </ul>
                         </li>

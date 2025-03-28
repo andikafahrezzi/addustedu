@@ -8,7 +8,7 @@ class Admin extends CI_Controller
         parent::__construct();
         $this->load->helper('url');
         $this->load->library('form_validation');
-        $this->load->model(['M_materi', 'Forum_model']);
+        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model']);
         $this->session->set_flashdata('not-login', 'Gagal!');
         if (!$this->session->userdata('email')) {
             redirect('welcome/admin');
@@ -473,4 +473,80 @@ class Admin extends CI_Controller
         
         $this->load->view('admin/list_materi', $data);
     }
+
+    public function buat_quiz()
+{
+    $this->load->model('Quiz_model');
+    
+    // Validasi form
+    $this->form_validation->set_rules('materi_id', 'Materi', 'required');
+    $this->form_validation->set_rules('judul', 'Judul Quiz', 'required|max_length[100]');
+    $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'max_length[500]');
+    $this->form_validation->set_rules('waktu_pengerjaan', 'Waktu Pengerjaan', 'required|numeric');
+    $this->form_validation->set_rules('attempts', 'Percobaan Maksimal', 'required|numeric');
+    
+    if ($this->form_validation->run()) {
+        $quiz_data = [
+            'materi_id' => $this->input->post('materi_id'),
+            'judul' => $this->input->post('judul'),
+            'deskripsi' => $this->input->post('deskripsi'),
+            'waktu_pengerjaan' => $this->input->post('waktu_pengerjaan'),
+            'attempts' => $this->input->post('attempts'),
+            'shuffle_questions' => $this->input->post('shuffle_questions') ? 1 : 0,
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        
+        $quiz_id = $this->Quiz_model->create_quiz($quiz_data);
+        
+        $this->session->set_flashdata('success', 'Quiz berhasil dibuat!');
+        redirect('admin/kelola_quiz/'.$quiz_id);
+    }
+    
+    $data['materi_list'] = $this->Quiz_model->get_materi_list();
+    
+    $this->load->view('admin/buat_quiz', $data);
+}
+
+public function kelola_quiz($quiz_id)
+{
+    $this->load->model('Quiz_model');
+    
+    // Tambahkan soal baru
+    if ($this->input->post('pertanyaan')) {
+        $this->tambah_soal($quiz_id);
+    }
+    
+    $data['quiz'] = $this->Quiz_model->get_quiz_with_questions($quiz_id);
+    
+    if(empty($data['quiz'])) {
+        show_404();
+    }
+    
+    
+    $this->load->view('admin/kelola_quiz', $data);
+}
+
+private function tambah_soal($quiz_id)
+{
+    $this->load->model('Quiz_model');
+    
+    $tipe = $this->input->post('tipe');
+    $data = [
+        'quiz_id' => $quiz_id,
+        'pertanyaan' => $this->input->post('pertanyaan'),
+        'tipe' => $tipe,
+        'poin' => $this->input->post('poin', true) ?: 1
+    ];
+    
+    if ($tipe == 'pilihan') {
+        $data['opsi_a'] = $this->input->post('opsi_a');
+        $data['opsi_b'] = $this->input->post('opsi_b');
+        $data['opsi_c'] = $this->input->post('opsi_c');
+        $data['opsi_d'] = $this->input->post('opsi_d');
+        $data['jawaban'] = $this->input->post('jawaban');
+    }
+    
+    $this->Quiz_model->tambah_soal($data);
+    $this->session->set_flashdata('success', 'Soal berhasil ditambahkan!');
+}
 }
