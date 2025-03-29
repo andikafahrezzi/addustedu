@@ -50,6 +50,51 @@ class Forum_model extends CI_Model {
         $this->db->where('materi_id', $materi_id);
         return $this->db->get('forum_diskusi')->result();
     }
+
+    public function get_comments($materi_id) {
+         return $this->db
+        ->select('fd.*, s.nama as user')
+        ->from('forum_diskusi fd')
+        ->join('siswa s', 's.nis = fd.nis')
+        ->where('fd.materi_id', $materi_id)
+        ->where('fd.deleted_at IS NULL')
+        ->order_by('fd.created_at', 'ASC')
+        ->get();
+        
+        return $this->build_tree($comments);
+    }
+    
+    private function build_tree($elements, $parent_id = null) {
+        $branch = array();
+        foreach ($elements as $element) {
+            if ($element->parent_id == $parent_id) {
+                $children = $this->build_tree($elements, $element->id);
+                if ($children) {
+                    $element->replies = $children;
+                }
+                $branch[] = $element;
+            }
+        }
+        return $branch;
+    }
+
+    public function update_comment($id, $data) {
+        // Check if user can edit (30 minutes limit)
+        $comment = $this->get_comment($id);
+        $now = new DateTime();
+        $lastEdit = new DateTime($comment->last_edit_time ?: $comment->created_at);
+        $diff = $now->diff($lastEdit);
+        
+        if ($diff->i < 30 && $diff->h == 0 && $diff->days == 0) {
+            return false; // Not enough time passed
+        }
+    
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        $data['last_edit_time'] = date('Y-m-d H:i:s');
+        
+        $this->db->where('id', $id);
+        return $this->db->update('comments', $data);
+    }
     
 
     // Hapus method yang tidak digunakan

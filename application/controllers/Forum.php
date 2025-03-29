@@ -57,6 +57,7 @@ class Forum extends CI_Controller {
     
             // Siapkan data komentar
             $data = [
+                'nis' => $this->session->userdata('nis'),
                 'materi_id' => $this->input->post('materi_id'),
                 'user'      => $siswa['nama'],
                 'komentar'  => $this->input->post('komentar'),
@@ -96,6 +97,45 @@ class Forum extends CI_Controller {
     
         $this->load->view('materi/belajar', $data);
     }
+    public function edit_komentar() {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('comment_id', 'Comment ID', 'required');
+        $this->form_validation->set_rules('komentar', 'Komentar', 'required|trim');
     
-
+        if ($this->form_validation->run()) {
+            $comment_id = $this->input->post('comment_id');
+            $nis = $this->session->userdata('nis');
+            
+            // Verifikasi kepemilikan komentar
+            $comment = $this->db->get_where('forum_diskusi', [
+                'id' => $comment_id,
+                'nis' => $nis
+            ])->row();
+    
+            if ($comment) {
+                $this->db->where('id', $comment_id)
+                         ->update('forum_diskusi', [
+                             'komentar' => $this->input->post('komentar'),
+                             'updated_at' => date('Y-m-d H:i:s')
+                         ]);
+                $this->session->set_flashdata('success', 'Komentar berhasil diupdate');
+            } else {
+                $this->session->set_flashdata('error', 'Anda tidak memiliki izin mengedit komentar ini');
+            }
+        } else {
+            $this->session->set_flashdata('error', validation_errors());
+        }
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+    
+    public function hapus_komentar($comment_id) {
+        $nis = $this->session->userdata('nis');
+        
+        $this->db->where('id', $comment_id)
+                 ->where('nis', $nis)
+                 ->delete('forum_diskusi');
+        
+        $this->session->set_flashdata('success', 'Komentar berhasil dihapus');
+        redirect($_SERVER['HTTP_REFERER']);
+    }
 }

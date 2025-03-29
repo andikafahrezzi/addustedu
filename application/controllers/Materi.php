@@ -39,6 +39,8 @@ class Materi extends CI_Controller
         $this->load->model(['M_materi', 'Forum_model', 'Quiz_model']);
         
         // Ambil data
+        $data['comments'] = $this->Forum_model->get_comments($id);
+        $data['current_nis'] = $this->session->userdata('nis');
         $data['materi'] = $this->M_materi->get_materi_by_id($id);
         $data['user'] = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row_array();
         $data['forum'] = $this->Forum_model->get_komentar_by_materi($id);
