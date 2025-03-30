@@ -63,13 +63,13 @@
 
         <!-- Discussion Forum -->
     <div class="discussion-forum">
-            <h3><span class="lnr lnr-bubble"></span> Forum Diskusi</h3>
+            <h3><i class="fa-regular fa fa-comments"></i></span> Forum Diskusi</h3>
             
             <!-- Comment Form -->
             <form class="comment-form" method="POST" action="<?= base_url('forum/tambah_komentar') ?>">
                 <input type="hidden" name="materi_id" value="<?= $materi->id ?>">
                 <textarea name="komentar" placeholder="Tulis komentar atau pertanyaan..." required></textarea>
-                <button type="submit"><span class="lnr lnr-paperclip"></span> Kirim</button>
+                <button type="submit"><i class="fa-regular fa fa-paper-plane"></i></span> Kirim</button>
             </form>
             
         <div class="row mt-4">
@@ -88,8 +88,7 @@ function display_comments($comments, $materi_id, $level = 0, $current_nis ) {
                 <div class="comment-author">
                     <span class="user-avatar">
                         <?= strtoupper(substr($comment->user, 0, 1)) ?>
-                    </span>
-                    <strong><?= htmlspecialchars($comment->user) ?></strong>
+                    </span> <strong><?= htmlspecialchars($comment->user) ?></strong>
                 </div>
                 <span class="comment-date">
                     <?= date('d M Y H:i', strtotime($comment->created_at)) ?>
@@ -102,18 +101,18 @@ function display_comments($comments, $materi_id, $level = 0, $current_nis ) {
             <div id="comment-display-<?= $comment->id ?>" class="comment-content">
                 <p><?= nl2br(htmlspecialchars($comment->komentar)) ?></p>
                 <button class="btn-action reply-btn" onclick="toggleReplyForm(<?= $comment->id ?>)">
-                                            <i class="fas fa-reply"></i> Balas
+                                            <i class="fas fa fa-reply"></i> Balas
                                         </button>
                 <?php if ($can_edit): ?>
                     <div class="comment-actions">
                         <button class="btn btn-sm btn-outline-primary edit-btn" 
                                 onclick="toggleEditForm(<?= $comment->id ?>)">
-                            <i class="fas fa-edit"></i> Edit
+                            <i class="fas fa fa-edit"></i> Edit
                         </button>
                         
                         <button class="btn btn-sm btn-outline-danger delete-btn" 
                                 onclick="confirmDelete(<?= $comment->id ?>)">
-                            <i class="fas fa-trash"></i> Hapus
+                            <i class="fas fa fa-trash"></i> Hapus
                         </button>
                     </div>
                 <?php endif; ?>
@@ -130,7 +129,7 @@ function display_comments($comments, $materi_id, $level = 0, $current_nis ) {
                                             
                                             <div class="form-actions">
                                                 <button type="submit" class="btn-submit">
-                                                    <i class="fas fa-paper-plane"></i> Kirim
+                                                    <i class="fas fa fa-paper-plane"></i> Kirim
                                                 </button>
                                                 <button type="button" class="btn-cancel" onclick="toggleReplyForm(<?= $comment->id ?>)">
                                                     Batal
@@ -150,7 +149,7 @@ function display_comments($comments, $materi_id, $level = 0, $current_nis ) {
                         </div>
                         <div class="mt-2">
                             <button type="submit" class="btn btn-primary btn-sm">
-                                <i class="fas fa-save"></i> Simpan
+                                <i class="fas fa fa-save"></i> Simpan
                             </button>
                             <button type="button" class="btn btn-secondary btn-sm" 
                                     onclick="toggleEditForm(<?= $comment->id ?>)">
@@ -305,6 +304,7 @@ if (!empty($forum)) {
     </div>
 </div>
 
+
 <!-- Video Controls Script -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -412,7 +412,3 @@ function showToast(type, message) {
 
 <!-- Add Linearicons CSS -->
 
-<style>
-/* Modern Learning View Styles */
-
-</style>
