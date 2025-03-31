@@ -33,14 +33,14 @@
                 Your browser does not support the video tag.
             </video>
             <div class="video-controls">
-                <button onclick="document.getElementById('myvideo').play()">
-                    <span class="lnr lnr-play-circle"></span> Play
+                <!-- <button onclick="document.getElementById('myvideo').play()">
+                    <span class="fas fa fa-play"></span>
                 </button>
                 <button onclick="document.getElementById('myvideo').pause()">
-                    <span class="lnr lnr-pause"></span> Pause
+                    <span class="fas fa fa-pause"></span>
                 </button>
                 <input type="range" id="progress-bar" min="0" max="100" value="0">
-                <span id="time-display">0:00 / 0:00</span>
+                <span id="time-display">0:00 / 0:00</span> -->
             </div>
         </div>
 

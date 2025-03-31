@@ -53,7 +53,8 @@ public function lanjutkan_quiz($quiz_siswa_id)
     $siswa = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row();
     
     // Validasi
-    if(!$quiz_siswa || $quiz_siswa->siswa_id != $siswa->id) {
+    if(!$quiz_siswa || $quiz_siswa->siswa_id != $siswa->nis) {
+        log_message('error', 'Akses tidak valid ke quiz siswa ID: '.$quiz_siswa_id);
         show_404();
     }
     

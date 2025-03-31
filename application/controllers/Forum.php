@@ -69,17 +69,6 @@ class Forum extends CI_Controller {
         $siswa = $this->db->get_where('siswa', ['nis' => $nis])->row();
         return $siswa ? $siswa->nama : "Nama tidak ditemukan";
     }
-    public function diskusi($materi_id) {
-        $data['forum'] = $this->Forum_model->get_komentar_by_materi($materi_id);
-    
-        // Debugging: Cek apakah data duplikat
-        echo "<pre>";
-        print_r($data['forum']);
-        echo "</pre>";
-        exit(); // Hentikan sementara untuk melihat hasil
-    
-        $this->load->view('materi/belajar', $data);
-    }
 
     public function edit_komentar() {
         $this->load->library('form_validation');
