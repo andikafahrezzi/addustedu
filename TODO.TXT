@@ -4,6 +4,7 @@ TODO
 - set_flash data untukj notif belum muncul
 - cari tau bagaimana cara destroy session 
 -  pada tampilan mobile, view belajar masih aneh
+- pada quiz_lanjutan jika siswa melewati batas waktu masih 404 belum dibuatkan fungsinya
 
 PR
 
