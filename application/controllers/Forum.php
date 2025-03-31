@@ -9,34 +9,17 @@ class Forum extends CI_Controller {
         $this->load->model('Forum_model');
     }
 
-    public function index($materi_id) {
-        $data['forums'] = $this->Forum_model->get_forums_by_materi($materi_id);
-        $nama_user = $this->session->userdata('nis');
-        if (!$nama_user) {
-            echo "Error: Nama user tidak ditemukan di session!";
-            return;
-        }
-
-        $this->load->view('forum/index', $data);
+    public function index() {
+        
+        $this->load->view('materi/navm');
+        $this->load->view('materi/belajar');
+        $this->load->view('materi/footm');
     }
 
-    public function tambah_topik() {
-        $data = [
-            'materi_id' => $this->input->post('materi_id'),
-            'judul' => $this->input->post('judul')
-        ];
-        $this->Forum_model->add_forum($data);
-        redirect('forum/index/' . $this->input->post('materi_id'));
-    }
-
-    public function komentar($forum_id) {
-        $data['forum'] = $this->Forum_model->get_forum_comments($forum_id);
-        $this->load->view('forum/komentar', $data);
-    }
         public function tambah_komentar() {
             // Validasi session
             if (!$this->session->userdata('nis')) {
-                redirect('auth');
+                redirect('welcome');
             }
     
             // Ambil data siswa
@@ -67,9 +50,9 @@ class Forum extends CI_Controller {
     
             // Simpan ke database
             if ($this->Forum_model->tambah_komentar($data)) {
-                $this->session->set_flashdata('success', 'Komentar berhasil ditambahkan');
+                $this->session->set_flashdata('success-add', 'Komentar berhasil ditambahkan');
             } else {
-                $this->session->set_flashdata('error', 'Gagal menambahkan komentar');
+                $this->session->set_flashdata('error-comment', 'Gagal menambahkan komentar');
             }
     
             redirect('materi/belajar/' . $data['materi_id']);
@@ -97,6 +80,7 @@ class Forum extends CI_Controller {
     
         $this->load->view('materi/belajar', $data);
     }
+
     public function edit_komentar() {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('comment_id', 'Comment ID', 'required');
@@ -118,9 +102,9 @@ class Forum extends CI_Controller {
                              'komentar' => $this->input->post('komentar'),
                              'updated_at' => date('Y-m-d H:i:s')
                          ]);
-                $this->session->set_flashdata('success', 'Komentar berhasil diupdate');
+                $this->session->set_flashdata('success-edit', 'Komentar berhasil diupdate');
             } else {
-                $this->session->set_flashdata('error', 'Anda tidak memiliki izin mengedit komentar ini');
+                $this->session->set_flashdata('error-comment', 'Anda tidak memiliki izin mengedit komentar ini');
             }
         } else {
             $this->session->set_flashdata('error', validation_errors());
@@ -135,7 +119,6 @@ class Forum extends CI_Controller {
                  ->where('nis', $nis)
                  ->delete('forum_diskusi');
         
-        $this->session->set_flashdata('success', 'Komentar berhasil dihapus');
         redirect($_SERVER['HTTP_REFERER']);
     }
 }

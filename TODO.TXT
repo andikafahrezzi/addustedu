@@ -2,7 +2,7 @@ TODO
 - membuat footer untuk user (index) agar sweet alertnya tetap menyala
 - membuat footer untuk user (belajar) agar sweet alertnya tetap menyala git 
 - set_flash data untukj notif belum muncul
-- cari tau bagaimana cara destroy sesson 
+- cari tau bagaimana cara destroy session 
 -  pada tampilan mobile, view belajar masih aneh
 
 PR

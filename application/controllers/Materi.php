@@ -56,6 +56,8 @@ class Materi extends CI_Controller
         
         $this->load->view('materi/navm');
         $this->load->view('materi/belajar', $data);
+        $this->load->view('materi/footm');
+
     }
     public function list_quiz()
 {
