@@ -73,6 +73,8 @@ public function complete_quiz($quiz_siswa_id, $score)
                  'status' => 'completed',
                  'score' => $score
              ]);
+    $this->db->where('id', $quiz_siswa_id);
+    return $this->db->update('quiz_siswa', $data);
 }
 public function get_quiz_siswa($quiz_siswa_id)
 {
@@ -107,4 +109,15 @@ public function get_quiz_result($quiz_id, $siswa_id)
         'siswa_id' => $siswa_id
     ])->row();
 }
+public function hitung_nilai_terakhir($id)
+{
+    // Hitung total nilai dari jawaban yang sudah dikerjakan
+    $this->db->select_sum('poin');
+    $this->db->where('id', $id);
+    $query = $this->db->get('quiz_questions');
+    
+    return $query->row()->total_nilai ?? 0; // Return 0 jika tidak ada jawaban
+}
+
+
 }
