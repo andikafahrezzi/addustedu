@@ -1,4 +1,5 @@
 TODO
+- create footer for user (indez) because user change path very quickly
 - cari tau bagaimana cara destroy session 
 
 
