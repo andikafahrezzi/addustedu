@@ -60,6 +60,22 @@ public function lanjutkan_quiz($quiz_siswa_id)
     if($quiz_siswa->status == 'completed') {
         redirect("materi/quiz_result/{$quiz_siswa_id}");
     }
+    $current_time = time();
+    $end_time = strtotime($quiz_siswa->end_time);
+    
+    if($current_time > $end_time) {
+        // Hitung nilai dari jawaban yang sudah dikerjakan
+        $nilai = $this->Quiz_model->hitung_nilai_terakhir($quiz_siswa_id);
+        
+        // Submit otomatis
+        $this->Quiz_model->complete_quiz($quiz_siswa_id, $nilai);
+        
+        // Set notifikasi
+        $this->session->set_flashdata('timeout', 'Waktu pengerjaan quiz telah habis! ' . 
+            ($nilai > 0 ? 'Nilai akhir: ' . $nilai : 'Anda tidak mengisi jawaban apapun.'));
+        
+        redirect("materi/quiz_result/{$quiz_siswa_id}");
+    }
     
     redirect("materi/do_quiz/{$quiz_siswa_id}");
 }

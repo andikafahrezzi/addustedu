@@ -1,5 +1,13 @@
 <div class="container mt-4">
     <div class="card shadow">
+    <?php if($this->session->flashdata('timeout')): ?>
+<div class="alert alert-warning">
+    <?= $this->session->flashdata('timeout') ?>
+    <?php if(isset($quiz->keterangan) && strpos($quiz->keterangan, 'Auto-submit') !== false): ?>
+        <br><small>(Quiz diselesaikan secara otomatis)</small>
+    <?php endif; ?>
+</div>
+<?php endif; ?>
         <div class="card-header bg-<?= $result->score >= 70 ? 'success' : 'danger' ?> text-white">
             <h4><i class="fas fa-clipboard-check mr-2"></i>Hasil Quiz: <?= $result->judul ?></h4>
         </div>
