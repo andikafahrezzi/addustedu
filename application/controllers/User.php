@@ -28,44 +28,15 @@ class User extends CI_Controller
             log_message('error', 'Kelas siswa: ' . $data['kelas_siswa']);
         $this->load->view('user/navu'); // Oper data ke view
         $this->load->view('user/index', $data); // Oper data ke view
-        $this->load->view('template/footer');
+        $this->load->view('user/foots');
     }
     
 
-    public function kelas10()
-    {
-        $data['user'] = $this->db->get_where('siswa', ['nis' =>
-            $this->session->userdata('nis')])->row_array();
-
-        $this->load->view('user/navu');
-        $this->load->view('user/kelas10');
-        $this->load->view('template/footer');
-    }
-
-    public function kelas11()
-    {
-        $data['user'] = $this->db->get_where('siswa', ['nis' =>
-            $this->session->userdata('nis')])->row_array();
-
-        $this->load->view('user/navu');
-        $this->load->view('user/kelas11');
-        $this->load->view('template/footer');
-    }
-
-    public function kelas12()
-    {
-        $data['user'] = $this->db->get_where('siswa', ['nis' =>
-            $this->session->userdata('nis')])->row_array();
-        
-        $this->load->view('user/navu');
-        $this->load->view('user/kelas12');
-        $this->load->view('template/footer');
-    }
 
     public function registration()
     {
         $this->load->view('user/registration');
-        $this->load->view('template/footer');
+        $this->load->view('user/foots');
     }
 
     public function registration_act()

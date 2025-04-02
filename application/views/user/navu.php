@@ -24,7 +24,6 @@
     <link rel="stylesheet" href="<?= base_url('assets/') ?>vendors/animate-css/animate.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>vendors/popup/magnific-popup.css">
     <!-- main css -->
-    <link rel="stylesheet" href="<?= base_url('assets/') ?>css/style.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/user_style.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/custom.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/responsive.css">
