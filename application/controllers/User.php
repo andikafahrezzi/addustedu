@@ -26,6 +26,7 @@ class User extends CI_Controller
                 redirect('welcome/');
             }
             log_message('error', 'Kelas siswa: ' . $data['kelas_siswa']);
+        $data['user'] = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row_array();
         $this->load->view('user/navu'); // Oper data ke view
         $this->load->view('user/index', $data); // Oper data ke view
         $this->load->view('user/foots');

@@ -1,0 +1,164 @@
+/* VARIABLES */
+/* KELAS UTAMA */
+.container {
+  padding: 2rem 0;
+}
+.container #judul {
+  color: #4cc9f0;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+.container #judul::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #42e695, #3bb2b8);
+  border-radius: 2px;
+}
+
+/* ACCORDION STYLE */
+.accordion .card {
+  border: none;
+  border-radius: 12px !important;
+  overflow: hidden;
+  margin-bottom: 1.5rem !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+.accordion .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+.accordion .card .card-header {
+  background: linear-gradient(135deg, #42e695, #3bb2b8);
+  border: none;
+  padding: 0;
+}
+.accordion .card .card-header button {
+  color: white;
+  text-decoration: none;
+  padding: 1.5rem 2rem;
+  position: relative;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+.accordion .card .card-header button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.accordion .card .card-header button[aria-expanded=true] .lnr-chevron-down {
+  transform: rotate(180deg);
+}
+.accordion .card .card-header button .card-mapel {
+  color: white;
+  font-size: 1.4rem;
+  display: inline-block;
+}
+.accordion .card .card-header button .lnr-chevron-down {
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+  margin-top: 5px;
+}
+.accordion .card .card-body {
+  padding: 2rem;
+  background-color: #f8f9fa;
+}
+
+/* CARD MATERI STYLE */
+.materi-card {
+  border: none;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+.materi-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+.materi-card:hover .card-img-overlay {
+  opacity: 1;
+}
+.materi-card .card-img-container {
+  position: relative;
+  overflow: hidden;
+  height: 180px;
+  background-color: #e9ecef;
+}
+.materi-card .card-img-container img {
+  height: 100%;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  transition: all 0.3s ease;
+}
+.materi-card .card-img-container:hover img {
+  transform: scale(1.05);
+}
+.materi-card .card-img-container .card-img-overlay {
+  background: rgba(67, 97, 238, 0.8);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+.materi-card .card-img-container .card-img-overlay .badge-primary {
+  background-color: white;
+  color: #4361ee;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+}
+.materi-card .card-img-container .card-img-overlay .badge-primary:hover {
+  background-color: #f2f2f2;
+}
+.materi-card .card-body .card-title {
+  color: #212529;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.materi-card .card-body .card-text {
+  color: #4e5862;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+.materi-card .card-body .divider {
+  border-top: 1px solid rgba(76, 201, 240, 0.1);
+  margin: 1rem 0;
+}
+.materi-card .card-body .teacher-badge {
+  color: #4cc9f0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.materi-card .card-body .teacher-badge i {
+  color: #4cc9f0;
+}
+.materi-card .card-body .btn-outline-primaryy {
+  border-color: #4cc9f0;
+  color: #4cc9f0;
+  border-radius: 50px;
+  padding: 0.25rem 1rem;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+.materi-card .card-body .btn-outline-primaryy:hover {
+  background-color: #4cc9f0;
+  color: white;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .materi-card {
+    margin-bottom: 1.5rem;
+  }
+  .accordion .card-header button {
+    padding: 1rem;
+  }
+  .accordion .card-header button .card-mapel {
+    font-size: 1.2rem;
+  }
+}/*# sourceMappingURL=materi.css.map */

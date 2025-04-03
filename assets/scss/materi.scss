@@ -1,0 +1,206 @@
+/* VARIABLES */
+$primary-color: #4361ee;
+$secondary-color: #3f37c9;
+$accent-color: #4cc9f0;
+$light-color: #f8f9fa;
+$dark-color: #212529;
+$border-radius: 12px;
+$box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
+$third-color: #42e695;
+$fourth-color: #3bb2b8;
+/* KELAS UTAMA */
+.container {
+  padding: 2rem 0;
+  
+  #judul {
+    color: $accent-color;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, $third-color, $fourth-color);
+      border-radius: 2px;
+    }
+  }
+}
+
+/* ACCORDION STYLE */
+.accordion {
+  .card {
+    border: none;
+    border-radius: $border-radius !important;
+    overflow: hidden;
+    margin-bottom: 1.5rem !important;
+    box-shadow: $box-shadow;
+    transition: $transition;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card-header {
+      background: linear-gradient(135deg, $third-color, $fourth-color);
+      border: none;
+      padding: 0;
+      
+      button {
+        color: white;
+        text-decoration: none;
+        padding: 1.5rem 2rem;
+        position: relative;
+        font-weight: 600;
+        transition: $transition;
+        
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        &[aria-expanded="true"] {
+          .lnr-chevron-down {
+            transform: rotate(180deg);
+          }
+        }
+        
+        .card-mapel {
+          color: white;
+          font-size: 1.4rem;
+          display: inline-block;
+        }
+        
+        .lnr-chevron-down {
+          transition: $transition;
+          font-size: 1.2rem;
+          margin-top: 5px;
+        }
+      }
+    }
+    
+    .card-body {
+      padding: 2rem;
+      background-color: $light-color;
+    }
+  }
+}
+
+/* CARD MATERI STYLE */
+.materi-card {
+  border: none;
+  border-radius: $border-radius;
+  transition: $transition;
+  overflow: hidden;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    
+    .card-img-overlay {
+      opacity: 1;
+    }
+  }
+  
+  .card-img-container {
+    position: relative;
+    overflow: hidden;
+    height: 180px;
+    background-color: #e9ecef;
+    
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      transition: $transition;
+    }
+    
+    &:hover img {
+      transform: scale(1.05);
+    }
+    
+    .card-img-overlay {
+      background: rgba($primary-color, 0.8);
+      opacity: 0;
+      transition: $transition;
+      
+      .badge-primary {
+        background-color: white;
+        color: $primary-color;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        transition: $transition;
+        
+        &:hover {
+          background-color: darken(white, 5%);
+        }
+      }
+    }
+  }
+  
+  .card-body {
+    .card-title {
+      color: $dark-color;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    .card-text {
+      color: lighten($dark-color, 20%);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    
+    .divider {
+      border-top: 1px solid rgba($accent-color, 0.1);
+      margin: 1rem 0;
+    }
+    
+    .teacher-badge {
+      color: $accent-color;
+      font-size: 0.9rem;
+      font-weight: 500;
+      
+      i {
+        color: $accent-color;
+      }
+    }
+    
+    .btn-outline-primaryy {
+      border-color: $accent-color;
+      color: $accent-color;
+      border-radius: 50px;
+      padding: 0.25rem 1rem;
+      font-size: 0.85rem;
+      transition: $transition;
+      
+      &:hover {
+        background-color: $accent-color;
+        color: white;
+      }
+    }
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .materi-card {
+    margin-bottom: 1.5rem;
+  }
+  
+  .accordion .card-header button {
+    padding: 1rem;
+    
+    .card-mapel {
+      font-size: 1.2rem;
+    }
+  }
+}

@@ -12,23 +12,13 @@
         <div class="bg-white mx-auto mt-5 p-4 buat-text" data-aos="fade-down" data-aos-duration="1400" style="width: 100%; border-radius:10px;">
             <div class="row" style="color: black; font-family: 'poppins';">
                 <div class="col-md-12 mt-1">
-                    <h1 class="display-4" style="color: black; font-family:'poppins';" data-aos="fade-down" data-aos-duration="1400">Selamat Datang
+                    <h1 class="display-4" data-aos="fade-down" data-aos-duration="1400">Selamat Datang
                         di addustedu <span style="font-size: 40px;">👋🏻
                         </span> </h1>
-                    <p>Hello Studentss! , Ini merupakan halaman utama addustedu ! Silahkan pilih kelas yang akan kamu
+                    <p>Hello <?= $user['nama'] ?> , Ini merupakan halaman utama addustedu ! Silahkan pilih kelas yang akan kamu
                         akses
                         dan pilih mata pelajaran yang ingin kamu pelajari. Selamat belajar ya students!</p>
-                    <hr>
-                    <h4 style="line-height: 4px;" data-aos="fade-down" data-aos-duration="1700"> Hai, <?php
-                                                                                                $data['user'] = $this->db->get_where('siswa', ['nis' =>
-                                                                                                $this->session->userdata('nis')])->row_array();
-                                                                                                echo $data['user']['nama'];
-                                                                                                ?> </h4>
-                        <p data-aos="fade-down" data-aos-duration="1800">Kelas, <?php
-                                                                                                $data['user'] = $this->db->get_where('siswa', ['nis' =>
-                                                                                                $this->session->userdata('nis')])->row_array();
-                                                                                                echo $data['user']['kelas'];
-                                                                                                ?> - addustedu Students</h4>
+                        <p data-aos="fade-down" data-aos-duration="1800">Kelas, <?= $user['kelas'] ?> - addustedu Students</h4>
                         
                         
                 </div>

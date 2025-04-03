@@ -454,10 +454,6 @@ button:focus {
 	right: 20px;
 }
 
-
-.card-mapel {
-    color: #020b06;
-}
 .btn-outline-primaryy {
 	color: #0df165;
 	border-color: #09f788;
@@ -492,67 +488,6 @@ button:focus {
 
 /*# sourceMappingURL=style.css.map */
 
-.footer-area {
-	background: linear-gradient(135deg, #42e695 0%, #3bb2b8 100%);
-}
-
-.footer_title {
-	font-size: 18px;
-	line-height: 24px;
-	font-weight: bold;
-	font-family: "Roboto", serif;
-	color: #fff;
-	margin-bottom: 28px;
-}
-
-.border_line {
-	width: 100%;
-	height: 1px;
-	background: #333333;
-	margin-top: 30px;
-}
-
-.footer-bottom {
-	padding-top: 85px;
-}
-
-.footer-bottom .footer-text {
-	color: #fff;
-	opacity: 0.6;
-}
-
-.footer-bottom .footer-text i {
-	color: #4dbf1c;
-	opacity: 1;
-}
-
-.footer-bottom .footer-text a {
-	color: #4dbf1c;
-	opacity: 1;
-}
-
-.footer-bottom .footer-social {
-	text-align: right;
-}
-
-.footer-bottom .footer-social a {
-	font-size: 14px;
-	line-height: 30px;
-	color: #15de91;
-	margin-left: 6px;
-	transition: all 0.3s linear;
-	background: #ebe9e6;
-	height: 30px;
-	width: 30px;
-	text-align: center;
-	display: inline-block;
-	transition: all 300ms linear 0s;
-}
-
-.footer-bottom .footer-social a:hover {
-	color: #e7f0ed;
-	background: #05eb8b;
-}
 
 @media (max-width: 768px) {
     #logo-img {

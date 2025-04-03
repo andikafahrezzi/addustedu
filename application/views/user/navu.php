@@ -26,6 +26,9 @@
     <!-- main css -->
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/user_style.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/custom.css">
+    <link rel="stylesheet" href="<?= base_url('assets/') ?>css/materi.css">
+    <link rel="stylesheet" href="<?= base_url('assets/') ?>css/greetings.css">
+    <link rel="stylesheet" href="<?= base_url('assets/') ?>css/footu.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/responsive.css">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
