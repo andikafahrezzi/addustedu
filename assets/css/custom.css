@@ -484,6 +484,334 @@ button:focus {
 	border-color: #007bff;
 }
 
+.bubbly-button {
+	font-family: "Poppins", "Arial", sans-serif;
+	display: inline-block;
+	font-size: 1em;
+	padding: 1em 5em;
+	margin-top: 20px;
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: #4dbf1c;
+	color: #fff;
+	border-radius: 40px;
+	border: none;
+	cursor: pointer;
+	position: relative;
+	transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
+	box-shadow: 0 2px 25px #5feb2356;
+}
+
+.bubbly-button:focus {
+	outline: 0;
+}
+
+.bubbly-button:before,
+.bubbly-button:after {
+	position: absolute;
+	content: "";
+	display: block;
+	width: 140%;
+	height: 100%;
+	left: -20%;
+	z-index: -1000;
+	transition: all ease-in-out 0.5s;
+	background-repeat: no-repeat;
+}
+
+.bubbly-button:before {
+	display: none;
+	top: -75%;
+	background-image: radial-gradient(circle, #4dbf1c 20%, transparent 20%),
+		radial-gradient(circle, transparent 20%, #4dbf1c 20%, transparent 30%),
+		radial-gradient(circle, #4dbf1c 20%, transparent 20%),
+		radial-gradient(circle, #4dbf1c 20%, transparent 20%),
+		radial-gradient(circle, transparent 10%, #4dbf1c 15%, transparent 20%),
+		radial-gradient(circle, #4dbf1c 20%, transparent 20%),
+		radial-gradient(circle, #4dbf1c 20%, transparent 20%),
+		radial-gradient(circle, #4dbf1c 20%, transparent 20%),
+		radial-gradient(circle, #4dbf1c 20%, transparent 20%);
+	background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%,
+		10% 10%, 18% 18%;
+}
+
+.bubbly-button:after {
+	display: none;
+	bottom: -75%;
+	background-image: radial-gradient(circle, #4dbf1c 20%, transparent 20%),
+		radial-gradient(circle, #4dbf1c 20%, transparent 20%),
+		radial-gradient(circle, transparent 10%, #4dbf1c 15%, transparent 20%),
+		radial-gradient(circle, #4dbf1c 20%, transparent 20%),
+		radial-gradient(circle, #4dbf1c 20%, transparent 20%),
+		radial-gradient(circle, #4dbf1c 20%, transparent 20%),
+		radial-gradient(circle, #4dbf1c 20%, transparent 20%);
+	background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 10% 10%, 20% 20%;
+}
+
+.bubbly-button:active {
+	transform: scale(0.9);
+	background-color: #4dbf1c;
+	box-shadow: 0 2px 25px rgba(255, 0, 130, 0.2);
+}
+
+.bubbly-button.animate:before {
+	display: block;
+	animation: topBubbles ease-in-out 0.75s forwards;
+}
+
+.bubbly-button.animate:after {
+	display: block;
+	animation: bottomBubbles ease-in-out 0.75s forwards;
+}
+.home_banner_area {
+	position: relative;
+	z-index: 1;
+	min-height: 500px;
+}
+
+.home_banner_area .banner_inner {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	min-height: 500px;
+}
+
+.home_banner_area .banner_inner .overlay {
+	background: url(../img/banner/banner-effect.png) no-repeat scroll center
+		center;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	height: 121%;
+	bottom: 0;
+	z-index: -1;
+}
+
+.home_banner_area .banner_inner .banner_content {
+	color: #fff;
+}
+
+.home_banner_area .banner_inner .banner_content h5 {
+	text-transform: uppercase;
+	font-family: "Roboto", sans-serif;
+	font-size: 14px;
+	font-weight: 900;
+	margin-bottom: 15px;
+}
+
+.home_banner_area .banner_inner .banner_content h3 {
+	font-size: 42px;
+	font-family: "Roboto", serif;
+	font-weight: 900;
+	margin-bottom: 20px;
+}
+
+.home_banner_area .banner_inner .banner_content p {
+	font-size: 14px;
+	line-height: 24px;
+	font-family: "Roboto", sans-serif;
+	font-weight: normal;
+	max-width: 620px;
+	margin: auto;
+}
+
+.home_banner_area .banner_inner .banner_content .main_btn {
+	margin-top: 40px;
+}
+
+.blog_banner {
+	min-height: 660px;
+	position: relative;
+	z-index: 1;
+	overflow: hidden;
+	margin-bottom: 0px;
+}
+
+.blog_banner .banner_inner {
+	background: #04091e;
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	min-height: 660px;
+	z-index: 1;
+}
+
+.blog_banner .banner_inner .overlay {
+	background: url(../img/banner/banner-2.jpg) no-repeat scroll center center;
+	opacity: 0.5;
+	height: 125%;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	z-index: -1;
+}
+
+.blog_banner .banner_inner .blog_b_text {
+	max-width: 700px;
+	margin: auto;
+	color: #fff;
+}
+
+.blog_banner .banner_inner .blog_b_text h2 {
+	font-size: 60px;
+	font-weight: bold;
+	font-family: "Roboto", serif;
+	line-height: 66px;
+	margin-bottom: 15px;
+}
+
+.blog_banner .banner_inner .blog_b_text p {
+	font-size: 16px;
+	margin-bottom: 35px;
+}
+
+.blog_banner .banner_inner .blog_b_text .white_bg_btn {
+	line-height: 42px;
+	padding: 0px 45px;
+}
+
+.banner_box {
+	max-width: 1620px;
+	margin: auto;
+}
+
+.banner_area {
+	position: relative;
+	z-index: 1;
+	min-height: 300px;
+}
+
+.banner_area .banner_inner {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	min-height: 300px;
+	background: #04091e;
+	z-index: 1;
+}
+
+.modal-body {
+	font-family: "Poppins", sans-serif !important;
+}
+
+.label-font {
+	font-size: 19px;
+	font-weight: 700;
+	font-family: "Poppins", sans-serif !important;
+	color: #212529;
+}
+
+.label-font-register {
+	font-size: 19px;
+	font-weight: 700;
+	font-family: "Poppins", sans-serif !important;
+	color: #212529;
+}
+
+.btn-modal {
+	font-weight: 600;
+	font-size: 20px;
+	background-color: #4dbf1c;
+	color: white;
+	box-shadow: 0 2.4px 5px rgba(0, 0, 0, -0.005),
+		0 6.1px 12.6px rgba(0, 0, 0, -0.004), 0 12.6px 25.7px rgba(0, 0, 0, 0.007),
+		0 27px 52.9px rgba(0, 0, 0, 0.028), 0 100px 145px rgba(0, 0, 0, 0.07);
+}
+
+.modal-title {
+	font-weight: 600;
+	letter-spacing: -1px;
+	font-family: "Poppins", sans-serif !important;
+}
+
+.terms {
+	font-size: 12px;
+	line-height: 18px;
+	color: #212529;
+}
+
+.form-check-label {
+	font-family: "Poppins", sans-serif !important;
+	color: #212529;
+	font-size: 16px;
+}
+
+.banner_area .banner_inner .overlay {
+	background: url(../img/banner/banner.jpg) no-repeat scroll center center;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	height: 125%;
+	bottom: 0;
+	z-index: -1;
+	opacity: 0.6;
+}
+
+.banner_area .banner_inner .pelajaran {
+	background: url(../img/banner/banner-pelajaran.jpg) no-repeat scroll center
+		center;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	height: 125%;
+	bottom: 0;
+	z-index: -1;
+	opacity: 0.6;
+}
+
+.banner_area .banner_inner .kontak {
+	background: url(../img/banner/banner-kontak.jpg) no-repeat scroll center
+		center;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	height: 125%;
+	bottom: 0;
+	z-index: -1;
+	opacity: 0.6;
+}
+
+.banner_area .banner_inner .banner_content h2 {
+	color: #fff;
+	font-size: 48px;
+	font-family: "Roboto", serif;
+	margin-bottom: 0px;
+	font-weight: bold;
+}
+
+.banner_area .banner_inner .banner_content .page_link a {
+	font-size: 14px;
+	color: #fff;
+	font-family: "Roboto", sans-serif;
+	margin-right: 32px;
+	position: relative;
+}
+
+.banner_area .banner_inner .banner_content .page_link a:before {
+	content: "\e87a";
+	font-family: "Linearicons-Free";
+	position: absolute;
+	right: -25px;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.banner_area .banner_inner .banner_content .page_link a:last-child {
+	margin-right: 0px;
+}
+
+.banner_area .banner_inner .banner_content .page_link a:last-child:before {
+	display: none;
+}
+
+.banner_area .banner_inner .banner_content .page_link a:hover {
+	color: #4dbf1c;
+}
 /*---------------------------------------------------- */
 
 /*# sourceMappingURL=style.css.map */

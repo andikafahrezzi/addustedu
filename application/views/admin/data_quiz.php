@@ -7,8 +7,8 @@
                             <h2 class="card-title" style="color: black;">Management Data Materi addustedu</h2>
                             <hr>
                             <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction.</p>
-                            <a href="<?= base_url('admin/add_materi') ?>" class="btn btn-success">Tambah
-                                Data Materi ⭢</a>
+                            <a href="<?= base_url('admin/buat_quiz') ?>" class="btn btn-success">Tambah
+                                Quiz⭢</a>
                         </div>
                     </div>
                     <div class="row">
@@ -40,27 +40,27 @@
                                                     </th>
 
                                                     <td>
-                                                        <?php echo $u->nama_guru ?>
+                                                        <?php echo $u->materi_id ?>
                                                     </td>
 
                                                     <td>
-                                                        <?php echo $u->nama_mapel ?>
+                                                        <?php echo $u->judul ?>
                                                     </td>
                                                     <td>
                                                         <?= substr($u->deskripsi, 0, 30); ?>
                                                         .&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.
                                                     </td>
                                                     <td>
-                                                        <?php echo $u->linkform ?>
+                                                        <?php echo $u->waktu_pengerjaan ?>
                                                     </td>
                                                     <td>
-                                                        <?php echo $u->kelas ?>
+                                                        <?php echo $u->created_at ?>
                                                     </td>
 
                                                     <td class="text-center">
-                                                        <a href="<?php echo site_url('admin/update_materi/' . $u->id); ?>" class="btn btn-info">Update ⭢</a>
+                                                        <a href="<?php echo site_url('admin/kelola_quiz/' . $u->id); ?>" class="btn btn-info">Update ⭢</a>
 
-                                                        <a href="<?php echo site_url('admin/delete_materi/' . $u->id); ?>" class="btn btn-danger remove">Delete ✖</a>
+                                                        <a href="<?php echo site_url('admin/delete_quiz/' . $u->id); ?>" class="btn btn-danger remove">Delete ✖</a>
                                                     </td>
 
                                                 </tr>

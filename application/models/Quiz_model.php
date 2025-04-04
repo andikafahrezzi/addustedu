@@ -118,6 +118,41 @@ public function hitung_nilai_terakhir($id)
     
     return $query->row()->total_nilai ?? 0; // Return 0 jika tidak ada jawaban
 }
+public function tampil_quiz()
+{
+    return $this->db->get('quiz');
+}
+public function delete_quiz($quiz_id) {
+    $this->db->trans_start(); // Mulai transaction database
+    
+    // Urutan penghapusan yang benar:
+    // 1. Hapus jawaban siswa terkait
+    $this->db->query("DELETE js FROM jawaban_siswa js 
+                     JOIN quiz_siswa qs ON js.quiz_siswa_id = qs.id 
+                     WHERE qs.quiz_id = ?", [$quiz_id]);
+    
+    // 2. Hapus record di quiz_siswa
+    $this->db->where('quiz_id', $quiz_id);
+    $this->db->delete('quiz_siswa');
+    
+    // 3. Hapus pertanyaan quiz
+    $this->db->where('quiz_id', $quiz_id);
+    $this->db->delete('quiz_questions');
+    
+    // 4. Hapus quiz utama
+    $this->db->where('id', $quiz_id);
+    $this->db->delete('quiz');
+    
+    $this->db->trans_complete(); // Selesaikan transaction
+    
+    if ($this->db->trans_status() === FALSE) {
+        $error = $this->db->error();
+        log_message('error', 'Database error: ' . $error['message']);
+        return FALSE;
+    }
+    
+    return TRUE;
+}
 
 
 }

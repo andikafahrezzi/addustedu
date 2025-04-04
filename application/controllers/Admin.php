@@ -549,4 +549,33 @@ private function tambah_soal($quiz_id)
     $this->Quiz_model->tambah_soal($data);
     $this->session->set_flashdata('success', 'Soal berhasil ditambahkan!');
 }
+public function data_quiz()
+    {
+        $this->load->model('Quiz_model');
+
+        $data['user'] = $this->db->get_where('admin', ['email' =>
+            $this->session->userdata('email')])->row_array();
+
+        $data['user'] = $this->Quiz_model->tampil_quiz()->result();
+        $this->load->view('admin/nava');
+        $this->load->view('admin/data_quiz', $data);
+    }
+    public function delete_quiz($id) {
+        // Validasi ID
+        if(empty($id) || !is_numeric($id)) {
+            $this->session->set_flashdata('error', 'ID Quiz tidak valid');
+            redirect('admin/data_quiz');
+        }
+        
+        $result = $this->Quiz_model->delete_quiz($id);
+        
+        if($result) {
+            $this->session->set_flashdata('success', 'Quiz dan semua data terkait berhasil dihapus');
+        } else {
+            $error = $this->db->error();
+            $this->session->set_flashdata('error', 'Gagal menghapus quiz: '.$error['message']);
+        }
+        
+        redirect('admin/data_quiz');
+    }
 }

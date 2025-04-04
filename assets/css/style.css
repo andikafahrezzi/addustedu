@@ -1,29 +1,12 @@
-.inner {
-  width: 700px;
-}
+/*----------------------------------------------------
+@File: Default Styles
+@Author: Rocky Ahmed
+@URL: http://wethemez.com
+Author E-mail: rockybd1995@gmail.com
 
-nav {
-  margin: 0;
-  padding: 0;
-  text-align: center;
-}
-
-nav ul {
-  list-style: none;
-}
-
-nav li {
-  display: inline;
-}
-
-nav li.active {
-  font-weight: bold;
-}
-
-nav a {
-  display: inline-block;
-  padding: 2px 5px;
-}/*# sourceMappingURL=style.css.map */.
+This file contains the styling for the actual theme, this
+is the file you need to edit to change the look of the
+theme.
 ---------------------------------------------------- */
 /*=====================================================================
 @Template Name: Builder Construction 
@@ -352,6 +335,7 @@ button:focus {
 
 /*---------------------------------------------------- */
 /*----------------------------------------------------*/
+/*Color Variables*/
 /* Home Banner Area css
 ============================================================================================ */
 .home_banner_area {
@@ -3525,7 +3509,6 @@ h6 {
 }
 
 .video_area {
-  float: right;
   display: inline-block;
   position: relative;
 }
@@ -3771,4 +3754,4 @@ h6 {
   background: #4dbf1c;
 }
 
-/*---------------------------------------------------- *//*# sourceMappingURL=style.css.map */
+/*---------------------------------------------------- */
