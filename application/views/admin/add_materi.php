@@ -28,30 +28,24 @@
                                             <input type="hidden" name="id">
                                             <div class="form-row">
                                                 <div class="form-group col-md-12">
-                                                    <label for="inputEmail4">Nama Guru</label>
-                                                    <input autocomplete="off" required type="text" list="nama_guru" onkeyup="autofill()" id="namaguru" name="nama_guru" class="form-control">
-                                                    <small>List guru sudah tersedia di autocomplete, kalian hanya
-                                                        tinggal klik input area nya atau dengan cara menulis namanya dan
-                                                        klik guru yang akan dipilih.</small>
-                                                    <datalist id=nama_guru>
-                                                        <?php
-                                                        include "koneksi.php";
-                                                        $qry = mysqli_query($koneksi, "SELECT nama_guru From guru");
-                                                        while ($t = mysqli_fetch_array($qry)) {
-                                                            echo "<option value='$t[nama_guru]'>";
-                                                        }
-                                                        ?>
-                                                    </datalist>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="exampleFormControlInput1">Nama Mata Pelajaran</label>
-                                                <input type="text" class="form-control" name="nama_mapel" id="nama_mapel" required placeholder="Pilih nama guru yang valid agar nama mapel muncul" readonly>
-                                                <small>Jika nama mapel sudah berganti artinya nama guru yang kamu
-                                                    masukan di input area adalah valid! jika tidak muncul nama mapel
-                                                    anda harus klik input area nama guru dan pilih guru yang tersedia
-                                                    disana.</small>
-                                            </div>
+                                                <label for="guru">Pilih Guru</label>
+<select name="guru_info" id="guru_select" required onchange="fillGuruData()">
+    <option value="">-- Pilih Guru --</option>
+    <?php foreach ($guru as $g): ?>
+        <option 
+            value="<?= $g->nip ?>" 
+            data-nama="<?= $g->nama_guru ?>" 
+            data-mapel="<?= $g->nama_mapel ?>">
+            <?= $g->nama_guru ?> (<?= $g->nip ?>)
+        </option>
+    <?php endforeach; ?>
+</select>
+<label>Nama Guru</label>
+<input type="text" name="nama_guru" id="nama_guru" class="form-control" readonly required>
+
+<label>Nama Mata Pelajaran</label>
+<input type="text" name="nama_mapel" id="nama_mapel" class="form-control" readonly required>
+
                                             <div class="form-group">
                                                 <label for="">Upload Video Materi</label>
                                                 <div class="input-group">
@@ -114,18 +108,18 @@
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script>
-            function autofill() {
-                var nama_guru = $("#namaguru").val();
-                $.ajax({
-                    url: '../autofill.php',
-                    data: "nama_guru=" + nama_guru,
-                }).done(function(data) {
-                    var json = data,
-                        obj = JSON.parse(json);
-                    $('#nama_mapel').val(obj.nama_mapel);
-                });
+            function fillGuruData() {
+                const select = document.getElementById('guru_select');
+                const selectedOption = select.options[select.selectedIndex];
+
+                const namaGuru = selectedOption.getAttribute('data-nama');
+                const mapel = selectedOption.getAttribute('data-mapel');
+
+                document.getElementById('nama_guru').value = namaGuru;
+                document.getElementById('nama_mapel').value = mapel;
             }
         </script>
+
         <script>
             $('.custom-file-input').on('change', function() {
                 let fileName = $(this).val().split('\\').pop();

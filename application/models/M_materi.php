@@ -6,6 +6,12 @@ class M_materi extends CI_Model
     {
         return $this->db->get('materi');
     }
+    public function tampil_materi_guru($nip)
+{
+    // Query untuk mengambil materi berdasarkan id_guru (yang sesuai dengan NIP guru)
+    return $this->db->get_where('materi', ['id_guru' => $nip]);
+}
+
 
     public function belajar($id = null)
     {

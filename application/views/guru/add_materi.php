@@ -348,11 +348,6 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
 
                     <!-- begin:: Content -->
                     <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-
-                        <!--Begin::Dashboard 7-->
-
-                        <!--Begin::Section-->
-
                         <div class="row">
                             <div class="col-md-12 bg-white p-4 container"
                                 style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px">
@@ -361,12 +356,11 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                     <input type="hidden" name="id">
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
+                                            <label for="inputEmail4">NIP</label>
+                                            <input required type="text" readonly name="nama_guru" value="<?= $user['nip'] ?>" class="form-control" id="inputEmail4">                                                                           
                                             <label for="inputEmail4">Nama Guru</label>
-                                            <input required type="text" readonly name="nama_guru" value="<?php
-                                            $data['user'] = $this->db->get_where('guru', ['nip' =>
-                                                $this->session->userdata('nip')])->row_array();
-                                            echo $data['user']['nama_guru'];?>" class="form-control" id="inputEmail4">
-                                                                                    </div>
+                                            <input required type="text" readonly name="nama_guru" value="<?= $user['nama_guru'] ?>" class="form-control" id="inputEmail4">                                                                           
+                                        </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
@@ -375,8 +369,8 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                                 $data['user'] = $this->db->get_where('guru', ['nip' =>
                                                     $this->session->userdata('nip')])->row_array();
                                                 echo $data['user']['nama_mapel'];?>" class="form-control" id="inputEmail4">
-                                                                                        </div>
-                                    </div>
+                                            </div>
+                                        </div>
                                     <div class="form-group">
                                         <div class="input-group">
                                             <div class="custom-file">
@@ -396,7 +390,6 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="exampleFormControlTextarea1">Deskripsi Materi</label>
                                         <textarea class="form-control" required name="deskripsi"
@@ -416,10 +409,10 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                         </select>
                                     </div>
                                     <button type="submit" class="btn btn-success">Tambah materi</button>
+                                </form>
                             </div>
                         </div>
 
-                        </form>
                     </div>
                 </div>
 

@@ -29,4 +29,27 @@ class M_guru extends CI_Model
         $this->db->where($where);
         $this->db->update($table, $data);
     }
+    public function is_owner($id_materi, $id_guru) {
+        return $this->db->where('id', $id_materi)
+                       ->where('id_guru', $id_guru)
+                       ->get('materi')
+                       ->num_rows() > 0;
+    }
+
+    // Update materi dengan validasi pemilik
+    public function update_materi($id_materi, $id_guru, $data) {
+        $this->db->where('id', $id_materi)
+                ->where('id_guru', $id_guru)
+                ->update('materi', $data);
+        
+        return $this->db->affected_rows() > 0;
+    }
+
+    // Get materi by id dengan validasi pemilik
+    public function get_materi_by_owner($id_materi, $id_guru) {
+        return $this->db->where('id', $id_materi)
+                      ->where('id_guru', $id_guru)
+                      ->get('materi')
+                      ->row();
+    }
 }

@@ -388,7 +388,8 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('nama_mapel', 'Nama Mata Pelajaran', 'required');
         
         if ($this->form_validation->run() == false) {
-            $this->load->view('admin/add_materi');
+            $data['guru'] = $this->db->get('guru')->result();
+            $this->load->view('admin/add_materi', $data);
         } else {
             // Load library upload terlebih dahulu
             $this->load->library('upload');
@@ -428,10 +429,23 @@ class Admin extends CI_Controller
                     redirect('admin/add_materi');
                 }
             }
+            $nip = $this->input->post('guru_info', true); // dari <select>
+            $nama_guru = $this->input->post('nama_guru', true);
+            $nip = $this->input->post('guru_info', true);
+$nama_guru = $this->input->post('nama_guru', true);
+
+if (!$nama_guru) {
+    die('Nama guru kosong! Pastikan JS berjalan dan field terisi.');
+}
+ // dari <input readonly>
+            
+
+
     
             // **3️⃣ Simpan Data ke Database**
             $data = [
-                'nama_guru'   => htmlspecialchars($this->input->post('nama_guru', true)),
+                'id_guru'     => $nip,
+                'nama_guru'   => $nama_guru,
                 'nama_mapel'  => htmlspecialchars($this->input->post('nama_mapel', true)),
                 'video'       => $video_materi,
                 'modul'       => $modul,

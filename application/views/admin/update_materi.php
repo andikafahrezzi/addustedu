@@ -27,6 +27,9 @@
                                 <form method="POST" action="<?= base_url('admin/materi_edit') ?>" enctype="multipart/form-data">
                                     <input type="hidden" name="id" value="<?= $u->id ?>">
                                     <div class="form-group">
+                                        <label for="nip">Nip</label>
+                                        <input readonly id="nip" type="text" class="form-control" value="<?= $u->id_guru ?>" name="nama_guru">
+                                        <?= form_error('nip', '<small class="text-danger">', '</small>'); ?>
                                         <label for="nip">Nama Guru</label>
                                         <input readonly id="nama_guru" type="text" class="form-control" value="<?= $u->nama_guru ?>" name="nama_guru">
                                         <?= form_error('nama_guru', '<small class="text-danger">', '</small>'); ?>
