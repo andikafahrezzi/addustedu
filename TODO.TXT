@@ -3,6 +3,7 @@ TODO
 - mmbuat path/fitur di guru agar bisa menambah quiz
 - masing-masing guru bisa melihat quiz yang sudah dibuat
 - tampilan mobile pada guru masih ngaco
+- menambahkan fungsi delete materi pada guru
 
 PR
 
