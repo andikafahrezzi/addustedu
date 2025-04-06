@@ -1,9 +1,7 @@
 TODO
 - cari tau bagaimana cara destroy session 
-- mmbuat path/fitur di guru agar bisa menambah quiz
-- masing-masing guru bisa melihat quiz yang sudah dibuat
 - tampilan mobile pada guru masih ngaco
-- menambahkan fungsi delete materi pada guru
+- menambahkan fungsi delete materi dan quiz pada guru
 
 PR
 
