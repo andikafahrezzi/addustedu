@@ -83,8 +83,8 @@
                                         </button>
                                     </div>
                                 </form>
-                            <?php } ?>
                             </div>
+                            <?php } ?>
                     </div>
                 </section>
             </div>

@@ -60,7 +60,7 @@
                 
                 <div class="text-center mt-4">
                     <button type="submit" class="btn btn-primary btn-lg px-5">
-                        <i class="fas fa-paper-plane mr-2"></i>Kirim Jawaban
+                        <i class="fas fa fa-paper-plane mr-2"></i>Kirim Jawaban
                     </button>
                 </div>
             </form>

@@ -26,7 +26,7 @@
             </div>
             
             <p class="lead">
-                <i class="fas fa-book mr-2"></i>Materi: <?= $result->nama_mapel ?>
+                <i class="fas fa fa-book mr-2"></i>Materi: <?= $result->nama_mapel ?>
             </p>
             <p class="lead">
                 <i class="fas fa-calendar-alt mr-2"></i>
@@ -36,7 +36,7 @@
             <hr>
             
             <a href="<?= site_url('user') ?>" class="btn btn-primary">
-                <i class="fas fa-arrow-left mr-2"></i>Kembali ke Daftar Quiz
+                <i class="fas fa fa-arrow-left mr-2"></i>Kembali ke Daftar Quiz
             </a>
         </div>
     </div>

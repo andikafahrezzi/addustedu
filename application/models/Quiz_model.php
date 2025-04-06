@@ -74,7 +74,7 @@ public function complete_quiz($quiz_siswa_id, $score)
                  'score' => $score
              ]);
     $this->db->where('id', $quiz_siswa_id);
-    return $this->db->update('quiz_siswa', $data);
+    return $this->db->set('quiz_siswa', $data);
 }
 public function get_quiz_siswa($quiz_siswa_id)
 {
@@ -154,5 +154,64 @@ public function delete_quiz($quiz_id) {
     return TRUE;
 }
 
+public function get_quizzes_by_guru($nip) {
+    $this->db->select('quiz.*, materi.deskripsi as judul_materi, materi.kelas as kelas');
+    $this->db->from('quiz');
+    $this->db->join('materi', 'materi.id = quiz.materi_id');
+    $this->db->where('materi.id_guru', $nip);
+    return $this->db->get()->result();
+}
 
+// Get single quiz with ownership check
+public function get_quiz_by_guru($quiz_id, $nip) {
+    $this->db->select('quiz.*, materi.deskripsi as judul_materi');
+    $this->db->from('quiz');
+    $this->db->join('materi', 'materi.id = quiz.materi_id');
+    $this->db->where('quiz.id', $quiz_id);
+    $this->db->where('materi.id_guru', $nip);
+    return $this->db->get()->row();
+}
+
+
+
+// Create new quiz
+
+// Update quiz with ownership check
+public function update_quiz($quiz_id, $nip, $data) {
+    $this->db->where('id', $quiz_id);
+    $this->db->where('materi_id IN (SELECT id FROM materi WHERE id_guru = "'.$nip.'")', NULL, FALSE);
+    return $this->db->update('quiz', $data);
+}
+
+// Delete quiz with ownership check
+public function delete_quiz_guru($quiz_id, $nip) {
+    // First delete related questions and answers
+    $this->db->trans_start();
+    
+    $this->db->query("DELETE jawaban_siswa FROM jawaban_siswa 
+                     JOIN quiz_siswa ON jawaban_siswa.quiz_siswa_id = quiz_siswa.id 
+                     WHERE quiz_siswa.quiz_id = ?", [$quiz_id]);
+                     
+    $this->db->where('quiz_id', $quiz_id);
+    $this->db->delete('quiz_siswa');
+    
+    $this->db->where('quiz_id', $quiz_id);
+    $this->db->delete('quiz_questions');
+    
+    // Then delete the quiz
+    $this->db->where('id', $quiz_id);
+    $this->db->where('materi_id IN (SELECT id FROM materi WHERE id_guru = "'.$nip.'")', NULL, FALSE);
+    $this->db->delete('quiz');
+    
+    $this->db->trans_complete();
+    return $this->db->trans_status();
+}
+
+// Get available materials for select dropdown
+public function get_materi_options($nip) {
+    $this->db->select('id, deskripsi, kelas');
+    $this->db->from('materi');
+    $this->db->where('id_guru', $nip);
+    return $this->db->get()->result();
+}
 }
