@@ -8,7 +8,7 @@ class Guru extends CI_Controller
         parent::__construct();
         $this->load->helper('url');
         $this->session->set_flashdata('not-login', 'Gagal!');
-        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model']);  
+        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);  
         $this->load->library('form_validation');
         if (!$this->session->userdata('nip')) {
             redirect('welcome/guru');
@@ -470,4 +470,55 @@ private function tambah_soal($quiz_id)
         
         redirect('quiz');
     }
+    public function lihat_tugas($materi_id) {
+        $data['submissions'] = $this->Tugas_model->get_submissions($materi_id);
+        $this->load->view('template/nav');  
+        $this->load->view('guru/lihat_tugas', $data);
+    }
+
+    // Beri nilai/catatan
+    public function beri_nilai($submission_id) {
+        $this->form_validation->set_rules('nilai', 'Nilai', 'numeric|greater_than_equal_to[0]|less_than_equal_to[100]');
+        
+        if ($this->form_validation->run()) {
+            $data = [
+                'nilai' => $this->input->post('nilai'),
+                'catatan' => $this->input->post('catatan')
+            ];
+            
+            if ($this->Tugas_model->update_nilai($submission_id, $data)) {
+                $this->session->set_flashdata('success', 'Nilai berhasil diperbarui');
+            } else {
+                $this->session->set_flashdata('error', 'Gagal memperbarui nilai');
+            }
+        } else {
+            $this->session->set_flashdata('error', validation_errors());
+        }
+        
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    // Hapus tugas (oleh admin/guru)
+    public function hapus_tugas($id) {
+        if ($this->Tugas_model->delete_tugas($id)) {
+            $this->session->set_flashdata('success', 'Tugas berhasil dihapus');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus tugas');
+        }
+        
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+    public function daftar_tugas() {
+        $this->load->model('Tugas_model');
+    
+        $data['materi_list'] = [];
+        $materi_ids = $this->Tugas_model->get_all_materi_ids();
+    
+        foreach ($materi_ids as $row) {
+            $data['materi_list'][$row->materi_id] = $this->Tugas_model->get_tugas_per_materi($row->materi_id);
+        }
+        $this->load->view('guru/navug'); 
+        $this->load->view('guru/daftar_tugas_siswa', $data);
+    }
+    
 }

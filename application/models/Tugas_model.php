@@ -1,0 +1,72 @@
+<?php
+class Tugas_model extends CI_Model {
+    // Upload tugas oleh siswa
+    public function upload_tugas($data) {
+        $this->db->insert('tugas_siswa', $data);
+        return $this->db->insert_id();
+    }
+
+    // Get tugas siswa by ID
+    public function get_tugas_siswa($nis, $materi_id)
+{
+    return $this->db->get_where('tugas_siswa', [
+        'siswa_id' => $nis,
+        'materi_id' => $materi_id
+    ])->row(); // atau row_array() jika di-view-nya kamu pakai array
+}
+
+
+    // Get semua tugas siswa untuk suatu tugas
+    public function get_submissions($materi_id) {
+        $this->db->select('tugas_siswa.*, siswa.nama as nama_siswa');
+        $this->db->from('tugas_siswa');
+        $this->db->join('siswa', 'siswa.nis = tugas_siswa.siswa_id');
+        $this->db->where('materi_id', $materi_id);
+        return $this->db->get()->result();
+    }
+    
+    public function sudah_dinilai($id) {
+        $this->db->where('id', $id);
+        $this->db->where_not_in('nilai', [null, '']);
+        return $this->db->get('tugas_siswa')->num_rows() > 0;
+    }
+    
+    
+    
+
+    // Hapus file tugas
+    public function delete_tugas($id) {
+        $tugas = $this->get_tugas_siswa($id);
+        if ($tugas) {
+            // Hapus file fisik
+            $file_path = FCPATH . $tugas->file_path;
+            if (file_exists($file_path)) {
+                unlink($file_path);
+            }
+            // Hapus record database
+            return $this->db->delete('tugas_siswa', ['id' => $id]);
+        }
+        return false;
+    }
+
+    // Update nilai/catatan oleh guru
+    public function update_nilai($id, $data) {
+        $data['diupdate_pada'] = date('Y-m-d H:i:s');
+        $this->db->where('id', $id);
+        return $this->db->update('tugas_siswa', $data);
+    }
+
+    public function get_tugas_per_materi($materi_id) {
+        $this->db->select('tugas_siswa.*, siswa.nama as nama_siswa');
+        $this->db->from('tugas_siswa');
+        $this->db->join('siswa', 'siswa.nis = tugas_siswa.siswa_id');
+        $this->db->where('tugas_siswa.materi_id', $materi_id);
+        $this->db->order_by('dikirim_pada', 'DESC');
+        return $this->db->get()->result();
+    }
+    
+    public function get_all_materi_ids() {
+        return $this->db->distinct()->select('materi_id')->get('tugas_siswa')->result();
+    }
+    
+}

@@ -13,10 +13,12 @@ class M_materi extends CI_Model
 }
 
 
-    public function belajar($id = null)
+    public function belajar($id = null, $materi_id)
     {
         $query = $this->db->get_where('materi', array('id' => $id))->row();
         return $query;
+
+        return $this->db->get_where('materi', ['id' => $materi_id]);
     }
     public function get_materi_by_id($id) {
         $this->db->where('id', $id);
@@ -27,6 +29,11 @@ class M_materi extends CI_Model
         }
         
         return null;
+    }
+    public function get_all_materi_id()
+    {
+        $this->db->select('id');
+        return $this->db->get('materi')->result_array(); // hasilnya array of id
     }
     public function detail_materi($id = null)
     {

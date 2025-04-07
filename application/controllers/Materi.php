@@ -34,9 +34,8 @@ class Materi extends CI_Controller
         $this->load->view('materi/'.str_replace('_', '-', $materi), $data);
         $this->load->view('template/footer');
     }
-
     public function belajar($id) {
-        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model']);
+        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);
         
         // Ambil data
         $data['comments'] = $this->Forum_model->get_comments($id);
@@ -46,6 +45,11 @@ class Materi extends CI_Controller
         $data['forum'] = $this->Forum_model->get_komentar_by_materi($id);
         $data['disqus'] = $this->disqus->get_html();
         $data['quizzes'] = $this->Quiz_model->get_quizzes_by_materi($id);
+        $data['materi_id'] = $this->M_materi->get_all_materi_id();
+        $data['tugas_saya'] = $this->Tugas_model->get_tugas_siswa(
+            $this->session->userdata('nis'), 
+            $id
+        );
 
         
         // Debug akhir sebelum load view

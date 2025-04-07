@@ -22,6 +22,69 @@
         <div class="learning-hero-image">
             <img src="<?= base_url('assets/img/logou.png') ?>" alt="Learning Illustration">
         </div>
+        <div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h4>Upload Tugas</h4>
+        </div>
+        <div class="card-body">
+            <?php if ($this->session->flashdata('error')): ?>
+                <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
+            <?php endif; ?>
+            
+            <?php if ($this->session->flashdata('success')): ?>
+                <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+            <?php endif; ?>
+            
+            <?php echo form_open_multipart('siswa/upload_tugas/'.$materi->id); ?>
+                <div class="form-group">
+                    <label>File Tugas (JPG, PNG, PDF, DOC/DOCX, max 5MB)</label>
+                    <input type="file" name="file_tugas" class="form-control-file" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            <?php echo form_close(); ?>
+            
+            <hr>
+            
+            <h5>Tugas Terkirim</h5>
+            <?php if ($tugas_saya): ?>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6><?= $tugas_saya->original_filename ?></h6>
+                                <small>Ukuran: <?= round($tugas_saya->file_size/1024, 2) ?> KB</small>
+                                <small>| Dikirim: <?= date('d M Y H:i', strtotime($tugas_saya->dikirim_pada)) ?></small>
+                            </div>
+                            <div>
+                            <a href="<?= base_url($tugas_saya->file_path) ?>" 
+                                class="btn btn-sm btn-success" 
+                                download="<?= $tugas_saya->original_filename ?>.<?= pathinfo($tugas_saya->file_path, PATHINFO_EXTENSION) ?>">
+                                <i class="fas fa fa-download"></i> Unduh
+                                </a>
+
+                                <button onclick="confirmDelete(<?= $tugas_saya->id ?>)" 
+                                        class="btn btn-sm btn-danger">
+                                    <i class="fas fa fa-trash"></i> Hapus
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php else: ?>
+                <p>Belum ada tugas terkirim</p>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(id) {
+    if (confirm('Apakah Anda yakin ingin menghapus tugas ini? Anda bisa mengupload ulang setelah menghapus.')) {
+        window.location.href = '<?= site_url("siswa/delete_tugas/") ?>' + id;
+    }
+}
+</script>
     </div>
 
     <!-- Main Content Area -->

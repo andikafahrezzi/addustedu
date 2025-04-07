@@ -1,7 +1,7 @@
 TODO
 - cari tau bagaimana cara destroy session 
 - tampilan mobile pada guru masih ngaco
-- menambahkan fungsi delete materi dan quiz pada guru
+- menambahkan fungsi delete materi, quiz dan tugas pada guru dan admin
 
 PR
 
