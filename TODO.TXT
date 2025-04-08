@@ -5,6 +5,10 @@ TODO
 - menambahkan fungsi delete materi, quiz dan tugas pada guru dan admin
 - tampilan upload tugas siswa masih ngaco
 - cari tau cara non activekan navbar di mobile menu pada web guru
+- cek navbar admin setiap komponen untuk clean code
+- menambahkan akun guru setiap mapel dan upload materinya, supaya id_guru yang null bisa dihapus dan materi di setiap mapel ada
+- pada update guru dan siswa, blm ada field untuk mengganti password (admin)
+- menambahkan fitur update profil pada guru dan siswa
 
 PR
 

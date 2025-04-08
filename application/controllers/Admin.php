@@ -112,7 +112,7 @@ class Admin extends CI_Controller
     public function update_siswa($id)
     {
         $this->load->model('m_siswa');
-        $where = array('id' => $id);
+        $where = array('nis' => $id);
         $data['user'] = $this->m_siswa->update_siswa($where, 'siswa')->result();
         $this->load->view('admin/nava');
         $this->load->view('admin/update_siswa', $data);
