@@ -80,8 +80,8 @@ $gradient: linear-gradient(135deg, $third-color, $fourth-color);
         border-top: 1px solid rgba($accent-color, 0.1);
       }
       
-      h4 {
-        color: $accent-color !important;
+      h6 {
+        color: $third-color !important;
         font-weight: 600;
         font-family: 'Poppins', sans-serif;
         margin-top: 1.5rem;

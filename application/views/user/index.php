@@ -18,7 +18,7 @@
                     <p>Hello <?= $user['nama'] ?> , Ini merupakan halaman utama addustedu ! Silahkan pilih kelas yang akan kamu
                         akses
                         dan pilih mata pelajaran yang ingin kamu pelajari. Selamat belajar ya students!</p>
-                        <p data-aos="fade-down" data-aos-duration="1800">Kelas, <?= $user['kelas'] ?> - addustedu Students</h4>
+                        <h6 data-aos="fade-down" data-aos-duration="1800"><span><i class="fas fa fa-trophy"></i></span> Kelas, <?= $user['kelas'] ?> - addustedu Students</h6>
                         
                         
                 </div>

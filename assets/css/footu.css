@@ -29,7 +29,7 @@
   font-weight: 500;
 }
 .footer-area .footer-text a:hover {
-  color: #4cc9f0;
+  color: #3f37c9;
   text-decoration: underline;
 }
 .footer-area .footer-text .text-danger {
@@ -49,7 +49,7 @@
   background: white;
   border-radius: 50%;
   margin-left: 10px;
-  color: linear-gradient(135deg, #42e695, #3bb2b8);
+  color: #42e695;
   font-size: 20px;
   transition: all 0.3s ease;
 }

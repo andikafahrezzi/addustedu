@@ -1,7 +1,7 @@
 /* VARIABLES */
 $primary-color: #4361ee;
 $secondary-color: #3f37c9;
-$accent-color: #4cc9f0;
+$accent-color: #54f4a6;
 $light-color: #f8f9fa;
 $dark-color: #212529;
 $border-radius: 12px;
@@ -9,12 +9,13 @@ $box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 $transition: all 0.3s ease;
 $third-color: #42e695;
 $fourth-color: #3bb2b8;
+$gradient: linear-gradient(135deg, $third-color, $fourth-color);
 /* KELAS UTAMA */
 .container {
   padding: 2rem 0;
   
   #judul {
-    color: $accent-color;
+    color: $third-color;
     font-weight: 700;
     margin-bottom: 2rem;
     position: relative;

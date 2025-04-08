@@ -107,7 +107,7 @@ function display_comments($comments, $materi_id, $level = 0, $current_nis ) {
                                         </button>
                 <?php if ($can_edit): ?>
                     <div class="comment-actions">
-                        <button class="btn btn-sm btn-outline-primary edit-btn" 
+                        <button class="btn edit-btn" 
                                 onclick="toggleEditForm(<?= $comment->id ?>)">
                             <i class="fas fa fa-edit"></i> Edit
                         </button>
@@ -286,6 +286,16 @@ if (!empty($forum)) {
                     <span class="lnr lnr-pushpin"></span>
                 </div>
                 <div class="resource-content">
+                <h4>Upload Tugas</h4>
+    <div class="upload-section">
+        <?php echo form_open_multipart('siswa/upload_tugas/'.$materi->id); ?>
+            <div class="form-group">
+                <label>File Tugas (JPG, PNG, PDF, DOC/DOCX, max 5MB)</label>
+                <input type="file" name="file_tugas" class="form-control-file" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        <?php echo form_close(); ?>
+            <?php echo form_close(); ?>
                 <h5>Tugas</h5>
                     <?php if ($tugas_saya): ?>
                         <div class="card mb-7">

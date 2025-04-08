@@ -63,15 +63,15 @@
   margin: 2rem 0;
   border-top: 1px solid rgba(76, 201, 240, 0.1);
 }
-.container .buat-text .row h4 {
-  color: #4cc9f0 !important;
+.container .buat-text .row h6 {
+  color: #42e695 !important;
   font-weight: 600;
   font-family: "Poppins", sans-serif;
   margin-top: 1.5rem;
   position: relative;
   display: inline-block;
 }
-.container .buat-text .row h4::after {
+.container .buat-text .row h6::after {
   content: "";
   position: absolute;
   bottom: -5px;
