@@ -6,7 +6,6 @@
                 <div class="card-body">
                     <h2 class="card-title" style="color: black;">Update Data Materi</h2>
                     <hr>
-                    <pre><?php print_r($materi); ?></pre>
                     <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request?</p>
                     <a href="#detail" class="btn btn-success">Saya paham dan ingin melanjutkan ⭢</a>
                 </div>

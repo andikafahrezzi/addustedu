@@ -483,8 +483,9 @@ private function tambah_soal($quiz_id)
     }
     public function lihat_tugas($materi_id) {
         $data['submissions'] = $this->Tugas_model->get_submissions($materi_id);
-        $this->load->view('template/nav');  
+        $this->load->view('guru/navug'); 
         $this->load->view('guru/lihat_tugas', $data);
+        $this->load->view('guru/footg');
     }
 
     // Beri nilai/catatan
@@ -530,6 +531,7 @@ private function tambah_soal($quiz_id)
         }
         $this->load->view('guru/navug'); 
         $this->load->view('guru/daftar_tugas_siswa', $data);
+        $this->load->view('guru/footg');
     }
     
 }
