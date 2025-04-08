@@ -43,7 +43,7 @@
                                     <td><?= date('d M Y', strtotime($quiz->created_at)) ?></td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="<?= base_url('guru/edit/'.$quiz->id) ?>" class="btn btn-sm btn-warning">
+                                            <a href="<?= base_url('guru/edit_quiz/'.$quiz->id) ?>" class="btn btn-sm btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <button onclick="confirmDelete('<?= $quiz->id ?>')" class="btn btn-sm btn-danger">

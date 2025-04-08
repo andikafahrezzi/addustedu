@@ -18,7 +18,9 @@ class Guru extends CI_Controller
     public function index()
     {
         $data['user'] = $this->db->get_where('guru', ['nip' => $this->session->userdata('nip')])->row_array();
+        $this->load->view('guru/navug');
         $this->load->view('guru/index');
+        $this->load->view('guru/footg');
 
     }
 
@@ -33,7 +35,9 @@ class Guru extends CI_Controller
 
         // Ambil data user dari tabel guru
         $data['user'] = $this->db->get_where('guru', ['nip' => $nip])->row_array();
+        $this->load->view('guru/navug');
         $this->load->view('guru/add_materi', $data);
+        $this->load->view('guru/footg');
     } else {
         // Load library upload terlebih dahulu
         $this->load->library('upload');
@@ -127,9 +131,10 @@ class Guru extends CI_Controller
     
     $this->load->view('guru/navug');
     $this->load->view('guru/data_materi', $data);
+    $this->load->view('guru/footg');
 }
 
-    public function update_materi()
+    public function update_materi($id)
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('nama_mapel', 'Nama Mata Pelajaran', 'required');
@@ -140,9 +145,10 @@ class Guru extends CI_Controller
     
             // Ambil data user dari tabel guru
             $data['user'] = $this->db->get_where('guru', ['nip' => $nip])->row_array();
-            $data['materi'] = $this->M_materi->tampil_materi_guru($nip)->result();
+            $data['materi'] = $this->M_materi->get_materi_by_ids($id)->row();
             $this->load->view('guru/navug');
             $this->load->view('guru/update_materi', $data);
+            $this->load->view('guru/footg');
         } else {
             // Load library upload terlebih dahulu
             $this->load->library('upload');
@@ -184,9 +190,9 @@ class Guru extends CI_Controller
                 }
             }
             $nip = $this->session->userdata('nip');
+            $guru = $this->db->get_where('guru', ['nip' => $nip])->row_array();
             // **3️⃣ Simpan Data ke Database**
             $data = [
-                'id_guru'     => $nip,
                 'nama_guru'   => htmlspecialchars($this->input->post('nama_guru', true)),
                 'nama_mapel'  => htmlspecialchars($this->input->post('nama_mapel', true)),
                 'video'       => $video_materi,
@@ -195,12 +201,13 @@ class Guru extends CI_Controller
                 'linkform'    => htmlspecialchars($this->input->post('linkform', true)),
                 'kelas'       => htmlspecialchars($this->input->post('kelas', true))
             ];
-    
+            $data['materi'] = $this->M_materi->tampil_materi_guru($nip)->result();
             $this->db->insert('materi', $data);
             $this->session->set_flashdata('success', 'Materi berhasil ditambahkan!');
             redirect('guru');
         }
     }
+    
     public function materi_edit()
     {
         $this->load->model('m_materi');
@@ -281,6 +288,7 @@ class Guru extends CI_Controller
         $data['quizzes'] = $this->Quiz_model->get_quizzes_by_guru($nip);
         $this->load->view('guru/navug');
         $this->load->view('guru/data_quiz', $data);
+        $this->load->view('guru/footg');
     }
 
     public function buat_quiz_guru()
@@ -322,6 +330,7 @@ class Guru extends CI_Controller
         
         $this->load->view('guru/navug');
         $this->load->view('guru/add_quiz', $data);
+        $this->load->view('guru/footg');
     }
 
 
@@ -368,7 +377,7 @@ class Guru extends CI_Controller
     }
 
     // Edit quiz form
-    public function edit($id) {
+    public function edit_quiz($id) {
         $nip = $this->session->userdata('nip');
         $data['quizzes'] = $this->Quiz_model->get_quizzes_by_guru($nip);
         $data['quiz'] = $this->Quiz_model->get_quiz_by_guru($id, $nip);
@@ -379,6 +388,7 @@ class Guru extends CI_Controller
         }
         $this->load->view('guru/navug');
         $this->load->view('guru/update_quiz', $data);
+        $this->load->view('guru/footg');
     }
 
     // Update quiz
@@ -433,6 +443,7 @@ class Guru extends CI_Controller
     
     $this->load->view('guru/navug');  
     $this->load->view('guru/kelola_quiz', $data);
+    $this->load->view('guru/footg');
 }
 private function tambah_soal($quiz_id)
 {
