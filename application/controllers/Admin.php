@@ -20,8 +20,9 @@ class Admin extends CI_Controller
         $data['user'] = $this->db->get_where('admin', ['email' =>
             $this->session->userdata('email')])->row_array();
 
-        $this->load->view('admin/nava');
+        $this->load->view('admin/partials/nava');
         $this->load->view('admin/index');
+        $this->load->view('admin/partials/foota');
     }
 
     public function about_developer()
@@ -29,8 +30,9 @@ class Admin extends CI_Controller
         $data['user'] = $this->db->get_where('admin', ['email' =>
             $this->session->userdata('email')])->row_array();
 
-        $this->load->view('admin/nava');
-        $this->load->view('admin/about_developer');
+            $this->load->view('admin/partials/nava');
+            $this->load->view('admin/about_developer');
+            $this->load->view('admin/partials/foota');
     }
 
     public function about_addustedu()
@@ -38,8 +40,9 @@ class Admin extends CI_Controller
         $data['user'] = $this->db->get_where('admin', ['email' =>
             $this->session->userdata('email')])->row_array();
         
-        $this->load->view('admin/nava');
-        $this->load->view('admin/about_addustedu');
+            $this->load->view('admin/partials/nava');
+            $this->load->view('admin/about_addustedu');
+            $this->load->view('admin/partials/foota');
     }
 
     // Management Siswa
@@ -52,8 +55,9 @@ class Admin extends CI_Controller
             $this->session->userdata('email')])->row_array();
 
         $data['user'] = $this->m_siswa->tampil_data()->result();
-        $this->load->view('admin/nava');
+        $this->load->view('admin/partials/nava');
         $this->load->view('admin/data_siswa', $data);
+        $this->load->view('admin/partials/foota');
     }
 
     public function detail_siswa($id)
@@ -62,7 +66,9 @@ class Admin extends CI_Controller
         $where = array('id' => $id);
         $detail = $this->m_siswa->detail_siswa($id);
         $data['detail'] = $detail;
+        $this->load->view('admin/partials/nava');
         $this->load->view('admin/detail_siswa', $data);
+        $this->load->view('admin/partials/foota');
     }
     public function add_siswa()
     {
@@ -92,8 +98,9 @@ class Admin extends CI_Controller
         ]);
 
         if ($this->form_validation->run() == false) {
-            $this->load->view('admin/nava');
-            $this->load->view('admin/add_siswa');
+            $this->load->view('admin/partials/nava');
+            $this->load->view('admin/add_siswa');           
+            $this->load->view('admin/partials/foota');
         } else {
             $data = [
                 'nis' => htmlspecialchars($this->input->post('nis', true)),
@@ -115,8 +122,9 @@ class Admin extends CI_Controller
         $this->load->model('m_siswa');
         $where = array('nis' => $nis);
         $data['user'] = $this->m_siswa->update_siswa($where, 'siswa')->result();
-        $this->load->view('admin/nava');
+        $this->load->view('admin/partials/nava');
         $this->load->view('admin/update_siswa', $data);
+        $this->load->view('admin/partials/foota');
     }
     
 
@@ -185,8 +193,9 @@ $data = array(
             $this->session->userdata('email')])->row_array();
 
         $data['user'] = $this->m_guru->tampil_data()->result();
-        $this->load->view('admin/nava');
+        $this->load->view('admin/partials/nava');
         $this->load->view('admin/data_guru', $data);
+        $this->load->view('admin/partials/foota');
     }
 
     public function detail_guru($nip)
@@ -195,8 +204,9 @@ $data = array(
         $where = array('nip' => $nip);
         $detail = $this->m_guru->detail_guru($nip);
         $data['detail'] = $detail;
-        $this->load->view('admin/nava');
+        $this->load->view('admin/partials/nava');
         $this->load->view('admin/detail_guru', $data);
+        $this->load->view('admin/partials/foota');
     }
 
     public function update_guru($nip)
@@ -204,8 +214,9 @@ $data = array(
         $this->load->model('m_guru');
         $where = array('nip' => $nip);
         $data['user'] = $this->m_guru->update_guru($where, 'guru')->result();
-        $this->load->view('admin/nava');
+        $this->load->view('admin/partials/nava');
         $this->load->view('admin/update_guru', $data);
+        $this->load->view('admin/partials/foota');
     }
 
     public function guru_edit()
@@ -236,7 +247,8 @@ $data = array(
         $this->m_guru->update_data($where, $data, 'guru');
         $this->session->set_flashdata('success-edit', 'berhasil');
         redirect('admin/data_guru');
-        $this->load->view('admin/nava');
+        $this->load->view('admin/partials/nava');
+        $this->load->view('admin/partials/foota');
     }
 
     public function update_materi($id)
@@ -244,8 +256,9 @@ $data = array(
         $this->load->model('m_materi');
         $where = array('id' => $id);
         $data['user'] = $this->m_materi->update_materi($where, 'materi')->result();
-        $this->load->view('admin/nava');
+        $this->load->view('admin/partials/nava');
         $this->load->view('admin/update_materi', $data);
+        $this->load->view('admin/partials/foota');
     }
 
     public function materi_edit()
@@ -316,7 +329,8 @@ $data = array(
      
         $this->session->set_flashdata('success-edit', 'berhasil');
         redirect('admin/data_materi');
-        $this->load->view('admin/nava');
+        $this->load->view('admin/partials/nava');
+        $this->load->view('admin/partials/foota');
     }
 
     public function delete_guru($nip)
@@ -384,8 +398,9 @@ $data = array(
             $this->session->userdata('email')])->row_array();
 
         $data['user'] = $this->m_materi->tampil_data()->result();
-        $this->load->view('admin/nava');
+        $this->load->view('admin/partials/nava');
         $this->load->view('admin/data_materi', $data);
+        $this->load->view('admin/partials/foota');
     }
 
     public function delete_materi($id)
@@ -404,7 +419,9 @@ $data = array(
         
         if ($this->form_validation->run() == false) {
             $data['guru'] = $this->db->get('guru')->result();
+            $this->load->view('admin/partials/nava');
             $this->load->view('admin/add_materi', $data);
+            $this->load->view('admin/partials/foota');
         } else {
             // Load library upload terlebih dahulu
             $this->load->library('upload');
@@ -473,7 +490,6 @@ if (!$nama_guru) {
             $this->session->set_flashdata('success', 'Materi berhasil ditambahkan!');
             redirect(base_url('admin/data_materi'));
         }
-        $this->load->view('admin/nava');
     }
 
     public function hapus_forum($materi_id) {
@@ -499,8 +515,9 @@ if (!$nama_guru) {
     
         $this->load->model('M_materi');
         $data['materi'] = $this->M_materi->get_all_materi();
-        
+        $this->load->view('admin/partials/nava');
         $this->load->view('admin/list_materi', $data);
+        $this->load->view('admin/partials/foota');
     }
 
     public function buat_quiz()
@@ -533,7 +550,9 @@ if (!$nama_guru) {
     
     $data['materi_list'] = $this->Quiz_model->get_materi_list();
     
+    
     $this->load->view('admin/buat_quiz', $data);
+    $this->load->view('admin/partials/foota');
 }
 
 public function kelola_quiz($quiz_id)
@@ -552,7 +571,9 @@ public function kelola_quiz($quiz_id)
     }
     
     
+    
     $this->load->view('admin/kelola_quiz', $data);
+    $this->load->view('admin/partials/foota');
 }
 
 private function tambah_soal($quiz_id)
@@ -586,8 +607,9 @@ public function data_quiz()
             $this->session->userdata('email')])->row_array();
 
         $data['user'] = $this->Quiz_model->tampil_quiz()->result();
-        $this->load->view('admin/nava');
+        $this->load->view('admin/partials/nava');
         $this->load->view('admin/data_quiz', $data);
+        $this->load->view('admin/partials/foota');
     }
     public function delete_quiz($id) {
         // Validasi ID
