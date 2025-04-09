@@ -29,6 +29,17 @@ class M_siswa extends CI_Model
     {
         return $this->db->get_where($table, $where);
     }
+    public function get_siswa_by_nis($nis)
+{
+    return $this->db->get_where('siswa', ['nis' => $nis])->row();
+}
+
+public function update($nis, $data)
+{
+    $this->db->where('nis', $nis);
+    return $this->db->update('siswa', $data);
+}
+
 
     public function update_data($where, $data, $table)
     {

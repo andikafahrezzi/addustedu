@@ -95,7 +95,7 @@ class Admin extends CI_Controller
             $this->load->view('admin/add_siswa');
         } else {
             $data = [
-                'nip' => htmlspecialchars($this->input->post('nip', true)),
+                'nis' => htmlspecialchars($this->input->post('nis', true)),
                 'email' => htmlspecialchars($this->input->post('email', true)),
                 'nama_guru' => htmlspecialchars($this->input->post('nama', true)),
                 'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
@@ -109,60 +109,67 @@ class Admin extends CI_Controller
         }
     }
 
-    public function update_siswa($id)
+    public function update_siswa($nis)
     {
         $this->load->model('m_siswa');
-        $where = array('nis' => $id);
+        $where = array('nis' => $nis);
         $data['user'] = $this->m_siswa->update_siswa($where, 'siswa')->result();
         $this->load->view('admin/nava');
         $this->load->view('admin/update_siswa', $data);
     }
+    
 
     public function user_edit()
-    {
-        $this->load->model('m_siswa');
+{
+    $this->load->model('m_siswa');
 
-        $id = $this->input->post('id');
-        $nama = $this->input->post('nama');
-        $email = $this->input->post('email');
-        $gambar = $_FILES['image']['name'];
+    $nis = $this->input->post('nis');
+    $nama = $this->input->post('nama');
+    $email = $this->input->post('email');
+    $gambar = $_FILES['image']['name'];
 
-        $data = array(
-            'nama' => $nama,
-            'email' => $email,
-        );
+    // Ambil data password baru
+    $new_password = $this->input->post('nPassword');
+    $repeat_password = $this->input->post('nRPassword');
 
-        $config['allowed_types'] = 'jpg|png|gif|jfif';
-        $config['max_size'] = '4096';
-        $config['upload_path'] = './assets/profile_picture';
+    $nis_lama = $this->input->post('nis_lama'); // untuk where
+    $nis_baru = $this->input->post('nis'); // untuk data update
+    $where = array('nis' => $nis_lama);
 
-        $this->load->library('upload', $config);
-        //berhasil
-        if ($this->upload->do_upload('image')) {
-            $gambarLama = $data['user']['image'];
-            if ($gambarLama != 'default.jpg') {
-                unlink(FCPATH . '/assets/profile_picture/' . $gambarLama);
-            }
-            $gambarBaru = $this->upload->data('file_name');
-            $this->db->set('image', $gambarBaru);
-        } else {
-            echo $this->upload->display_errors();
-        }
+$data = array(
+    'nis' => $nis_baru,
+    'nama' => $nama,
+    'email' => $email,
+);
 
-        $where = array(
-            'id' => $id,
-        );
-
-        $this->load->view('admin/nava');
-        $this->m_siswa->update_data($where, $data, 'siswa');
-        $this->session->set_flashdata('success-edit', 'berhasil');
-        redirect('admin/data_siswa');
+    // Update password jika diisi dan cocok
+    if (!empty($new_password) && $new_password === $repeat_password) {
+        $data['password'] = password_hash($new_password, PASSWORD_DEFAULT);
     }
+
+    // Proses upload foto
+    $config['allowed_types'] = 'jpg|png|gif|jfif';
+    $config['max_size'] = '4096';
+    $config['upload_path'] = './assets/profile_picture';
+
+    $this->load->library('upload', $config);
+    if ($this->upload->do_upload('image')) {
+        $gambarBaru = $this->upload->data('file_name');
+        $data['image'] = $gambarBaru;
+    }
+
+    $this->m_siswa->update_data($where, $data, 'siswa');
+
+    $this->load->view('admin/nava');
+    $this->session->set_flashdata('success-edit', 'Berhasil memperbarui data siswa');
+    redirect('admin/data_siswa');
+}
+
 
     public function delete_siswa($id)
     {
         $this->load->model('m_siswa');
-        $where = array('id' => $id);
+        $where = array('nis' => $id);
         $this->m_siswa->delete_siswa($where, 'siswa');
         $this->session->set_flashdata('user-delete', 'berhasil');
         redirect('admin/data_siswa');
@@ -206,17 +213,24 @@ class Admin extends CI_Controller
         $nip = $this->input->post('nip');
         $nama = $this->input->post('nama');
         $email = $this->input->post('email');
-
+        $new_password = $this->input->post('nPassword');
+        $repeat_password = $this->input->post('nRPassword');
+    
+        
         $data = array(
             'nip' => $nip,
             'nama_guru' => $nama,
             'email' => $email,
 
         );
+        if (!empty($new_password) && $new_password === $repeat_password) {
+            $data['password'] = password_hash($new_password, PASSWORD_DEFAULT);
+        }
 
         $where = array(
             'nip' => $nip,
         );
+
 
         $this->m_guru->update_data($where, $data, 'guru');
         $this->session->set_flashdata('success-edit', 'berhasil');

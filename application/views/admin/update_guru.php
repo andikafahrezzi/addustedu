@@ -52,6 +52,15 @@
                                         <div class="invalid-feedback">
                                         </div>
                                     </div>
+                                    <div class="form-group" id="detail">
+                                    <label for="exampleInputEmail1" class="font-weight-bold" style="font-size: 20px;">Password Baru</label>
+                                    <input type="password" name="nPassword" class="form-control" placeholder="Password Baru">
+                                    <label for="exampleInputEmail1" class="font-weight-bold" style="font-size: 20px;">Re-type Password Baru</label>
+                                    <input type="password" name="nRPassword" class="form-control" placeholder="Ulangi Password Baru">
+                                        <?= form_error('nama', '<small class="text-danger">', '</small>'); ?>
+                                        <div class="invalid-feedback">
+                                        </div>
+                                    </div>
 
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-success btn-lg btn-block">
