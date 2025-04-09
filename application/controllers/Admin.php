@@ -92,6 +92,7 @@ class Admin extends CI_Controller
         ]);
 
         if ($this->form_validation->run() == false) {
+            $this->load->view('admin/nava');
             $this->load->view('admin/add_siswa');
         } else {
             $data = [
