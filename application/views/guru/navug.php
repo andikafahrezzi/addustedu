@@ -285,16 +285,16 @@
 
                                 <!--begin: Navigation -->
                                 <div class="kt-notification">
-                                    <a href="<?=base_url('guru/add_materi')?>" class="kt-notification__item">
+                                    <a href="<?=base_url('guru/edit_profile')?>" class="kt-notification__item">
                                         <div class="kt-notification__item-icon">
                                             <i class="flaticon2-hourglass kt-font-brand"></i>
                                         </div>
                                         <div class="kt-notification__item-details">
                                             <div class="kt-notification__item-title kt-font-bold">
-                                                Tambah data materi
+                                                Profile
                                             </div>
                                             <div class="kt-notification__item-time">
-                                                Tambah Materi addustedu
+                                                Ubah Profile Dirimu!
                                             </div>
                                         </div>
                                     </a>

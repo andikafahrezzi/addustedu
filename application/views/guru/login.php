@@ -82,7 +82,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                     masuk ke
                                     halaman guru.</h5>
                             </div>
-                            Made with <span class="text-danger"> &#10084;</span> by <a class="text-light bb" target="_blank" href="https://syauqizaidan.github.io/">Syaauqi Zaaidan</a> - Image by <a class="text-light bb" target="_blank" href="https://unsplash.com">Unsplash</a>
+                            Made with &nbsp; <span class="" style="color: red"> &#10084;</span> &nbsp; by AndikaFahrezi
                         </div>
                     </div>
                 </div>

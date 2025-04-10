@@ -2,7 +2,7 @@ TODO
 - cari tau bagaimana cara destroy session 
 - tampilan mobile pada guru masih ngaco
 - tampilan quiz sama tugas masih ngaco
-- menambahkan fungsi delete materi, quiz dan tugas pada guru dan admin
+- menambahkan fungsi delete materi, quiz dan tugas pada siswa, guru dan admin
 - tampilan upload tugas siswa masih ngaco
 - cari tau cara non activekan navbar di mobile menu pada web guru
 - cek navbar admin setiap komponen untuk clean code

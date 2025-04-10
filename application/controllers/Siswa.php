@@ -264,8 +264,7 @@ public function update_profile()
             $updateData['password'] = password_hash($password, PASSWORD_DEFAULT);
         }
 
-        $this->db->where('nis', $nis);
-        $this->db->update('siswa', $updateData);
+        $this->M_siswa->update_profile($nis, $updateData);;
 
         $this->session->set_flashdata('success', 'Profil berhasil diperbarui.');
         redirect('siswa/edit_profile');

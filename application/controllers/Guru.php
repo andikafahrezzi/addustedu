@@ -8,7 +8,7 @@ class Guru extends CI_Controller
         parent::__construct();
         $this->load->helper('url');
         $this->session->set_flashdata('not-login', 'Gagal!');
-        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);  
+        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model', 'M_siswa']);  
         $this->load->library('form_validation');
         if (!$this->session->userdata('nip')) {
             redirect('welcome/guru');
@@ -533,5 +533,65 @@ private function tambah_soal($quiz_id)
         $this->load->view('guru/daftar_tugas_siswa', $data);
         $this->load->view('guru/footg');
     }
+    public function edit_profile() {
+        $nip = $this->session->userdata('nip');
+        $data['guru'] = $this->M_siswa->get_by_nip($nip);
+    
+        $this->load->view('guru/navug');
+        $this->load->view('guru/profile', $data);
+        $this->load->view('guru/footg');
+    }
+    
+    public function update_profile()
+    {
+        $nip = $this->input->post('nip');
+        $nama_guru = $this->input->post('nama_guru');
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
+    
+        $this->form_validation->set_rules('nama_guru', 'Nama_guru', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_email_check');
+    
+    
+        // hanya validasi password jika user mengisinya
+        if (!empty($password)) {
+            $this->form_validation->set_rules('password', 'Password', 'min_length[8]');
+        }
+    
+        if ($this->form_validation->run() == FALSE) {
+            $data['guru'] = $this->db->get_where('guru', ['nip' => $nip])->row();
+            $this->load->view('guru/profile', $data);
+        } else {
+            $updateData = [
+                'nama_guru' => $nama_guru,
+                'email' => $email
+            ];
+    
+            if (!empty($password)) {
+                $updateData['password'] = password_hash($password, PASSWORD_DEFAULT);
+            }
+    
+            $this->M_siswa->update_profile_guru($nip, $updateData);
+    
+            $this->session->set_flashdata('success', 'Profil berhasil diperbarui.');
+            redirect('guru/edit_profile');
+        }
+    }
+    
+    public function email_check($email)
+    {
+        $nip = $this->input->post('nip');
+        $this->db->where('email', $email);
+        $this->db->where('nip !=', $nip); // pengecualian untuk dirinya sendiri
+        $query = $this->db->get('guru');
+    
+        if ($query->num_rows() > 0) {
+            $this->form_validation->set_message('email_check', 'Email ini sudah digunakan oleh siswa lain.');
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+    
     
 }
