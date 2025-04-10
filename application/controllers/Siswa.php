@@ -11,6 +11,7 @@ class Siswa extends CI_Controller
         $this->load->library('form_validation');
         $this->load->library('disqus');
         $this->load->model('M_materi');
+        $this->load->model('M_siswa');
         $this->load->model('Tugas_model');
         $this->load->model('Quiz_model');
     }
@@ -225,4 +226,66 @@ public function delete_tugas($id) {
     
     redirect('materi/belajar/' . $tugas->materi_id);
 }
+public function edit_profile() {
+    $nis = $this->session->userdata('nis');
+    $data['siswa'] = $this->M_siswa->get_by_nis($nis);
+
+    $this->load->view('user/navu');
+    $this->load->view('user/profile', $data);
+    $this->load->view('user/foots');
+}
+
+public function update_profile()
+{
+    $nis = $this->input->post('nis');
+    $nama = $this->input->post('nama');
+    $email = $this->input->post('email');
+    $password = $this->input->post('password');
+
+    $this->form_validation->set_rules('nama', 'Nama', 'required');
+    $this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_email_check');
+
+
+    // hanya validasi password jika user mengisinya
+    if (!empty($password)) {
+        $this->form_validation->set_rules('password', 'Password', 'min_length[8]');
+    }
+
+    if ($this->form_validation->run() == FALSE) {
+        $data['siswa'] = $this->db->get_where('siswa', ['nis' => $nis])->row();
+        $this->load->view('siswa/edit_profile', $data);
+    } else {
+        $updateData = [
+            'nama' => $nama,
+            'email' => $email
+        ];
+
+        if (!empty($password)) {
+            $updateData['password'] = password_hash($password, PASSWORD_DEFAULT);
+        }
+
+        $this->db->where('nis', $nis);
+        $this->db->update('siswa', $updateData);
+
+        $this->session->set_flashdata('success', 'Profil berhasil diperbarui.');
+        redirect('siswa/edit_profile');
+    }
+}
+
+public function email_check($email)
+{
+    $nis = $this->input->post('nis');
+    $this->db->where('email', $email);
+    $this->db->where('nis !=', $nis); // pengecualian untuk dirinya sendiri
+    $query = $this->db->get('siswa');
+
+    if ($query->num_rows() > 0) {
+        $this->form_validation->set_message('email_check', 'Email ini sudah digunakan oleh siswa lain.');
+        return FALSE;
+    } else {
+        return TRUE;
+    }
+}
+
+
 }

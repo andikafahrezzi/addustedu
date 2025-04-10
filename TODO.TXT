@@ -7,6 +7,8 @@ TODO
 - cari tau cara non activekan navbar di mobile menu pada web guru
 - cek navbar admin setiap komponen untuk clean code
 - menambahkan akun guru setiap mapel dan upload materinya, supaya id_guru yang null bisa dihapus dan materi di setiap mapel ada
+- pada tabel siswa ada kolom image yang kita bisa gunakan untuk mengambil gamabr siswa.
+    - gambar ini bisa digunakan untuk gambar di kolom fordis serta mempercantik tampilan navigasi user
 
 PR
 

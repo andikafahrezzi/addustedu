@@ -5,8 +5,7 @@
                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                 Copyright &copy;<script>
                     document.write(new Date().getFullYear());
-                </script> All rights reserved | This template is made with <span class="text-danger"> &#10084;</span> by
-                <a href="https://colorlib.com" target="_blank">Colorlib</a> <br> addustedu is develop with <span class="text-danger"> &#10084;</span> by <a href="https://github.com/Andikafahrezi">andikafahrezzi</a> with MIT License
+                </script> All rights reserved <br> addustedu is develop with <span class="text-danger"> &#10084;</span> by <a href="https://github.com/Andikafahrezi">andikafahrezzi</a> with MIT License
                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
             </p>
             <div class="col-lg-4 col-md-4 footer-social">
@@ -68,6 +67,37 @@
 <script>
     AOS.init();
 </script>
+<script>
+    document.getElementById("togglePassword").addEventListener("click", function () {
+        const passwordInput = document.getElementById("password");
+        const eyeIcon = document.getElementById("eyeIcon");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            eyeIcon.classList.remove("fa-eye-slash");
+            eyeIcon.classList.add("fa-eye");
+        } else {
+            passwordInput.type = "password";
+            eyeIcon.classList.remove("fa-eye");
+            eyeIcon.classList.add("fa-eye-slash");
+        }
+    });
+</script>
+<script>
+    document.querySelector("form").addEventListener("submit", function(e) {
+        const password = document.getElementById("password").value;
+
+        if (password && password.length < 8) {
+            e.preventDefault(); // stop submit
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Password minimal 8 karakter!',
+            });
+        }
+    });
+</script>
+
 
     <!-- <script>
 
