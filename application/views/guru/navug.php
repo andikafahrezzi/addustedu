@@ -170,18 +170,18 @@
                                 data-ktmenu-submenu-toggle="click"><a href="javascript:;"
                                     class="kt-menu__link kt-menu__toggle"><i
                                         class="kt-menu__link-icon flaticon2-plus-1"></i><span
-                                        class="kt-menu__link-text">Tambah</span><i
+                                        class="kt-menu__link-text">Materi</span><i
                                         class="kt-menu__ver-arrow la la-angle-right"></i></a>
                                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                                     <ul class="kt-menu__subnav">
                                         <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span
                                                 class="kt-menu__link"><span
-                                                    class="kt-menu__link-text">Tambah</span></span>
+                                                    class="kt-menu__link-text">Materi</span></span>
                                         </li>
                                         <li class="kt-menu__item " aria-haspopup="true"><a
                                                 href="<?=base_url('guru/data_materi')?>" class="kt-menu__link "><i
                                                     class="kt-menu__link-icon la la-commenting"></i><span
-                                                    class="kt-menu__link-text">Materi</span></a></li>
+                                                    class="kt-menu__link-text">Data Materi</span></a></li>
                                     </ul>
                                 </div>
                             </li>   
