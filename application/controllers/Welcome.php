@@ -6,9 +6,14 @@ class Welcome extends CI_Controller
 
     public function index()
     {
+
+        
+
       $this->load->view('template/nav');
       $this->load->view('index');
       $this->load->view('template/footer');
+      // index.php
+// Pastikan Anda memuat autoloader Composer terlebih dahulu
     }
 
     //login siswa 

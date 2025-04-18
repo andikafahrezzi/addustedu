@@ -75,9 +75,9 @@ $query_builder = true;
 
 $db['default'] = array(
     'dsn' => '',
-    'hostname' => 'localhost',
-    'username' => 'root',
-    'password' => '',
+    'hostname' => $_ENV['DB_HOST'],  // BENAR - pakai kurung siku
+    'username' => $_ENV['DB_USERNAME'],  // BENAR
+    'password' => $_ENV['DB_PASSWORD'],  // BENAR
     'database' => 'db_addustedu',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',

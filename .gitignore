@@ -1,8 +1,13 @@
 .DS_Store
+# Ignore .env file
+.env
+
+# Ignore vendor directory
+vendor/
 
 application/cache/*
 !application/cache/index.html
-.env
+
 application/logs/*
 !application/logs/index.html
 
