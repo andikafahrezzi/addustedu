@@ -69,85 +69,88 @@
   background-color: #f8f9fa;
 }
 
-/* CARD MATERI STYLE */
-.materi-card {
-  border: none;
+/* GURU CARD */
+.guru-card {
+  background: white;
   border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
   transition: all 0.3s ease;
-  overflow: hidden;
+  border: 2px solid transparent;
 }
-.materi-card:hover {
+.guru-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  border-color: #54f4a6;
 }
-.materi-card:hover .card-img-overlay {
-  opacity: 1;
-}
-.materi-card .card-img-container {
-  position: relative;
+.guru-card .guru-avatar {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
   overflow: hidden;
-  height: 180px;
-  background-color: #e9ecef;
+  border: 3px solid #54f4a6;
 }
-.materi-card .card-img-container img {
-  height: 100%;
+.guru-card .guru-avatar img {
   width: 100%;
+  height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
-  transition: all 0.3s ease;
 }
-.materi-card .card-img-container:hover img {
-  transform: scale(1.05);
-}
-.materi-card .card-img-container .card-img-overlay {
-  background: rgba(67, 97, 238, 0.8);
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-.materi-card .card-img-container .card-img-overlay .badge-primary {
-  background-color: white;
-  color: #4361ee;
-  font-size: 0.9rem;
-  padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
-}
-.materi-card .card-img-container .card-img-overlay .badge-primary:hover {
-  background-color: #f2f2f2;
-}
-.materi-card .card-body .card-title {
-  color: #212529;
+.guru-card .guru-nama {
+  font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 1rem;
-}
-.materi-card .card-body .card-text {
-  color: #4e5862;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-.materi-card .card-body .divider {
-  border-top: 1px solid rgba(84, 244, 166, 0.1);
-  margin: 1rem 0;
-}
-.materi-card .card-body .teacher-badge {
   color: #54f4a6;
-  font-size: 0.9rem;
-  font-weight: 500;
+  margin-bottom: 0.3rem;
 }
-.materi-card .card-body .teacher-badge i {
-  color: #54f4a6;
-}
-.materi-card .card-body .btn-outline-primaryy {
-  border-color: #54f4a6;
-  color: #54f4a6;
-  border-radius: 50px;
-  padding: 0.25rem 1rem;
+.guru-card p {
   font-size: 0.85rem;
+  color: #65727e;
+}
+
+.col-md-4.active-guru .guru-card {
+  border-color: #54f4a6;
+  background: rgba(66, 230, 149, 0.1);
+}
+
+/* PERTEMUAN CARD */
+.pertemuan-card {
+  background: white;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  padding: 1rem;
+}
+.pertemuan-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+.pertemuan-card .card-body h6 {
+  color: #42e695;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.pertemuan-card .card-body p {
+  font-size: 0.9rem;
+  color: #212529;
+}
+.pertemuan-card .card-body em {
+  color: rgba(241, 20, 20, 0.7294117647);
+  font-style: italic;
+}
+.pertemuan-card .card-body .btn-gradient {
+  background: linear-gradient(135deg, #42e695, #3bb2b8);
+  border: none;
+  color: white;
+  padding: 0.4rem 0.9rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
   transition: all 0.3s ease;
 }
-.materi-card .card-body .btn-outline-primaryy:hover {
-  background-color: #54f4a6;
-  color: white;
+.pertemuan-card .card-body .btn-gradient:hover {
+  filter: brightness(1.1);
 }
 
 /* RESPONSIVE */
@@ -161,4 +164,22 @@
   .accordion .card-header button .card-mapel {
     font-size: 1.2rem;
   }
+}
+.pertemuan-container {
+  transition: all 0.4s ease-in-out;
+}
+
+/* BUTTONS */
+.btn-gradient {
+  background: linear-gradient(135deg, #42e695, #3bb2b8);
+  border: none;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.btn-gradient:hover {
+  filter: brightness(1.1);
 }

@@ -12,6 +12,10 @@ TODO
 - PADA KOLOM UPLOAD TUGAS, DI PISAH MENJADI  2 FORM ( FORM UPLOAD DAN FORM LIHAT(MENGHAPUS 
     DAN MENGUNDUH FILE YANG DIKIRIM UNTUK MEMASTIKAN TUGAS YANG DIKIRIM BENAR, 
     DAN TAMBAHKAN KOLOM UNTUK NELIHAT NILAI JIGA SUDAH DIBERI NILAI OLEH GURU )
+- menambahkan fitur uas/uts yang hanya bisa dibuka saat pertemuannya dan ada jamnya. jika jam tersebut melebihi waktu dia out sendiri
+- import excel ke database siswa
+- nama tidak boleh ada angka(validasi)
+
 PR
 
 

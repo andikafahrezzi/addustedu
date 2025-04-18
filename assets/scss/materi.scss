@@ -9,7 +9,9 @@ $box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 $transition: all 0.3s ease;
 $third-color: #42e695;
 $fourth-color: #3bb2b8;
+$danger-color:#f11414ba;
 $gradient: linear-gradient(135deg, $third-color, $fourth-color);
+
 /* KELAS UTAMA */
 .container {
   padding: 2rem 0;
@@ -94,98 +96,97 @@ $gradient: linear-gradient(135deg, $third-color, $fourth-color);
   }
 }
 
-/* CARD MATERI STYLE */
-.materi-card {
-  border: none;
+/* GURU CARD */
+.guru-card {
+  background: white;
   border-radius: $border-radius;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: $box-shadow;
+  cursor: pointer;
   transition: $transition;
-  overflow: hidden;
-  
+  border: 2px solid transparent;
+
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-    
-    .card-img-overlay {
-      opacity: 1;
-    }
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    border-color: $accent-color;
   }
-  
-  .card-img-container {
-    position: relative;
+
+  .guru-avatar {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
     overflow: hidden;
-    height: 180px;
-    background-color: #e9ecef;
-    
+    border: 3px solid $accent-color;
+
     img {
-      height: 100%;
       width: 100%;
+      height: 100%;
       object-fit: cover;
-      transition: $transition;
-    }
-    
-    &:hover img {
-      transform: scale(1.05);
-    }
-    
-    .card-img-overlay {
-      background: rgba($primary-color, 0.8);
-      opacity: 0;
-      transition: $transition;
-      
-      .badge-primary {
-        background-color: white;
-        color: $primary-color;
-        font-size: 0.9rem;
-        padding: 0.5rem 1rem;
-        transition: $transition;
-        
-        &:hover {
-          background-color: darken(white, 5%);
-        }
-      }
     }
   }
-  
+
+  .guru-nama {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $accent-color;
+    margin-bottom: 0.3rem;
+  }
+
+  p {
+    font-size: 0.85rem;
+    color: lighten($dark-color, 30%);
+  }
+}
+
+.col-md-4.active-guru .guru-card {
+  border-color: $accent-color;
+  background: rgba($third-color, 0.1);
+}
+
+/* PERTEMUAN CARD */
+.pertemuan-card {
+  background: white;
+  border-radius: $border-radius;
+  transition: $transition;
+  padding: 1rem;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
   .card-body {
-    .card-title {
-      color: $dark-color;
+    h6 {
+      color: $third-color;
       font-weight: 600;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
-    
-    .card-text {
-      color: lighten($dark-color, 20%);
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-    
-    .divider {
-      border-top: 1px solid rgba($accent-color, 0.1);
-      margin: 1rem 0;
-    }
-    
-    .teacher-badge {
-      color: $accent-color;
+
+    p {
       font-size: 0.9rem;
-      font-weight: 500;
-      
-      i {
-        color: $accent-color;
-      }
+      color: $dark-color;
     }
-    
-    .btn-outline-primaryy {
-      border-color: $accent-color;
-      color: $accent-color;
+
+    em {
+      color: $danger-color;
+      font-style: italic;
+    }
+
+    .btn-gradient {
+      background: $gradient;
+      border: none;
+      color: white;
+      padding: 0.4rem 0.9rem;
       border-radius: 50px;
-      padding: 0.25rem 1rem;
       font-size: 0.85rem;
+      font-weight: 500;
       transition: $transition;
-      
+
       &:hover {
-        background-color: $accent-color;
-        color: white;
+        filter: brightness(1.1);
       }
     }
   }
@@ -203,5 +204,25 @@ $gradient: linear-gradient(135deg, $third-color, $fourth-color);
     .card-mapel {
       font-size: 1.2rem;
     }
+  }
+}
+
+.pertemuan-container {
+  transition: all 0.4s ease-in-out;
+}
+
+/* BUTTONS */
+.btn-gradient {
+  background: $gradient;
+  border: none;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: $transition;
+
+  &:hover {
+    filter: brightness(1.1);
   }
 }
