@@ -16,47 +16,66 @@ class Forum extends CI_Controller {
         $this->load->view('materi/footm');
     }
 
-        public function tambah_komentar() {
-            // Validasi session
-            if (!$this->session->userdata('nis')) {
-                redirect('welcome');
-            }
-    
-            // Ambil data siswa
-            $siswa = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row_array();
-            if (!$siswa) {
-                $this->session->set_flashdata('error', 'Data siswa tidak ditemukan');
-                redirect('auth');
-            }
-    
-            // Validasi input
-            $this->form_validation->set_rules('komentar', 'Komentar', 'required');
-            $this->form_validation->set_rules('materi_id', 'Materi ID', 'required|numeric');
-            
-            if ($this->form_validation->run() == FALSE) {
-                $this->session->set_flashdata('error', validation_errors());
-                redirect('materi/belajar/' . $this->input->post('materi_id'));
-            }
-    
-            // Siapkan data komentar
-            $data = [
-                'nis' => $this->session->userdata('nis'),
-                'materi_id' => $this->input->post('materi_id'),
-                'user'      => $siswa['nama'],
-                'komentar'  => $this->input->post('komentar'),
-                'parent_id' => $this->input->post('parent_id') ?: NULL,
-                'tanggal'   => date('Y-m-d H:i:s')
-            ];
-    
-            // Simpan ke database
-            if ($this->Forum_model->tambah_komentar($data)) {
-                $this->session->set_flashdata('success-add', 'Komentar berhasil ditambahkan');
-            } else {
-                $this->session->set_flashdata('error-comment', 'Gagal menambahkan komentar');
-            }
-    
-            redirect('materi/belajar/' . $data['materi_id']);
+    public function tambah_komentar()
+    {
+        if (!$this->session->userdata('nis')) {
+            redirect('welcome');
         }
+    
+        $siswa = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row_array();
+        if (!$siswa) {
+            $this->session->set_flashdata('error', 'Data siswa tidak ditemukan');
+            redirect('welcome');
+        }
+    
+        $this->form_validation->set_rules('komentar', 'Komentar', 'required');
+        $this->form_validation->set_rules('materi_id', 'Materi ID', 'required|numeric');
+    
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('materi/belajar/' . $this->input->post('materi_id'));
+        }
+    
+        // FIX: ambil dari POST
+        $materi_id = $this->input->post('materi_id');
+        $komentar = $this->input->post('komentar');
+    
+        $guru = $this->Forum_model->getGuruByMateri($materi_id);
+        if (!$guru || empty($guru->email)) {
+            $this->session->set_flashdata('error', 'Email guru tidak ditemukan.');
+            redirect('materi/belajar/' . $materi_id);
+        }
+    
+        // Kirim email ke guru
+        $this->email->from('addustedu@noreply', 'E-Learning');
+        $this->email->to($guru->email);
+        $this->email->subject('Komentar Baru di Forum Diskusi');
+        $this->email->message("Ada komentar baru dari siswa di forum materi: <b>{$materi_id}</b><br><br>Komentar:<br>{$komentar}");
+    
+        if (!$this->email->send()) {
+            $this->session->set_flashdata('error', 'Komentar terkirim, tapi email gagal dikirim.');
+            log_message('error', print_r($this->email->print_debugger(), true)); // log error ke log CI
+        }
+    
+        // Simpan komentar ke DB
+        $data = [
+            'nis' => $this->session->userdata('nis'),
+            'materi_id' => $materi_id,
+            'user'      => $siswa['nama'],
+            'komentar'  => $komentar,
+            'parent_id' => $this->input->post('parent_id') ?: NULL,
+            'tanggal'   => date('Y-m-d H:i:s')
+        ];
+    
+        if ($this->Forum_model->tambah_komentar($data)) {
+            $this->session->set_flashdata('success-add', 'Komentar berhasil ditambahkan');
+        } else {
+            $this->session->set_flashdata('error-comment', 'Gagal menambahkan komentar');
+        }
+    
+        redirect('materi/belajar/' . $materi_id);
+    }
+    
     
 
     public function get_nama_siswa()
@@ -110,4 +129,24 @@ class Forum extends CI_Controller {
         
         redirect($_SERVER['HTTP_REFERER']);
     }
+    public function tesEmail()
+{
+    $this->load->library('email'); // load library email
+
+    $this->email->from('your_email@gmail.com', 'E-Learning'); // email pengirim
+    $this->email->to('guru@example.com'); // email tujuan
+
+    $this->email->subject('Tes Email dari CodeIgniter');
+    $this->email->message('Halo! Ini adalah percobaan kirim email dari CodeIgniter 3.');
+
+    if ($this->email->send()) {
+        echo "Email berhasil dikirim!";
+    } else {
+        echo "Email gagal dikirim:";
+        echo "<pre>";
+        print_r($this->email->print_debugger()); // debug jika error
+        echo "</pre>";
+    }
+}
+
 }

@@ -95,6 +95,14 @@ class Forum_model extends CI_Model {
         $this->db->where('id', $id);
         return $this->db->update('comments', $data);
     }
+    public function getGuruByMateri($materi_id) {
+        // Join materi dan guru, sesuaikan nama tabel
+        $this->db->select('guru.email');
+        $this->db->from('materi');
+        $this->db->join('guru', 'materi.id_guru = guru.nip');
+        $this->db->where('materi.id', $materi_id);
+        return $this->db->get()->row(); // return satu baris object
+    }
     
 
     // Hapus method yang tidak digunakan
