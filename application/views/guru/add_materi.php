@@ -28,6 +28,10 @@
                                                 echo $data['user']['nama_mapel'];?>" class="form-control" id="inputEmail4">
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="pertemuan">Pertemuan Ke-</label>
+                                            <input type="number" name="pertemuan" id="pertemuan" class="form-control" min="1" required>
+                                        </div>
                                     <div class="form-group">
                                         <div class="input-group">
                                             <div class="custom-file">

@@ -69,7 +69,16 @@
             })
             </script>
             <?php endif;?>
-
+            <?php if ($this->session->flashdata('error')): ?>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '<?php echo $this->session->flashdata('error'); ?>',
+            footer: 'Cek kembali data yang Anda inputkan.'
+        });
+    </script>
+<?php endif; ?>
             <!-- end::Global Config -->
 
             <!--begin:: Global Mandatory Vendors -->

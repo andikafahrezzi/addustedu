@@ -28,67 +28,81 @@ class Guru extends CI_Controller
 {
     $this->load->library('form_validation');
     $this->form_validation->set_rules('nama_mapel', 'Nama Mata Pelajaran', 'required');
-    $this->load->model(['M_materi', 'Forum_model', 'Quiz_model']);
+    $this->form_validation->set_rules('pertemuan', 'Pertemuan', 'required|numeric');
     
-    if ($this->form_validation->run() == false) {
-        $nip = $this->session->userdata('nip'); // atau 'id_guru', sesuai yang kamu pakai
+    $this->load->model(['M_materi', 'Forum_model', 'Quiz_model']);
 
-        // Ambil data user dari tabel guru
+    if ($this->form_validation->run() == false) {
+        $nip = $this->session->userdata('nip');
         $data['user'] = $this->db->get_where('guru', ['nip' => $nip])->row_array();
         $this->load->view('guru/navug');
         $this->load->view('guru/add_materi', $data);
         $this->load->view('guru/footg');
     } else {
-        // Load library upload terlebih dahulu
-        $this->load->library('upload');
+        $pertemuan = $this->input->post('pertemuan');
+        $kelas = $this->input->post('kelas');
+        $mapel = $this->input->post('nama_mapel');
+        $nip = $this->session->userdata('nip');
 
-        // **1️⃣ Proses Upload Video**
+        //  Validasi pertemuan tidak duplikat
+        $cek_duplikat = $this->db->get_where('materi', [
+            'pertemuan' => $pertemuan,
+            'kelas' => $kelas,
+            'nama_mapel' => $mapel,
+            'id_guru' => $nip
+        ])->row();
+
+        if ($cek_duplikat) {
+            $this->session->set_flashdata('error', 'Pertemuan ke-' . $pertemuan . ' untuk kelas dan mapel ini sudah ada.');
+            redirect('guru/add_materi');
+        }
+
+        // Upload video
+        $this->load->library('upload');
         $video_materi = '';
         if (!empty($_FILES['video']['name'])) {
             $config_video['upload_path']   = './assets/materi_video/';
             $config_video['allowed_types'] = 'mp4|avi|mov|wmv|mkv|webm';
             $config_video['max_size']      = 100000;
-
             $this->upload->initialize($config_video);
 
             if ($this->upload->do_upload('video')) {
                 $upload_data = $this->upload->data();
-                $video_materi = '' . $upload_data['file_name'];
+                $video_materi = $upload_data['file_name'];
             } else {
                 $this->session->set_flashdata('error', 'Gagal upload video: ' . $this->upload->display_errors());
                 redirect('guru/add_materi');
             }
         }
 
-        // **2️⃣ Proses Upload File Materi (PDF, Word, JPG)**
+        // Upload file materi
         $modul = '';
         if (!empty($_FILES['modul']['name'])) {
             $config_modul['upload_path']   = './assets/materi_modul/';
             $config_modul['allowed_types'] = 'pdf|doc|docx|jpg|jpeg|png';
             $config_modul['max_size']      = 2048;
-
             $this->upload->initialize($config_modul);
 
             if ($this->upload->do_upload('modul')) {
                 $upload_data = $this->upload->data();
-                $modul = '' . $upload_data['file_name'];
+                $modul = $upload_data['file_name'];
             } else {
                 $this->session->set_flashdata('error', 'Gagal upload file materi: ' . $this->upload->display_errors());
                 redirect('guru/add_materi');
             }
         }
-        $nip = $this->session->userdata('nip');
 
-        // **3️⃣ Simpan Data ke Database**
+        // Simpan ke database
         $data = [
             'id_guru'     => $nip,
             'nama_guru'   => htmlspecialchars($this->input->post('nama_guru', true)),
             'nama_mapel'  => htmlspecialchars($this->input->post('nama_mapel', true)),
+            'kelas'       => htmlspecialchars($this->input->post('kelas', true)),
+            'pertemuan'   => $pertemuan,
             'video'       => $video_materi,
             'modul'       => $modul,
             'deskripsi'   => htmlspecialchars($this->input->post('deskripsi', true)),
             'linkform'    => htmlspecialchars($this->input->post('linkform', true)),
-            'kelas'       => htmlspecialchars($this->input->post('kelas', true))
         ];
 
         $this->db->insert('materi', $data);
@@ -96,6 +110,7 @@ class Guru extends CI_Controller
         redirect('guru');
     }
 }
+
 
     private function _uploadImage()
     {
@@ -134,152 +149,247 @@ class Guru extends CI_Controller
     $this->load->view('guru/footg');
 }
 
-    public function update_materi($id)
-    {
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('nama_mapel', 'Nama Mata Pelajaran', 'required');
-        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model']);
+public function update_materi($id)
+{
+    $this->load->library('form_validation');
+    $this->form_validation->set_rules('nama_mapel', 'Nama Mata Pelajaran', 'required');
+    $this->form_validation->set_rules('pertemuan', 'Pertemuan', 'required|numeric');
+    $this->load->model(['M_materi', 'Forum_model', 'Quiz_model']);
+
+    if ($this->form_validation->run() == false) {
+        $nip = $this->session->userdata('nip');
+        $data['user'] = $this->db->get_where('guru', ['nip' => $nip])->row_array();
+        $data['materi'] = $this->M_materi->get_materi_by_ids($id)->row();
         
-        if ($this->form_validation->run() == false) {
-            $nip = $this->session->userdata('nip'); // atau 'id_guru', sesuai yang kamu pakai
-    
-            // Ambil data user dari tabel guru
-            $data['user'] = $this->db->get_where('guru', ['nip' => $nip])->row_array();
-            $data['materi'] = $this->M_materi->get_materi_by_ids($id)->row();
-            $this->load->view('guru/navug');
-            $this->load->view('guru/update_materi', $data);
-            $this->load->view('guru/footg');
-        } else {
-            // Load library upload terlebih dahulu
-            $this->load->library('upload');
-    
-            // **1️⃣ Proses Upload Video**
-            $video_materi = '';
-            if (!empty($_FILES['video']['name'])) {
-                $config_video['upload_path']   = './assets/materi_video/';
-                $config_video['allowed_types'] = 'mp4|avi|mov|wmv|mkv|webm';
-                $config_video['max_size']      = 100000;
-    
-                $this->upload->initialize($config_video);
-    
-                if ($this->upload->do_upload('video')) {
-                    $upload_data = $this->upload->data();
-                    $video_materi = '' . $upload_data['file_name'];
-                } else {
-                    $this->session->set_flashdata('error', 'Gagal upload video: ' . $this->upload->display_errors());
-                    redirect('guru/add_materi');
-                }
-            }
-            $nip = $this->session->userdata('nip');
-    
-            // **2️⃣ Proses Upload File Materi (PDF, Word, JPG)**
-            $modul = '';
-            if (!empty($_FILES['modul']['name'])) {
-                $config_modul['upload_path']   = './assets/materi_modul/';
-                $config_modul['allowed_types'] = 'pdf|doc|docx|jpg|jpeg|png';
-                $config_modul['max_size']      = 2048;
-    
-                $this->upload->initialize($config_modul);
-    
-                if ($this->upload->do_upload('modul')) {
-                    $upload_data = $this->upload->data();
-                    $modul = '' . $upload_data['file_name'];
-                } else {
-                    $this->session->set_flashdata('error', 'Gagal upload file materi: ' . $this->upload->display_errors());
-                    redirect('guru/add_materi');
-                }
-            }
-            $nip = $this->session->userdata('nip');
-            $guru = $this->db->get_where('guru', ['nip' => $nip])->row_array();
-            // **3️⃣ Simpan Data ke Database**
-            $data = [
-                'nama_guru'   => htmlspecialchars($this->input->post('nama_guru', true)),
-                'nama_mapel'  => htmlspecialchars($this->input->post('nama_mapel', true)),
-                'video'       => $video_materi,
-                'modul'       => $modul,
-                'deskripsi'   => htmlspecialchars($this->input->post('deskripsi', true)),
-                'linkform'    => htmlspecialchars($this->input->post('linkform', true)),
-                'kelas'       => htmlspecialchars($this->input->post('kelas', true))
-            ];
-            $data['materi'] = $this->M_materi->tampil_materi_guru($nip)->result();
-            $this->db->insert('materi', $data);
-            $this->session->set_flashdata('success', 'Materi berhasil ditambahkan!');
-            redirect('guru');
+        $this->load->view('guru/navug');
+        $this->load->view('guru/update_materi', $data);
+        $this->load->view('guru/footg');
+    } else {
+        $this->load->library('upload');
+
+        $nip = $this->session->userdata('nip');
+        $guru = $this->db->get_where('guru', ['nip' => $nip])->row_array();
+
+        $pertemuan = $this->input->post('pertemuan');
+        $kelas = $this->input->post('kelas');
+        $mapel = $this->input->post('nama_mapel');
+
+        // 🔁 Cek duplikat pertemuan
+        $cek_duplikat = $this->db->get_where('materi', [
+            'pertemuan' => $pertemuan,
+            'kelas' => $kelas,
+            'nama_mapel' => $mapel,
+            'id_guru' => $nip
+        ])->row();
+
+        if ($cek_duplikat) {
+            $this->session->set_flashdata('error-per', 'Pertemuan ke-' . $pertemuan . ' untuk kelas dan mapel ini sudah ada.');
+            redirect('guru/update_materi/' . $id);
         }
+
+        // ✅ Upload Video
+        $video_materi = '';
+        if (!empty($_FILES['video']['name'])) {
+            $config_video['upload_path']   = './assets/materi_video/';
+            $config_video['allowed_types'] = 'mp4|avi|mov|wmv|mkv|webm';
+            $config_video['max_size']      = 100000;
+
+            $this->upload->initialize($config_video);
+
+            if ($this->upload->do_upload('video')) {
+                $upload_data = $this->upload->data();
+                $video_materi = $upload_data['file_name'];
+            } else {
+                $this->session->set_flashdata('error', 'Gagal upload video: ' . $this->upload->display_errors());
+                redirect('guru/update_materi/' . $id);
+            }
+        }
+
+        // ✅ Upload Modul
+        $modul = '';
+        if (!empty($_FILES['modul']['name'])) {
+            $config_modul['upload_path']   = './assets/materi_modul/';
+            $config_modul['allowed_types'] = 'pdf|doc|docx|jpg|jpeg|png';
+            $config_modul['max_size']      = 2048;
+
+            $this->upload->initialize($config_modul);
+
+            if ($this->upload->do_upload('modul')) {
+                $upload_data = $this->upload->data();
+                $modul = $upload_data['file_name'];
+            } else {
+                $this->session->set_flashdata('error', 'Gagal upload file materi: ' . $this->upload->display_errors());
+                redirect('guru/update_materi/' . $id);
+            }
+        }
+
+        // ✅ Simpan ke database
+        $data = [
+            'nama_guru'   => htmlspecialchars($this->input->post('nama_guru', true)),
+            'nama_mapel'  => htmlspecialchars($mapel),
+            'pertemuan'   => $pertemuan,
+            'video'       => $video_materi,
+            'modul'       => $modul,
+            'deskripsi'   => htmlspecialchars($this->input->post('deskripsi', true)),
+            'linkform'    => htmlspecialchars($this->input->post('linkform', true)),
+            'kelas'       => htmlspecialchars($kelas)
+        ];
+
+        $this->db->where('id_materi', $id);
+        $this->db->update('materi', $data);
+
+        $this->session->set_flashdata('success', 'Materi berhasil diperbarui!');
+        redirect('guru');
     }
+}
+
     
     public function materi_edit()
-    {
-        $this->load->model('m_materi');
-        $id = $this->input->post('id');
+{
+    $this->load->model('m_materi');
+    $this->load->library('form_validation');
 
-        // Konfigurasi upload video
+    // Validasi form input
+    $this->form_validation->set_rules('pertemuan', 'Pertemuan', 'required|numeric');
+
+    if ($this->form_validation->run() == FALSE) {
+        // Jika validasi gagal, kembali ke halaman edit
+        $id = $this->input->post('id');
+        $this->session->set_flashdata('error', validation_errors());
+        redirect('guru/update_materi/' . $id);
+        return;
+    }
+
+    // Ambil data input
+    $id          = $this->input->post('id');
+    $pertemuan   = $this->input->post('pertemuan');
+    $kelas       = $this->input->post('kelas');
+    $mapel       = $this->input->post('nama_mapel');
+    $nip         = $this->input->post('id_guru');
+    $nama_guru   = $this->input->post('nama_guru');
+    $deskripsi   = $this->input->post('deskripsi');
+    $linkform    = $this->input->post('linkform');
+
+    // Cek apakah pertemuan ke-x sudah dipakai guru, mapel, dan kelas lain
+    $cek_duplikat = $this->db
+        ->where('pertemuan', $pertemuan)
+        ->where('kelas', $kelas)
+        ->where('nama_mapel', $mapel)
+        ->where('id_guru', $nip)
+        ->where('id !=', $id) // hindari id sendiri
+        ->get('materi')
+        ->row();
+
+    if ($cek_duplikat) {
+        $this->session->set_flashdata('error-per', 'Pertemuan ke-' . $pertemuan . ' sudah dipakai untuk mapel dan kelas ini.');
+        redirect('guru/update_materi/' . $id);
+        return;
+    }
+
+    // ---------------- Upload Video ----------------
+    $video = '';
+    if (!empty($_FILES['video']['name'])) {
         $config['upload_path']   = './assets/materi_video/';
-        $config['allowed_types'] = 'mp4|avi|mov';
-        $config['max_size']      = 102400; // 100MB
+        $config['allowed_types'] = 'mp4|avi|mov|wmv|mkv';
+        $config['max_size']      = 102400;
 
         $this->load->library('upload', $config);
-
         if ($this->upload->do_upload('video')) {
             $video = $this->upload->data('file_name');
         } else {
-            $this->upload->display_errors();
+            $this->session->set_flashdata('error', $this->upload->display_errors());
+            redirect('guru/update_materi/' . $id);
+            return;
         }
+    } else {
+        $video = $this->db->get_where('materi', ['id' => $id])->row()->video;
+    }
 
-        // Konfigurasi upload modul
+    // ---------------- Upload Modul ----------------
+    $modul = '';
+    if (!empty($_FILES['modul']['name'])) {
         $config['upload_path']   = './assets/materi_modul/';
         $config['allowed_types'] = 'pdf|doc|docx|jpg|jpeg|png';
-        $config['max_size']      = 5120; // 5MB
+        $config['max_size']      = 5120;
 
         $this->upload->initialize($config);
-
         if ($this->upload->do_upload('modul')) {
             $modul = $this->upload->data('file_name');
         } else {
-            $this->upload->display_errors();
-        }// Hentikan eksekusi untuk melihat hasilnya
-
-        
-        $nip = $this->input->post('id_guru');
-        $nama_guru = $this->input->post('nama_guru');
-        $nama_mapel = $this->input->post('nama_mapel');
-        $deskripsi = $this->input->post('deskripsi');
-        $linkform = $this->input->post('linkform');
-        
-        $data = array(
-            'id_guru' => $nip,
-            'nama_guru' => $nama_guru,
-            'nama_mapel' => $nama_mapel,
-            'deskripsi' => $deskripsi,
-            'linkform' => $linkform,
-            'video'     => $video,
-            'modul'     => $modul
-        );
-
-        $where = array(
-            'id' => $id,
-        );
-
-        $query = $this->db->get_where('materi', array('id' => $id));
-
-        $existing_data = $this->db->get_where('materi', array('id' => $id))->row_array();
-        if ($existing_data) {
-            $difference = array_diff_assoc($data, $existing_data);
-            if (empty($difference)) {
-                echo "❌ Tidak ada perubahan data, update dibatalkan!";
-                exit;
-            }
+            $this->session->set_flashdata('error', $this->upload->display_errors());
+            redirect('guru/update_materi/' . $id);
+            return;
         }
-
-
-        $this->m_materi->update_data($where, $data, 'materi');
-
-        $this->m_materi->update_data($where, $data, 'materi');
-     
-        $this->session->set_flashdata('success-edit', 'berhasil');
-        redirect('guru/data_materi');
-
+    } else {
+        $modul = $this->db->get_where('materi', ['id' => $id])->row()->modul;
     }
+
+    // ---------------- Update Data ----------------
+    $data = [
+        'id_guru'    => $nip,
+        'nama_guru'  => $nama_guru,
+        'nama_mapel' => $mapel,
+        'kelas'      => $kelas,
+        'pertemuan'  => $pertemuan,
+        'deskripsi'  => $deskripsi,
+        'linkform'   => $linkform,
+        'video'      => $video,
+        'modul'      => $modul
+    ];
+
+    $where = ['id' => $id];
+
+    // Optional: Cek apakah ada perubahan data
+    $existing_data = $this->db->get_where('materi', $where)->row_array();
+    if ($existing_data) {
+        $difference = array_diff_assoc($data, $existing_data);
+        if (empty($difference)) {
+            $this->session->set_flashdata('info', 'Tidak ada perubahan data.');
+            redirect('guru/update_materi/' . $id);
+            return;
+        }
+    }
+
+    // Simpan ke DB
+    $this->m_materi->update_data($where, $data, 'materi');
+    $this->session->set_flashdata('success-edit', 'Materi berhasil diperbarui.');
+    redirect('guru/data_materi');
+}
+public function delete_materi($id)
+{
+    // Load model dan helper
+    $this->load->model('M_materi');
+    $this->load->helper('file');
+
+    // Ambil data materi berdasarkan ID
+    $materi = $this->db->get_where('materi', ['id' => $id])->row();
+
+    // Jika materi tidak ditemukan
+    if (!$materi) {
+        $this->session->set_flashdata('error', 'Data materi tidak ditemukan.');
+        redirect('guru/data_materi');
+        return;
+    }
+
+    // Hapus file video jika ada
+    if ($materi->video && file_exists('./assets/materi_video/' . $materi->video)) {
+        unlink('./assets/materi_video/' . $materi->video);
+    }
+
+    // Hapus file modul jika ada
+    if ($materi->modul && file_exists('./assets/materi_modul/' . $materi->modul)) {
+        unlink('./assets/materi_modul/' . $materi->modul);
+    }
+
+    // Hapus dari database
+    $this->M_materi->delete_data(['id' => $id], 'materi');
+
+    // Notifikasi berhasil
+    $this->session->set_flashdata('success', 'Data materi berhasil dihapus.');
+    redirect('guru/data_materi');
+}
+
+
 
     //QUIZ
     public function data_quiz()

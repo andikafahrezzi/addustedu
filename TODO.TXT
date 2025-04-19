@@ -16,6 +16,7 @@ TODO
 - import excel ke database siswa
 - nama tidak boleh ada angka(validasi)
 - tambahkan pilihan untuk input dan post pertemuan setiap upload materi (guru dan admin)
+- bug id guru sama, tetapi jika ganti nama berbeda kolom guru nya
 
 PR
 

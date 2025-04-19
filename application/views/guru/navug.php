@@ -102,7 +102,8 @@
 
     <!--end::Layout Skins -->
     <link rel="shortcut icon" href="<?=base_url('assets')?>/img/logoh.png" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.0/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.4/dist/sweetalert2.all.min.js"></script>
+
 </head>
 
 <!-- end::Head -->
