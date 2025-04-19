@@ -47,7 +47,7 @@ class Forum extends CI_Controller {
         }
     
         // Kirim email ke guru
-        $this->email->from('addustedu@noreply', 'E-Learning');
+        $this->email->from('noreply@addustedu', 'E-Learning');
         $this->email->to($guru->email);
         $this->email->subject('Komentar Baru di Forum Diskusi');
         $this->email->message("Ada komentar baru dari siswa di forum materi: <b>{$materi_id}</b><br><br>Komentar:<br>{$komentar}");
