@@ -15,7 +15,7 @@ TODO
 - menambahkan fitur uas/uts yang hanya bisa dibuka saat pertemuannya dan ada jamnya. jika jam tersebut melebihi waktu dia out sendiri
 - import excel ke database siswa
 - nama tidak boleh ada angka(validasi)
-- tambahkan pilihan untuk input dan post pertemuan setiap upload materi (guru dan admin)
+- tambahkan pilihan untuk input dan post pertemuan setiap upload materi ( admin)
 - bug id guru sama, tetapi jika ganti nama berbeda kolom guru nya
 
 PR

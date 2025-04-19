@@ -19,14 +19,23 @@ class User extends CI_Controller
         $kelas_siswa = $data['user']['kelas'];
         $data['kelas_siswa'] = $kelas_siswa;
 
-        $materi = $this->db->get_where('materi', ['kelas' => $kelas_siswa])->result_array();
+        $this->db->select('materi.*, guru.nip, guru.nama_guru');
+        $this->db->from('materi');
+        $this->db->join('guru', 'guru.nip = materi.id_guru');
+        $this->db->where('materi.kelas', $kelas_siswa);
+        $materi = $this->db->get()->result_array();
 
         $mapel_data = [];
-        foreach ($materi as $m) {
-            $mapel = $m['nama_mapel'];
-            $guru = $m['nama_guru'];
-            $mapel_data[$mapel][$guru][] = $m;
-        }
+            foreach ($materi as $m) {
+                $mapel = $m['nama_mapel'];
+                $nip = $m['id_guru']; // Pastikan kamu ambil NIP di query
+
+                // Gabungkan NIP dan nama agar tetap bisa tampil nama guru tapi unik berdasarkan NIP
+                
+                
+                $mapel_data[$mapel][$nip][] = $m;
+            }
+
 
         $data['mapel_data'] = $mapel_data;
 

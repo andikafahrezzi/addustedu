@@ -25,7 +25,9 @@
       <div id="collapseMapel<?= $mapel_id ?>" class="collapse" data-parent="#mapelAccordion">
         <div class="card-body">
           <div class="row">
-            <?php foreach ($guru_list as $guru => $materi_list): ?>
+          <?php foreach ($guru_list as $nip => $materi_list): 
+                $guru = $materi_list[0]['nama_guru'];
+          ?>
                 <div class="col-md-4">
                 <div class="guru-card" onclick="togglePertemuan(this)">
                     <div class="guru-avatar">

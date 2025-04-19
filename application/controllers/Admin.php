@@ -369,7 +369,10 @@ $data = array(
         ]);
 
         if ($this->form_validation->run() == false) {
-            $this->load->view('guru/registration');
+            $this->load->view('admin/partials/nava');
+            $this->load->view('admin/add_guru');
+            $this->load->view('admin/partials/foota');
+
         } else {
             $data = [
                 'nip' => htmlspecialchars($this->input->post('nip', true)),
