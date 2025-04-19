@@ -619,17 +619,44 @@ private function tambah_soal($quiz_id)
         
         redirect($_SERVER['HTTP_REFERER']);
     }
+    public function delete_quiz($id)
+    {
+        $this->load->model('Quiz_model');
+        
+        // Pastikan $id adalah integer, bukan array
+        $id = (int) $id;
+    
+        $this->Quiz_model->delete_quiz($id);
+        $this->session->set_flashdata('success', 'Quiz berhasil dihapus.');
+        redirect('guru/data_quiz'); // sesuaikan dengan route kamu
+    }
+    
+
+
 
     // Hapus tugas (oleh admin/guru)
-    public function hapus_tugas($id) {
-        if ($this->Tugas_model->delete_tugas($id)) {
-            $this->session->set_flashdata('success', 'Tugas berhasil dihapus');
-        } else {
-            $this->session->set_flashdata('error', 'Gagal menghapus tugas');
+    public function hapus_tugas($id)
+    {
+        // Pastikan ID valid
+        if (!is_numeric($id)) {
+            show_404();
         }
-        
+    
+        // Hapus tugas dari tabel 'tugas'
+        $this->db->where('id', $id);
+        $this->db->delete('tugas_siswa');
+    
+        // Cek jika penghapusan sukses
+        if ($this->db->affected_rows() > 0) {
+            $this->session->set_flashdata('success', 'Tugas berhasil dihapus!');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus tugas.');
+        }
+    
+        // Redirect kembali ke halaman tugas
         redirect($_SERVER['HTTP_REFERER']);
     }
+    
     public function daftar_tugas() {
         $this->load->model('Tugas_model');
     

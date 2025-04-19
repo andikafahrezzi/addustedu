@@ -122,37 +122,33 @@ public function tampil_quiz()
 {
     return $this->db->get('quiz');
 }
-public function delete_quiz($quiz_id) {
-    $this->db->trans_start(); // Mulai transaction database
-    
-    // Urutan penghapusan yang benar:
-    // 1. Hapus jawaban siswa terkait
-    $this->db->query("DELETE js FROM jawaban_siswa js 
-                     JOIN quiz_siswa qs ON js.quiz_siswa_id = qs.id 
-                     WHERE qs.quiz_id = ?", [$quiz_id]);
-    
-    // 2. Hapus record di quiz_siswa
-    $this->db->where('quiz_id', $quiz_id);
-    $this->db->delete('quiz_siswa');
-    
-    // 3. Hapus pertanyaan quiz
-    $this->db->where('quiz_id', $quiz_id);
+public function delete_quiz($id)
+{
+    // Cek validitas id
+    if (!is_numeric($id)) return false;
+
+    // 1️⃣ Hapus semua pertanyaan terkait di quiz_questions
+    $this->db->where('quiz_id', $id);
     $this->db->delete('quiz_questions');
-    
-    // 4. Hapus quiz utama
-    $this->db->where('id', $quiz_id);
-    $this->db->delete('quiz');
-    
-    $this->db->trans_complete(); // Selesaikan transaction
-    
-    if ($this->db->trans_status() === FALSE) {
-        $error = $this->db->error();
-        log_message('error', 'Database error: ' . $error['message']);
-        return FALSE;
+
+    // 2️⃣ Hapus semua quiz_siswa berdasarkan quiz_id
+    $quiz_siswa_list = $this->db->get_where('quiz_siswa', ['quiz_id' => $id])->result();
+    foreach ($quiz_siswa_list as $qs) {
+        $this->db->where('quiz_siswa_id', $qs->id);
+        $this->db->delete('jawaban_siswa');
     }
-    
-    return TRUE;
+    $this->db->where('quiz_id', $id);
+    $this->db->delete('quiz_siswa');
+
+    // 3️⃣ Hapus quiz
+    $this->db->where('id', $id);
+    $this->db->delete('quiz');
+
+    return true;
 }
+
+
+
 
 public function get_quizzes_by_guru($nip) {
     $this->db->select('quiz.*, materi.deskripsi as judul_materi, materi.kelas as kelas');

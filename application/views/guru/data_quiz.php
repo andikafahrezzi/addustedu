@@ -46,8 +46,9 @@
                                             <a href="<?= base_url('guru/edit_quiz/'.$quiz->id) ?>" class="btn btn-sm btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <button onclick="confirmDelete('<?= $quiz->id ?>')" class="btn btn-sm btn-danger">
-                                                <i class="fas fa-trash"></i>
+                                            <button onclick="confirmDeleteQuiz('<?= $quiz->id; ?>')" class="btn btn-sm btn-danger" title="Hapus">
+                    <i class="fas fa-trash"></i>
+                </button>
                                             </button>
                                             <a href="<?= base_url('guru/kelola_quiz/'.$quiz->id) ?>" class="btn btn-sm btn-info">
                                                 <i class="fas fa-question"></i> Soal
@@ -68,10 +69,31 @@
     </div>
 </div>
 
+<!-- Modal Konfirmasi Hapus Quiz -->
+<div class="modal fade" id="deleteQuizModal" tabindex="-1" role="dialog" aria-labelledby="deleteQuizModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteQuizModalLabel">Konfirmasi Hapus Quiz</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Apakah Anda yakin ingin menghapus quiz ini?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <a id="deleteQuizLink" href="#" class="btn btn-danger">Hapus</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
-function confirmDelete(quizId) {
-    if (confirm('Apakah Anda yakin ingin menghapus quiz ini? Semua soal dan jawaban terkait juga akan dihapus.')) {
-        window.location.href = '<?= base_url("quiz/delete/") ?>' + quizId;
+    function confirmDeleteQuiz(id) {
+        $('#deleteQuizLink').attr('href', '<?= site_url("guru/delete_quiz/"); ?>' + id);
+        $('#deleteQuizModal').modal('show');
     }
-}
 </script>

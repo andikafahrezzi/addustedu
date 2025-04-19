@@ -33,10 +33,9 @@
   <i class="fas fa-edit"></i> Nilai
 </button>
 
-                                    <a href="<?= site_url('guru/hapus_tugas/'.$sub->id) ?>" 
-                                    class="btn btn-sm btn-danger" onclick="return confirm('Hapus tugas ini?')">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
+<a href="#" class="btn btn-sm btn-danger" onclick="confirmDelete('<?= $sub->id; ?>')">
+    <i class="fas fa-trash"></i>
+</a>
                                 </td>
                             </tr>
                             
@@ -108,3 +107,32 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Apakah Anda yakin ingin menghapus tugas ini?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <a id="deleteLink" href="#" class="btn btn-danger">Hapus</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    // Fungsi untuk memanggil modal konfirmasi
+function confirmDelete(id) {
+    $('#deleteLink').attr('href', '<?= site_url("guru/hapus_tugas/"); ?>' + id);
+    $('#deleteModal').modal('show');
+}
+
+</script>
