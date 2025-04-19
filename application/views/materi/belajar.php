@@ -305,6 +305,7 @@ if (!empty($forum)) {
                                         <h6><?= $tugas_saya->original_filename ?></h6>
                                         <small>Ukuran: <?= round($tugas_saya->file_size/1024, 2) ?> KB</small>
                                         <small>| Dikirim: <?= date('d M Y H:i', strtotime($tugas_saya->dikirim_pada)) ?></small>
+                                        <small>| Nilai: <?= number_format($tugas_saya->nilai) ?></small>
                                     </div>
                                     <div>
                                     <a href="<?= base_url($tugas_saya->file_path) ?>" 
