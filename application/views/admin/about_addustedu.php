@@ -16,7 +16,7 @@
 							<div class="card-body">
 								<h2 class="card-title" style="color: black;">Tentang addustedu</h2>
 								<hr>
-								<p class="card-text">Web Edukasi Open Source yang dibuat oleh Syauqi Zaidan Khairan Khalaf. <br> addustedu adalah Web edukasi yang dilengkapi video, materi dan sistem ujian yang tersedia secara gratis. <br> addustedu dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja. </p>
+								<p class="card-text">Web Edukasi Open Source yang dibuat oleh Andika Fahrezi. <br> addustedu adalah Web edukasi yang dilengkapi video, materi dan sistem ujian yang tersedia secara gratis. <br> addustedu dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja. </p>
 							</div>
 						</div>
 					</div>

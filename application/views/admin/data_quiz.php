@@ -60,8 +60,9 @@
                                                     <td class="text-center">
                                                         <a href="<?php echo site_url('admin/kelola_quiz/' . $u->id); ?>" class="btn btn-info">Update ⭢</a>
 
-                                                        <a href="<?php echo site_url('admin/delete_quiz/' . $u->id); ?>" class="btn btn-danger remove">Delete ✖</a>
-                                                    </td>
+                                                        <button onclick="confirmDeleteQuiz('<?= $u->id; ?>')" class="btn btn-sm btn-danger" title="Hapus">
+                    <i class="fas fa-trash"></i>
+                </button>
 
                                                 </tr>
                                             <?php
@@ -70,8 +71,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <p class="small font-weight-bold">Sebelum mengupload file, harus terlebih dahulu
-                                    melakukan config max_upload di php.ini</p>
+                                <p class="small font-weight-bold">Tidak Ada Data Quiz yg tersedia, Silahkan Tambah Quiz</p>
                             </div>
                         </div>
                     </div>
@@ -120,3 +120,31 @@
     <?php endif; ?>
 
     <!-- End Sweetalert -->
+<!-- Modal Konfirmasi Hapus Quiz -->
+<div class="modal fade" id="deleteQuizModal" tabindex="-1" role="dialog" aria-labelledby="deleteQuizModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteQuizModalLabel">Konfirmasi Hapus Quiz</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Apakah Anda yakin ingin menghapus quiz ini?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <a id="deleteQuizLink" href="#" class="btn btn-danger">Hapus</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    function confirmDeleteQuiz(id) {
+        $('#deleteQuizLink').attr('href', '<?= site_url("admin/delete_quiz/"); ?>' + id);
+        $('#deleteQuizModal').modal('show');
+    }
+</script>
