@@ -72,8 +72,12 @@
                             <div class="card-body">
                                 <h2 class="card-title" style="color: black;">Tambah Materi?</h2>
                                 <hr>
-                                <p class="card-text">After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction.</p>
-                                <a href="<?= base_url('admin/add_materi') ?>" class="btn btn-success">Tambah Materi ⭢</a>
+                                <div class="admin-quote card shadow-sm p-4">
+                                    <blockquote class="blockquote mb-0">
+                                        <p>“Ilmu yang tidak dibagikan, akan hilang seiring waktu.”</p>
+                                        <footer class="blockquote-footer">Tambahkan materi baru dan bantu siswa terus berkembang!</footer>
+                                    </blockquote>
+                                    </div>                                <a href="<?= base_url('admin/add_materi') ?>" class="btn btn-success">Tambah Materi ⭢</a>
                             </div>
                         </div>
                     </div>
@@ -85,7 +89,7 @@
                                                     $this->session->userdata('email')])->row_array();
                                                     echo $data['user']['username'];
                                                     ?>!</h1>
-                                <p class="lead">After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? but moving the goalposts gain traction.</p>
+                                <p class="lead">Kelola data siswa, guru, dan materi dengan mudah. Semua dalam satu dashboard yang efisien dan modern</p>
                                 <div class="mt-4">
                                     <a href="<?= base_url('admin/data_siswa') ?>" class="btn btn-outline-white btn-lg btn-icon icon-left"><i class="far fa-user"></i>
                                         Data Siswa</a>

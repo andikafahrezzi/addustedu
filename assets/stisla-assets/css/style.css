@@ -2339,7 +2339,17 @@ h6 .badge {
 	letter-spacing: 3px;
 	font-weight: 700;
 }
-
+.blockquote {
+	font-size: 1.5rem;
+	font-weight: 300;
+	margin-top: 2rem;
+	color: #444;
+  }
+  
+  .blockquote footer {
+	color: #3bb2b8;
+	font-weight: 500;
+  }
 .navbar .form-inline .form-control {
 	background-color: #fff;
 	border-color: transparent;
