@@ -8,7 +8,7 @@ class Guru extends CI_Controller
         parent::__construct();
         $this->load->helper('url');
         $this->session->set_flashdata('not-login', 'Gagal!');
-        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model', 'M_siswa']);  
+        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model', 'M_siswa', 'Ujian_model']);  
         $this->load->library('form_validation');
         if (!$this->session->userdata('nip')) {
             redirect('welcome/guru');
@@ -727,6 +727,162 @@ private function tambah_soal($quiz_id)
             return FALSE;
         } else {
             return TRUE;
+        }
+    }
+    public function tambah_ujian()
+    {
+        $nip = $this->session->userdata('nip');
+        $data['materi_list'] = $this->Ujian_model->get_materi_options($nip);
+        $this->load->view('guru/navug'); 
+        $this->load->view('guru/tambah_ujian', $data);
+        $this->load->view('guru/footg');
+    }
+
+    // Menyimpan ujian ke database
+    public function simpan_ujian()
+    {
+        // Ambil data dari form input
+        $materi_id = $this->input->post('materi_id');
+        $data = [
+            'nama_ujian' => $this->input->post('nama_ujian'),
+            'tanggal_mulai' => $this->input->post('tanggal_mulai'),
+            'tanggal_selesai' => $this->input->post('tanggal_selesai'),
+            'durasi' => $this->input->post('durasi'),
+            'status' => $this->input->post('status'),
+            'id_materi' => $materi_id
+        ];
+
+        // Simpan data ujian
+        $this->Ujian_model->tambah_ujian($data);
+        redirect('guru/tampilkan_ujian'); // Kembali ke halaman daftar ujian
+    }
+
+    // Menampilkan form untuk tambah soal
+    public function tambah_soal_ujian($id_ujian)
+    {
+        $data['id_ujian'] = $id_ujian;
+        $this->load->view('guru/navug'); 
+        $this->load->view('guru/tambah_soal', $data);
+        $this->load->view('guru/footg');
+    }
+
+    // Menyimpan soal ke database
+    public function simpan_soal()
+    {
+        $data = [
+            'id_ujian' => $this->input->post('id_ujian'),
+            'pertanyaan' => $this->input->post('pertanyaan'),
+            'pilihan_a' => $this->input->post('pilihan_a'),
+            'pilihan_b' => $this->input->post('pilihan_b'),
+            'pilihan_c' => $this->input->post('pilihan_c'),
+            'pilihan_d' => $this->input->post('pilihan_d'),
+            'kunci_jawaban' => $this->input->post('kunci_jawaban')
+        ];
+
+        // Simpan soal ke database
+        $this->Ujian_model->tambah_soal($data);
+        redirect('guru/tampilkan_soal/' . $data['id_ujian']); // Kembali ke halaman soal ujian
+    }
+
+    // Menampilkan daftar ujian yang dibuat oleh guru
+    public function tampilkan_ujian()
+    {
+        $nip_guru = $this->session->userdata('nip'); // Ambil NIP dari session (pastikan sudah login); // Mengambil ujian yang terkait dengan guru
+        $data['ujian_list'] = $this->Ujian_model->get_ujian_by_guru($nip_guru);
+        
+
+        // Tampilkan data ujian
+        $this->load->view('guru/navug'); 
+        $this->load->view('guru/data_ujian', $data);
+        $this->load->view('guru/footg');
+    }
+
+    // Menampilkan soal berdasarkan ujian
+    public function tampilkan_soal($id_ujian)
+    {
+        $data['id_ujian'] = $id_ujian;
+        $data['soal_list'] = $this->Ujian_model->get_soal_by_ujian_G($id_ujian);
+        $this->load->view('guru/navug'); 
+        $this->load->view('guru/tampil_soal', $data);
+        $this->load->view('guru/footg');
+    
+    }
+
+    public function edit_ujian($id_ujian)
+{
+    // Pastikan user sudah login
+    $nip = $this->session->userdata('nip');
+    
+    // Ambil data ujian berdasarkan id
+    $ujian = $this->Ujian_model->get_ujian_by_id($id_ujian);
+    
+    // Pastikan ujian ditemukan
+    if ($ujian) {
+        // Ambil daftar materi untuk pilihan pada dropdown
+        $data['materi_list'] = $this->Ujian_model->get_materi_options($nip);
+        var_dump($data['materi_list']);
+        // Kirim data ujian dan materi ke view
+        $data['ujian'] = $ujian;
+        $this->load->view('guru/navug');
+        $this->load->view('guru/edit_ujian', $data);
+        $this->load->view('guru/footg');
+    } else {
+        // Jika ujian tidak ditemukan, redirect ke halaman sebelumnya atau halaman error
+        redirect('guru/data_ujian');
+    }
+}
+
+public function simpan_edit_ujian($id_ujian)
+{
+    // Ambil data dari form
+    $data = array(
+        'nama_ujian' => $this->input->post('nama_ujian'),
+        'tanggal_mulai' => $this->input->post('tanggal_mulai'),
+        'tanggal_selesai' => $this->input->post('tanggal_selesai'),
+        'durasi' => $this->input->post('durasi'),
+        'status' => $this->input->post('status'),
+        'id_materi' => $this->input->post('materi_id')
+    );
+    
+    // Simpan perubahan data ujian
+    $this->Ujian_model->update_ujian($id_ujian, $data);
+
+    // Redirect ke daftar ujian atau halaman lainnya
+    redirect('guru/tampilkan_ujian');
+}
+
+    // Mengedit soal
+    public function edit_soal($id_soal)
+    {
+        $soal = $this->Ujian_soal_model->get_soal_by_id($id_soal);
+        if ($this->input->post()) {
+            $data = [
+                'pertanyaan' => $this->input->post('pertanyaan'),
+                'pilihan_a' => $this->input->post('pilihan_a'),
+                'pilihan_b' => $this->input->post('pilihan_b'),
+                'pilihan_c' => $this->input->post('pilihan_c'),
+                'pilihan_d' => $this->input->post('pilihan_d'),
+                'kunci_jawaban' => $this->input->post('kunci_jawaban')
+            ];
+
+            if ($this->Ujian_soal_model->edit_soal($id_soal, $data)) {
+                redirect('guruController/tampilkan_soal/' . $soal['id_ujian']);
+            } else {
+                echo "Gagal mengedit soal.";
+            }
+        } else {
+            $this->load->view('guru/edit_soal', ['soal' => $soal]);
+        }
+    }
+
+    // Menghapus soal
+    public function hapus_soal($id_soal)
+    {
+        $soal = $this->Ujian_soal_model->get_soal_by_id($id_soal);
+        if ($this->Ujian_soal_model->delete_soal($id_soal)) {
+            redirect('guruController/tampilkan_soal/' . $soal['id_ujian']);
+        } else {
+            echo "Gagal menghapus soal.";
         }
     }
     

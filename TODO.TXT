@@ -19,7 +19,8 @@ TODO
 - bug id guru sama, tetapi jika ganti nama berbeda kolom guru nya
 
 PR
-
+- id_ujian masih null
+- score/ hasil belum ada
 
 next can be a problem
 - change id at database siswa to nis
