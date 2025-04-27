@@ -94,45 +94,104 @@ class Ujian extends CI_Controller {
 
     $this->load->view('user/ujian', $data);  // Memuat view dengan data
 }
+public function kerjakan($id_ujian)
+{
+    $nis = $this->session->userdata('nis');
+
+    // Cek apakah sudah selesai
+    $sudah_selesai = $this->db->get_where('tbl_jawaban_siswa', [
+        'nis' => $nis,
+        'id_ujian' => $id_ujian,
+        'is_selesai' => 1
+    ])->row();
+
+    if($sudah_selesai){
+        redirect('ujian/hasil/'.$id_ujian);
+    }
+
+    $data['ujian'] = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
+    $data['soal'] = $this->db->get_where('tbl_soal', ['id_ujian' => $id_ujian])->result();
+    $data['nis'] = $nis;
+    $this->load->view('ujian/kerjakan', $data);
+}
+
 public function submit_ujian()
 {
     $nis = $this->session->userdata('nis');
     $id_ujian = $this->input->post('id_ujian');
-    
-    // Ambil soal berdasarkan ujian
-    $soal = $this->Ujian_model->get_soal_by_ujian($id_ujian);
 
-    if (empty($soal)) {
-        show_404();  // Jika soal tidak ditemukan
-    }
+    $soal = $this->db->get_where('tbl_soal', ['id_ujian' => $id_ujian])->result();
+    $jumlah_soal = count($soal);
+    $jumlah_benar = 0;
 
-    // Proses jawaban
-    foreach ($soal as $s) {
-        $jawaban = $this->input->post('jawaban' . $s->id_soal);  // Mengambil jawaban
-        $ragu = $this->input->post('ragu_' . $s->id_soal) ?? 0;  // Menandai jika ragu
+    foreach($soal as $s){
+        $jawaban_siswa = $this->input->post('jawaban'.$s->id_soal);
+        $ragu_ragu = $this->input->post('ragu_'.$s->id_soal); // Perhatikan underscore
+        
+        if(!empty($jawaban_siswa)){
+            if($jawaban_siswa == $s->kunci_jawaban){
+                $jumlah_benar++;
+            }
 
-        // Jika jawaban ada, simpan
-        if ($jawaban !== null) {
-            $data = [
+            $this->db->replace('tbl_jawaban_siswa', [
                 'nis' => $nis,
+                'id_ujian' => $id_ujian,
                 'id_soal' => $s->id_soal,
-                'jawaban' => $jawaban,
-                'ragu_ragu' => $ragu
-            ];
-
-            // Insert atau update jawaban siswa
-            $this->db->replace('tbl_jawaban_siswa', $data);
+                'jawaban' => $jawaban_siswa,
+                'ragu_ragu' => $ragu_ragu ? 1 : 0
+            ]);
         }
     }
 
-    // Menghapus sesi ujian dari localStorage (Client-side)
-    $waktuUjianKey = 'waktu_ujian_' . $id_ujian;
-    $this->session->set_flashdata('message', 'Ujian telah disubmit.');
+    // Hitung skor dan simpan hasil
+    $score = ($jumlah_benar / $jumlah_soal) * 100;
+    
+    $this->db->where(['nis' => $nis, 'id_ujian' => $id_ujian]);
+    $this->db->update('tbl_jawaban_siswa', [
+        'is_selesai' => 1,
+        'jumlah_benar' => $jumlah_benar,
+        'jumlah_salah' => $jumlah_soal - $jumlah_benar,
+        'score' => $score,
+        'tanggal_submit' => date('Y-m-d H:i:s')
+    ]);
 
-    // Redirect ke halaman konfirmasi atau dashboard
-    redirect('user');
+    redirect('ujian/hasil/'.$id_ujian);
 }
 
+
+public function hasil($id_ujian)
+{
+    $nis = $this->session->userdata('nis');
+
+    $hasil = $this->db->select('jumlah_benar, jumlah_salah, score, tanggal_submit')
+                      ->where(['nis' => $nis, 'id_ujian' => $id_ujian, 'is_selesai' => 1])
+                      ->group_by('nis')
+                      ->get('tbl_jawaban_siswa')
+                      ->row();
+
+    if(!$hasil){
+        redirect('ujian/kerjakan/'.$id_ujian);
+    }
+
+    $data['hasil'] = $hasil;
+    $data['ujian'] = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
+    $this->load->view('user/hasil', $data);
+}
+
+
+public function ranking($id_ujian)
+{
+    $ranking = $this->db->select('nis, SUM(score) as total_score')
+                        ->where(['id_ujian' => $id_ujian, 'is_selesai' => 1])
+                        ->group_by('nis')
+                        ->order_by('total_score', 'DESC')
+                        ->get('tbl_jawaban_siswa')
+                        ->result();
+
+    $data['ranking'] = $ranking;
+    $data['ujian'] = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
+    $this->load->view('user/rankinng', $data);
+}
 
 
 

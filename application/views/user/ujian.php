@@ -13,10 +13,10 @@
         <div class="soal-card" id="soal<?= $index ?>" style="display: <?= $index==0 ? 'block' : 'none' ?>;">
             <p class="soal-title"><b>Soal <?= $index+1 ?>:</b> <?= $s->pertanyaan ?></p>
             <div class="pilihan-jawaban">
-                <label><input type="radio" name="jawaban<?= $s->id_soal ?>" value="a" onclick="saveAnswer(<?= $s->id_soal ?>,'a')"> A. <?= $s->pilihan_a ?></label><br>
-                <label><input type="radio" name="jawaban<?= $s->id_soal ?>" value="b" onclick="saveAnswer(<?= $s->id_soal ?>,'b')"> B. <?= $s->pilihan_b ?></label><br>
-                <label><input type="radio" name="jawaban<?= $s->id_soal ?>" value="c" onclick="saveAnswer(<?= $s->id_soal ?>,'c')"> C. <?= $s->pilihan_c ?></label><br>
-                <label><input type="radio" name="jawaban<?= $s->id_soal ?>" value="d" onclick="saveAnswer(<?= $s->id_soal ?>,'d')"> D. <?= $s->pilihan_d ?></label><br>
+                <label><input type="radio" name="jawaban<?= $s->id_soal ?>" value="A" onclick="saveAnswer(<?= $s->id_soal ?>,'a')"> A. <?= $s->pilihan_a ?></label><br>
+                <label><input type="radio" name="jawaban<?= $s->id_soal ?>" value="B" onclick="saveAnswer(<?= $s->id_soal ?>,'b')"> B. <?= $s->pilihan_b ?></label><br>
+                <label><input type="radio" name="jawaban<?= $s->id_soal ?>" value="C" onclick="saveAnswer(<?= $s->id_soal ?>,'c')"> C. <?= $s->pilihan_c ?></label><br>
+                <label><input type="radio" name="jawaban<?= $s->id_soal ?>" value="D" onclick="saveAnswer(<?= $s->id_soal ?>,'d')"> D. <?= $s->pilihan_d ?></label><br>
             </div>
 
             <div class="soal-actions">
@@ -35,7 +35,7 @@
         $jawaban = $this->db->get_where('tbl_jawaban_siswa', ['id_soal' => $s->id_soal, 'nis' => $nis])->row();
         $class = '';
         if($jawaban){
-            if($jawaban->ragu == 1){
+            if($jawaban->ragu_ragu == 1){
                 $class = 'ragu';
             } else if($jawaban->jawaban){
                 $class = 'answered';
@@ -43,6 +43,7 @@
         }
     ?>
         <button class="nav-btn <?= $class ?>" id="nav<?= $index ?>" onclick="gotoSoal(<?= $index ?>)"><?= $index+1 ?></button>
+        
     <?php endforeach; ?>
 </div>
 
@@ -101,32 +102,77 @@ function gotoSoal(index){
     current = index;
 }
 
-function nextSoal(){
-    if(current < totalSoal-1){
-        gotoSoal(current+1);
+// Navigasi ke soal berikutnya
+// Menyimpan jawaban ke input hidden
+function saveAnswerToHidden(index){
+    var jawaban = $('input[name=jawaban'+soal[index].id_soal+']:checked').val();
+    var ragu_ragu = $('#ragu_ragu'+soal[index].id_soal).val(); // Status ragu
+
+    // Menyimpan jawaban yang dipilih dan status ragu di input hidden
+    $('#jawaban' + soal[index].id_soal).val(jawaban);
+    $('#ragu_ragu' + soal[index].id_soal).val(ragu_ragu);
+}
+
+
+function nextSoal() {
+    saveCurrentAnswer(); // Simpan jawaban sebelum pindah
+    if (current < totalSoal - 1) {
+        current++;
+        gotoSoal(current);
     }
 }
 
-function previousSoal(){
-    if(current > 0){
-        gotoSoal(current-1);
+// Navigasi ke soal sebelumnya
+function previousSoal() {
+    saveCurrentAnswer(); // Simpan jawaban sebelum pindah
+    if (current > 0) {
+        current--;
+        gotoSoal(current);
     }
 }
+
+// Fungsi untuk menyimpan jawaban soal saat ini
+function saveCurrentAnswer() {
+    var currentSoalId = <?= $soal[0]->id_soal ?> + current; // Asumsi ID soal berurutan
+    var jawaban = $('input[name=jawaban' + currentSoalId + ']:checked').val();
+    
+    if (jawaban) {
+        $('#jawaban' + currentSoalId).val(jawaban);
+        $('#nav' + current).addClass('answered').removeClass('ragu');
+    }
+}
+
+// Navigasi ke soal berdasarkan indeks
+function gotoSoal(index){
+    // Sembunyikan semua soal
+    $('.soal-card').hide();
+
+    // Menampilkan soal sesuai dengan index
+    $('#soal' + index).show();
+}
+
 
 // Simpan Jawaban
-function saveAnswer(id_soal, jawaban){
-    $('#jawaban' + id_soal).val(jawaban); // Menyimpan jawaban yang dipilih
-    $('#nav'+current).addClass('answered').removeClass('ragu');
+// Simpan Jawaban
+function saveAnswer(id_soal, jawaban) {
+    $('#jawaban' + id_soal).val(jawaban);
+    $('#ragu_' + id_soal).val(0); // Pastikan status ragu direset
+    $('#nav' + current).addClass('answered').removeClass('ragu');
 }
 
 // Tandai Ragu
-function raguRagu(id_soal){
-    var jawaban = $('input[name=jawaban'+id_soal+']:checked').val();
-    $('#jawaban' + id_soal).val(jawaban); // Menyimpan jawaban yang dipilih
-    $('#ragu_' + id_soal).val(1); // Tandai sebagai ragu
-
-    $('#nav'+current).addClass('ragu').removeClass('answered');
+// Tandai Ragu
+function raguRagu(id_soal) {
+    var jawaban = $('input[name=jawaban' + id_soal + ']:checked').val();
+    if (jawaban) {
+        $('#jawaban' + id_soal).val(jawaban);
+        $('#ragu_' + id_soal).val(1);
+        $('#nav' + current).addClass('ragu').removeClass('answered');
+    } else {
+        alert('Pilih jawaban terlebih dahulu sebelum menandai ragu!');
+    }
 }
+
 
 // Submit Ujian
 function submitUjian(autoSubmit = false){
@@ -148,6 +194,7 @@ window.onbeforeunload = function() {
     return "Ujian masih berlangsung, yakin mau keluar? Semua jawaban bisa hilang!";
 };
 </script>
+
 
 <style>
 body {
@@ -190,6 +237,22 @@ body {
     display: block;
     margin-bottom: 8px;
     font-size: 16px;
+}
+.belum-dijawab {
+    background-color: red;
+    color: white;
+    border: none;
+    margin: 2px;
+    padding: 10px;
+    border-radius: 50%;
+}
+.sudah-dijawab {
+    background-color: blue;
+    color: white;
+    border: none;
+    margin: 2px;
+    padding: 10px;
+    border-radius: 50%;
 }
 
 .soal-actions {
