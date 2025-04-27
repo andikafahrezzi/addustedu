@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2025 at 11:27 AM
+-- Generation Time: Apr 27, 2025 at 06:33 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -277,7 +277,7 @@ INSERT INTO `siswa` (`nis`, `nama`, `password`, `email`, `image`, `is_active`, `
 (0, 'addust', '$2y$10$cYm/i5rWupzWKrc92nX4EublfQgeyyZl4AQyu2e4rbKFQUwc8iv9u', 'addust@gmial.com', 'default.jpg', 1, 1742275981, ''),
 (39, 'Syaauqi Zaaidan', '$2y$10$djI2M/FQH2k3H7b6tLK5X.MZG1R.wrARoR6NerH3tsScNnsNCnexa', 'zaidanline67@gmail.com', '73349393_156861225523800_2119508204152772215_n_(1)6.jpg', 1, 1586163321, 'X'),
 (11323, 'bjbsjb1', '$2y$10$VOoalVJV9zYYueBRttR7DevfcHEhH2ilZFt0OBLsF17iGT5pMCSKO', 'nasigir1e@gmail.com', 'default.jpg', 1, 1744613912, ''),
-(18883, 'addusttt', '$2y$10$bgLd2NGzEGiL8GDCN0KnaO6Rt3QrF8Ta0FZAzyWmYk8x5DIuOKx82', 'addust1@gmail.com', 'riyo1.jpg', 1, 1742454210, 'XI'),
+(18883, 'addusttt', '$2y$10$m3uP.Pe16p8NuQXi48Xen.EkUXHag.tcIq5.xzs2w.L88Ak0w7MYa', 'addust1@gmail.com', 'riyo1.jpg', 1, 1742454210, 'XI'),
 (123456, 'user', '$2y$10$lG3qWm29AejdK/HV2iIwDOGzIAo3Q3MqlxVcODDQrj.hQvBYwWkdi', 'use1@gmail.com', 'default.jpg', 1, 1735200089, 'XI'),
 (147852, 'dwdqwddq', '$2y$10$3T5Nmo7ZQIiF.h4e9Qqxo.oRzcYXGlceENvn9gObYM9lsXlsBlzDG', 'test12@gmail.com', 'default.jpg', 1, 1744168247, 'XII'),
 (181816, 'qsqwdqwd', '$2y$10$YJppxwZ1JOt3s1/Xf9rgWewsjN8ZIhK1b.F39GcTmVS0uy5oOlhDK', 'testwd@gmail.com', 'default.jpg', 1, 1742296726, 'X'),
@@ -299,6 +299,11 @@ CREATE TABLE `tbl_jawaban_siswa` (
   `id_soal` int(11) DEFAULT NULL,
   `jawaban` varchar(1) DEFAULT NULL,
   `ragu_ragu` tinyint(1) DEFAULT 0,
+  `is_selesai` tinyint(1) DEFAULT 0,
+  `jumlah_benar` int(11) DEFAULT 0,
+  `jumlah_salah` int(11) DEFAULT 0,
+  `score` float DEFAULT 0,
+  `tanggal_submit` datetime DEFAULT NULL,
   `waktu_jawab` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -306,12 +311,12 @@ CREATE TABLE `tbl_jawaban_siswa` (
 -- Dumping data for table `tbl_jawaban_siswa`
 --
 
-INSERT INTO `tbl_jawaban_siswa` (`id_jawaban`, `nis`, `id_ujian`, `id_soal`, `jawaban`, `ragu_ragu`, `waktu_jawab`) VALUES
-(1, 123456, NULL, 1, 'a', 0, '2025-04-27 09:24:25'),
-(2, 123456, NULL, 2, 'b', 1, '2025-04-27 09:24:25'),
-(3, 123456, NULL, 3, 'b', 0, '2025-04-27 09:24:25'),
-(4, 123456, NULL, 4, 'c', 0, '2025-04-27 09:24:25'),
-(5, 123456, NULL, 5, 'd', 0, '2025-04-27 09:24:25');
+INSERT INTO `tbl_jawaban_siswa` (`id_jawaban`, `nis`, `id_ujian`, `id_soal`, `jawaban`, `ragu_ragu`, `is_selesai`, `jumlah_benar`, `jumlah_salah`, `score`, `tanggal_submit`, `waktu_jawab`) VALUES
+(63, 123456, 4, 1, 'A', 1, 1, 5, 0, 100, '2025-04-27 18:31:22', '2025-04-27 16:31:22'),
+(64, 123456, 4, 2, 'A', 0, 1, 5, 0, 100, '2025-04-27 18:31:22', '2025-04-27 16:31:22'),
+(65, 123456, 4, 3, 'A', 0, 1, 5, 0, 100, '2025-04-27 18:31:22', '2025-04-27 16:31:22'),
+(66, 123456, 4, 4, 'A', 0, 1, 5, 0, 100, '2025-04-27 18:31:22', '2025-04-27 16:31:22'),
+(67, 123456, 4, 5, 'A', 1, 1, 5, 0, 100, '2025-04-27 18:31:22', '2025-04-27 16:31:22');
 
 -- --------------------------------------------------------
 
@@ -363,7 +368,8 @@ CREATE TABLE `tbl_ujian` (
 
 INSERT INTO `tbl_ujian` (`id_ujian`, `nama_ujian`, `tanggal_mulai`, `tanggal_selesai`, `durasi`, `status`, `id_materi`) VALUES
 (4, '11q', '2025-04-26', '2025-04-27', 100, 'aktif', 2),
-(5, 'hahaha', '2025-04-27', '2025-04-27', 100, 'aktif', 6);
+(5, 'hahaha', '2025-04-27', '2025-04-27', 100, 'aktif', 6),
+(6, 'xaxax', '2025-04-27', '2025-04-28', 100, 'aktif', 2);
 
 -- --------------------------------------------------------
 
@@ -574,7 +580,7 @@ ALTER TABLE `quiz_siswa`
 -- AUTO_INCREMENT for table `tbl_jawaban_siswa`
 --
 ALTER TABLE `tbl_jawaban_siswa`
-  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `tbl_soal`
@@ -586,7 +592,7 @@ ALTER TABLE `tbl_soal`
 -- AUTO_INCREMENT for table `tbl_ujian`
 --
 ALTER TABLE `tbl_ujian`
-  MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `token`

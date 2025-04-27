@@ -168,7 +168,7 @@ $data = array(
 
     $this->m_siswa->update_data($where, $data, 'siswa');
 
-    $this->load->view('admin/nava');
+    $this->load->view('admin/partials/nava');
     $this->session->set_flashdata('success-edit', 'Berhasil memperbarui data siswa');
     redirect('admin/data_siswa');
 }

@@ -21,6 +21,8 @@ TODO
 PR
 - id_ujian masih null
 - score/ hasil belum ada
+- beda user tetapi waktu tidak mulai dari 100
+- jika siswa menyelesaikan ujian, ubah tampilan menjadi sudah selesai
 
 next can be a problem
 - change id at database siswa to nis
