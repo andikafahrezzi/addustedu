@@ -1,28 +1,40 @@
 TODO
-- cari tau bagaimana cara destroy session 
-- tampilan mobile pada guru masih ngaco
-- tampilan quiz sama tugas masih ngaco
-- menambahkan fungsi delete materi, quiz dan tugas pada siswa, dan admin
-- tampilan upload tugas siswa masih ngaco
-- cari tau cara non activekan navbar di mobile menu pada web guru
-- cek navbar admin setiap komponen untuk clean code
-- menambahkan akun guru setiap mapel dan upload materinya, supaya id_guru yang null bisa dihapus dan materi di setiap mapel ada
-- pada tabel siswa ada kolom image yang kita bisa gunakan untuk mengambil gamabr siswa.
-    - gambar ini bisa digunakan untuk gambar di kolom fordis serta mempercantik tampilan navigasi user
-- PADA KOLOM UPLOAD TUGAS, DI PISAH MENJADI  2 FORM ( FORM UPLOAD DAN FORM LIHAT(MENGHAPUS 
-    DAN MENGUNDUH FILE YANG DIKIRIM UNTUK MEMASTIKAN TUGAS YANG DIKIRIM BENAR, 
-    DAN TAMBAHKAN KOLOM UNTUK NELIHAT NILAI JIGA SUDAH DIBERI NILAI OLEH GURU )
-- menambahkan fitur uas/uts yang hanya bisa dibuka saat pertemuannya dan ada jamnya. jika jam tersebut melebihi waktu dia out sendiri
-- import excel ke database siswa
-- nama tidak boleh ada angka(validasi)
-- tambahkan pilihan untuk input dan post pertemuan setiap upload materi ( admin)
-- bug id guru sama, tetapi jika ganti nama berbeda kolom guru nya
+- GENERAL
+    - cari tau bagaimana cara destroy session 
+    - menambahkan fungsi delete materi, quiz dan tugas pada siswa, dan admin
+    - nama tidak boleh ada angka(validasi)
+
+- ADMIN
+    - cek navbar admin setiap komponen untuk clean code
+    - import excel ke database siswa
+    - tambahkan pilihan untuk input dan post pertemuan setiap upload materi ( admin)
+
+- GURU
+    - tampilan mobile pada guru masih ngaco
+    - cari tau cara non activekan navbar di mobile menu pada web guru
+
+- SISWA 
+    - tampilan quiz sama tugas masih ngaco
+    - tampilan upload tugas siswa masih ngaco
+    - pada tabel siswa ada kolom image yang kita bisa gunakan untuk mengambil gamabr siswa.
+        - gambar ini bisa digunakan untuk gambar di kolom fordis serta mempercantik tampilan navigasi user
+    - buat tampilan yang lebih menarik untuk hasil dan ranking
+    - perhitungan score di rankking masih aneh/salah
+
+
+
+
+
+
+
+
+
+
+
 
 PR
-- id_ujian masih null
-- score/ hasil belum ada
 - beda user tetapi waktu tidak mulai dari 100
-- jika siswa menyelesaikan ujian, ubah tampilan menjadi sudah selesai
+- setiap function hapus, samakan seperti yang lainnya(ada modal hapus)
 
 next can be a problem
 - change id at database siswa to nis

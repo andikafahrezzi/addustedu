@@ -68,34 +68,49 @@
 
                                 <!-- UJIAN SECTION MULAI DISINI -->
                                 <?php if (!empty($ujian_list)): ?>
-                                    <?php foreach ($ujian_list as $ujian): ?>
-                                    <div class="col-md-4 mb-4">
-                                        <div class="pertemuan-card h-100 shadow-sm" style="background: linear-gradient(135deg, #ff5f6d, #ffc371); border: 2px solid #ff7e5f;">
-                                            <div class="card-body text-center">
-                                                <h5 class="font-weight-bold"><?= $ujian['nama_ujian'] ?></h5>
-                                                <p><?= $ujian['deskripsi'] ?? 'Ujian telah tersedia untuk dikerjakan.' ?></p>
-                                               <!-- Ujian Section -->
-                                                    <?php
-                                                    // Ambil tanggal tanpa waktu (jam, menit, detik)
-                                                    $mulai = strtotime($ujian['tanggal_mulai'] . ' 00:00:00');
-                                                    $selesai = strtotime($ujian['tanggal_selesai'] . ' 23:59:59');
-                                                    $sekarang = time();
-
-
-                                                    if ($mulai <= $sekarang && $selesai >= $sekarang): ?>
-                                                        <a href="<?= base_url('ujian/mulai/' . $ujian['id_ujian']) ?>" class="btn btn-sm btn-danger">
-                                                            Mulai Ujian <i class="lnr lnr-pencil"></i>
-                                                        </a>
-                                                    <?php else: ?>
-                                                        <button class="btn btn-sm btn-secondary" disabled>Belum tersedia</button>
-                                                    <?php endif; ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <p><em>Ujian belum tersedia.</em></p>
-                                <?php endif; ?>
+    <?php foreach ($ujian_list as $ujian): ?>
+    <div class="col-md-4 mb-4">
+        <div class="pertemuan-card h-100 shadow-sm" style="background: linear-gradient(135deg, #42e695, #3bb2b8); border: 2px solidrgb(95, 255, 210);">
+            <div class="card-body text-center">
+                <h5 class="font-weight-bold"><?= $ujian['nama_ujian'] ?></h5>
+                <p><?= $ujian['deskripsi'] ?? 'Ujian telah tersedia untuk dikerjakan.' ?></p>
+                
+                <?php
+                // Cek apakah siswa sudah menyelesaikan ujian ini
+                $sudah_selesai = $this->db->get_where('tbl_jawaban_siswa', [
+                    'nis' => $this->session->userdata('nis'),
+                    'id_ujian' => $ujian['id_ujian'],
+                    'is_selesai' => 1
+                ])->row();
+                
+                $mulai = strtotime($ujian['tanggal_mulai'] . ' 00:00:00');
+                $selesai = strtotime($ujian['tanggal_selesai'] . ' 23:59:59');
+                $sekarang = time();
+                
+                if ($sudah_selesai): ?>
+                    <!-- Jika sudah selesai -->
+                    <button class="btn btn-sm btn-success" disabled>
+                        <i class="lnr lnr-checkmark-circle"></i> Sudah Dikerjakan
+                    </button>
+                    <a href="<?= base_url('ujian/hasil/' . $ujian['id_ujian']) ?>" class="btn btn-sm btn-info mt-2">
+                        Lihat Hasil <i class="lnr lnr-eye"></i>
+                    </a>
+                <?php elseif ($mulai <= $sekarang && $selesai >= $sekarang): ?>
+                    <!-- Jika ujian tersedia dan belum dikerjakan -->
+                    <a href="<?= base_url('ujian/mulai/' . $ujian['id_ujian']) ?>" class="btn btn-sm btn-danger">
+                        Mulai Ujian <i class="lnr lnr-pencil"></i>
+                    </a>
+                <?php else: ?>
+                    <!-- Jika ujian belum tersedia -->
+                    <button class="btn btn-sm btn-secondary" disabled>Belum tersedia</button>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <p><em>Ujian belum tersedia.</em></p>
+<?php endif; ?>
                                 <!-- UJIAN SECTION SELESAI -->
 
                             </div>
