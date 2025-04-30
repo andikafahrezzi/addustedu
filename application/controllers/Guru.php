@@ -854,7 +854,7 @@ public function simpan_edit_ujian($id_ujian)
     // Mengedit soal
     public function edit_soal($id_soal)
     {
-        $soal = $this->Ujian_soal_model->get_soal_by_id($id_soal);
+        $soal = $this->Ujian_model->get_soal_by_id($id_soal);
         if ($this->input->post()) {
             $data = [
                 'pertanyaan' => $this->input->post('pertanyaan'),
@@ -865,22 +865,24 @@ public function simpan_edit_ujian($id_ujian)
                 'kunci_jawaban' => $this->input->post('kunci_jawaban')
             ];
 
-            if ($this->Ujian_soal_model->edit_soal($id_soal, $data)) {
-                redirect('guruController/tampilkan_soal/' . $soal['id_ujian']);
+            if ($this->Ujian_model->edit_soal($id_soal, $data)) {
+                redirect('guru/tampilkan_soal/' . $soal['id_ujian']);
             } else {
                 echo "Gagal mengedit soal.";
             }
         } else {
+            $this->load->view('guru/navug');
             $this->load->view('guru/edit_soal', ['soal' => $soal]);
+            $this->load->view('guru/footg');
         }
     }
 
     // Menghapus soal
     public function hapus_soal($id_soal)
     {
-        $soal = $this->Ujian_soal_model->get_soal_by_id($id_soal);
-        if ($this->Ujian_soal_model->delete_soal($id_soal)) {
-            redirect('guruController/tampilkan_soal/' . $soal['id_ujian']);
+        $soal = $this->Ujian_model->get_soal_by_id($id_soal);
+        if ($this->Ujian_model->delete_soal($id_soal)) {
+            redirect('guru/tampilkan_soal/' . $soal['id_ujian']);
         } else {
             echo "Gagal menghapus soal.";
         }

@@ -78,7 +78,24 @@ class Ujian extends CI_Controller {
     // Ambil NIS dari session
     $nis = $this->session->userdata('nis');
     $this->load->model('Ujian_model');
+    // Cek apakah sudah selesai
+    $sudah_selesai = $this->db->get_where('tbl_jawaban_siswa', [
+        'nis' => $nis,
+        'id_ujian' => $id_ujian,
+        'is_selesai' => 1
+    ])->row();
 
+    if($sudah_selesai){
+        redirect('ujian/hasil/'.$id_ujian);
+    }
+
+    // Lanjutkan dengan logika awal
+    $data['ujian'] = $this->Ujian_model->get_ujian_by_idS($id_ujian);
+    $data['soal'] = $this->Ujian_model->get_soal_by_ujian($id_ujian);
+
+    if (empty($data['soal'])) {
+        show_404();
+    }
     $data['ujian'] = $this->Ujian_model->get_ujian_by_idS($id_ujian);
     
     // Ambil soal dari model
@@ -119,6 +136,11 @@ public function submit_ujian()
 {
     $nis = $this->session->userdata('nis');
     $id_ujian = $this->input->post('id_ujian');
+    $this->db->where(['nis' => $nis, 'id_ujian' => $id_ujian]);
+    $this->db->update('tbl_jawaban_siswa', [
+        'is_selesai' => 1,
+        // field lainnya...
+        ]);
 
     $soal = $this->db->get_where('tbl_soal', ['id_ujian' => $id_ujian])->result();
     $jumlah_soal = count($soal);
@@ -175,7 +197,9 @@ public function hasil($id_ujian)
 
     $data['hasil'] = $hasil;
     $data['ujian'] = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
+    $this->load->view('user/navu');
     $this->load->view('user/hasil', $data);
+    
 }
 
 
@@ -190,6 +214,7 @@ public function ranking($id_ujian)
 
     $data['ranking'] = $ranking;
     $data['ujian'] = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
+    $this->load->view('user/navu');
     $this->load->view('user/rankinng', $data);
 }
 

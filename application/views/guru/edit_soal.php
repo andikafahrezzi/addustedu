@@ -1,6 +1,6 @@
 <div class="container">
     <h2>Edit Soal Ujian</h2>
-    <form action="<?= site_url('guruController/edit_soal/' . $soal['id_soal']) ?>" method="post">
+    <form action="<?= site_url('guru/edit_soal/' . $soal['id_soal']) ?>" method="post">
         <div class="form-group">
             <label>Soal</label>
             <textarea name="pertanyaan" class="form-control" required><?= $soal['pertanyaan'] ?></textarea>

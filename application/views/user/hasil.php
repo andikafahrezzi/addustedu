@@ -3,7 +3,7 @@
 <head>
     <title>Hasil Ujian</title>
     <style>
-        body { font-family: Arial; margin: 30px; }
+        body { font-family: Arial; margin: 30px; margin-top: 200px}
         table { border-collapse: collapse; width: 60%; }
         th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
     </style>

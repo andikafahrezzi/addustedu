@@ -27,6 +27,11 @@
 </table>
 
 <a href="<?= site_url('user') ?>">Kembali ke Dashboard</a>
-
+<style>
+   body{
+       margin: 500px;
+    margin-top: 200px;
+   } 
+</style>
 </body>
 </html>

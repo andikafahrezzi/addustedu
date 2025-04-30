@@ -451,6 +451,22 @@ button:focus {
 	margin-top: -6px;
 	right: 20px;
 }
+.btn-success[disabled] {
+    background-color: #28a745;
+    opacity: 1;
+    cursor: not-allowed;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    color: white;
+    transition: all 0.3s;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+    color: white;
+}
 
 .btn-outline-primaryy {
 	color: #0df165;

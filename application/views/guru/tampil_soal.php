@@ -7,6 +7,7 @@
                 <th>No</th>
                 <th>Soal</th>
                 <th>Pilihan Jawaban</th>
+                <th>Kunci Jawaban</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -21,9 +22,10 @@
                         C: <?= $s['pilihan_c'] ?><br>
                         D: <?= $s['pilihan_d'] ?>
                     </td>
+                    <td><?= $s['kunci_jawaban'] ?></td>
                     <td>
-                        <a href="<?= site_url('guruController/edit_soal/' . $s['id_soal']) ?>" class="btn btn-warning">Edit</a>
-                        <a href="<?= site_url('guruController/hapus_soal/' . $s['id_soal']) ?>" class="btn btn-danger">Hapus</a>
+                        <a href="<?= site_url('guru/edit_soal/' . $s['id_soal']) ?>" class="btn btn-warning">Edit</a>
+                        <a href="<?= site_url('guru/hapus_soal/' . $s['id_soal']) ?>" class="btn btn-danger">Hapus</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
