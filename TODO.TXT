@@ -1,8 +1,9 @@
 TODO
 - GENERAL
     - cari tau bagaimana cara destroy session 
-    - menambahkan fungsi delete materi, quiz dan tugas pada siswa, dan admin
+    - menambahkan fungsi delete materi, quiz dan bank soal, tugas pada siswa, dan admin
     - nama tidak boleh ada angka(validasi)
+    - bagaimana cara menyambungkan bank soal yang sudah dibuat, agar bisa dipakai oleh guru saat ingin mengisi soal Ujian
 
 - ADMIN
     - cek navbar admin setiap komponen untuk clean code

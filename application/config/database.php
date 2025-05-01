@@ -94,3 +94,6 @@ $db['default'] = array(
     'failover' => array(),
     'save_queries' => true,
 );
+
+// Di config/database.php
+$db['default']['db_debug'] = TRUE;

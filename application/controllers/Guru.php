@@ -3,14 +3,25 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Guru extends CI_Controller
 {
+    protected $guru_data;
     public function __construct()
     {
         parent::__construct();
         $this->load->helper('url');
         $this->session->set_flashdata('not-login', 'Gagal!');
-        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model', 'M_siswa', 'Ujian_model']);  
+        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model', 'M_siswa', 'Ujian_model', 'Bank_soal_model', 'M_guru']);  
         $this->load->library('form_validation');
-        if (!$this->session->userdata('nip')) {
+        $this->load->helper('text');
+        if ($this->session->userdata('user_type') != 'guru') {
+            redirect('welcome/guru');
+        }
+        
+        // Ambil data guru yang login
+        $nip = $this->session->userdata('nip');
+        $this->guru_data = $this->M_guru->detail_guru($nip);
+        
+        if (!$this->guru_data) {
+            $this->session->set_flashdata('error', 'Data guru tidak ditemukan');
             redirect('welcome/guru');
         }
     }
@@ -888,5 +899,119 @@ public function simpan_edit_ujian($id_ujian)
         }
     }
     
+    // BANK SOAL - GURU
+    public function bank_soal() {
+        $nip = $this->session->userdata('nip');
     
+        // Ambil data guru untuk mendapatkan mapel yang diajarkan
+        $this->db->select('nama_mapel');
+        $guru = $this->db->get_where('guru', ['nip' => $nip])->row();
+        
+        if (!$guru) {
+            show_error('Data guru tidak ditemukan');
+        }
+        
+        // Ambil soal berdasarkan mapel yang diajarkan
+        $data['bank_soal'] = $this->Bank_soal_model->get_soal_by_mapel($guru->nama_mapel);
+        $data['title'] = 'Bank Soal';
+        
+        $this->load->view('guru/navug', $data);
+        $this->load->view('guru/bank_soal', $data);
+        $this->load->view('guru/footg');
+    }
+
+    public function add_bank_soal() {
+        $nip = $this->session->userdata('nip');
+        $guru = $this->db->get_where('guru', ['nip' => $nip])->row();
+        
+        if (!$guru) {
+            show_error('Data guru tidak ditemukan', 404);
+        }
+
+        $data['title'] = 'Tambah Soal';
+        $data['mapel_guru'] = $guru->nama_mapel; // Kirim data mapel ke view
+        
+        $this->form_validation->set_rules('pertanyaan', 'Pertanyaan', 'required');
+        $this->form_validation->set_rules('kunci_jawaban', 'Kunci Jawaban', 'required');
+            
+        if ($this->form_validation->run() === FALSE) {
+            $this->load->view('guru/navug', $data);
+            $this->load->view('guru/add_bank_soal', $data);
+            $this->load->view('guru/footg');
+        } else {
+            $data = [
+                'pertanyaan' => $this->input->post('pertanyaan'),
+                'pilihan_a' => $this->input->post('pilihan_a'),
+                'pilihan_b' => $this->input->post('pilihan_b'),
+                'pilihan_c' => $this->input->post('pilihan_c'),
+                'pilihan_d' => $this->input->post('pilihan_d'),
+                'kunci_jawaban' => $this->input->post('kunci_jawaban'),
+                'tingkat_kesulitan' => $this->input->post('tingkat_kesulitan'),
+                'tipe_kognitif' => $this->input->post('tipe_kognitif'),
+                'created_by' => $nip,
+                'user_type' => 'guru',
+                'mapel_diajarkan' => $this->input->post('mapel_diajarkan'),
+            ];
+            
+            $this->Bank_soal_model->tambah_soal($data);
+            $this->session->set_flashdata('success', 'Soal berhasil ditambahkan');
+            redirect('guru/bank_soal');
+        }
+    }
+    
+    public function edit_bank_soal($id_soal) {
+        // Cek kepemilikan soal
+        $soal = $this->Bank_soal_model->get_detail_soal($id_soal);
+        
+        if (!$soal || 
+            $soal->created_by != $this->guru_data->nip || 
+            $soal->user_type != 'guru' ||
+            $soal->mapel_diajarkan != $this->guru_data->nama_mapel) {
+            show_error('Anda tidak memiliki akses untuk mengedit soal ini', 403);
+        }
+        
+        $data['title'] = 'Edit Soal';
+        $data['soal'] = $soal;
+        $data['kategori'] = $this->Bank_soal_model->get_kategori();
+        
+        $this->form_validation->set_rules('pertanyaan', 'Pertanyaan', 'required');
+        $this->form_validation->set_rules('kunci_jawaban', 'Kunci Jawaban', 'required');
+        
+        if ($this->form_validation->run() === FALSE) {
+            $this->load->view('guru/navug', $data);
+            $this->load->view('guru/edit_bank_soal', $data);
+            $this->load->view('guru/footg');
+        } else {
+            $data = [
+                'pertanyaan' => $this->input->post('pertanyaan'),
+                'pilihan_a' => $this->input->post('pilihan_a'),
+                'pilihan_b' => $this->input->post('pilihan_b'),
+                'pilihan_c' => $this->input->post('pilihan_c'),
+                'pilihan_d' => $this->input->post('pilihan_d'),
+                'kunci_jawaban' => $this->input->post('kunci_jawaban'),
+                'tingkat_kesulitan' => $this->input->post('tingkat_kesulitan'),
+                'tipe_kognitif' => $this->input->post('tipe_kognitif')
+            ];
+            
+            $this->Bank_soal_model->update_soal($id_soal, $data);
+            $this->session->set_flashdata('success', 'Soal berhasil diperbarui');
+            redirect('guru/bank_soal');
+        }
+    }
+    
+    public function hapus_bank_soal($id_soal) {
+        // Cek kepemilikan soal
+        $soal = $this->Bank_soal_model->get_detail_soal($id_soal);
+        
+        if (!$soal || 
+            $soal->created_by != $this->guru_data->nip || 
+            $soal->user_type != 'guru' ||
+            $soal->mapel_diajarkan != $this->guru_data->nama_mapel) {
+            show_error('Anda tidak memiliki akses untuk menghapus soal ini', 403);
+        }
+        
+        $this->Bank_soal_model->hapus_soal($id_soal);
+        $this->session->set_flashdata('success', 'Soal berhasil dihapus');
+        redirect('guru/bank_soal');
+    }
 }

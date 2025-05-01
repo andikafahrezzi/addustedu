@@ -103,6 +103,8 @@ class Welcome extends CI_Controller
     
                         'nip' => $user['nip'],
                         'nama_guru' => $user['nama_guru'],
+                        'user_type' => 'guru', // tambahkan ini
+                        'logged_in' => true //
     
                     ];
                     $this->session->set_userdata($data);
@@ -147,21 +149,20 @@ class Welcome extends CI_Controller
             //cek password
             if (password_verify($password, $user['password'])) {
                 $data = [
-
+                    'id' => $user['id'], // penting untuk created_by
                     'email' => $user['email'],
-                    'nama' => $user['username'],
-
+                    'username' => $user['username'],
+                    'user_type' => 'admin', // tambahkan ini
+                    'logged_in' => true // tambahkan status login
                 ];
                 $this->session->set_userdata($data);
                 redirect(base_url('admin'));
             } else {
-
-                $this->session->set_flashdata('fail-pass', 'Gagal!');
+                $this->session->set_flashdata('fail-pass', 'Password salah!');
                 redirect(base_url('welcome/admin'));
             }
         } else {
-
-            $this->session->set_flashdata('fail-login', 'Gagal!');
+            $this->session->set_flashdata('fail-login', 'Email tidak terdaftar!');
             redirect(base_url('welcome/admin'));
         }
     }

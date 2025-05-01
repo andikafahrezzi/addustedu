@@ -4,21 +4,25 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Admin extends CI_Controller
 {
     public function __construct()
-    {
-        parent::__construct();
-        $this->load->helper('url');
-        $this->load->library('form_validation');
-        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model']);
-        $this->session->set_flashdata('not-login', 'Gagal!');
-        if (!$this->session->userdata('email')) {
-            redirect('welcome/admin');
-        }
+{
+    parent::__construct();
+    $this->load->helper('url');
+    $this->load->library('form_validation');
+    $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Bank_soal_model']);
+    $this->load->helper('text');
+    
+    // Perbaikan pengecekan login
+    if (!$this->session->userdata('logged_in') || $this->session->userdata('user_type') != 'admin') {
+        $this->session->set_flashdata('not-login', 'Anda harus login sebagai admin!');
+        redirect(base_url('welcome/admin')); 
     }
+}
 
     public function index()
     {
-        $data['user'] = $this->db->get_where('admin', ['email' =>
-            $this->session->userdata('email')])->row_array();
+        $data['user'] = $this->db->get_where('admin', [
+            'email' => $this->session->userdata('email')
+        ])->row_array();
 
         $this->load->view('admin/partials/nava');
         $this->load->view('admin/index');
@@ -612,6 +616,7 @@ public function data_quiz()
         $this->load->view('admin/partials/nava');
         $this->load->view('admin/data_quiz', $data);
         $this->load->view('admin/partials/foota');
+
     }
     public function delete_quiz($id) {
         // Validasi ID
@@ -630,5 +635,98 @@ public function data_quiz()
         }
         
         redirect('admin/data_quiz');
+    }
+    
+    // BANK SOAL - ADMIN
+    public function bank_soal() {
+        $data['title'] = 'Bank Soal';
+        $data['soal'] = $this->Bank_soal_model->get_all_soal();
+        $data['kategori'] = $this->Bank_soal_model->get_kategori();
+        
+        $this->load->view('admin/partials/nava', $data);
+        $this->load->view('admin/data_bank_soal', $data);
+        $this->load->view('admin/partials/foota');
+    }
+
+    public function add_bank_soal() {
+        $data['title'] = 'Tambah Soal';
+        
+        $this->form_validation->set_rules('pertanyaan', 'Pertanyaan', 'required');
+        $this->form_validation->set_rules('kunci_jawaban', 'Kunci Jawaban', 'required');
+        $this->form_validation->set_rules('mapel_diajarkan', 'Mata Pelajaran', 'required');
+        
+        if ($this->form_validation->run() === FALSE) {
+            // Tampilkan error validasi
+            $data['validation_errors'] = validation_errors();
+            
+            $this->load->view('admin/add_bank_soal', $data);
+            $this->load->view('admin/partials/foota');
+        } else {
+            $data = [
+                'pertanyaan' => $this->input->post('pertanyaan'),
+                'pilihan_a' => $this->input->post('pilihan_a'),
+                'pilihan_b' => $this->input->post('pilihan_b'),
+                'pilihan_c' => $this->input->post('pilihan_c'),
+                'pilihan_d' => $this->input->post('pilihan_d'),
+                'kunci_jawaban' => $this->input->post('kunci_jawaban'),
+                'tingkat_kesulitan' => $this->input->post('tingkat_kesulitan', true) ?? 'sedang',
+                'tipe_kognitif' => $this->input->post('tipe_kognitif', true) ?? 'paham',
+                'created_by' => $this->session->userdata('id'),
+                'user_type' => 'admin',
+                'mapel_diajarkan' => $this->input->post('mapel_diajarkan'),
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+            
+            // Debug data sebelum disimpan
+            // print_r($data); die();
+            // echo "<h2>Query SQL:</h2>";
+            // echo $this->db->last_query();
+            
+            // die();
+            
+            if ($this->Bank_soal_model->tambah_soal($data)) {
+                $this->session->set_flashdata('success', 'Soal berhasil ditambahkan');
+            } else {
+                $error = $this->db->error();
+                $this->session->set_flashdata('error', 'Gagal menyimpan: '.$error['message']);
+            }
+            redirect('admin/bank_soal');
+        }
+    }
+
+    public function edit_bank_soal($id_soal) {
+        $data['title'] = 'Edit Soal';
+        $data['soal'] = $this->Bank_soal_model->get_detail_soal($id_soal);
+
+        
+        $this->form_validation->set_rules('pertanyaan', 'Pertanyaan', 'required');
+        
+        if ($this->form_validation->run() === FALSE) {
+            $this->load->view('template/nav', $data);
+            $this->load->view('admin/update_bank_soal', $data);
+            $this->load->view('admin/partials/foota');
+        } else {
+            $data = [
+                'pertanyaan' => $this->input->post('pertanyaan'),
+                'pilihan_a' => $this->input->post('pilihan_a'),
+                'pilihan_b' => $this->input->post('pilihan_b'),
+                'pilihan_c' => $this->input->post('pilihan_c'),
+                'pilihan_d' => $this->input->post('pilihan_d'),
+                'kunci_jawaban' => $this->input->post('kunci_jawaban'),
+                'tingkat_kesulitan' => $this->input->post('tingkat_kesulitan'),
+                'tipe_kognitif' => $this->input->post('tipe_kognitif'),
+                'mapel_diajarkan' => $this->input->post('mapel_diajarkan')
+            ];
+            
+            $this->Bank_soal_model->update_soal($id_soal, $data);
+            $this->session->set_flashdata('success', 'Soal berhasil diperbarui');
+            redirect('admin/bank_soal');
+        }
+    }
+
+    public function hapus_soal($id_soal) {
+        $this->Bank_soal_model->hapus_soal($id_soal);
+        $this->session->set_flashdata('success', 'Soal berhasil dihapus');
+        redirect('admin/bank_soal');
     }
 }

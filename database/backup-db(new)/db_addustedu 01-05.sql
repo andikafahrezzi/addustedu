@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2025 at 06:09 AM
+-- Generation Time: May 01, 2025 at 08:32 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -31,15 +31,48 @@ CREATE TABLE `admin` (
   `id` int(64) NOT NULL,
   `username` varchar(128) NOT NULL,
   `password` varchar(128) NOT NULL,
-  `email` varchar(128) NOT NULL
+  `email` varchar(128) NOT NULL,
+  `user_type` enum('admin') NOT NULL DEFAULT 'admin'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id`, `username`, `password`, `email`) VALUES
-(0, 'admin', '$2y$10$EX0L5MeIQldpkCuTZW.mjujTaj.Yy20IW0GOluecU/c.es.9r6E5.', 'admin@gmail.com');
+INSERT INTO `admin` (`id`, `username`, `password`, `email`, `user_type`) VALUES
+(0, 'admin', '$2y$10$EX0L5MeIQldpkCuTZW.mjujTaj.Yy20IW0GOluecU/c.es.9r6E5.', 'admin@gmail.com', 'admin');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bank_soal`
+--
+
+CREATE TABLE `bank_soal` (
+  `id_soal` int(11) NOT NULL,
+  `pertanyaan` text NOT NULL,
+  `pilihan_a` text DEFAULT NULL,
+  `pilihan_b` text DEFAULT NULL,
+  `pilihan_c` text DEFAULT NULL,
+  `pilihan_d` text DEFAULT NULL,
+  `kunci_jawaban` enum('a','b','c','d') DEFAULT NULL,
+  `tingkat_kesulitan` enum('mudah','sedang','sulit') DEFAULT 'sedang',
+  `tipe_kognitif` enum('ingatan','paham','aplikasi','analisis','evaluasi','kreasi') DEFAULT 'paham',
+  `created_by` int(11) DEFAULT NULL,
+  `user_type` enum('admin','guru') NOT NULL,
+  `mapel_diajarkan` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `bank_soal`
+--
+
+INSERT INTO `bank_soal` (`id_soal`, `pertanyaan`, `pilihan_a`, `pilihan_b`, `pilihan_c`, `pilihan_d`, `kunci_jawaban`, `tingkat_kesulitan`, `tipe_kognitif`, `created_by`, `user_type`, `mapel_diajarkan`, `created_at`) VALUES
+(1, '33e3ww', 'e3e3e3', 'sdsds', 'e3e3e', 'sdsdsd', 'a', 'mudah', 'evaluasi', 0, 'admin', 'sddss', '2025-05-01 06:47:58'),
+(2, 'dwdw', 'dwwdw', 'dww', 'wdw', 'wdw', 'a', 'mudah', 'aplikasi', 0, 'admin', 'dwwd', '2025-05-01 07:06:54'),
+(6, 'wwW', 'ww', 'ww', 'ww', 'ww', 'a', 'sedang', 'paham', 21101140, 'guru', 'Matematika', '2025-05-01 12:55:44'),
+(7, 'XXX', 'WXXX', 'XX', 'XXX', 'XXX', 'a', 'sulit', 'evaluasi', 21101140, 'guru', 'Matematika', '2025-05-01 13:30:14');
 
 -- --------------------------------------------------------
 
@@ -80,21 +113,22 @@ CREATE TABLE `guru` (
   `email` varchar(255) NOT NULL,
   `nama_guru` varchar(128) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `nama_mapel` varchar(64) NOT NULL
+  `nama_mapel` varchar(64) NOT NULL,
+  `user_type` enum('guru') NOT NULL DEFAULT 'guru'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `guru`
 --
 
-INSERT INTO `guru` (`nip`, `email`, `nama_guru`, `password`, `nama_mapel`) VALUES
-(21101140, 'pahrulmaji@gmail.com', 'guru terbaikss', '$2y$10$5b/MJhDxwMBoOBZ0m4nofOCPrwn9XM/RZu7xuG528R7P71k629SUS', 'Matematika'),
-(21101141, 'fahreziandika10@gmail.com', 'addust11', '$2y$10$nDOjyUB0msJL1E1FTC7PdeQTCR0ip441LfLFbHZk/g7f2EoQ2vOAO', 'Bahasa Inggris'),
-(21101142, 'test@gmail.com', 'addust111', '$2y$10$SnRGlMYTwJSElDgt6DUza.qK/8tCzJQQfogjZxZxTMXkqMDgeBRU.', 'IPA'),
-(21101143, 'test12@gmail.com', 'useraa', '$2y$10$nk3jFu4/ANCEkgrYFq4F6uYl2UZQHLGtdCAYLSQ6eEkfT9quBoDo.', 'Test'),
-(214748364, 'Dummy@gmail.com', 'Ahmad Saugi', '$2y$10$nvcd.PCpCxStCPws.gAfluw192h3YOqXHTZIIp44yDp5RuHfYlg72', 'Pendidikan Agama Islam'),
-(214748365, 'zaidanlineee67@gmail.com', 'Saauky', '$2y$10$3qQ2TYrtQHy44LblPMexnu4ZQrCWD.dYh20P.sOL5cyo6Z48fJQEq', 'Matematika'),
-(1819107728, 'imas@gmail.com', 'Imas Kartika', '$2y$10$wCSBYTaCpSJaEX/1VUo1p.YU88vbgr7PeW.j1OkmD2xnKjIbB7SD6', 'Matematika');
+INSERT INTO `guru` (`nip`, `email`, `nama_guru`, `password`, `nama_mapel`, `user_type`) VALUES
+(21101140, 'pahrulmaji@gmail.com', 'guru terbaikss', '$2y$10$5b/MJhDxwMBoOBZ0m4nofOCPrwn9XM/RZu7xuG528R7P71k629SUS', 'Matematika', 'guru'),
+(21101141, 'fahreziandika10@gmail.com', 'addust11', '$2y$10$nDOjyUB0msJL1E1FTC7PdeQTCR0ip441LfLFbHZk/g7f2EoQ2vOAO', 'Bahasa Inggris', 'guru'),
+(21101142, 'test@gmail.com', 'addust111', '$2y$10$SnRGlMYTwJSElDgt6DUza.qK/8tCzJQQfogjZxZxTMXkqMDgeBRU.', 'IPA', 'guru'),
+(21101143, 'test12@gmail.com', 'useraa', '$2y$10$nk3jFu4/ANCEkgrYFq4F6uYl2UZQHLGtdCAYLSQ6eEkfT9quBoDo.', 'Test', 'guru'),
+(214748364, 'Dummy@gmail.com', 'Ahmad Saugi', '$2y$10$nvcd.PCpCxStCPws.gAfluw192h3YOqXHTZIIp44yDp5RuHfYlg72', 'Pendidikan Agama Islam', 'guru'),
+(214748365, 'zaidanlineee67@gmail.com', 'Saauky', '$2y$10$3qQ2TYrtQHy44LblPMexnu4ZQrCWD.dYh20P.sOL5cyo6Z48fJQEq', 'Matematika', 'guru'),
+(1819107728, 'imas@gmail.com', 'Imas Kartika', '$2y$10$wCSBYTaCpSJaEX/1VUo1p.YU88vbgr7PeW.j1OkmD2xnKjIbB7SD6', 'Matematika', 'guru');
 
 -- --------------------------------------------------------
 
@@ -117,6 +151,18 @@ CREATE TABLE `jawaban_siswa` (
 INSERT INTO `jawaban_siswa` (`id`, `quiz_siswa_id`, `question_id`, `jawaban`, `poin_diperoleh`) VALUES
 (20, 14, 29, 'a', '1.00'),
 (21, 14, 30, 'a', '1.00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kategori_soal`
+--
+
+CREATE TABLE `kategori_soal` (
+  `id_kategori` int(11) NOT NULL,
+  `nama_kategori` varchar(100) NOT NULL,
+  `deskripsi` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -158,7 +204,8 @@ INSERT INTO `materi` (`id`, `nama_guru`, `nama_mapel`, `video`, `deskripsi`, `ke
 (2, 'guru terbaikss', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef150951.mp4', 'ss', 'XI', ' sss', '5141-11123-2-PB.pdf', 21101140, 1),
 (3, 'addust111', 'IPA', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef150952.mp4', '2', 'XI', ' 2', '4845-17134-1-PB1.pdf', 21101142, 1),
 (4, 'useraa', 'Test', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef150953.mp4', '2', 'XI', ' 2', '4845-17134-1-PB2.pdf', 21101143, 1),
-(5, 'Ahmad Saugi', 'Pendidikan Agama Islam', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef150954.mp4', 's', 'XI', 's', '4845-17134-1-PB3.pdf', 214748364, 1);
+(5, 'Ahmad Saugi', 'Pendidikan Agama Islam', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef150954.mp4', 's', 'XI', 's', '4845-17134-1-PB3.pdf', 214748364, 1),
+(6, 'guru terbaikss', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef150955.mp4', 'asa', 'XI', ' swa', '4845-17134-1-PB4.pdf', 21101140, 2);
 
 -- --------------------------------------------------------
 
@@ -265,25 +312,26 @@ CREATE TABLE `siswa` (
   `image` varchar(255) NOT NULL,
   `is_active` int(1) NOT NULL,
   `date_created` int(64) NOT NULL,
-  `kelas` varchar(5) NOT NULL DEFAULT ''
+  `kelas` varchar(5) NOT NULL DEFAULT '',
+  `user_type` enum('siswa') NOT NULL DEFAULT 'siswa'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `siswa`
 --
 
-INSERT INTO `siswa` (`nis`, `nama`, `password`, `email`, `image`, `is_active`, `date_created`, `kelas`) VALUES
-(0, 'addust', '$2y$10$cYm/i5rWupzWKrc92nX4EublfQgeyyZl4AQyu2e4rbKFQUwc8iv9u', 'addust@gmial.com', 'default.jpg', 1, 1742275981, ''),
-(39, 'Syaauqi Zaaidan', '$2y$10$djI2M/FQH2k3H7b6tLK5X.MZG1R.wrARoR6NerH3tsScNnsNCnexa', 'zaidanline67@gmail.com', '73349393_156861225523800_2119508204152772215_n_(1)6.jpg', 1, 1586163321, 'X'),
-(11323, 'bjbsjb1', '$2y$10$VOoalVJV9zYYueBRttR7DevfcHEhH2ilZFt0OBLsF17iGT5pMCSKO', 'nasigir1e@gmail.com', 'default.jpg', 1, 1744613912, ''),
-(18883, 'addusttt', '$2y$10$bgLd2NGzEGiL8GDCN0KnaO6Rt3QrF8Ta0FZAzyWmYk8x5DIuOKx82', 'addust1@gmail.com', 'riyo1.jpg', 1, 1742454210, 'XI'),
-(123456, 'user', '$2y$10$lG3qWm29AejdK/HV2iIwDOGzIAo3Q3MqlxVcODDQrj.hQvBYwWkdi', 'use1@gmail.com', 'default.jpg', 1, 1735200089, 'XI'),
-(147852, 'dwdqwddq', '$2y$10$3T5Nmo7ZQIiF.h4e9Qqxo.oRzcYXGlceENvn9gObYM9lsXlsBlzDG', 'test12@gmail.com', 'default.jpg', 1, 1744168247, 'XII'),
-(181816, 'qsqwdqwd', '$2y$10$YJppxwZ1JOt3s1/Xf9rgWewsjN8ZIhK1b.F39GcTmVS0uy5oOlhDK', 'testwd@gmail.com', 'default.jpg', 1, 1742296726, 'X'),
-(211011, 'addust', '$2y$10$jxtWU6XSRAaV/kU0UqlUeurzzcp9EFVEuXJmwiGUrOSLjK9oSvjB6', '', 'default.jpg', 1, 1742276422, ''),
-(232332, 'aasdadee qw', '$2y$10$luY1AxePrqda2kLL61Vu0.i/ZEtGLEvmamD3E4nrjBktQ4z1Va3V2', 'testwewe1@gmail.com', 'default.jpg', 1, 1742295476, ''),
-(456123, 'wqdqdqw', '$2y$10$/Rx33H/8HvUpFcj3F4AM7eqlFnR17N38y7pt8pt0Ew3kRI3HwcNqi', 'nasigirewww@gmail.com', 'default.jpg', 1, 1744168582, 'XII'),
-(456789, 'nasi gile', '$2y$10$LwYTyg0Usc1SNcQe50HY3.7ZWcRIy926dKlbLA8bZrWtgFMoTZMvq', '', 'default.jpg', 1, 1739114168, 'XII');
+INSERT INTO `siswa` (`nis`, `nama`, `password`, `email`, `image`, `is_active`, `date_created`, `kelas`, `user_type`) VALUES
+(0, 'addust', '$2y$10$cYm/i5rWupzWKrc92nX4EublfQgeyyZl4AQyu2e4rbKFQUwc8iv9u', 'addust@gmial.com', 'default.jpg', 1, 1742275981, '', 'siswa'),
+(39, 'Syaauqi Zaaidan', '$2y$10$djI2M/FQH2k3H7b6tLK5X.MZG1R.wrARoR6NerH3tsScNnsNCnexa', 'zaidanline67@gmail.com', '73349393_156861225523800_2119508204152772215_n_(1)6.jpg', 1, 1586163321, 'X', 'siswa'),
+(11323, 'bjbsjb1', '$2y$10$VOoalVJV9zYYueBRttR7DevfcHEhH2ilZFt0OBLsF17iGT5pMCSKO', 'nasigir1e@gmail.com', 'default.jpg', 1, 1744613912, '', 'siswa'),
+(18883, 'addusttt', '$2y$10$m3uP.Pe16p8NuQXi48Xen.EkUXHag.tcIq5.xzs2w.L88Ak0w7MYa', 'addust1@gmail.com', 'riyo1.jpg', 1, 1742454210, 'XI', 'siswa'),
+(123456, 'user', '$2y$10$lG3qWm29AejdK/HV2iIwDOGzIAo3Q3MqlxVcODDQrj.hQvBYwWkdi', 'use1@gmail.com', 'default.jpg', 1, 1735200089, 'XI', 'siswa'),
+(147852, 'dwdqwddq', '$2y$10$3T5Nmo7ZQIiF.h4e9Qqxo.oRzcYXGlceENvn9gObYM9lsXlsBlzDG', 'test12@gmail.com', 'default.jpg', 1, 1744168247, 'XII', 'siswa'),
+(181816, 'qsqwdqwd', '$2y$10$YJppxwZ1JOt3s1/Xf9rgWewsjN8ZIhK1b.F39GcTmVS0uy5oOlhDK', 'testwd@gmail.com', 'default.jpg', 1, 1742296726, 'X', 'siswa'),
+(211011, 'addust', '$2y$10$jxtWU6XSRAaV/kU0UqlUeurzzcp9EFVEuXJmwiGUrOSLjK9oSvjB6', '', 'default.jpg', 1, 1742276422, '', 'siswa'),
+(232332, 'aasdadee qw', '$2y$10$luY1AxePrqda2kLL61Vu0.i/ZEtGLEvmamD3E4nrjBktQ4z1Va3V2', 'testwewe1@gmail.com', 'default.jpg', 1, 1742295476, '', 'siswa'),
+(456123, 'wqdqdqw', '$2y$10$/Rx33H/8HvUpFcj3F4AM7eqlFnR17N38y7pt8pt0Ew3kRI3HwcNqi', 'nasigirewww@gmail.com', 'default.jpg', 1, 1744168582, 'XII', 'siswa'),
+(456789, 'nasi gile', '$2y$10$LwYTyg0Usc1SNcQe50HY3.7ZWcRIy926dKlbLA8bZrWtgFMoTZMvq', '', 'default.jpg', 1, 1739114168, 'XII', 'siswa');
 
 -- --------------------------------------------------------
 
@@ -298,8 +346,28 @@ CREATE TABLE `tbl_jawaban_siswa` (
   `id_soal` int(11) DEFAULT NULL,
   `jawaban` varchar(1) DEFAULT NULL,
   `ragu_ragu` tinyint(1) DEFAULT 0,
+  `is_selesai` tinyint(1) DEFAULT 0,
+  `jumlah_benar` int(11) DEFAULT 0,
+  `jumlah_salah` int(11) DEFAULT 0,
+  `score` float DEFAULT 0,
+  `tanggal_submit` datetime DEFAULT NULL,
   `waktu_jawab` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_jawaban_siswa`
+--
+
+INSERT INTO `tbl_jawaban_siswa` (`id_jawaban`, `nis`, `id_ujian`, `id_soal`, `jawaban`, `ragu_ragu`, `is_selesai`, `jumlah_benar`, `jumlah_salah`, `score`, `tanggal_submit`, `waktu_jawab`) VALUES
+(63, 123456, 4, 1, 'A', 1, 1, 5, 0, 100, '2025-04-27 18:31:22', '2025-04-27 16:31:22'),
+(64, 123456, 4, 2, 'A', 0, 1, 5, 0, 100, '2025-04-27 18:31:22', '2025-04-27 16:31:22'),
+(65, 123456, 4, 3, 'A', 0, 1, 5, 0, 100, '2025-04-27 18:31:22', '2025-04-27 16:31:22'),
+(66, 123456, 4, 4, 'A', 0, 1, 5, 0, 100, '2025-04-27 18:31:22', '2025-04-27 16:31:22'),
+(67, 123456, 4, 5, 'A', 1, 1, 5, 0, 100, '2025-04-27 18:31:22', '2025-04-27 16:31:22'),
+(68, 123456, 5, 6, 'A', 0, 1, 3, 1, 75, '2025-04-30 05:34:12', '2025-04-30 03:34:12'),
+(69, 123456, 5, 7, 'A', 1, 1, 3, 1, 75, '2025-04-30 05:34:12', '2025-04-30 03:34:12'),
+(70, 123456, 5, 8, 'A', 1, 1, 3, 1, 75, '2025-04-30 05:34:12', '2025-04-30 03:34:12'),
+(71, 123456, 5, 9, 'c', 0, 1, 3, 1, 75, '2025-04-30 05:34:12', '2025-04-30 03:34:12');
 
 -- --------------------------------------------------------
 
@@ -318,6 +386,21 @@ CREATE TABLE `tbl_soal` (
   `kunci_jawaban` varchar(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `tbl_soal`
+--
+
+INSERT INTO `tbl_soal` (`id_soal`, `id_ujian`, `pertanyaan`, `pilihan_a`, `pilihan_b`, `pilihan_c`, `pilihan_d`, `kunci_jawaban`) VALUES
+(1, 4, 'sss', 'cwdcw', 'qdwqdq', 'dqwqw', 'dqqwd', 'A'),
+(2, 4, 'dqwdqw', 'a', 'a', 'a', 'a', 'A'),
+(3, 4, 'r23r', 'dqwdw', 'qwdq', 'wdqqdwq', 'dqddq', 'A'),
+(4, 4, 'dqqwd', 'dqdqw', 'qdqwd', 'qwdwd', 'ddqwwd', 'A'),
+(5, 4, 'ddqwqwd', 'qdwwqdwq', 'dqwqwd', 'qdqwdqw', 'dqwqwdd', 'A'),
+(6, 5, 'qq', 'qq', 'qq', 'qq', 'qq', 'A'),
+(7, 5, 'ww', 'ww', 'ww', 'ww', 'ww', 'A'),
+(8, 5, 'ww', 'ww', 'ww', 'ww', 'ww', 'A'),
+(9, 5, 'ww', 'ww', 'ww', 'ww', 'ww', 'A');
+
 -- --------------------------------------------------------
 
 --
@@ -333,6 +416,15 @@ CREATE TABLE `tbl_ujian` (
   `status` enum('aktif','nonaktif') DEFAULT NULL,
   `id_materi` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_ujian`
+--
+
+INSERT INTO `tbl_ujian` (`id_ujian`, `nama_ujian`, `tanggal_mulai`, `tanggal_selesai`, `durasi`, `status`, `id_materi`) VALUES
+(4, '11q', '2025-04-26', '2025-04-27', 100, 'aktif', 2),
+(5, 'hahaha', '2025-04-30', '2025-05-01', 2, 'aktif', 6),
+(6, 'xaxax', '2025-04-27', '2025-04-28', 100, 'aktif', 2);
 
 -- --------------------------------------------------------
 
@@ -385,6 +477,12 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `bank_soal`
+--
+ALTER TABLE `bank_soal`
+  ADD PRIMARY KEY (`id_soal`);
+
+--
 -- Indexes for table `forum_diskusi`
 --
 ALTER TABLE `forum_diskusi`
@@ -407,6 +505,12 @@ ALTER TABLE `jawaban_siswa`
   ADD PRIMARY KEY (`id`),
   ADD KEY `quiz_siswa_id` (`quiz_siswa_id`),
   ADD KEY `question_id` (`question_id`);
+
+--
+-- Indexes for table `kategori_soal`
+--
+ALTER TABLE `kategori_soal`
+  ADD PRIMARY KEY (`id_kategori`);
 
 --
 -- Indexes for table `kelas`
@@ -498,6 +602,12 @@ ALTER TABLE `tugas_siswa`
 --
 
 --
+-- AUTO_INCREMENT for table `bank_soal`
+--
+ALTER TABLE `bank_soal`
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `forum_diskusi`
 --
 ALTER TABLE `forum_diskusi`
@@ -510,10 +620,16 @@ ALTER TABLE `jawaban_siswa`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
+-- AUTO_INCREMENT for table `kategori_soal`
+--
+ALTER TABLE `kategori_soal`
+  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `materi`
 --
 ALTER TABLE `materi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `materi_status`
@@ -543,19 +659,19 @@ ALTER TABLE `quiz_siswa`
 -- AUTO_INCREMENT for table `tbl_jawaban_siswa`
 --
 ALTER TABLE `tbl_jawaban_siswa`
-  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `tbl_soal`
 --
 ALTER TABLE `tbl_soal`
-  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `tbl_ujian`
 --
 ALTER TABLE `tbl_ujian`
-  MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `token`
