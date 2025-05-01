@@ -106,6 +106,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                 </li>
                                 <li><a class="nav-link" href="<?= base_url('admin/list_materi') ?>">List Fordis</a>
                                 <li><a class="nav-link" href="<?= base_url('admin/data_quiz') ?>">Data Quiz</a>
+                                <li><a class="nav-link" href="<?= base_url('admin/bank_soal') ?>">Data Bank SOal</a>
                                 </li>
                             </ul>
                         </li>
