@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 01, 2025 at 07:17 AM
+-- Generation Time: May 01, 2025 at 08:32 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -70,7 +70,9 @@ CREATE TABLE `bank_soal` (
 
 INSERT INTO `bank_soal` (`id_soal`, `pertanyaan`, `pilihan_a`, `pilihan_b`, `pilihan_c`, `pilihan_d`, `kunci_jawaban`, `tingkat_kesulitan`, `tipe_kognitif`, `created_by`, `user_type`, `mapel_diajarkan`, `created_at`) VALUES
 (1, '33e3ww', 'e3e3e3', 'sdsds', 'e3e3e', 'sdsdsd', 'a', 'mudah', 'evaluasi', 0, 'admin', 'sddss', '2025-05-01 06:47:58'),
-(2, 'dwdw', 'dwwdw', 'dww', 'wdw', 'wdw', 'a', 'mudah', 'aplikasi', 0, 'admin', 'dwwd', '2025-05-01 07:06:54');
+(2, 'dwdw', 'dwwdw', 'dww', 'wdw', 'wdw', 'a', 'mudah', 'aplikasi', 0, 'admin', 'dwwd', '2025-05-01 07:06:54'),
+(6, 'wwW', 'ww', 'ww', 'ww', 'ww', 'a', 'sedang', 'paham', 21101140, 'guru', 'Matematika', '2025-05-01 12:55:44'),
+(7, 'XXX', 'WXXX', 'XX', 'XXX', 'XXX', 'a', 'sulit', 'evaluasi', 21101140, 'guru', 'Matematika', '2025-05-01 13:30:14');
 
 -- --------------------------------------------------------
 
@@ -603,7 +605,7 @@ ALTER TABLE `tugas_siswa`
 -- AUTO_INCREMENT for table `bank_soal`
 --
 ALTER TABLE `bank_soal`
-  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `forum_diskusi`
