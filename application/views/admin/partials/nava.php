@@ -27,6 +27,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
     <link rel="stylesheet" href="<?= base_url('assets/') ?>stisla-assets/css/style.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/custom.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>stisla-assets/css/components.css">
+    <script src="<?= base_url('assets/') ?>js/jquery-3.3.1.min.js"></script>
 </head>
 
 <body>

@@ -8,7 +8,7 @@
                             <hr>
                             <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction.</p>
                             <a href="<?= base_url('admin/add_bank_soal') ?>" class="btn btn-success">Tambah
-                                Quiz⭢</a>
+                                Bank Soal⭢</a>
                         </div>
                     </div>
                     <div class="row">
@@ -21,6 +21,7 @@
                                             <th width="5%">No</th>
                                             <th>Pertanyaan</th>
                                             <th width="15%">Mata Pelajaran</th>
+                                            <th width="10%">Tipe Soal</th>
                                             <th width="10%">Pembuat</th>
                                             <th width="15%">Aksi</th>
                                             </tr>
@@ -33,6 +34,7 @@
                             <td><?= $no++ ?></td>
                             <td><?= character_limiter(strip_tags($s->pertanyaan), 100) ?></td>
                             <td><?= $s->mapel_diajarkan ?></td>
+                            <td><?= $s->tipe_soal ?></td>
                             <td><?= $s->user_type == 'admin' ? 'Admin' : 'Guru #'.$s->created_by ?></td>
                             <td>
                                 <a href="<?= site_url('admin/edit_bank_soal/'.$s->id_soal) ?>" class="btn btn-sm btn-warning">
