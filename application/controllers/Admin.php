@@ -652,38 +652,43 @@ public function data_quiz()
         $data['title'] = 'Tambah Soal';
         
         $this->form_validation->set_rules('pertanyaan', 'Pertanyaan', 'required');
-        $this->form_validation->set_rules('kunci_jawaban', 'Kunci Jawaban', 'required');
+        $this->form_validation->set_rules('tipe_soal', 'Tipe Soal', 'required|in_list[pilihan,essay]');
         $this->form_validation->set_rules('mapel_diajarkan', 'Mata Pelajaran', 'required');
         
+        // Validasi khusus untuk pilihan ganda
+        if ($this->input->post('tipe_soal') == 'pilihan') {
+            $this->form_validation->set_rules('pilihan_a', 'Pilihan A', 'required');
+            $this->form_validation->set_rules('pilihan_b', 'Pilihan B', 'required');
+            $this->form_validation->set_rules('pilihan_c', 'Pilihan C', 'required');
+            $this->form_validation->set_rules('pilihan_d', 'Pilihan D', 'required');
+            $this->form_validation->set_rules('kunci_jawaban', 'Kunci Jawaban', 'required|in_list[a,b,c,d]');
+        }
+        
         if ($this->form_validation->run() === FALSE) {
-            // Tampilkan error validasi
-            $data['validation_errors'] = validation_errors();
-            
             $this->load->view('admin/add_bank_soal', $data);
             $this->load->view('admin/partials/foota');
         } else {
+            $post_data = $this->input->post();
             $data = [
-                'pertanyaan' => $this->input->post('pertanyaan'),
-                'pilihan_a' => $this->input->post('pilihan_a'),
-                'pilihan_b' => $this->input->post('pilihan_b'),
-                'pilihan_c' => $this->input->post('pilihan_c'),
-                'pilihan_d' => $this->input->post('pilihan_d'),
-                'kunci_jawaban' => $this->input->post('kunci_jawaban'),
-                'tingkat_kesulitan' => $this->input->post('tingkat_kesulitan', true) ?? 'sedang',
-                'tipe_kognitif' => $this->input->post('tipe_kognitif', true) ?? 'paham',
+                'pertanyaan' => $post_data['pertanyaan'],
+                'tipe_soal' => $post_data['tipe_soal'],
+                'tingkat_kesulitan' => $post_data['tingkat_kesulitan'] ?? 'sedang',
+                'tipe_kognitif' => $post_data['tipe_kognitif'] ?? 'paham',
                 'created_by' => $this->session->userdata('id'),
                 'user_type' => 'admin',
-                'mapel_diajarkan' => $this->input->post('mapel_diajarkan'),
+                'mapel_diajarkan' => $post_data['mapel_diajarkan'],
                 'created_at' => date('Y-m-d H:i:s')
             ];
-            
-            // Debug data sebelum disimpan
-            // print_r($data); die();
-            // echo "<h2>Query SQL:</h2>";
-            // echo $this->db->last_query();
-            
-            // die();
-            
+    
+            // Tambahkan data khusus pilihan ganda jika diperlukan
+            if ($post_data['tipe_soal'] == 'pilihan') {
+                $data['pilihan_a'] = $post_data['pilihan_a'];
+                $data['pilihan_b'] = $post_data['pilihan_b'];
+                $data['pilihan_c'] = $post_data['pilihan_c'];
+                $data['pilihan_d'] = $post_data['pilihan_d'];
+                $data['kunci_jawaban'] = $post_data['kunci_jawaban'];
+            }
+    
             if ($this->Bank_soal_model->tambah_soal($data)) {
                 $this->session->set_flashdata('success', 'Soal berhasil ditambahkan');
             } else {
@@ -697,29 +702,55 @@ public function data_quiz()
     public function edit_bank_soal($id_soal) {
         $data['title'] = 'Edit Soal';
         $data['soal'] = $this->Bank_soal_model->get_detail_soal($id_soal);
-
         
         $this->form_validation->set_rules('pertanyaan', 'Pertanyaan', 'required');
+        $this->form_validation->set_rules('tipe_soal', 'Tipe Soal', 'required|in_list[pilihan,essay]');
+        $this->form_validation->set_rules('mapel_diajarkan', 'Mata Pelajaran', 'required');
+        
+        // Validasi khusus untuk pilihan ganda
+        if ($this->input->post('tipe_soal') == 'pilihan') {
+            $this->form_validation->set_rules('pilihan_a', 'Pilihan A', 'required');
+            $this->form_validation->set_rules('pilihan_b', 'Pilihan B', 'required');
+            $this->form_validation->set_rules('pilihan_c', 'Pilihan C', 'required');
+            $this->form_validation->set_rules('pilihan_d', 'Pilihan D', 'required');
+            $this->form_validation->set_rules('kunci_jawaban', 'Kunci Jawaban', 'required|in_list[a,b,c,d]');
+        }
         
         if ($this->form_validation->run() === FALSE) {
-            $this->load->view('template/nav', $data);
             $this->load->view('admin/update_bank_soal', $data);
             $this->load->view('admin/partials/foota');
         } else {
-            $data = [
-                'pertanyaan' => $this->input->post('pertanyaan'),
-                'pilihan_a' => $this->input->post('pilihan_a'),
-                'pilihan_b' => $this->input->post('pilihan_b'),
-                'pilihan_c' => $this->input->post('pilihan_c'),
-                'pilihan_d' => $this->input->post('pilihan_d'),
-                'kunci_jawaban' => $this->input->post('kunci_jawaban'),
-                'tingkat_kesulitan' => $this->input->post('tingkat_kesulitan'),
-                'tipe_kognitif' => $this->input->post('tipe_kognitif'),
-                'mapel_diajarkan' => $this->input->post('mapel_diajarkan')
+            $post_data = $this->input->post();
+            $update_data = [
+                'pertanyaan' => $post_data['pertanyaan'],
+                'tipe_soal' => $post_data['tipe_soal'],
+                'tingkat_kesulitan' => $post_data['tingkat_kesulitan'],
+                'tipe_kognitif' => $post_data['tipe_kognitif'],
+                'mapel_diajarkan' => $post_data['mapel_diajarkan'],
             ];
-            
-            $this->Bank_soal_model->update_soal($id_soal, $data);
-            $this->session->set_flashdata('success', 'Soal berhasil diperbarui');
+    
+            // Tambahkan data khusus pilihan ganda jika diperlukan
+            if ($post_data['tipe_soal'] == 'pilihan') {
+                $update_data['pilihan_a'] = $post_data['pilihan_a'];
+                $update_data['pilihan_b'] = $post_data['pilihan_b'];
+                $update_data['pilihan_c'] = $post_data['pilihan_c'];
+                $update_data['pilihan_d'] = $post_data['pilihan_d'];
+                $update_data['kunci_jawaban'] = $post_data['kunci_jawaban'];
+            } else {
+                // Kosongkan data pilihan jika diubah ke essay
+                $update_data['pilihan_a'] = null;
+                $update_data['pilihan_b'] = null;
+                $update_data['pilihan_c'] = null;
+                $update_data['pilihan_d'] = null;
+                $update_data['kunci_jawaban'] = null;
+            }
+    
+            if ($this->Bank_soal_model->update_soal($id_soal, $update_data)) {
+                $this->session->set_flashdata('success', 'Soal berhasil diperbarui');
+            } else {
+                $error = $this->db->error();
+                $this->session->set_flashdata('error', 'Gagal memperbarui: '.$error['message']);
+            }
             redirect('admin/bank_soal');
         }
     }

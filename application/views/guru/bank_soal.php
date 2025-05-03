@@ -13,34 +13,34 @@
         <div class="card-body">
             <div class="table-responsive">
             <table class="table">
-    <thead>
-        <tr>
-            <th>Pertanyaan</th>
-            <th>Mapel</th>
-            <th>Tingkat Kesulitan</th>
-            <th>Tanggal Dibuat</th>
-            <th>Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($bank_soal as $soal): ?>
-        <tr>
-            <td><?= character_limiter($soal->pertanyaan, 50) ?></td>
-            <td><?= $soal->mapel_diajarkan ?></td>
-            <td><?= ucfirst($soal->tingkat_kesulitan) ?></td>
-            <td><?= date('d M Y', strtotime($soal->created_at)) ?></td>
-            <td>
-                                <a href="<?= site_url('guru/edit_bank_soal/'.$soal->id_soal) ?>" class="btn btn-sm btn-warning">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Pertanyaan</th>
+                        <th>Tipe Soal</th>
+                        <th>Mapel</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($bank_soal as $i => $soal): ?>
+                    <tr>
+                        <td><?= $i+1 ?></td>
+                        <td><?= character_limiter($soal->pertanyaan, 50) ?></td>
+                        <td><?= $soal->tipe_soal == 'pilihan' ? 'Pilihan Ganda' : 'Essay' ?></td>
+                        <td><?= $soal->mapel_diajarkan ?></td>
+                        <td>
+                        <a href="<?= site_url('guru/edit_bank_soal/'.$soal->id_soal) ?>" class="btn btn-sm btn-warning">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                                 <button onclick="hapusSoal(<?= $soal->id_soal ?>)" class="btn btn-sm btn-danger">
                                     <i class="fas fa-trash"></i> Hapus
                                 </button>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
             </div>
         </div>
     </div>

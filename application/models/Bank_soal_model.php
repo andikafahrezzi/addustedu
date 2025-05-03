@@ -48,14 +48,30 @@ class Bank_soal_model extends CI_Model {
     }
 
     public function tambah_soal($data) {
+        // Handle perbedaan data untuk pilihan ganda vs essay
+        if ($data['tipe_soal'] == 'essay') {
+            $data['pilihan_a'] = null;
+            $data['pilihan_b'] = null;
+            $data['pilihan_c'] = null;
+            $data['pilihan_d'] = null;
+            $data['kunci_jawaban'] = null;
+        }
         return $this->db->insert('bank_soal', $data);
     }
-
+    
     public function update_soal($id_soal, $data) {
+        // Logika update serupa
+        if ($data['tipe_soal'] == 'essay') {
+            $data['pilihan_a'] = null;
+            $data['pilihan_b'] = null;
+            $data['pilihan_c'] = null;
+            $data['pilihan_d'] = null;
+            $data['kunci_jawaban'] = null;
+        }
         return $this->db->where('id_soal', $id_soal)
                        ->update('bank_soal', $data);
     }
-
+    
     public function hapus_soal($id_soal) {
         return $this->db->where('id_soal', $id_soal)
                        ->delete('bank_soal');
