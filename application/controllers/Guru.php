@@ -741,32 +741,92 @@ private function tambah_soal($quiz_id)
         }
     }
     public function tambah_ujian()
-    {
-        $nip = $this->session->userdata('nip');
-        $data['materi_list'] = $this->Ujian_model->get_materi_options($nip);
-        $this->load->view('guru/navug'); 
-        $this->load->view('guru/tambah_ujian', $data);
-        $this->load->view('guru/footg');
+{
+    $nip = $this->session->userdata('nip');
+    
+    // Ambil data materi dan soal dari bank soal
+    $data = [
+        'materi_list' => $this->Ujian_model->get_materi_options($nip),
+        'bank_soal' => $this->Bank_soal_model->get_soal_by_guru($nip),
+        'title' => 'Tambah Ujian Baru'
+    ];
+    
+    $this->load->view('guru/navug', $data); 
+    $this->load->view('guru/add_ujian', $data);
+    $this->load->view('guru/footg');
+}
+
+public function simpan_ujian()
+{
+    $this->form_validation->set_rules('nama_ujian', 'Nama Ujian', 'required');
+    $this->form_validation->set_rules('tanggal_mulai', 'Tanggal Mulai', 'required');
+    $this->form_validation->set_rules('tanggal_selesai', 'Tanggal Selesai', 'required');
+    $this->form_validation->set_rules('durasi', 'Durasi', 'required|numeric');
+
+    if ($this->form_validation->run() === FALSE) {
+        $this->tambah_ujian();
+        return;
     }
 
-    // Menyimpan ujian ke database
-    public function simpan_ujian()
-    {
-        // Ambil data dari form input
-        $materi_id = $this->input->post('materi_id');
-        $data = [
-            'nama_ujian' => $this->input->post('nama_ujian'),
-            'tanggal_mulai' => $this->input->post('tanggal_mulai'),
+    $this->db->trans_start();
+
+    try {
+        // Data utama ujian
+        $ujian_data = [
+            'nama_ujian'      => $this->input->post('nama_ujian'),
+            'tanggal_mulai'   => $this->input->post('tanggal_mulai'),
             'tanggal_selesai' => $this->input->post('tanggal_selesai'),
-            'durasi' => $this->input->post('durasi'),
-            'status' => $this->input->post('status'),
-            'id_materi' => $materi_id
+            'durasi'          => $this->input->post('durasi'),
+            'status'          => $this->input->post('status') ?? 'aktif',
+            'id_materi'       => $this->input->post('materi_id'),
+            'nip_guru'        => $this->session->userdata('nip')
         ];
 
-        // Simpan data ujian
-        $this->Ujian_model->tambah_ujian($data);
-        redirect('guru/tampilkan_ujian'); // Kembali ke halaman daftar ujian
+        // Simpan ujian
+        $this->db->insert('tbl_ujian', $ujian_data);
+        $ujian_id = $this->db->insert_id();
+
+        // Cek apakah menggunakan bank soal
+        if ($this->input->post('sumber_soal') === 'bank_soal') {
+            $soal_ids = $this->input->post('soal_ids');
+
+            if (empty($soal_ids)) {
+                throw new Exception('Pilih minimal 1 soal dari bank soal');
+            }
+
+            foreach ($soal_ids as $soal_id) {
+                $soal_exists = $this->db->where('id_soal', $soal_id)
+                                        ->count_all_results('bank_soal') > 0;
+                if (!$soal_exists) {
+                    throw new Exception('Soal dengan ID ' . $soal_id . ' tidak ditemukan di bank soal');
+                }
+
+                // Simpan ke tabel ujian_soal dengan sumber
+                $this->db->insert('ujian_soal', [
+                    'ujian_id' => $ujian_id,
+                    'soal_id'  => $soal_id,
+                    'sumber'   => 'bank_soal'
+                ]);
+            }
+        }
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE) {
+            throw new Exception('Gagal menyimpan data ujian.');
+        }
+
+        $this->session->set_flashdata('success', 'Ujian berhasil dibuat.');
+        
+    } catch (Exception $e) {
+        $this->db->trans_rollback();
+        $this->session->set_flashdata('error', $e->getMessage());
+        $this->tambah_ujian();
+        return;
     }
+
+    redirect('guru/tampilkan_soal/' . $ujian_id);
+}
 
     // Menampilkan form untuk tambah soal
     public function tambah_soal_ujian($id_ujian)
@@ -779,21 +839,35 @@ private function tambah_soal($quiz_id)
 
     // Menyimpan soal ke database
     public function simpan_soal()
-    {
-        $data = [
-            'id_ujian' => $this->input->post('id_ujian'),
-            'pertanyaan' => $this->input->post('pertanyaan'),
-            'pilihan_a' => $this->input->post('pilihan_a'),
-            'pilihan_b' => $this->input->post('pilihan_b'),
-            'pilihan_c' => $this->input->post('pilihan_c'),
-            'pilihan_d' => $this->input->post('pilihan_d'),
-            'kunci_jawaban' => $this->input->post('kunci_jawaban')
-        ];
+{
+    $ujian_id = $this->input->post('id_ujian');
 
-        // Simpan soal ke database
-        $this->Ujian_model->tambah_soal($data);
-        redirect('guru/tampilkan_soal/' . $data['id_ujian']); // Kembali ke halaman soal ujian
-    }
+    // Data soal pribadi
+    $soal_data = [
+        'id_ujian' => $this->input->post('id_ujian'),
+        'pertanyaan'     => $this->input->post('pertanyaan'),
+        'pilihan_a'      => $this->input->post('pilihan_a'),
+        'pilihan_b'      => $this->input->post('pilihan_b'),
+        'pilihan_c'      => $this->input->post('pilihan_c'),
+        'pilihan_d'      => $this->input->post('pilihan_d'),
+        'kunci_jawaban'  => $this->input->post('kunci_jawaban'), // Anda bisa sesuaikan// Default, atau bisa dari input// Jika Anda menyimpan guru
+    ];
+
+    // Simpan ke tbl_soal
+    $this->db->insert('tbl_soal', $soal_data);
+    $soal_id = $this->db->insert_id(); // AMBIL ID soal yang baru dimasukkan
+
+    // Simpan relasi ke tabel ujian_soal
+    $this->db->insert('ujian_soal', [
+        'ujian_id' => $ujian_id,
+        'soal_id'  => $soal_id,
+        'sumber'   => 'tbl_soal'
+    ]);
+
+    // Redirect kembali ke halaman lihat soal
+    $this->session->set_flashdata('success', 'Soal pribadi berhasil ditambahkan ke ujian.');
+    redirect('guru/tampilkan_soal/' . $ujian_id);
+}
 
     // Menampilkan daftar ujian yang dibuat oleh guru
     public function tampilkan_ujian()
@@ -809,15 +883,31 @@ private function tambah_soal($quiz_id)
     }
 
     // Menampilkan soal berdasarkan ujian
-    public function tampilkan_soal($id_ujian)
-    {
-        $data['id_ujian'] = $id_ujian;
-        $data['soal_list'] = $this->Ujian_model->get_soal_by_ujian_G($id_ujian);
-        $this->load->view('guru/navug'); 
-        $this->load->view('guru/tampil_soal', $data);
-        $this->load->view('guru/footg');
-    
-    }
+    public function tampilkan_soal($ujian_id)
+{
+    // Ambil data soal dari bank_soal
+    $this->db->select('us.*, bs.pertanyaan, bs.pilihan_a, bs.pilihan_b, bs.pilihan_c, bs.pilihan_d');
+    $this->db->from('ujian_soal us');
+    $this->db->join('bank_soal bs', 'bs.id_soal = us.soal_id');
+    $this->db->where('us.ujian_id', $ujian_id);
+    $this->db->where('us.sumber', 'bank_soal');
+    $bank_soal = $this->db->get()->result();
+
+    // Ambil data soal dari soal pribadi guru
+    $this->db->select('us.*, ts.pertanyaan, ts.pilihan_a, ts.pilihan_b, ts.pilihan_c, ts.pilihan_d');
+    $this->db->from('ujian_soal us');
+    $this->db->join('tbl_soal ts', 'ts.id_soal = us.soal_id');
+    $this->db->where('us.ujian_id', $ujian_id);
+    $this->db->where('us.sumber', 'tbl_soal');
+    $pribadi_soal = $this->db->get()->result();
+
+    $data['ujian_id'] = $ujian_id;
+    $data['bank_soal'] = $bank_soal;
+    $data['pribadi_soal'] = $pribadi_soal;
+
+    $this->load->view('guru/tampil_soal', $data);
+}
+
 
     public function edit_ujian($id_ujian)
 {
@@ -1054,5 +1144,53 @@ public function simpan_edit_ujian($id_ujian)
         $this->Bank_soal_model->hapus_soal($id_soal);
         $this->session->set_flashdata('success', 'Soal berhasil dihapus');
         redirect('guru/bank_soal');
+    }
+
+    public function buat_ujian() {
+        // Ambil mapel yang diajarkan guru
+        $nip = $this->session->userdata('nip');
+        $guru = $this->db->get_where('guru', ['nip' => $nip])->row();
+        
+        $data['title'] = 'Buat Ujian';
+        $data['mapel'] = $guru->nama_mapel;
+        $data['bank_soal'] = $this->Bank_soal_model->get_soal_by_mapel($guru->nama_mapel);
+        
+        $this->load->view('guru/navug', $data);
+        $this->load->view('guru/buat_ujian', $data);
+        $this->load->view('guru/footg');
+    }
+    
+    public function simpan_ujian_bk() {
+        $this->form_validation->set_rules('judul_ujian', 'Judul Ujian', 'required');
+        $this->form_validation->set_rules('waktu', 'Waktu Pengerjaan', 'required|numeric');
+        
+        if ($this->form_validation->run() === FALSE) {
+            $this->buat_ujian();
+        } else {
+            // Simpan data ujian
+            $ujian_data = [
+                'judul' => $this->input->post('judul_ujian'),
+                'mapel' => $this->input->post('mapel'),
+                'waktu' => $this->input->post('waktu'),
+                'guru_id' => $this->session->userdata('nip'),
+                'soal_source' => 'bank_soal',
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+            
+            $this->db->insert('tbl_ujian', $ujian_data);
+            $ujian_id = $this->db->insert_id();
+            
+            // Hubungkan soal yang dipilih
+            $soal_ids = $this->input->post('soal_ids');
+            foreach ($soal_ids as $soal_id) {
+                $this->db->insert('ujian_soal', [
+                    'ujian_id' => $ujian_id,
+                    'soal_id' => $soal_id
+                ]);
+            }
+            
+            $this->session->set_flashdata('success', 'Ujian berhasil dibuat dari bank soal');
+            redirect('guru/ujian');
+        }
     }
 }
