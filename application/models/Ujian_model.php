@@ -200,15 +200,15 @@ public function hitung_skor($id_ujian, $nis)
         ])->row();
     }
 
-    public function mulai_ujian($id_ujian, $nis)
-    {
-        $data = [
-            'nis' => $nis,
-            'id_ujian' => $id_ujian,
-            'waktu_mulai_ujian' => date('Y-m-d H:i:s')
-        ];
-        return $this->db->insert('tbl_jawaban_siswa', $data);
-    }
+    // public function mulai_ujian($id_ujian, $nis)
+    // {
+    //     $data = [
+    //         'nis' => $nis,
+    //         'id_ujian' => $id_ujian,
+    //         'waktu_mulai_ujian' => date('Y-m-d H:i:s')
+    //     ];
+    //     return $this->db->insert('tbl_jawaban_siswa', $data);
+    // }
 
     // Fungsi-fungsi lainnya tetap sama seperti sebelumnya...
 }

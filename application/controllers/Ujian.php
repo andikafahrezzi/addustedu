@@ -36,8 +36,9 @@ class Ujian extends CI_Controller {
 
         // Cek apakah sudah mulai ujian
         $sudah_mulai = $this->Ujian_model->cek_sudah_mulai($id_ujian, $nis);
-        if (!$sudah_mulai) {
-            $this->Ujian_model->mulai_ujian($id_ujian, $nis);
+             if (!$sudah_mulai) {
+            // Simpan waktu mulai di session saja
+            $this->session->set_userdata('waktu_mulai_ujian', time());
         }
 
         // Set session ujian
@@ -58,17 +59,17 @@ class Ujian extends CI_Controller {
             return;
         }
 
-    $data['ujian'] = $ujian;
-    $data['soal'] = $this->Ujian_model->get_all_soal_by_ujian($id_ujian);
-    $data['sisa_waktu'] = $sisa_waktu;
-    $data['nis'] = $nis;
+            $data['ujian'] = $ujian;
+            $data['soal'] = $this->Ujian_model->get_all_soal_by_ujian($id_ujian);
+            $data['sisa_waktu'] = $sisa_waktu;
+            $data['nis'] = $nis;
 
-    // Pastikan semua soal memiliki id
-    foreach ($data['soal'] as &$soal) {
-        if (!isset($soal['id'])) {
-            $soal['id'] = $soal['id_soal'] ?? 0; // Fallback jika id_soal ada
-        }
-    }
+            // Pastikan semua soal memiliki id
+            foreach ($data['soal'] as &$soal) {
+                if (!isset($soal['id'])) {
+                    $soal['id'] = $soal['id_soal'] ?? 0; // Fallback jika id_soal ada
+                }
+            }
 
 
 
@@ -157,6 +158,20 @@ class Ujian extends CI_Controller {
                 'message' => 'Gagal menyimpan ke database'
             ]));
     }
+}
+public function ranking($id_ujian)
+{
+    $ranking = $this->db->select('nis, SUM(score) as total_score')
+                        ->where(['id_ujian' => $id_ujian, 'is_selesai' => 1])
+                        ->group_by('nis')
+                        ->order_by('total_score', 'DESC')
+                        ->get('tbl_jawaban_siswa')
+                        ->result();
+
+    $data['ranking'] = $ranking; 
+    $data['ujian'] = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
+
+    $this->load->view('user/rankinng', $data);   
 }
 
 }
