@@ -13,43 +13,40 @@ class User extends CI_Controller
         //     redirect('welcome');
     }
     public function index()
-    {
-        $data['user'] = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row_array();
-    
-        if ($data['user']) {
-            $kelas_siswa = $data['user']['kelas'];
-            $data['kelas_siswa'] = $kelas_siswa;
-    
-            // Ambil data materi berdasarkan kelas
-            $this->db->select('materi.*, guru.nip, guru.nama_guru');
-            $this->db->from('materi');
-            $this->db->join('guru', 'guru.nip = materi.id_guru');
-            $this->db->where('materi.kelas', $kelas_siswa);
-            $materi = $this->db->get()->result_array();
-    
-            $mapel_data = [];
-            foreach ($materi as $m) {
-                $mapel = $m['nama_mapel'];
-                $nip = $m['id_guru']; // Pastikan kamu ambil NIP di query
-    
-                // Gabungkan NIP dan nama agar tetap bisa tampil nama guru tapi unik berdasarkan NIP
-                $mapel_data[$mapel][$nip][] = $m;
-            }
-    
-            // Ambil ujian berdasarkan kelas dan mapel
-            $data['mapel_data'] = $mapel_data;
-    
-            // Di sini kita perlu mengambil ujian berdasarkan kelas siswa dan mapel
-            $data['ujian_list'] = $this->Ujian_model->get_ujian_by_mapel_and_kelas($kelas_siswa);
-    
-            // Memanggil view
-            $this->load->view('user/navu');
-            $this->load->view('user/index', $data);
-            $this->load->view('user/foots');
-        } else {
-            redirect('welcome/');
+{
+    $data['user'] = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row_array();
+
+    if ($data['user']) {
+        $kelas_siswa = $data['user']['kelas'];
+        $data['kelas_siswa'] = $kelas_siswa;
+
+        // Ambil data materi berdasarkan kelas
+        $this->db->select('materi.*, guru.nip, guru.nama_guru');
+        $this->db->from('materi');
+        $this->db->join('guru', 'guru.nip = materi.id_guru');
+        $this->db->where('materi.kelas', $kelas_siswa);
+        $materi = $this->db->get()->result_array();
+
+        $mapel_data = [];
+        foreach ($materi as $m) {
+            $mapel = $m['nama_mapel'];
+            $nip = $m['id_guru'];
+            $mapel_data[$mapel][$nip][] = $m;
         }
+
+        $data['mapel_data'] = $mapel_data;
+
+        // ✅ Ambil daftar ujian berdasarkan kelas siswa
+        $data['ujian_list'] = $this->Ujian_model->get_ujian_by_kelas($kelas_siswa);
+
+        $this->load->view('user/navu');
+        $this->load->view('user/index', $data);
+        $this->load->view('user/foots');
+    } else {
+        redirect('welcome/');
     }
+}
+
     
 
     

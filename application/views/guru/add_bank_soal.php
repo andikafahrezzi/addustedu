@@ -67,10 +67,10 @@
                         <label for="kunci_jawaban">Kunci Jawaban *</label>
                         <select name="kunci_jawaban" id="kunci_jawaban" class="form-control">
                             <option value="">-- Pilih --</option>
-                            <option value="a" <?= set_select('kunci_jawaban', 'a') ?>>A</option>
-                            <option value="b" <?= set_select('kunci_jawaban', 'b') ?>>B</option>
-                            <option value="c" <?= set_select('kunci_jawaban', 'c') ?>>C</option>
-                            <option value="d" <?= set_select('kunci_jawaban', 'd') ?>>D</option>
+                            <option value="A" <?= set_select('kunci_jawaban', 'A') ?>>A</option>
+                            <option value="B" <?= set_select('kunci_jawaban', 'B') ?>>B</option>
+                            <option value="C" <?= set_select('kunci_jawaban', 'C') ?>>C</option>
+                            <option value="D" <?= set_select('kunci_jawaban', 'D') ?>>D</option>
                         </select>
                         <?= form_error('kunci_jawaban', '<small class="text-danger">', '</small>') ?>
                     </div>
