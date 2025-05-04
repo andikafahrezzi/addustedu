@@ -48,6 +48,8 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                         <p class="text-muted">Sebelum masuk ke halaman guru, anda harus login terlebih dahulu sebagai
                             guru. silahkan isi data dibawah untuk melanjutkan.</p>
                         <form method="post" action="<?= base_url('welcome/guru') ?>" class="needs-validation" novalidate="">
+                        <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                        value="<?= $this->security->get_csrf_hash(); ?>" />
                             <div class="form-group">
                                 <label for="nip">Nomer Induk Pegawai</label>
                                 <input id="nip" type="text" class="form-control" name="nip" tabindex="1" required autofocus>

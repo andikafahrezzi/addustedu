@@ -52,6 +52,8 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                             admin. silahkan isi data dibawah untuk melanjutkan.</p>
                         <form method="post" action="<?=base_url('welcome/admin')?>" class="needs-validation"
                             novalidate="">
+                            <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                            value="<?= $this->security->get_csrf_hash(); ?>" />
                             <div class="form-group">
                                 <label for="email">Email</label>
                                 <input id="email" type="email" class="form-control" name="email" tabindex="1" required

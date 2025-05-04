@@ -4,7 +4,9 @@ TODO
     - menambahkan fungsi delete materi, quiz dan bank soal, tugas pada siswa, dan admin
     - nama tidak boleh ada angka(validasi)
     - bagaimana cara menyambungkan bank soal yang sudah dibuat, agar bisa dipakai oleh guru saat ingin mengisi soal Ujian
-
+    -  pada pemilihan bank_soal belum sesuai kelas dan matapelajaran
+    - jika menggunakan bank soal walaupun jawaban benar masih salah. karena masih menggunakan 
+        tbl_soal untuk merefrensikan kunci jawaban
 - ADMIN
     - cek navbar admin setiap komponen untuk clean code
     - import excel ke database siswa
@@ -30,6 +32,7 @@ PR
 - setiap function hapus, samakan seperti yang lainnya(ada modal hapus)
 - bank soal dan pribadi berhasil tampil barang melalui ujian_soal tetapi saat siswa melakukan ujian
      hanya bisa melihat soal_pribadi saja(hanya membaca tabel tbl_soal)
+- menjawab benar semua tetapi salah 1, walaupun soal 2 tetapi jadi 3 (benar 2 salahj 1)
 
 next can be a problem
 - change id at database siswa to nis

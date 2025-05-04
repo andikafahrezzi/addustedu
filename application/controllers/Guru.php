@@ -804,13 +804,17 @@ public function simpan_ujian()
                 // Simpan ke tabel ujian_soal dengan sumber
                 $this->db->insert('ujian_soal', [
                     'ujian_id' => $ujian_id,
-                    'soal_id'  => $soal_id,
+                    'soal_id'  => null,
+                    'bank_soal_id' => $soal_id,
                     'sumber'   => 'bank_soal'
                 ]);
             }
         }
 
         $this->db->trans_complete();
+            if ($this->db->trans_status() === FALSE) {
+                throw new Exception('Gagal menyimpan ujian');
+            }
 
         if ($this->db->trans_status() === FALSE) {
             throw new Exception('Gagal menyimpan data ujian.');
@@ -861,6 +865,7 @@ public function simpan_ujian()
     $this->db->insert('ujian_soal', [
         'ujian_id' => $ujian_id,
         'soal_id'  => $soal_id,
+        'bank_soal_id' => null,
         'sumber'   => 'tbl_soal'
     ]);
 
@@ -888,7 +893,7 @@ public function simpan_ujian()
     // Ambil data soal dari bank_soal
     $this->db->select('us.*, bs.pertanyaan, bs.pilihan_a, bs.pilihan_b, bs.pilihan_c, bs.pilihan_d');
     $this->db->from('ujian_soal us');
-    $this->db->join('bank_soal bs', 'bs.id_soal = us.soal_id');
+    $this->db->join('bank_soal bs', 'bs.id_soal = us.bank_soal_id');
     $this->db->where('us.ujian_id', $ujian_id);
     $this->db->where('us.sumber', 'bank_soal');
     $bank_soal = $this->db->get()->result();
