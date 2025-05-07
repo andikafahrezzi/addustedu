@@ -910,7 +910,9 @@ public function simpan_ujian()
     $data['bank_soal'] = $bank_soal;
     $data['pribadi_soal'] = $pribadi_soal;
 
+    $this->load->view('guru/navug');
     $this->load->view('guru/tampil_soal', $data);
+    $this->load->view('guru/footg');
 }
 
 
