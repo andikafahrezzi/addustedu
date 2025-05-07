@@ -25,6 +25,8 @@
                         <?php foreach ($user as $u) { ?>
                             <div class="card-body">
                                 <form method="POST" action="<?= base_url('admin/materi_edit') ?>" enctype="multipart/form-data">
+                                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                                value="<?= $this->security->get_csrf_hash(); ?>" />
                                     <input type="hidden" name="id" value="<?= $u->id ?>">
                                     <div class="form-group">
                                         <label for="nip">Nip</label>

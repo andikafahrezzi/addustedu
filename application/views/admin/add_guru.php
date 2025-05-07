@@ -26,6 +26,8 @@
 
                         <div class="card-body">
                             <form method="POST" action="<?= base_url('admin/add_guru') ?>">
+                            <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                            value="<?= $this->security->get_csrf_hash(); ?>" />
                                 <div id="" class="form-group">
                                     <label for="nip">Nomor Induk Pegawai</label>
                                     <input id="nip" type="text" class="form-control" name="nip">

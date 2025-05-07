@@ -50,6 +50,7 @@
                                             </button>
                                         </div>
                                         <?= form_open('guru/beri_nilai/'.$sub->id) ?>
+                                        <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
                                         <div class="modal-body">
                                             <div class="form-group">
                                                 <label>Nilai (0-100)</label>

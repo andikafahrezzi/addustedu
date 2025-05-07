@@ -5,6 +5,8 @@
 <form method="POST" action="<?= base_url('guru/materi_edit/' . $materi->id) ?>" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?= $materi->id ?>">
     <input type="hidden" name="id_guru" value="<?= $materi->id_guru ?>">
+    <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                        value="<?= $this->security->get_csrf_hash(); ?>" />
 
     <div class="form-group">
         <label for="nama_guru">Nama Guru</label>

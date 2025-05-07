@@ -109,7 +109,9 @@ class Ujian extends CI_Controller {
 
         $data['ujian'] = $this->Ujian_model->get_ujian_by_id($id_ujian);
 
+        $this->load->view('user/navu');
         $this->load->view('user/hasil', $data);
+        
     }
 
     public function simpan_jawaban_ajax()
@@ -171,6 +173,7 @@ public function ranking($id_ujian)
     $data['ranking'] = $ranking; 
     $data['ujian'] = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
 
+    $this->load->view('user/navu');
     $this->load->view('user/rankinng', $data);   
 }
 

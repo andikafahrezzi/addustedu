@@ -505,7 +505,7 @@ if (!$nama_guru) {
         $forum = $this->Forum_model->get_forum_by_materi($materi_id);
         if(empty($forum)) {
             $this->session->set_flashdata('error', 'Forum tidak ditemukan');
-            redirect('admin/list_materi');
+            redirect('admin/data_fordis');
         }
     
         // Proses penghapusan
@@ -514,19 +514,19 @@ if (!$nama_guru) {
         } else {
             $this->session->set_flashdata('error', 'Gagal menghapus forum');
         }
-        redirect('admin/list_materi');
+        redirect('admin/data_fordis');
     }
-    public function list_materi() {
+    public function data_fordis() {
         // Cek role admin
     
         $this->load->model('M_materi');
         $data['materi'] = $this->M_materi->get_all_materi();
         $this->load->view('admin/partials/nava');
-        $this->load->view('admin/list_materi', $data);
+        $this->load->view('admin/data_fordis', $data);
         $this->load->view('admin/partials/foota');
     }
 
-    public function buat_quiz()
+    public function add_quiz()
 {
     $this->load->model('Quiz_model');
     
@@ -557,7 +557,7 @@ if (!$nama_guru) {
     $data['materi_list'] = $this->Quiz_model->get_materi_list();
     
     
-    $this->load->view('admin/buat_quiz', $data);
+    $this->load->view('admin/add_quiz', $data);
     $this->load->view('admin/partials/foota');
 }
 

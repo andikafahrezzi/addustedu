@@ -13,6 +13,7 @@
             <div class="mb-5">
                 <h5><i class="fas fa-plus-circle mr-2"></i>Tambah Soal Baru</h5>
                 <form method="post" action="">
+                <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
                     <div class="form-group">
                         <label>Pertanyaan</label>
                         <textarea name="pertanyaan" class="form-control" rows="3" required></textarea>
@@ -143,6 +144,13 @@
         </div>
     </div>
 </div>
+<?php if($this->session->flashdata('success')): ?>
+    <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+<?php endif; ?>
+
+<?php if($this->session->flashdata('error')): ?>
+    <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
+<?php endif; ?>
 
 <script>
 // Sembunyikan opsi pilihan jika tipe soal essay

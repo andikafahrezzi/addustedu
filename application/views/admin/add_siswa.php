@@ -16,6 +16,8 @@
                  </div>
                  <div class="col-md-6 mx-auto my-auto mt--5">
                      <form action="<?= base_url('user/registration_act') ?>" method="post">
+                     <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                     value="<?= $this->security->get_csrf_hash(); ?>" />
                          <div class="form-group">
                              <label for="nis" class="label-font-register">Nis</label>
                              <input type="text" autocomplete="off" class="form-control effect-9" name="nis" id="nis" value="<?= set_value('nis'); ?>">

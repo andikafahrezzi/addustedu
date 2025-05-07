@@ -569,26 +569,49 @@ public function delete_materi($id)
 private function tambah_soal($quiz_id)
 {
     $this->load->model('Quiz_model');
-    
+
+    // Ambil input
     $tipe = $this->input->post('tipe');
+    $pertanyaan = trim($this->input->post('pertanyaan'));
+    $poin = (int) $this->input->post('poin', true);
+
+    // Validasi minimal
+    if (empty($pertanyaan) || $poin <= 0) {
+        $this->session->set_flashdata('error', 'Pertanyaan dan poin wajib diisi.');
+        return;
+    }
+
     $data = [
         'quiz_id' => $quiz_id,
-        'pertanyaan' => $this->input->post('pertanyaan'),
+        'pertanyaan' => $pertanyaan,
         'tipe' => $tipe,
-        'poin' => $this->input->post('poin', true) ?: 1
+        'poin' => $poin ?: 1
     ];
-    
+
     if ($tipe == 'pilihan') {
-        $data['opsi_a'] = $this->input->post('opsi_a');
-        $data['opsi_b'] = $this->input->post('opsi_b');
-        $data['opsi_c'] = $this->input->post('opsi_c');
-        $data['opsi_d'] = $this->input->post('opsi_d');
-        $data['jawaban'] = $this->input->post('jawaban');
+        $opsi_a = trim($this->input->post('opsi_a'));
+        $opsi_b = trim($this->input->post('opsi_b'));
+        $opsi_c = trim($this->input->post('opsi_c'));
+        $opsi_d = trim($this->input->post('opsi_d'));
+        $jawaban = $this->input->post('jawaban');
+
+        // Validasi pilihan ganda
+        if (empty($opsi_a) || empty($opsi_b) || empty($opsi_c) || empty($opsi_d)) {
+            $this->session->set_flashdata('error', 'Semua opsi dan jawaban benar wajib diisi.');
+            return;
+        }
+
+        $data['opsi_a'] = $opsi_a;
+        $data['opsi_b'] = $opsi_b;
+        $data['opsi_c'] = $opsi_c;
+        $data['opsi_d'] = $opsi_d;
+        $data['jawaban'] = $jawaban;
     }
-    
+
     $this->Quiz_model->tambah_soal($data);
     $this->session->set_flashdata('success', 'Soal berhasil ditambahkan!');
 }
+
 
     // Delete quiz
     public function delete($id) {
@@ -910,7 +933,9 @@ public function simpan_ujian()
     $data['bank_soal'] = $bank_soal;
     $data['pribadi_soal'] = $pribadi_soal;
 
+    $this->load->view('guru/navug');
     $this->load->view('guru/tampil_soal', $data);
+    $this->load->view('guru/footg');
 }
 
 

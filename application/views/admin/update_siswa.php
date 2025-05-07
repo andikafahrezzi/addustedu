@@ -15,6 +15,8 @@
                         </div>
                     </div>
                     <form action="<?= base_url('admin/user_edit') ?>" enctype="multipart/form-data" method="post">
+                    <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                    value="<?= $this->security->get_csrf_hash(); ?>" />
                         <?php foreach ($user as $u) { ?>
                             <div class="">
                                 <div class="hero text-white hero-bg-image" data-background="<?= base_url('assets/') ?>stisla-assets/img/unsplash/eberhard-grossgasteiger-1207565-unsplash.jpg">
