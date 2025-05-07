@@ -12,7 +12,7 @@
 					<div class="">
 						<div class="card" style="width:100%;">
 							<div class="card-body">
-								<h2 class="card-title" style="color: black;">Syauqi Zaidan Khairan Khalaf</h2>
+								<h2 class="card-title" style="color: black;">Andika Fahrezi</h2>
 								<hr>
 								<p class="card-text">Perfectionist Web Developer with one years of experience as a Web Developer and Web Designer. Skilled at Designing and developing Websites. Excellent written and oral communication skills; capable of explaining complex software issues in easy-to-understand terms. </p>
 							</div>
