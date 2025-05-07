@@ -7,6 +7,8 @@
         
         <div class="card-body">
             <form id="quizForm" action="<?= site_url('siswa/submit_quiz') ?>" method="post">
+            <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
+
                 <input type="hidden" name="quiz_siswa_id" value="<?= $quiz_siswa_id ?>">
                 <input type="hidden" name="quiz_id" value="<?= $quiz->id ?>">
                 
@@ -67,7 +69,9 @@
         </div>
     </div>
 </div>
-
+<style>
+        body { font-family: Arial; margin: 30px; margin-top: 200px}
+    </style>
 <script>
 // Timer countdown
 function startTimer(duration, display) {

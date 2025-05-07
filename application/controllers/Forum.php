@@ -73,7 +73,7 @@ class Forum extends CI_Controller {
             $this->session->set_flashdata('error-comment', 'Gagal menambahkan komentar');
         }
     
-        redirect('materi/belajar/' . $materi_id);
+        redirect($_SERVER['HTTP_REFERER']);
     }
     
     
