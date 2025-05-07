@@ -228,7 +228,7 @@
                             <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true"
                                 data-ktmenu-submenu-toggle="click"><a href="javascript:;"
                                     class="kt-menu__link kt-menu__toggle"><i
-                                        class="kt-menu__link-icon flaticon2-delivery-package"></i><span
+                                        class="kt-menu__link-icon flaticon2-hourglass-1"></i><span
                                         class="kt-menu__link-text">Tambah</span><i
                                         class="kt-menu__ver-arrow la la-angle-right"></i></a>
                                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
@@ -247,7 +247,7 @@
                             <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true"
                                 data-ktmenu-submenu-toggle="click"><a href="javascript:;"
                                     class="kt-menu__link kt-menu__toggle"><i
-                                        class="kt-menu__link-icon flaticon2-delivery-package"></i><span
+                                        class="kt-menu__link-icon la la-university" style="font-size: 25px;"></i><span
                                         class="kt-menu__link-text">Tambah</span><i
                                         class="kt-menu__ver-arrow la la-angle-right"></i></a>
                                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>

@@ -8,6 +8,7 @@
     <div class="card shadow mb-4">
         <div class="card-body">
             <form method="post" action="<?= site_url('guru/add_bank_soal') ?>">
+            <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
                 <!-- Tipe Soal -->
                 <div class="form-group">
                     <label for="tipe_soal">Tipe Soal *</label>

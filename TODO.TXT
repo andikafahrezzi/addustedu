@@ -3,8 +3,7 @@ TODO
     - cari tau bagaimana cara destroy session 
     - menambahkan fungsi delete materi, quiz dan bank soal, tugas pada siswa, dan admin
     - nama tidak boleh ada angka(validasi)
-    - bagaimana cara menyambungkan bank soal yang sudah dibuat, agar bisa dipakai oleh guru saat ingin mengisi soal Ujian
-    -  pada pemilihan bank_soal belum sesuai kelas dan matapelajaran
+    - pada pemilihan bank_soal belum sesuai kelas dan matapelajaran
     - menambahkan csrf kesetiap form
 - ADMIN
     - cek navbar admin setiap komponen untuk clean code
