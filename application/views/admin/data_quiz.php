@@ -7,7 +7,7 @@
                             <h2 class="card-title" style="color: black;">Management Data Materi addustedu</h2>
                             <hr>
                             <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction.</p>
-                            <a href="<?= base_url('admin/buat_quiz') ?>" class="btn btn-success">Tambah
+                            <a href="<?= base_url('admin/add_quiz') ?>" class="btn btn-success">Tambah
                                 Quiz⭢</a>
                         </div>
                     </div>

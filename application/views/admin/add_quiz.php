@@ -71,7 +71,9 @@
                 </div>
             <?php endif; ?>
             
-            <form method="post" action="<?= site_url('admin/buat_quiz') ?>">
+            <form method="post" action="<?= site_url('admin/add_quiz') ?>">
+            <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+            value="<?= $this->security->get_csrf_hash(); ?>" />
                 <div class="form-group">
                     <label for="materi_id"><i class="fas fa-book mr-1"></i> Pilih Materi</label>
                     <select name="materi_id" id="materi_id" class="form-control" required>

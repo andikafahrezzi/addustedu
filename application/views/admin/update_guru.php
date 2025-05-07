@@ -27,6 +27,8 @@
                         <?php foreach ($user as $u) { ?>
                             <div class="card-body">
                                 <form method="POST" action="<?= base_url('admin/guru_edit') ?>">
+                                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                                value="<?= $this->security->get_csrf_hash(); ?>" />
 
                                     <div class="form-group">
                                         <label for="nip">Nomor Induk Pegawai</label>

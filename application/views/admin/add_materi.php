@@ -23,6 +23,8 @@
                             </div>
                             <div id="detail" class="card-body">
                                 <form method="POST" enctype="multipart/form-data" action="<?= base_url('admin/add_materi') ?>">
+                                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                                value="<?= $this->security->get_csrf_hash(); ?>" />
                                     <div class="col-md-12 bg-white" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px">
                                         <form method="post" enctype="multipart/form-data" action="<?= base_url('guru/add_materi') ?>">
                                             <input type="hidden" name="id">
