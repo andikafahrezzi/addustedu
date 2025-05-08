@@ -127,6 +127,48 @@ public function simpan_jawaban($id_soal, $jawaban, $ragu, $sumber = 'tbl_soal')
 
     return $this->db->trans_status();
 }
+public function tandai_ragu($id_soal, $jawaban, $sumber)
+{
+    $data = [
+        'nis' => $this->session->userdata('nis'),
+        'id_ujian' => $this->session->userdata('ujian_id'),
+        'jawaban' => $jawaban,
+        'ragu_ragu' => 1,
+        'sumber' => $sumber,
+        'waktu_jawab' => date('Y-m-d H:i:s')
+    ];
+
+    // Set kolom sesuai sumber soal
+    if ($sumber === 'tbl_soal') {
+        $data['id_soal'] = $id_soal;
+        $data['bank_soal_id'] = null;
+        $where = ['id_soal' => $id_soal];
+    } else {
+        $data['bank_soal_id'] = $id_soal;
+        $data['id_soal'] = null;
+        $where = ['bank_soal_id' => $id_soal];
+    }
+
+    // Tambahkan kondisi umum
+    $where['nis'] = $data['nis'];
+    $where['id_ujian'] = $data['id_ujian'];
+
+    // Cek apakah sudah ada jawaban
+    $existing = $this->db->get_where('tbl_jawaban_siswa', $where)->row();
+
+    $this->db->trans_start();
+    
+    if ($existing) {
+        $this->db->where('id_jawaban', $existing->id_jawaban);
+        $result = $this->db->update('tbl_jawaban_siswa', $data);
+    } else {
+        $result = $this->db->insert('tbl_jawaban_siswa', $data);
+    }
+
+    $this->db->trans_complete();
+
+    return $this->db->trans_status();
+}
 
 public function hitung_skor($id_ujian, $nis)
 {

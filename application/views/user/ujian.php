@@ -194,10 +194,10 @@
             </label>
         </div>
         <div class="soal-actions">
-            <button class="btn btn-warning" onclick="raguRagu(<?= $s['id'] ?>)">
-                <?= (isset($jawaban_siswa) && $jawaban_siswa->ragu_ragu ? 'Batal Ragu' : 'Tandai Ragu') ?>
-            </button>
             <button class="btn btn-secondary" onclick="previousSoal()" <?= $index == 0 ? 'disabled' : '' ?>>Sebelumnya</button>
+            <button class="btn btn-warning" onclick="raguRagu(<?= $s['id'] ?>, '<?= $s['sumber'] ?>')">
+    <?= (isset($jawaban_siswa) && $jawaban_siswa->ragu_ragu ? 'Batal Ragu' : 'Tandai Ragu') ?>
+</button>
             <button class="btn btn-primary" onclick="nextSoal()" <?= $index == count($soal) - 1 ? 'disabled' : '' ?>>Berikutnya</button>
         </div>
     </div>
@@ -327,81 +327,65 @@
 // Panggil dengan menyertakan sumber soal
 onclick="saveAnswer(<?= $s['id'] ?>,'A','<?= $s['sumber'] ?>')"
 
-function raguRagu(id_soal) {
-    var jawaban = $('input[name="jawaban' + id_soal + '"]:checked').val();
-    if (jawaban) {
-        var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
-        var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
-        
-        $.ajax({
-            url: '<?= site_url("ujian/simpan_jawaban_ajax") ?>',
-            method: 'POST',
-            data: {
-                id_soal: id_soal,
-                jawaban: jawaban,
-                ragu: 1,
-                [csrfName]: csrfHash
-            },
-            success: function(response) {
-                if(response.status === 'success') {
-                    var btn = $('#nav' + current);
-                    if (btn.hasClass('ragu')) {
-                        btn.removeClass('ragu').addClass('answered');
-                        $('.btn-warning').text('Tandai Ragu');
-                    } else {
-                        btn.removeClass('answered').addClass('ragu');
-                        $('.btn-warning').text('Batal Ragu');
-                    }
-                }
-            }
-        });
-    } else {
+function raguRagu(id_soal, sumber) {
+    // Dapatkan jawaban yang dipilih
+    var jawaban = $('input[name="jawaban'+id_soal+'"]:checked').val();
+    
+    if (!jawaban) {
         alert('Pilih jawaban terlebih dahulu sebelum menandai ragu!');
+        return;
     }
+
+    // Dapatkan CSRF token
+    var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+    var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+    
+    // Tampilkan loading
+    $('#loading-indicator').show();
+
+    $.ajax({
+        url: '<?= site_url("ujian/tandai_ragu") ?>',
+        method: 'POST',
+        dataType: 'json',
+        data: {
+            id_soal: id_soal,
+            jawaban: jawaban,
+            sumber: sumber,
+            [csrfName]: csrfHash
+        },
+        success: function(response) {
+            $('#loading-indicator').hide();
+            
+            if(response.status === 'success') {
+                // Update tampilan
+                var btn = $('#nav'+current);
+                var raguBtn = $('.btn-warning', '#soal'+current);
+                
+                if (btn.hasClass('ragu')) {
+                    btn.removeClass('ragu').addClass('answered');
+                    raguBtn.text('Tandai Ragu');
+                } else {
+                    btn.removeClass('answered').addClass('ragu');
+                    raguBtn.text('Batal Ragu');
+                }
+            } else {
+                alert('Error: ' + response.message);
+            }
+        },
+        error: function(xhr) {
+            $('#loading-indicator').hide();
+            
+            var errorMsg = 'Gagal menyimpan tanda ragu. ';
+            if(xhr.responseJSON && xhr.responseJSON.message) {
+                errorMsg += xhr.responseJSON.message;
+            } else {
+                errorMsg += 'Status: ' + xhr.status;
+            }
+            alert(errorMsg);
+        }
+    });
 }
 
-function raguRagu(id_soal) {
-    let jawaban = $('input[name=jawaban' + id_soal + ']:checked').val();
-    if (jawaban) {
-        // Tambahkan CSRF token
-        var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
-        var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
-        
-        $.ajax({
-            url: '<?= site_url("ujian/simpan_jawaban_ajax") ?>',
-            method: 'POST',
-            data: {
-                id_soal: id_soal,
-                jawaban: jawaban,
-                ragu: 1,
-                [csrfName]: csrfHash // Tambahkan CSRF token
-            },
-            dataType: 'json',
-            success: function(response) {
-                if (response.status === 'success') {
-                    let btn = $('#nav' + current);
-                    let raguBtn = $('.soal-actions button:contains("Tandai Ragu"), .soal-actions button:contains("Batal Ragu")').first();
-                    
-                    if (btn.hasClass('ragu')) {
-                        btn.removeClass('ragu').addClass('answered');
-                        raguBtn.text('Tandai Ragu');
-                    } else {
-                        btn.removeClass('answered').addClass('ragu');
-                        raguBtn.text('Batal Ragu');
-                    }
-                } else {
-                    alert('Gagal menyimpan: ' + response.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-                alert('Gagal menyimpan jawaban. Status: ' + status + '\nError: ' + error);
-            }
-        });
-    } else {
-        alert('Pilih jawaban terlebih dahulu sebelum menandai ragu!');
-    }
-}
 
     function submitUjian(auto = false) {
         if (auto || confirm('Apakah Anda yakin ingin mengumpulkan ujian ini?\nPastikan semua jawaban sudah diperiksa.')) {

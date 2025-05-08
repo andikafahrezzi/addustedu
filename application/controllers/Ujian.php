@@ -113,7 +113,54 @@ class Ujian extends CI_Controller {
         $this->load->view('user/hasil', $data);
         
     }
+    public function tandai_ragu()
+{
+    $this->output->set_content_type('application/json');
 
+    // Validasi AJAX request
+    if (!$this->input->is_ajax_request()) {
+        return $this->output->set_status_header(403)
+            ->set_output(json_encode(['status' => 'error', 'message' => 'Forbidden']));
+    }
+
+    // Validasi input
+    $this->form_validation->set_rules('id_soal', 'ID Soal', 'required|numeric');
+    $this->form_validation->set_rules('jawaban', 'Jawaban', 'required|in_list[A,B,C,D]');
+    $this->form_validation->set_rules('sumber', 'Sumber Soal', 'required|in_list[tbl_soal,bank_soal]');
+
+    if (!$this->form_validation->run()) {
+        return $this->output->set_status_header(400)
+            ->set_output(json_encode([
+                'status' => 'error',
+                'message' => 'Validasi gagal: ' . validation_errors(null, null)
+            ]));
+    }
+
+    // Proses tanda ragu
+    $this->load->model('Ujian_model');
+    $success = $this->Ujian_model->tandai_ragu(
+        $this->input->post('id_soal'),
+        $this->input->post('jawaban'),
+        $this->input->post('sumber')
+    );
+
+    if ($success) {
+        return $this->output->set_status_header(200)
+            ->set_output(json_encode([
+                'status' => 'success',
+                'message' => 'Tanda ragu berhasil disimpan',
+                'csrf_token' => $this->security->get_csrf_hash()
+            ]));
+    } else {
+        return $this->output->set_status_header(500)
+            ->set_output(json_encode([
+                'status' => 'error',
+                'message' => 'Gagal menyimpan tanda ragu',
+                'csrf_token' => $this->security->get_csrf_hash()
+            ]));
+    }
+}
+    
     public function simpan_jawaban_ajax()
 {
     $this->output->set_content_type('application/json');

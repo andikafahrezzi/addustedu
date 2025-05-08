@@ -99,7 +99,7 @@ class Admin extends CI_Controller
         ]
     );
 
-    $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[6]|matches[password2]', [
+    $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[8]|matches[password2]', [
         'required' => 'Harap isi kolom Password.',
         'matches' => 'Password tidak sama!',
         'min_length' => 'Password terlalu pendek',
