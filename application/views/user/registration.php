@@ -5,14 +5,14 @@
             <div class="col-md-12 text-center">
                 <p class="registration-title font-weight-bold display-4 mt-4" style="font-size: 50px;">
                     Pendaftaran addustedu</p>
-                <p style="line-height:-30px;margin-top:-20px;">Silahkan isi data data yang diperlukan dibawah ini </p>
+                <p style="line-height:-30px;margin-top:-20px;">Silahkan isi data data yangg diperlukan dibawah ini </p>
                 <hr>
             </div>
             <div class="col-md-6 mx-auto text-center">
                 <div class="bodymovin" data-icon="<?= base_url('assets/') ?>json/registration-animation.json"></div>
             </div>
             <div class="col-md-6 mx-auto my-auto mt--5">
-                <form action="<?= base_url('user/registration_act') ?>" method="post">
+                <form action="<?= base_url('admin/add_siswa') ?>" method="post">
                 <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
                 <div class="form-group">
                         <label for="nis" class="label-font-register">nis</label>

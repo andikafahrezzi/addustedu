@@ -15,7 +15,7 @@
                      <div class="bodymovin" data-icon="<?= base_url('assets/') ?>json/registration-animation.json"></div>
                  </div>
                  <div class="col-md-6 mx-auto my-auto mt--5">
-                     <form action="<?= base_url('user/registration_act') ?>" method="post">
+                     <form action="<?= base_url('admin/add_siswa') ?>" method="post">
                      <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
                      value="<?= $this->security->get_csrf_hash(); ?>" />
                          <div class="form-group">
@@ -40,9 +40,9 @@
                                  <?= form_error('password', '<small class="text-danger">', '</small>'); ?>
                              </div>
                              <div class="form-group col-md-6">
-                                 <label for="retype_password" class="label-font-register">Retype password</label>
-                                 <input type="password" class="form-control" name="retype_password" id="retype_password">
-                                 <?= form_error('retype_password', '<small class="text-danger">', '</small>'); ?>
+                                 <label for="password2" class="label-font-register">Retype password</label>
+                                 <input type="password" class="form-control" name="password2" id="password2">
+                                 <?= form_error('password2', '<small class="text-danger">', '</small>'); ?>
                              </div>
                         </div>
                         <div class="form-group">

@@ -75,50 +75,63 @@ class Admin extends CI_Controller
         $this->load->view('admin/partials/foota');
     }
     public function add_siswa()
-    {
-        $this->form_validation->set_rules('nip', 'Nip', 'required|trim|min_length[4]', [
-            'required' => 'Harap isi kolom NIP.',
-            'min_length' => 'NIP terlalu pendek.',
-        ]);
+{
+    $this->form_validation->set_rules('nis', 'NIS', 'required|trim|min_length[4]|is_unique[siswa.nis]', [
+        'required' => 'Harap isi kolom NIS.',
+        'min_length' => 'NIS terlalu pendek.',
+        'is_unique' => 'NIS ini sudah terdaftar.',
+    ]);
 
-        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[guru.email]', [
-            'is_unique' => 'Email ini telah digunakan!',
-            'required' => 'Harap isi kolom email.',
-            'valid_email' => 'Masukan email yang valid.',
-        ]);
+    $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[guru.email]', [
+        'is_unique' => 'Email ini telah digunakan!',
+        'required' => 'Harap isi kolom email.',
+        'valid_email' => 'Masukan email yang valid.',
+    ]);
 
-        $this->form_validation->set_rules('nama', 'Nama', 'required|trim|min_length[4]', [
-            'required' => 'Harap isi kolom nAMA.',
+    $this->form_validation->set_rules(
+        'nama',
+        'Nama',
+        'required|trim|min_length[4]|regex_match[/^[a-zA-Z\s]+$/]',
+        [
+            'required' => 'Harap isi kolom Nama.',
             'min_length' => 'Nama terlalu pendek.',
-        ]);
+            'regex_match' => 'Nama hanya boleh berisi huruf dan spasi.',
+        ]
+    );
 
-        $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[6]|matches[password2]', [
-            'required' => 'Harap isi kolom Password.',
-            'matches' => 'Password tidak sama!',
-            'min_length' => 'Password terlalu pendek',
-        ]);
-        $this->form_validation->set_rules('password2', 'Password', 'required|trim|matches[password]', [
-            'matches' => 'Password tidak sama!',
-        ]);
+    $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[6]|matches[password2]', [
+        'required' => 'Harap isi kolom Password.',
+        'matches' => 'Password tidak sama!',
+        'min_length' => 'Password terlalu pendek',
+    ]);
+    $this->form_validation->set_rules('password2', 'Konfirmasi Password', 'required|trim|matches[password]', [
+        'matches' => 'Password tidak sama!',
+        'required' => 'Harap isi konfirmasi password.',
+    ]);
 
-        if ($this->form_validation->run() == false) {
-            $this->load->view('admin/add_siswa');           
-            $this->load->view('admin/partials/foota');
-        } else {
-            $data = [
-                'nis' => htmlspecialchars($this->input->post('nis', true)),
-                'email' => htmlspecialchars($this->input->post('email', true)),
-                'nama_guru' => htmlspecialchars($this->input->post('nama', true)),
-                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-                'nama_mapel' => htmlspecialchars($this->input->post('mapel', true)),
-            ];
+    if ($this->form_validation->run() == false) {
+        $this->load->view('admin/partials/nava');
+        $this->load->view('admin/add_siswa');           
+        $this->load->view('admin/partials/foota');
+    } else {
+        $data = [
+            'nis' => htmlspecialchars($this->input->post('nis', true)),
+            'email' => htmlspecialchars($this->input->post('email', true)),
+            'nama' => htmlspecialchars($this->input->post('nama', true)),
+            'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+            'kelas' => htmlspecialchars($this->input->post('kelas', true)),
+            'image' => 'default.jpg',
+            'is_active' => 1,
+            'date_created' => date('Y-m-d H:i:s'),
+        ];
 
-            $this->db->insert('siswa', $data);
+        $this->db->insert('siswa', $data);
 
-            $this->session->set_flashdata('success-reg', 'Berhasil!');
-            redirect(base_url('admin/data_siswa'));
-        }
+        $this->session->set_flashdata('success-reg', 'Berhasil!');
+        redirect(base_url('admin/data_siswa'));
     }
+}
+
 
     public function update_siswa($nis)
     {
