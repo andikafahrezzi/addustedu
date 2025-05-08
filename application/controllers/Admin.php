@@ -371,12 +371,18 @@ $data = array(
             'valid_email' => 'Masukan email yang valid.',
         ]);
 
-        $this->form_validation->set_rules('nama', 'Nama', 'required|trim|min_length[4]', [
-            'required' => 'Harap isi kolom nAMA.',
-            'min_length' => 'Nama terlalu pendek.',
-        ]);
+        $this->form_validation->set_rules(
+            'nama',
+            'Nama',
+            'required|trim|min_length[4]|regex_match[/^[a-zA-Z\s]+$/]',
+            [
+                'required' => 'Harap isi kolom Nama.',
+                'min_length' => 'Nama terlalu pendek.',
+                'regex_match' => 'Nama hanya boleh berisi huruf dan spasi.',
+            ]
+        );
 
-        $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[6]|matches[password2]', [
+        $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[8]|matches[password2]', [
             'required' => 'Harap isi kolom Password.',
             'matches' => 'Password tidak sama!',
             'min_length' => 'Password terlalu pendek',
