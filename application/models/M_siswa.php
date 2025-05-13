@@ -62,4 +62,31 @@ public function update($nis, $data)
         $this->db->where($where);
         $this->db->update($table, $data);
     }
+    public function import_data($data) {
+        $this->db->trans_start();
+        
+        // Cek duplikat NIS
+        $nises = array_column($data, 'nis');
+        $existing = $this->db->select('nis')
+                            ->where_in('nis', $nises)
+                            ->get('siswa')
+                            ->result_array();
+        
+        if (!empty($existing)) {
+            $existing_nis = array_column($existing, 'nis');
+            $data = array_filter($data, function($item) use ($existing_nis) {
+                return !in_array($item['nis'], $existing_nis);
+            });
+            
+            if (empty($data)) {
+                $this->db->trans_complete();
+                return false;
+            }
+        }
+        
+        $this->db->insert_batch('siswa', $data);
+        $this->db->trans_complete();
+        
+        return $this->db->trans_status();
+    }
 }
