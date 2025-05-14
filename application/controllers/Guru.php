@@ -766,11 +766,12 @@ private function tambah_soal($quiz_id)
     public function tambah_ujian()
 {
     $nip = $this->session->userdata('nip');
-    
+    $this->db->select('nama_mapel');
+    $guru = $this->db->get_where('guru', ['nip' => $nip])->row();
     // Ambil data materi dan soal dari bank soal
     $data = [
         'materi_list' => $this->Ujian_model->get_materi_options($nip),
-        'bank_soal' => $this->Bank_soal_model->get_soal_by_guru($nip),
+        'bank_soal' => $this->Bank_soal_model->get_soal_by_mapel($guru->nama_mapel),
         'title' => 'Tambah Ujian Baru'
     ];
     
