@@ -31,13 +31,14 @@ class Ujian_model extends CI_Model {
     }
 
 
-public function get_ujian_by_kelas($kelas_siswa)
+public function get_ujian_by_kelas($kelas_siswa, $nip)
 {
     $this->db->select('tbl_ujian.*, materi.nama_mapel, materi.kelas');
     $this->db->from('tbl_ujian');
     $this->db->join('materi', 'materi.id = tbl_ujian.id_materi');
     $this->db->where('materi.kelas', $kelas_siswa);
     $this->db->where('tbl_ujian.status', 'aktif');
+    $this->db->where('tbl_ujian.nip_guru', $nip); 
     return $this->db->get()->result_array();
 }
 public function get_all_soal_by_ujian($ujian_id)

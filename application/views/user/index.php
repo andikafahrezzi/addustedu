@@ -67,8 +67,14 @@
                                 <?php endfor; ?>
 
                                 <!-- UJIAN SECTION MULAI DISINI -->
-                                <?php if (!empty($ujian_list)): ?>
+                                <?php 
+$nip_guru_ini = $materi_list[0]['id_guru']; // ini adalah nip untuk guru yang sedang ditampilkan
+$ujian_list = $ujian_data[$nip_guru_ini] ?? [];
+?>
+
+<?php if (!empty($ujian_list)): ?>
     <?php foreach ($ujian_list as $ujian): ?>
+
     <div class="col-md-4 mb-4">
         <div class="pertemuan-card h-100 shadow-sm" style="background: linear-gradient(135deg, #42e695, #3bb2b8); border: 2px solidrgb(95, 255, 210);">
             <div class="card-body text-center">

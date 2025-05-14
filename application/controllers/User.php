@@ -37,7 +37,14 @@ class User extends CI_Controller
         $data['mapel_data'] = $mapel_data;
 
         // ✅ Ambil daftar ujian berdasarkan kelas siswa
-        $data['ujian_list'] = $this->Ujian_model->get_ujian_by_kelas($kelas_siswa);
+        $ujian_data = [];
+            foreach ($mapel_data as $mapel => $guru_list) {
+                foreach ($guru_list as $nip => $materi_list) {
+                    $ujian_data[$nip] = $this->Ujian_model->get_ujian_by_kelas($kelas_siswa, $nip);
+                }
+            }
+        $data['ujian_data'] = $ujian_data;
+
 
         $this->load->view('user/navu');
         $this->load->view('user/index', $data);
