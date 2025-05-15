@@ -1,8 +1,3 @@
-
-    <!-- Registration Form Area -->
-     <!-- <form action="POST" action="<?= base_url('admin/add_siswa') ?>">
-         
-     </form> -->
      <div class="container mt-5 mb-5" id="registration">
              <div class="row bg-registration p-3">
                  <div class="col-md-12 text-center">
@@ -84,4 +79,18 @@
             }
         });
     </script>
+    <script>
+  $(function () {
+    $(".bodymovin").each(function () {
+      var element = $(this);
+      var animation = bodymovin.loadAnimation({
+        container: element[0],
+        renderer: "svg",
+        loop: true,
+        autoplay: true,
+        path: element.data("icon"),
+      });
+    });
+  });
+</script>   
     <!-- End Checkbox Scripts -->

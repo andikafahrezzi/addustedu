@@ -242,16 +242,13 @@ public function hitung_skor($id_ujian, $nis)
             'nis' => $nis
         ])->row();
     }
-
-    // public function mulai_ujian($id_ujian, $nis)
-    // {
-    //     $data = [
-    //         'nis' => $nis,
-    //         'id_ujian' => $id_ujian,
-    //         'waktu_mulai_ujian' => date('Y-m-d H:i:s')
-    //     ];
-    //     return $this->db->insert('tbl_jawaban_siswa', $data);
-    // }
-
-    // Fungsi-fungsi lainnya tetap sama seperti sebelumnya...
+    public function tampil_ujian()
+    {
+    return $this->db->get('tbl_ujian');
+    }
+    public function detail_ujian($id_ujian = null)
+    {
+        $query = $this->db->get_where('tbl_ujian', array('id_ujian' => $id_ujian))->row();
+        return $query;
+    }
 }

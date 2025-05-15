@@ -779,4 +779,27 @@ public function data_quiz()
         $this->session->set_flashdata('success', 'Soal berhasil dihapus');
         redirect('admin/bank_soal');
     }
+    public function data_ujian()
+    {
+        $this->load->model('Ujian_model');
+
+        $data['user'] = $this->db->get_where('admin', ['email' =>
+            $this->session->userdata('email')])->row_array();
+
+        $data['user'] = $this->Ujian_model->tampil_ujian()->result();
+        $this->load->view('admin/partials/nava');
+        $this->load->view('admin/data_ujian', $data);
+        $this->load->view('admin/partials/foota');
+
+    }
+    public function detail_ujian($id_ujian)
+    {
+        $this->load->model('Ujian_model');
+        $where = array('id_ujian' => $id_ujian);
+        $detail = $this->Ujian_model->detail_ujian($id_ujian);
+        $data['detail'] = $detail;
+        $this->load->view('admin/partials/nava');
+        $this->load->view('admin/detail_ujian', $data);
+        $this->load->view('admin/partials/foota');
+    }
 }

@@ -3,11 +3,9 @@ TODO
     - cari tau bagaimana cara destroy session 
     - menambahkan fungsi delete materi, quiz dan bank soal, tugas pada siswa, dan admin
     - nama tidak boleh ada angka(validasi)
-    - pada pemilihan bank_soal belum sesuai kelas dan matapelajaran
-    - menambahkan csrf kesetiap form
+
 - ADMIN
     - cek navbar admin setiap komponen untuk clean code
-    - import excel ke database siswa
     - tambahkan pilihan untuk input dan post pertemuan setiap upload materi ( admin)
     - belum ada data ujian pada admin yang memungkinkan admin bisa melihat atau mengelola ujian
     - edit bank soal masih null

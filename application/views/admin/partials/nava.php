@@ -28,6 +28,9 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/custom.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>stisla-assets/css/components.css">
     <script src="<?= base_url('assets/') ?>js/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.4/lottie.min.js"></script>
+    
+
 </head>
 
 <body>
@@ -105,7 +108,8 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                             <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/data_materi') ?>">Data Materi</a>
                                 </li>
-                                <li><a class="nav-link" href="<?= base_url('admin/data_fordis') ?>">List Fordis</a>
+                                <li><a class="nav-link" href="<?= base_url('admin/data_fordis') ?>">Data Fordis</a>
+                                <li><a class="nav-link" href="<?= base_url('admin/data_ujian') ?>">Data Ujian</a>
                                 <li><a class="nav-link" href="<?= base_url('admin/data_quiz') ?>">Data Quiz</a>
                                 <li><a class="nav-link" href="<?= base_url('admin/bank_soal') ?>">Data Bank SOal</a>
                                 </li>
