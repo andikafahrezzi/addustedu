@@ -210,14 +210,15 @@ class Ujian extends CI_Controller {
 }
 public function ranking($id_ujian)
 {
-    $ranking = $this->db->select('nis, SUM(score) as total_score')
-                        ->where(['id_ujian' => $id_ujian, 'is_selesai' => 1])
-                        ->group_by('nis')
-                        ->order_by('total_score', 'DESC')
-                        ->get('tbl_jawaban_siswa')
-                        ->result();
+    $this->db->select('tbl_jawaban_siswa.nis, siswa.nama, MAX(tbl_jawaban_siswa.score) as total_score');
+    $this->db->from('tbl_jawaban_siswa');
+    $this->db->join('siswa', 'siswa.nis = tbl_jawaban_siswa.nis');
+    $this->db->where('tbl_jawaban_siswa.id_ujian', $id_ujian);
+    $this->db->where('tbl_jawaban_siswa.is_selesai', 1);
+    $this->db->group_by('tbl_jawaban_siswa.nis');
+    $this->db->order_by('total_score', 'DESC');
 
-    $data['ranking'] = $ranking; 
+    $data['ranking'] = $this->db->get()->result();
     $data['ujian'] = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
 
     $this->load->view('user/navu');
