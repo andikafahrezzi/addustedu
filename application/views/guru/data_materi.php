@@ -41,6 +41,9 @@
                                             <td><?= htmlspecialchars($m->modul); ?></td>
                                             <td class="text-center">
                                                 <div class="btn-group" role="group">
+                                                    <a href="<?= site_url('guru/belajar/'.$m->id); ?>" class="btn btn-sm btn-success" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                     <a href="<?= site_url('guru/update_materi/'.$m->id); ?>" class="btn btn-sm btn-warning" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>

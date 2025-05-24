@@ -19,7 +19,7 @@ TODO
     - tampilan upload tugas siswa masih ngaco
     - pada tabel siswa ada kolom image yang kita bisa gunakan untuk mengambil gamabr siswa.
         - gambar ini bisa digunakan untuk gambar di kolom fordis serta mempercantik tampilan navigasi user
-
+    - tidak bisa replay++ di diskusi
 
 
 PR

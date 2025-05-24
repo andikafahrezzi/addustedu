@@ -1,6 +1,7 @@
 <div class="container">
     <h2>Edit Soal Ujian</h2>
     <form action="<?= site_url('guru/edit_soal/' . $soal['id_soal']) ?>" method="post">
+                    <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
         <div class="form-group">
             <label>Soal</label>
             <textarea name="pertanyaan" class="form-control" required><?= $soal['pertanyaan'] ?></textarea>

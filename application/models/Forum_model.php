@@ -4,31 +4,11 @@ class Forum_model extends CI_Model {
     /**
      * Mendapatkan komentar beserta balasannya secara recursive
      */
-    public function get_komentar_by_materi($materi_id, $parent_id = null) 
-    {
-        $this->db->where('materi_id', $materi_id);
-        $this->db->where('parent_id', $parent_id);
-        $this->db->order_by('tanggal', 'ASC');
-        
-        $query = $this->db->get('forum_diskusi');
-        $comments = $query->result();
-
-        if ($comments) {
-            foreach ($comments as $comment) {
-                // Dapatkan balasan secara recursive
-                $comment->replies = $this->get_komentar_by_materi($materi_id, $comment->id);
-            }
-        }
-
-        return $comments;
-    }
+   
 
     /**
      * Menambahkan komentar baru
-     */
-    public function tambah_komentar($data) {
-        return $this->db->insert('forum_diskusi', $data);
-    }
+    
 
     /**
      * Fungsi tambahan untuk mendapatkan jumlah komentar
@@ -52,32 +32,64 @@ class Forum_model extends CI_Model {
     }
 
     public function get_comments($materi_id) {
-         return $this->db
-        ->select('fd.*, s.nama as user')
-        ->from('forum_diskusi fd')
-        ->join('siswa s', 's.nis = fd.nis')
-        ->where('fd.materi_id', $materi_id)
-        ->where('fd.deleted_at IS NULL')
-        ->order_by('fd.created_at', 'ASC')
-        ->get();
-        
-        return $this->build_tree($comments);
-    }
+    $this->db->select('fd.*, 
+        IF(fd.user_type = "siswa", s.nama, g.nama_guru) as user,
+        fd.user_type');
+    $this->db->from('forum_diskusi fd');
+    $this->db->join('siswa s', 'fd.user_type = "siswa" AND s.nis = fd.user_id', 'left');
+    $this->db->join('guru g', 'fd.user_type = "guru" AND g.nip = fd.user_id', 'left');
+    $this->db->where('fd.materi_id', $materi_id);
+    $this->db->where('fd.deleted_at IS NULL');
+    $this->db->order_by('fd.created_at', 'ASC');
+    $query = $this->db->get();
+    
+    $comments = $query->result();
+    return $this->build_tree($comments);
+}
     
     private function build_tree($elements, $parent_id = null) {
-        $branch = array();
-        foreach ($elements as $element) {
-            if ($element->parent_id == $parent_id) {
-                $children = $this->build_tree($elements, $element->id);
-                if ($children) {
-                    $element->replies = $children;
-                }
-                $branch[] = $element;
+    $branch = array();
+    foreach ($elements as $element) {
+        if ($element->parent_id == $parent_id) {
+            $children = $this->build_tree($elements, $element->id);
+            if ($children) {
+                $element->replies = $children;
             }
+            $branch[] = $element;
         }
-        return $branch;
+    }
+    return $branch;
+}
+public function get_comment($id) {
+    $this->db->select('fd.*, 
+        IF(fd.user_type = "siswa", s.nama, g.nama_guru) as user,
+        fd.user_type');
+    $this->db->from('forum_diskusi fd');
+    $this->db->join('siswa s', 'fd.user_type = "siswa" AND s.nis = fd.user_id', 'left');
+    $this->db->join('guru g', 'fd.user_type = "guru" AND g.nip = fd.user_id', 'left');
+    $this->db->where('fd.id', $id);
+    return $this->db->get()->row();
+}
+
+public function can_edit_comment($comment_id, $user_type, $user_id) {
+    if (empty($comment_id) || empty($user_type) || empty($user_id)) {
+        return false;
     }
 
+    $comment = $this->get_comment($comment_id);
+    
+    if (!$comment || !is_object($comment)) {
+        return false;
+    }
+
+    // Guru bisa edit semua komentar atau hanya miliknya sendiri
+    // Siswa hanya bisa edit komentar mereka sendiri
+    return ($user_type === 'guru') || 
+           (property_exists($comment, 'user_type') && 
+            property_exists($comment, 'user_id') &&
+            $comment->user_type === $user_type && 
+            $comment->user_id == $user_id);
+}
     public function update_comment($id, $data) {
         // Check if user can edit (30 minutes limit)
         $comment = $this->get_comment($id);
@@ -95,16 +107,73 @@ class Forum_model extends CI_Model {
         $this->db->where('id', $id);
         return $this->db->update('comments', $data);
     }
-    public function getGuruByMateri($materi_id) {
-        // Join materi dan guru, sesuaikan nama tabel
-        $this->db->select('guru.email');
-        $this->db->from('materi');
-        $this->db->join('guru', 'materi.id_guru = guru.nip');
-        $this->db->where('materi.id', $materi_id);
-        return $this->db->get()->row(); // return satu baris object
+   
+  public function get_komentar_by_materi($materi_id) {
+    $this->db->select('fd.*, 
+        IF(fd.user_type = "siswa", s.nama, g.nama_guru) as user_name,
+        fd.user_type,
+        s.image as siswa_foto,
+        g.image as guru_foto, 
+        ');
+    $this->db->from('forum_diskusi fd');
+    $this->db->join('siswa s', 'fd.user_type = "siswa" AND s.nis = fd.user_id', 'left');
+    $this->db->join('guru g', 'fd.user_type = "guru" AND g.nip = fd.user_id', 'left');
+    $this->db->where('fd.materi_id', $materi_id);
+    $this->db->where('fd.deleted_at IS NULL');
+    $this->db->order_by('fd.created_at', 'ASC');
+    $query = $this->db->get();
+    
+    if (!$query) {
+        log_message('error', $this->db->error());
+        return array();
     }
     
+    $all_comments = $query->result();
+    return $this->build_comment_tree($all_comments);
+}
 
+private function build_comment_tree($comments, $parent_id = NULL) {
+    $branch = array();
+    
+    if (!is_array($comments)) return $branch;
+    
+    foreach ($comments as $comment) {
+        if (is_object($comment) && property_exists($comment, 'parent_id') && 
+            $comment->parent_id == $parent_id) {
+                
+            $comment->replies = $this->build_comment_tree($comments, $comment->id);
+            $branch[] = $comment;
+        }
+    }
+    return $branch;
+}
+
+public function tambah_komentar($data) {
+    $data['created_at'] = date('Y-m-d H:i:s');
+    return $this->db->insert('forum_diskusi', $data);
+}
+
+public function edit_komentar($id, $data) {
+    $data['updated_at'] = date('Y-m-d H:i:s');
+    $this->db->where('id', $id);
+    return $this->db->update('forum_diskusi', $data);
+}
+
+public function hapus_komentar($id) {
+    $this->db->where('id', $id);
+    return $this->db->update('forum_diskusi', ['deleted_at' => date('Y-m-d H:i:s')]);
+}
+
+
+    
+
+    public function getGuruByMateri($materi_id) {
+        $this->db->select('g.nip, g.nama_guru, g.email');
+        $this->db->from('materi m');
+        $this->db->join('guru g', 'm.nip = g.nip');
+        $this->db->where('m.id', $materi_id);
+        return $this->db->get()->row();
+    }
     // Hapus method yang tidak digunakan
     // public function add_forum() dan add_comment() bisa dihapus jika tidak digunakan
 }

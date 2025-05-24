@@ -52,122 +52,222 @@
         </div>
 
         <!-- Discussion Forum -->
-        <div class="discussion-forum">
-            <h3><i class="fa-regular fa fa-comments"></i> Forum Diskusi</h3>
-            
-            <!-- Comment Form -->
-            <form class="comment-form" method="POST" action="<?= base_url('forum/tambah_komentar') ?>">
-                <input type="hidden" name="materi_id" value="<?= $materi->id ?>">
-                <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
-                <textarea name="komentar" placeholder="Tulis komentar atau pertanyaan..." required></textarea>
-                <button type="submit"><i class="fa-regular fa fa-paper-plane"></i> Kirim</button>
-            </form>
-            
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <?php 
-                            function display_comments($comments, $materi_id, $level = 0, $current_nis) {
-                                $ci =& get_instance();
-                                foreach ($comments as $comment) {
-                                    $margin = min($level * 32, 256);
-                                    $can_edit = ($current_nis && $current_nis == $comment->nis);
-                            ?>
-                            <div class="comment-card" style="margin-left: <?= $margin ?>px;" id="comment-<?= $comment->id ?>">
-                                <div class="comment-header">
-                                    <div class="comment-author">
-                                        <span class="user-avatar">
-                                            <?= strtoupper(substr($comment->user, 0, 1)) ?>
-                                        </span> 
-                                        <strong><?= htmlspecialchars($comment->user) ?></strong>
-                                    </div>
-                                    <span class="comment-date">
-                                        <?= date('d M Y H:i', strtotime($comment->created_at)) ?>
-                                        <?php if ($comment->updated_at): ?>
-                                            <small>(diedit)</small>
-                                        <?php endif; ?>
+        <!-- Bagian Forum Diskusi -->
+<div class="card mt-4">
+    <div class="card-header bg-primary text-white">
+        <h4><i class="fas fa-comments"></i> Forum Diskusi</h4>
+    </div>
+    <div class="card-body">
+        <!-- Form Komentar Utama -->
+        <form id="form-komentar" method="post" action="<?= base_url('siswa/tambah_komentar') ?>">
+                                                <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
+
+            <input type="hidden" name="materi_id" value="<?= $materi->id ?>">
+            <div class="form-group">
+                <textarea name="komentar" class="form-control" rows="3" 
+                    placeholder="Tulis komentar atau pertanyaan..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Kirim Komentar
+            </button>
+        </form>
+
+        <hr>
+
+        <!-- Daftar Komentar -->
+        <div id="komentar-list">
+            <?php if (!empty($forum)): ?>
+                <?php foreach ($forum as $komentar): ?>
+                    <?php $is_siswa = ($komentar->user_type === 'siswa'); ?>
+                    <div class="media mb-4 <?= $is_siswa ? 'siswa-komentar' : 'guru-komentar' ?>" 
+                        id="komentar-<?= $komentar->id ?>">
+                        <img src="<?= $is_siswa ? 
+                            base_url('assets/profile_picture/'.$komentar->siswa_foto) : 
+                            base_url('assets/profile_picture/'.$komentar->guru_foto) ?>" 
+                            class="mr-3 rounded-circle" width="50" 
+                            onerror="this.src='<?= base_url('assets/profile_picture/default.jpg') ?>'">
+                        <div class="media-body">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="mt-0">
+                                    <?= htmlspecialchars($komentar->user_name) ?>
+                                    <span class="badge <?= $is_siswa ? 'badge-info' : 'badge-success' ?>">
+                                        <?= $is_siswa ? 'Siswa' : 'Guru' ?>
                                     </span>
-                                </div>
-                                
-                                <div id="comment-display-<?= $comment->id ?>" class="comment-content">
-                                    <p><?= nl2br(htmlspecialchars($comment->komentar)) ?></p>
-                                    <button class="btn-action reply-btn" onclick="toggleReplyForm(<?= $comment->id ?>)">
-                                        <i class="fas fa fa-reply"></i> Balas
-                                    </button>
-                                    <?php if ($can_edit): ?>
-                                        <div class="comment-actions">
-                                            <button class="btn edit-btn" onclick="toggleEditForm(<?= $comment->id ?>)">
-                                                <i class="fas fa fa-edit"></i> Edit
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-danger delete-btn" onclick="confirmDelete(<?= $comment->id ?>)">
-                                                <i class="fas fa fa-trash"></i> Hapus
-                                            </button>
-                                        </div>
+                                </h5>
+                                <small class="text-muted">
+                                    <?= date('d M Y H:i', strtotime($komentar->created_at)) ?>
+                                    <?php if ($komentar->updated_at): ?>
+                                        <span class="text-info">(diedit)</span>
                                     <?php endif; ?>
-                                </div>
-
-                                <!-- Reply Form -->
-                                <div id="reply-form-<?= $comment->id ?>" class="reply-form" style="display: none;">
-                                    <form method="POST" action="<?= base_url('forum/tambah_komentar') ?>">
-                                        <input type="hidden" name="materi_id" value="<?= $materi_id ?>">
-                                        <input type="hidden" name="parent_id" value="<?= $comment->id ?>">
-                                        <input type="hidden" name="<?= $ci->security->get_csrf_token_name() ?>" value="<?= $ci->security->get_csrf_hash() ?>">
-                                        <div class="form-group mb-3">
-                                            <textarea class="form-control" name="komentar" rows="3" placeholder="Tulis balasan Anda..." required></textarea>
-                                        </div>
-                                        <div class="form-actions">
-                                            <button type="submit" class="btn-submit">
-                                                <i class="fas fa fa-paper-plane"></i> Kirim
-                                            </button>
-                                            <button type="button" class="btn-cancel" onclick="toggleReplyForm(<?= $comment->id ?>)">
-                                                Batal
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-
-                                <?php if ($can_edit): ?>
-                                <div id="edit-form-<?= $comment->id ?>" class="edit-form mt-3" style="display:none">
-                                    <form method="POST" action="<?= base_url('forum/edit_komentar') ?>">
-                                        <input type="hidden" name="<?= $ci->security->get_csrf_token_name() ?>" value="<?= $ci->security->get_csrf_hash() ?>">
-                                        <input type="hidden" name="comment_id" value="<?= $comment->id ?>">
-                                        <div class="form-group">
-                                            <textarea class="form-control" name="komentar" rows="3" required><?= 
-                                                htmlspecialchars($comment->komentar) 
-                                            ?></textarea>
-                                        </div>
-                                        <div class="mt-2">
-                                            <button type="submit" class="btn btn-primary btn-sm">
-                                                <i class="fas fa fa-save"></i> Simpan
-                                            </button>
-                                            <button type="button" class="btn btn-secondary btn-sm" onclick="toggleEditForm(<?= $comment->id ?>)">
-                                                Batal
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <?php endif; ?>
-
-                                <?php if (!empty($comment->replies)): ?>
-                                    <?php display_comments($comment->replies, $materi_id, $level + 1, $current_nis); ?>
+                                </small>
+                            </div>
+                            <p><?= nl2br(htmlspecialchars($komentar->komentar)) ?></p>
+                            
+                            <!-- Tombol Aksi -->
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-secondary btn-reply" 
+                                    data-id="<?= $komentar->id ?>">
+                                    <i class="fas fa-reply"></i> Balas
+                                </button>
+                                
+                                <?php if ($is_siswa && $komentar->user_id == $current_nis): ?>
+                                    <button class="btn btn-outline-primary btn-edit" 
+                                        data-id="<?= $komentar->id ?>"
+                                        data-komentar="<?= htmlspecialchars($komentar->komentar) ?>">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-hapus" 
+                                        data-id="<?= $komentar->id ?>">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </button>
                                 <?php endif; ?>
                             </div>
-                            <?php
-                                }
-                            }
                             
-                            if (!empty($forum)) {
-                                display_comments($forum, $materi->id, 0, $current_nis);
-                            } else {
-                                echo "<p class='mt-3'>Belum ada komentar.</p>";
-                            }
-                            ?>
+                            <!-- Form Edit (tersembunyi) -->
+                            <div class="edit-form mt-3" id="edit-form-<?= $komentar->id ?>" style="display:none">
+                                <form method="post" action="<?= base_url('siswa/edit_komentar') ?>">
+                                                                                    <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
+
+                                    <input type="hidden" name="comment_id" value="<?= $komentar->id ?>">
+                                    <div class="form-group">
+                                        <textarea name="komentar" class="form-control" rows="3" required><?= 
+                                            htmlspecialchars($komentar->komentar) 
+                                        ?></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-save"></i> Simpan
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-sm btn-cancel-edit" 
+                                        data-id="<?= $komentar->id ?>">
+                                        Batal
+                                    </button>
+                                </form>
+                            </div>
+                            
+                            <!-- Form Balasan (tersembunyi) -->
+                            <div class="reply-form mt-3" id="reply-form-<?= $komentar->id ?>" style="display:none">
+                                <form method="post" action="<?= base_url('siswa/tambah_komentar') ?>">
+                                                                                    <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
+
+                                    <input type="hidden" name="materi_id" value="<?= $materi->id ?>">
+                                    <input type="hidden" name="parent_id" value="<?= $komentar->id ?>">
+                                    <div class="form-group">
+                                        <textarea name="komentar" class="form-control" rows="2" 
+                                            placeholder="Tulis balasan Anda..." required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-paper-plane"></i> Kirim
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-sm btn-cancel-reply" 
+                                        data-id="<?= $komentar->id ?>">
+                                        Batal
+                                    </button>
+                                </form>
+                            </div>
+                            
+                            <!-- Tampilkan Balasan -->
+                            <?php if (!empty($komentar->replies)): ?>
+                                <div class="mt-3 ml-5">
+                                    <?php foreach ($komentar->replies as $reply): ?>
+                                        <?php $is_siswa_reply = ($reply->user_type === 'siswa'); ?>
+                                        <div class="media mt-3 <?= $is_siswa_reply ? 'siswa-komentar' : 'guru-komentar' ?>">
+                                            <img src="<?= base_url('assets/profile_picture/' . 
+        ($is_siswa_reply 
+            ? (!empty($reply->siswa_foto) ? $reply->siswa_foto : 'default.jpg') 
+            : (!empty($reply->guru_foto) ? $reply->guru_foto : 'default.jpg')
+        )) ?>" 
+    class="mr-3 rounded-circle" 
+    width="40"
+    onerror="this.src='<?= base_url('assets/profile_picture/default.jpg') ?>'">
+
+                                            <div class="media-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h6 class="mt-0">
+                                                        <?= htmlspecialchars($reply->user_name) ?>
+                                                        <span class="badge <?= $is_siswa_reply ? 'badge-info' : 'badge-success' ?>">
+                                                            <?= $is_siswa_reply ? 'Siswa' : 'Guru' ?>
+                                                        </span>
+                                                    </h6>
+                                                    <small class="text-muted">
+                                                        <?= date('d M Y H:i', strtotime($reply->created_at)) ?>
+                                                        <?php if ($reply->updated_at): ?>
+                                                            <span class="text-info">(diedit)</span>
+                                                        <?php endif; ?>
+                                                    </small>
+                                                </div>
+                                                <p><?= nl2br(htmlspecialchars($reply->komentar)) ?></p>
+                                                
+                                                <?php if ($is_siswa_reply && $reply->user_id == $current_nis): ?>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button class="btn btn-outline-primary btn-edit" 
+                                                            data-id="<?= $reply->id ?>"
+                                                            data-komentar="<?= htmlspecialchars($reply->komentar) ?>">
+                                                            <i class="fas fa-edit"></i> Edit
+                                                        </button>
+                                                        <button class="btn btn-outline-danger btn-hapus" 
+                                                            data-id="<?= $reply->id ?>">
+                                                            <i class="fas fa-trash"></i> Hapus
+                                                        </button>
+                                                    </div>
+                                                    
+                                                    <!-- Form Edit untuk Balasan -->
+                                                    <div class="edit-form mt-2" id="edit-form-<?= $reply->id ?>" style="display:none">
+                                                        <form method="post" action="<?= base_url('siswa/edit_komentar') ?>">
+                                                                                                                                                <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
+
+                                                        <input type="hidden" name="comment_id" value="<?= $reply->id ?>">
+                                                            <div class="form-group">
+                                                                <textarea name="komentar" class="form-control" rows="2" required><?= 
+                                                                    htmlspecialchars($reply->komentar) 
+                                                                ?></textarea>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                                <i class="fas fa-save"></i> Simpan
+                                                            </button>
+                                                            <button type="button" class="btn btn-secondary btn-sm btn-cancel-edit" 
+                                                                data-id="<?= $reply->id ?>">
+                                                                Batal
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
-                </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="alert alert-info">Belum ada komentar untuk materi ini.</div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Konfirmasi Hapus -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Konfirmasi Hapus</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin menghapus komentar ini?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <a href="#" id="btn-delete-confirm" class="btn btn-danger">Hapus</a>
             </div>
         </div>
+    </div>
+</div>
+
+
     </div>
 
     <!-- Sidebar Resources -->
@@ -311,6 +411,52 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function() {
+    // Toggle form balasan
+    $('.btn-reply').click(function(e) {
+        e.preventDefault();
+        var commentId = $(this).data('id');
+        $('#reply-form-' + commentId).toggle();
+        $('#edit-form-' + commentId).hide();
+    });
+    
+    // Toggle form edit
+    $('.btn-edit').click(function(e) {
+        e.preventDefault();
+        var commentId = $(this).data('id');
+        $('#edit-form-' + commentId).toggle();
+        $('#reply-form-' + commentId).hide();
+    });
+    
+    // Batal edit
+    $('.btn-cancel-edit').click(function() {
+        var commentId = $(this).data('id');
+        $('#edit-form-' + commentId).hide();
+    });
+    
+    // Batal balas
+    $('.btn-cancel-reply').click(function() {
+        var commentId = $(this).data('id');
+        $('#reply-form-' + commentId).hide();
+    });
+    
+    // Konfirmasi hapus
+    $('.btn-hapus').click(function(e) {
+        e.preventDefault();
+        var commentId = $(this).data('id');
+        $('#btn-delete-confirm').attr('href', '<?= base_url('siswa/hapus_komentar/') ?>' + commentId);
+        $('#confirmDeleteModal').modal('show');
+    });
+    
+    // Scroll ke komentar yang baru saja dibalas/diedit
+    <?php if ($this->session->flashdata('scroll_to')): ?>
+        $('html, body').animate({
+            scrollTop: $('#komentar-<?= $this->session->flashdata('scroll_to') ?>').offset().top - 100
+        }, 500);
+    <?php endif; ?>
+});
+</script>
 
 <script>
 function confirmDelete(id) {

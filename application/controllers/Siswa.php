@@ -285,6 +285,124 @@ public function email_check($email)
         return TRUE;
     }
 }
+public function belajar($id) {
+        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);
+        
+        // Ambil data
+        $data['comments'] = $this->Forum_model->get_comments($id);
+        $data['current_nis'] = $this->session->userdata('nis');
+        $data['materi'] = $this->M_materi->get_materi_by_id($id);
+        $data['user'] = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row_array();
+        $data['forum'] = $this->Forum_model->get_komentar_by_materi($id);
+        $data['disqus'] = $this->disqus->get_html();
+        $data['quizzes'] = $this->Quiz_model->get_quizzes_by_materi($id);
+        $data['materi_id'] = $this->M_materi->get_all_materi_id();
+        $data['tugas_saya'] = $this->Tugas_model->get_tugas_siswa(
+            $this->session->userdata('nis'), 
+            $id
+        );
+
+        
+        // Debug akhir sebelum load view
+        if(empty($data['materi'])) {
+            show_404();
+            return;
+        }
+        
+        $this->load->view('materi/navm');
+        $this->load->view('materi/belajar', $data);
+        $this->load->view('materi/footm');
+
+    }
+
+public function tambah_komentar() {
+    $nis = $this->session->userdata('nis');
+    if (!$nis) redirect('siswa/login');
+
+    $this->load->model('Forum_model');
+    $siswa = $this->db->get_where('siswa', ['nis' => $nis])->row_array();
+
+    $this->form_validation->set_rules('komentar', 'Komentar', 'required');
+    $this->form_validation->set_rules('materi_id', 'Materi', 'required|numeric');
+
+    if ($this->form_validation->run()) {
+        $data = [
+            'user_type' => 'siswa',
+            'user_id' => $nis,
+            'user_name' => $siswa['nama'],
+            'materi_id' => $this->input->post('materi_id'),
+            'komentar' => $this->input->post('komentar'),
+            'parent_id' => $this->input->post('parent_id') ?: NULL
+        ];
+
+        if ($this->Forum_model->tambah_komentar($data)) {
+            $this->session->set_flashdata('success', 'Komentar berhasil ditambahkan');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menambahkan komentar');
+        }
+    } else {
+        $this->session->set_flashdata('error', validation_errors());
+    }
+
+    redirect('materi/belajar/' . $this->input->post('materi_id'));
+}
+
+public function edit_komentar() {
+    $nis = $this->session->userdata('nis');
+    if (!$nis) redirect('siswa/login');
+
+    $this->load->model('Forum_model');
+    $comment_id = $this->input->post('comment_id');
+
+    $user_type = $this->session->userdata('user_type'); // 'siswa' atau 'guru'
+$user_id = ($user_type === 'siswa') 
+    ? $this->session->userdata('nis') 
+    : $this->session->userdata('nip');
+
+if (!$this->Forum_model->can_edit_comment($comment_id, $user_type, $user_id)) {
+    $this->session->set_flashdata('error', 'Anda tidak memiliki izin mengedit komentar ini');
+    redirect($_SERVER['HTTP_REFERER']);
+}
+
+
+    $this->form_validation->set_rules('komentar', 'Komentar', 'required');
+
+    if ($this->form_validation->run()) {
+        $data = [
+            'komentar' => $this->input->post('komentar'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+
+        if ($this->Forum_model->edit_komentar($comment_id, $data)) {
+            $this->session->set_flashdata('success', 'Komentar berhasil diperbarui');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal memperbarui komentar');
+        }
+    } else {
+        $this->session->set_flashdata('error', validation_errors());
+    }
+
+    redirect($_SERVER['HTTP_REFERER']);
+}
+
+public function hapus_komentar($id) {
+    $nis = $this->session->userdata('nis');
+    if (!$nis) redirect('siswa/login');
+
+    $this->load->model('Forum_model');
+    
+    if ($this->Forum_model->can_edit_comment($id, $nis)) {
+        if ($this->Forum_model->hapus_komentar($id)) {
+            $this->session->set_flashdata('success', 'Komentar berhasil dihapus');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus komentar');
+        }
+    } else {
+        $this->session->set_flashdata('error', 'Anda tidak memiliki izin menghapus komentar ini');
+    }
+
+    redirect($_SERVER['HTTP_REFERER']);
+}
 
 
 }

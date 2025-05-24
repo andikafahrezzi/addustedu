@@ -1224,4 +1224,130 @@ public function simpan_edit_ujian($id_ujian)
             redirect('guru/ujian');
         }
     }
+    // application/controllers/guru/Forum_guru.php
+
+
+
+
+    public function tambah_komentar() {
+        $guru = $this->db->get_where('guru', ['nip' => $this->session->userdata('nip')])->row_array();
+        if (!$guru) {
+            $this->session->set_flashdata('error', 'Data guru tidak ditemukan');
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+
+        $this->form_validation->set_rules('komentar', 'Komentar', 'required');
+        $this->form_validation->set_rules('materi_id', 'Materi ID', 'required|numeric');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+
+        $data = [
+    'user_type' => 'guru',
+    'user_id' => $this->session->userdata('nip'),
+    'user_name' => $guru['nama_guru'],
+    'materi_id' => $this->input->post('materi_id'),
+    'komentar' => $this->input->post('komentar'),
+    'parent_id' => $this->input->post('parent_id') ?: NULL
+];
+
+        if ($this->Forum_model->tambah_komentar($data)) {
+            $this->session->set_flashdata('success', 'Komentar berhasil ditambahkan');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menambahkan komentar');
+        }
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    public function edit_komentar() {
+        $this->form_validation->set_rules('comment_id', 'Comment ID', 'required');
+        $this->form_validation->set_rules('komentar', 'Komentar', 'required|trim');
+
+        if ($this->form_validation->run()) {
+            $comment_id = $this->input->post('comment_id');
+            $nip = $this->session->userdata('nip');
+            
+            // Verifikasi kepemilikan komentar
+            $comment = $this->db->get_where('forum_diskusi', [
+                'id' => $comment_id,
+                'user_id' => $nip
+            ])->row();
+
+            if ($comment) {
+                $this->Forum_model->edit_komentar($comment_id, [
+                    'komentar' => $this->input->post('komentar'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+                $this->session->set_flashdata('success', 'Komentar berhasil diupdate');
+            } else {
+                $this->session->set_flashdata('error', 'Anda tidak memiliki izin mengedit komentar ini');
+            }
+        } else {
+            $this->session->set_flashdata('error', validation_errors());
+        }
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    public function hapus_komentar($comment_id) {
+        $nip = $this->session->userdata('nip');
+        
+        // Verifikasi kepemilikan komentar
+        $comment = $this->db->get_where('forum_diskusi', [
+            'id' => $comment_id,
+            'nip' => $nip
+        ])->row();
+
+        if ($comment) {
+            $this->Forum_model->hapus_komentar($comment_id);
+            $this->session->set_flashdata('success', 'Komentar berhasil dihapus');
+        } else {
+            $this->session->set_flashdata('error', 'Anda tidak memiliki izin menghapus komentar ini');
+        }
+        
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    public function belajar($id) {
+    $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);
+    
+    $role = $this->session->userdata('user_type');
+    $current_user = ($role === 'siswa') 
+        ? $this->session->userdata('nis') 
+        : $this->session->userdata('nip');
+
+    $data['materi'] = $this->M_materi->get_materi_by_id($id);
+    if (!$data['materi']) {
+        show_404();
+        return;
+    }
+
+    // Ambil data user
+    $data['user'] = ($role === 'siswa') 
+        ? $this->db->get_where('siswa', ['nis' => $current_user])->row_array()
+        : $this->db->get_where('guru', ['nip' => $current_user])->row_array();
+
+    // Ambil data forum dengan penanganan error
+    $forum_data = $this->Forum_model->get_komentar_by_materi($id);
+    $data['forum'] = is_array($forum_data) ? $forum_data : array();
+
+    // Data tambahan
+    $data['quizzes'] = $this->Quiz_model->get_quizzes_by_materi($id) ?: array();
+    $data['materi_id'] = $this->M_materi->get_all_materi_id() ?: array();
+    $data['current_user'] = [
+        'type' => $role,
+        'identifier' => $current_user
+    ];
+
+    if ($role === 'siswa') {
+        $data['tugas_saya'] = $this->Tugas_model->get_tugas_siswa($current_user, $id) ?: array();
+    }
+
+    $this->load->view('guru/navug', $data);
+    $this->load->view($role . '/tampil_materi', $data);
+        $this->load->view('guru/footg');
+}
+
 }
