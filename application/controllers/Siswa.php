@@ -8,11 +8,15 @@ class Siswa extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+         if (!$this->session->userdata('logged_in') || $this->session->userdata('user_type') != 'siswa') {
+            redirect('welcome');
+        }
         $this->load->library('form_validation');
         $this->load->library('disqus');
         $this->load->model('M_materi');
         $this->load->model('M_siswa');
         $this->load->model('Tugas_model');
+        $this->load->model('Forum_model');
         $this->load->model('Quiz_model');
     }
     public function start_quiz($quiz_id)
@@ -316,23 +320,54 @@ public function belajar($id) {
     }
 
 public function tambah_komentar() {
-    $nis = $this->session->userdata('nis');
-    if (!$nis) redirect('siswa/login');
+    // Pastikan user sudah login
+    if (!$this->session->userdata('logged_in')) {
+        redirect('login');
+    }
 
-    $this->load->model('Forum_model');
-    $siswa = $this->db->get_where('siswa', ['nis' => $nis])->row_array();
+    // Debug session - bisa dihapus setelah fix
 
+    $user_type = $this->session->userdata('user_type');
+    
+    // Validasi user_type
+    if (!in_array($user_type, ['siswa', 'guru'])) {
+        $this->session->set_flashdata('error', 'Tipe user tidak valid');
+        redirect('login');
+    }
+
+    $user_id = ($user_type === 'siswa') ? $this->session->userdata('nis') : $this->session->userdata('nip');
+    
+    // Data user
+    if ($user_type === 'siswa') {
+        $user = $this->db->get_where('siswa', ['nis' => $user_id])->row_array();
+        if (!$user) {
+            $this->session->set_flashdata('error', 'Data siswa tidak ditemukan');
+            redirect('siswa/dashboard');
+        }
+        $user_name = $user['nama'];
+    } else {
+        $user = $this->db->get_where('guru', ['nip' => $user_id])->row_array();
+        if (!$user) {
+            $this->session->set_flashdata('error', 'Data guru tidak ditemukan');
+            redirect('guru/dashboard');
+        }
+        $user_name = $user['nama_guru'];
+    }
+
+    // Validasi form
     $this->form_validation->set_rules('komentar', 'Komentar', 'required');
-    $this->form_validation->set_rules('materi_id', 'Materi', 'required|numeric');
+    $this->form_validation->set_rules('materi_id', 'Materi ID', 'required|numeric');
+    $this->form_validation->set_rules('parent_id', 'Parent ID', 'numeric');
 
     if ($this->form_validation->run()) {
         $data = [
-            'user_type' => 'siswa',
-            'user_id' => $nis,
-            'user_name' => $siswa['nama'],
+            'user_type' => $user_type,
+            'user_id' => $user_id,
+            'user_name' => $user_name,
             'materi_id' => $this->input->post('materi_id'),
             'komentar' => $this->input->post('komentar'),
-            'parent_id' => $this->input->post('parent_id') ?: NULL
+            'parent_id' => $this->input->post('parent_id') ?: NULL,
+            'created_at' => date('Y-m-d H:i:s')
         ];
 
         if ($this->Forum_model->tambah_komentar($data)) {
@@ -344,9 +379,13 @@ public function tambah_komentar() {
         $this->session->set_flashdata('error', validation_errors());
     }
 
-    redirect('materi/belajar/' . $this->input->post('materi_id'));
+    // Redirect berdasarkan user_type
+    if ($user_type === 'siswa') {
+        redirect('siswa/belajar/' . $this->input->post('materi_id'));
+    } else {
+        redirect('guru/belajar/' . $this->input->post('materi_id'));
+    }
 }
-
 public function edit_komentar() {
     $nis = $this->session->userdata('nis');
     if (!$nis) redirect('siswa/login');

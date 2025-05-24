@@ -12,7 +12,7 @@ class Guru extends CI_Controller
         $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model', 'M_siswa', 'Ujian_model', 'Bank_soal_model', 'M_guru']);  
         $this->load->library('form_validation');
         $this->load->helper('text');
-        if ($this->session->userdata('user_type') != 'guru') {
+        if (!$this->session->userdata('logged_in') || $this->session->userdata('user_type') != 'guru') {
             redirect('welcome/guru');
         }
         
@@ -1229,38 +1229,42 @@ public function simpan_edit_ujian($id_ujian)
 
 
 
-    public function tambah_komentar() {
-        $guru = $this->db->get_where('guru', ['nip' => $this->session->userdata('nip')])->row_array();
-        if (!$guru) {
-            $this->session->set_flashdata('error', 'Data guru tidak ditemukan');
-            redirect($_SERVER['HTTP_REFERER']);
-        }
+   public function tambah_komentar() {
+    $user_type = $this->session->userdata('user_type');
+    $user_id = ($user_type === 'siswa') ? $this->session->userdata('nis') : $this->session->userdata('nip');
+    
+    if ($user_type === 'siswa') {
+        $user = $this->db->get_where('siswa', ['nis' => $user_id])->row_array();
+    } else {
+        $user = $this->db->get_where('guru', ['nip' => $user_id])->row_array();
+    }
 
-        $this->form_validation->set_rules('komentar', 'Komentar', 'required');
-        $this->form_validation->set_rules('materi_id', 'Materi ID', 'required|numeric');
+    $this->form_validation->set_rules('komentar', 'Komentar', 'required');
+    $this->form_validation->set_rules('materi_id', 'Materi ID', 'required|numeric');
+    $this->form_validation->set_rules('parent_id', 'Parent ID', 'numeric');
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->session->set_flashdata('error', validation_errors());
-            redirect($_SERVER['HTTP_REFERER']);
-        }
-
+    if ($this->form_validation->run()) {
         $data = [
-    'user_type' => 'guru',
-    'user_id' => $this->session->userdata('nip'),
-    'user_name' => $guru['nama_guru'],
-    'materi_id' => $this->input->post('materi_id'),
-    'komentar' => $this->input->post('komentar'),
-    'parent_id' => $this->input->post('parent_id') ?: NULL
-];
+            'user_type' => $user_type,
+            'user_id' => $user_id,
+            'user_name' => $user['nama'] ?? $user['nama_guru'],
+            'materi_id' => $this->input->post('materi_id'),
+            'komentar' => $this->input->post('komentar'),
+            'parent_id' => $this->input->post('parent_id') ?: NULL
+        ];
 
         if ($this->Forum_model->tambah_komentar($data)) {
             $this->session->set_flashdata('success', 'Komentar berhasil ditambahkan');
+            $this->session->set_flashdata('scroll_to', $this->db->insert_id());
         } else {
             $this->session->set_flashdata('error', 'Gagal menambahkan komentar');
         }
-
-        redirect($_SERVER['HTTP_REFERER']);
+    } else {
+        $this->session->set_flashdata('error', validation_errors());
     }
+
+    redirect(($user_type === 'siswa' ? 'siswa' : 'guru') . '/belajar/' . $this->input->post('materi_id'));
+}
 
     public function edit_komentar() {
         $this->form_validation->set_rules('comment_id', 'Comment ID', 'required');

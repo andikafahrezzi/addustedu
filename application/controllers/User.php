@@ -9,8 +9,9 @@ class User extends CI_Controller
         $this->load->library('form_validation');
         $this->load->model('Ujian_model');
         // $this->session->set_flashdata('not-login', 'Gagal!');
-        // if (!$this->session->userdata('email')) {
-        //     redirect('welcome');
+        if (!$this->session->userdata('logged_in') || $this->session->userdata('user_type') != 'siswa') {
+            redirect('welcome');
+        }
     }
     public function index()
 {

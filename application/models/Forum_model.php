@@ -109,12 +109,12 @@ public function can_edit_comment($comment_id, $user_type, $user_id) {
     }
    
   public function get_komentar_by_materi($materi_id) {
+    // Ambil semua komentar untuk materi ini sekaligus
     $this->db->select('fd.*, 
         IF(fd.user_type = "siswa", s.nama, g.nama_guru) as user_name,
         fd.user_type,
         s.image as siswa_foto,
-        g.image as guru_foto, 
-        ');
+        g.image as guru_foto');
     $this->db->from('forum_diskusi fd');
     $this->db->join('siswa s', 'fd.user_type = "siswa" AND s.nis = fd.user_id', 'left');
     $this->db->join('guru g', 'fd.user_type = "guru" AND g.nip = fd.user_id', 'left');
@@ -123,29 +123,26 @@ public function can_edit_comment($comment_id, $user_type, $user_id) {
     $this->db->order_by('fd.created_at', 'ASC');
     $query = $this->db->get();
     
-    if (!$query) {
-        log_message('error', $this->db->error());
-        return array();
-    }
-    
     $all_comments = $query->result();
-    return $this->build_comment_tree($all_comments);
+    
+    // Bangun hierarki komentar
+    return $this->build_comment_hierarchy($all_comments);
 }
 
-private function build_comment_tree($comments, $parent_id = NULL) {
-    $branch = array();
-    
-    if (!is_array($comments)) return $branch;
+private function build_comment_hierarchy($comments, $parent_id = null, $level = 0) {
+    $result = array();
     
     foreach ($comments as $comment) {
-        if (is_object($comment) && property_exists($comment, 'parent_id') && 
-            $comment->parent_id == $parent_id) {
-                
-            $comment->replies = $this->build_comment_tree($comments, $comment->id);
-            $branch[] = $comment;
+        if ($comment->parent_id == $parent_id) {
+            // Simpan level untuk indentasi
+            $comment->level = $level;
+            // Cari replies untuk komentar ini (rekursif)
+            $comment->replies = $this->build_comment_hierarchy($comments, $comment->id, $level + 1);
+            $result[] = $comment;
         }
     }
-    return $branch;
+    
+    return $result;
 }
 
 public function tambah_komentar($data) {
