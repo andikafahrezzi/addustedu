@@ -1354,4 +1354,54 @@ public function simpan_edit_ujian($id_ujian)
         $this->load->view('guru/footg');
 }
 
+public function daftar_nilai_essay()
+{
+    // Pastikan guru sudah login (opsional)
+    if (!$this->session->userdata('nip')) {
+        redirect('welcome');
+    }
+
+    // Ambil semua jawaban essay yang belum dinilai atau sudah dinilai
+    $this->db->select('j.id_jawaban, j.jawaban_essay, j.nilai_essay, j.catatan_essay, j.id_ujian, j.nis, 
+                   s.nama AS nama_siswa, 
+                   COALESCE(ts.pertanyaan, bs.pertanyaan) AS pertanyaan,
+                   COALESCE(ts.tipe_soal, bs.tipe_soal) AS tipe_soal');
+$this->db->from('tbl_jawaban_siswa j');
+$this->db->join('siswa s', 's.nis = j.nis');
+$this->db->join('tbl_soal ts', 'ts.id_soal = j.id_soal', 'left');
+$this->db->join('bank_soal bs', 'bs.id_soal = j.bank_soal_id', 'left');
+$this->db->where('COALESCE(ts.tipe_soal, bs.tipe_soal) =', 'essay');
+$this->db->order_by('j.id_jawaban', 'DESC');
+
+
+
+    $data['jawaban_essay'] = $this->db->get()->result();
+
+    $this->load->view('guru/navug', $data);
+    $this->load->view('guru/data_essay', $data);
+    $this->load->view('guru/footg');
+}
+
+public function beri_nilai_essay()
+{
+    $id_jawaban = $this->input->post('id_jawaban');
+    $nilai_essay = $this->input->post('nilai_essay');
+    $catatan = $this->input->post('catatan_essay');
+
+    if ($id_jawaban && is_numeric($nilai_essay)) {
+        $this->db->where('id_jawaban', $id_jawaban);
+        $this->db->update('tbl_jawaban_siswa', [
+            'nilai_essay' => $nilai_essay,
+            'catatan_essay' => $catatan
+        ]);
+
+        $this->session->set_flashdata('success', 'Nilai essay berhasil disimpan.');
+    } else {
+        $this->session->set_flashdata('error', 'Gagal menyimpan nilai. Pastikan nilai valid.');
+    }
+
+    redirect('guru/daftar_nilai_essay');
+}
+
+
 }
