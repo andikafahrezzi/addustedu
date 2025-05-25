@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 25, 2025 at 06:21 AM
+-- Generation Time: May 25, 2025 at 02:07 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -133,7 +133,8 @@ INSERT INTO `forum_diskusi` (`id`, `user_type`, `user_id`, `materi_id`, `user_na
 (41, 'siswa', '123456', 2, 'zccust', 'sqs', NULL, '2025-05-25 03:19:40', NULL, NULL),
 (42, 'siswa', '123456', 2, 'zccust', 'ewfewf', NULL, '2025-05-25 03:20:02', NULL, NULL),
 (43, 'siswa', '123456', 2, 'zccust', 'qwqdwq', NULL, '2025-05-25 03:20:36', NULL, NULL),
-(44, 'siswa', '123456', 2, 'zccust', 'dwd', 26, '2025-05-25 03:22:38', NULL, NULL);
+(44, 'siswa', '123456', 2, 'zccust', 'dwd', 26, '2025-05-25 03:22:38', NULL, NULL),
+(45, 'guru', '21101140', 2, 'guru terbaikss', 'test', 42, '2025-05-25 13:59:44', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -178,6 +179,15 @@ CREATE TABLE `jawaban_siswa` (
   `jawaban` text DEFAULT NULL,
   `poin_diperoleh` decimal(5,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `jawaban_siswa`
+--
+
+INSERT INTO `jawaban_siswa` (`id`, `quiz_siswa_id`, `question_id`, `jawaban`, `poin_diperoleh`) VALUES
+(39, 17, 46, 'a', '1.00'),
+(40, 17, 47, 'a', '1.00'),
+(41, 17, 48, 'qwdqwdwq', '0.00');
 
 -- --------------------------------------------------------
 
@@ -270,6 +280,13 @@ CREATE TABLE `quiz` (
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `quiz`
+--
+
+INSERT INTO `quiz` (`id`, `materi_id`, `judul`, `deskripsi`, `waktu_pengerjaan`, `attempts`, `shuffle_questions`, `created_at`) VALUES
+(18, 2, 'qsqs', 'wqdqwdqw', 30, 1, 1, '2025-05-25 14:00:54');
+
 -- --------------------------------------------------------
 
 --
@@ -289,6 +306,15 @@ CREATE TABLE `quiz_questions` (
   `poin` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `quiz_questions`
+--
+
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `pertanyaan`, `tipe`, `opsi_a`, `opsi_b`, `opsi_c`, `opsi_d`, `jawaban`, `poin`) VALUES
+(46, 18, 'qwdqwd', 'pilihan', 'qdqwd', 'qwdwqd', 'qdqwd', 'qwdqwd', 'a', 1),
+(47, 18, 'qwdqd', 'pilihan', 'qdqwdq', 'dqqd', 'dqqd', 'qwdqwd', 'a', 1),
+(48, 18, 'qwdqdqwd', 'essay', NULL, NULL, NULL, NULL, NULL, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -304,6 +330,13 @@ CREATE TABLE `quiz_siswa` (
   `status` enum('ongoing','completed') NOT NULL DEFAULT 'ongoing',
   `score` decimal(5,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `quiz_siswa`
+--
+
+INSERT INTO `quiz_siswa` (`id`, `quiz_id`, `siswa_id`, `start_time`, `end_time`, `status`, `score`) VALUES
+(17, 18, 123456, '2025-05-25 14:01:40', '2025-05-25 14:01:48', 'completed', '66.67');
 
 -- --------------------------------------------------------
 
@@ -354,32 +387,34 @@ CREATE TABLE `tbl_jawaban_siswa` (
   `waktu_jawab` timestamp NOT NULL DEFAULT current_timestamp(),
   `waktu_mulai_ujian` datetime DEFAULT NULL,
   `waktu_submit` datetime DEFAULT NULL,
-  `sumber` enum('tbl_soal','bank_soal') NOT NULL DEFAULT 'tbl_soal'
+  `sumber` enum('tbl_soal','bank_soal') NOT NULL DEFAULT 'tbl_soal',
+  `nilai_essay` int(11) DEFAULT NULL,
+  `catatan_essay` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_jawaban_siswa`
 --
 
-INSERT INTO `tbl_jawaban_siswa` (`id_jawaban`, `nis`, `id_ujian`, `id_soal`, `bank_soal_id`, `jawaban`, `jawaban_essay`, `ragu_ragu`, `is_selesai`, `jumlah_benar`, `jumlah_salah`, `score`, `tanggal_submit`, `waktu_jawab`, `waktu_mulai_ujian`, `waktu_submit`, `sumber`) VALUES
-(194, 12345, 51, NULL, 17, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-14 02:30:38', NULL, '2025-05-14 09:30:59', 'bank_soal'),
-(195, 12345, 51, NULL, 15, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-14 02:30:42', NULL, '2025-05-14 09:30:59', 'bank_soal'),
-(196, 12345, 51, NULL, 13, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-14 02:30:44', NULL, '2025-05-14 09:30:59', 'bank_soal'),
-(197, 12345, 51, 40, NULL, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-14 02:30:46', NULL, '2025-05-14 09:30:59', 'tbl_soal'),
-(198, 12345, 51, 41, NULL, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-14 02:30:48', NULL, '2025-05-14 09:30:59', 'tbl_soal'),
-(199, 12345, 52, NULL, 17, 'A', NULL, 0, 1, 1, 1, 50, NULL, '2025-05-14 02:54:27', NULL, '2025-05-14 09:54:35', 'bank_soal'),
-(200, 12345, 52, 42, NULL, 'C', NULL, 0, 1, 1, 1, 50, NULL, '2025-05-14 02:54:31', NULL, '2025-05-14 09:54:35', 'tbl_soal'),
-(201, 123456, 51, NULL, 17, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-15 03:08:50', NULL, '2025-05-15 10:09:04', 'bank_soal'),
-(202, 123456, 51, NULL, 15, 'A', NULL, 1, 1, 5, 0, 100, NULL, '2025-05-15 03:08:54', NULL, '2025-05-15 10:09:04', 'bank_soal'),
-(203, 123456, 51, NULL, 13, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-15 03:08:57', NULL, '2025-05-15 10:09:04', 'bank_soal'),
-(204, 123456, 51, 40, NULL, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-15 03:09:00', NULL, '2025-05-15 10:09:04', 'tbl_soal'),
-(205, 123456, 51, 41, NULL, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-15 03:09:02', NULL, '2025-05-15 10:09:04', 'tbl_soal'),
-(206, 123456, 52, NULL, 17, 'D', NULL, 0, 1, 0, 2, 0, NULL, '2025-05-15 03:31:08', NULL, '2025-05-15 10:31:13', 'bank_soal'),
-(207, 123456, 52, 42, NULL, 'D', NULL, 0, 1, 0, 2, 0, NULL, '2025-05-15 03:31:10', NULL, '2025-05-15 10:31:13', 'tbl_soal'),
-(270, 123456, 53, NULL, 8, NULL, 'dwqdqwdqwd', 0, 1, 3, 0, 100, NULL, '2025-05-24 23:20:05', NULL, '2025-05-25 06:20:20', 'bank_soal'),
-(271, 123456, 53, NULL, 16, 'A', NULL, 0, 1, 3, 0, 100, NULL, '2025-05-24 23:20:07', NULL, '2025-05-25 06:20:20', 'bank_soal'),
-(272, 123456, 53, NULL, 17, 'A', NULL, 0, 1, 3, 0, 100, NULL, '2025-05-24 23:20:14', NULL, '2025-05-25 06:20:20', 'bank_soal'),
-(273, 123456, 53, 43, NULL, 'A', NULL, 0, 1, 3, 0, 100, NULL, '2025-05-24 23:20:16', NULL, '2025-05-25 06:20:20', 'tbl_soal');
+INSERT INTO `tbl_jawaban_siswa` (`id_jawaban`, `nis`, `id_ujian`, `id_soal`, `bank_soal_id`, `jawaban`, `jawaban_essay`, `ragu_ragu`, `is_selesai`, `jumlah_benar`, `jumlah_salah`, `score`, `tanggal_submit`, `waktu_jawab`, `waktu_mulai_ujian`, `waktu_submit`, `sumber`, `nilai_essay`, `catatan_essay`) VALUES
+(194, 12345, 51, NULL, 17, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-14 02:30:38', NULL, '2025-05-14 09:30:59', 'bank_soal', NULL, NULL),
+(195, 12345, 51, NULL, 15, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-14 02:30:42', NULL, '2025-05-14 09:30:59', 'bank_soal', NULL, NULL),
+(196, 12345, 51, NULL, 13, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-14 02:30:44', NULL, '2025-05-14 09:30:59', 'bank_soal', NULL, NULL),
+(197, 12345, 51, 40, NULL, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-14 02:30:46', NULL, '2025-05-14 09:30:59', 'tbl_soal', NULL, NULL),
+(198, 12345, 51, 41, NULL, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-14 02:30:48', NULL, '2025-05-14 09:30:59', 'tbl_soal', NULL, NULL),
+(199, 12345, 52, NULL, 17, 'A', NULL, 0, 1, 1, 1, 50, NULL, '2025-05-14 02:54:27', NULL, '2025-05-14 09:54:35', 'bank_soal', NULL, NULL),
+(200, 12345, 52, 42, NULL, 'C', NULL, 0, 1, 1, 1, 50, NULL, '2025-05-14 02:54:31', NULL, '2025-05-14 09:54:35', 'tbl_soal', NULL, NULL),
+(201, 123456, 51, NULL, 17, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-15 03:08:50', NULL, '2025-05-15 10:09:04', 'bank_soal', NULL, NULL),
+(202, 123456, 51, NULL, 15, 'A', NULL, 1, 1, 5, 0, 100, NULL, '2025-05-15 03:08:54', NULL, '2025-05-15 10:09:04', 'bank_soal', NULL, NULL),
+(203, 123456, 51, NULL, 13, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-15 03:08:57', NULL, '2025-05-15 10:09:04', 'bank_soal', NULL, NULL),
+(204, 123456, 51, 40, NULL, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-15 03:09:00', NULL, '2025-05-15 10:09:04', 'tbl_soal', NULL, NULL),
+(205, 123456, 51, 41, NULL, 'A', NULL, 0, 1, 5, 0, 100, NULL, '2025-05-15 03:09:02', NULL, '2025-05-15 10:09:04', 'tbl_soal', NULL, NULL),
+(206, 123456, 52, NULL, 17, 'D', NULL, 0, 1, 0, 2, 0, NULL, '2025-05-15 03:31:08', NULL, '2025-05-15 10:31:13', 'bank_soal', NULL, NULL),
+(207, 123456, 52, 42, NULL, 'D', NULL, 0, 1, 0, 2, 0, NULL, '2025-05-15 03:31:10', NULL, '2025-05-15 10:31:13', 'tbl_soal', NULL, NULL),
+(270, 123456, 53, NULL, 8, NULL, 'dwqdqwdqwd', 0, 1, 3, 0, 100, NULL, '2025-05-24 23:20:05', NULL, '2025-05-25 06:20:20', 'bank_soal', 66, 'ewfewf'),
+(271, 123456, 53, NULL, 16, 'A', NULL, 0, 1, 3, 0, 100, NULL, '2025-05-24 23:20:07', NULL, '2025-05-25 06:20:20', 'bank_soal', NULL, NULL),
+(272, 123456, 53, NULL, 17, 'A', NULL, 0, 1, 3, 0, 100, NULL, '2025-05-24 23:20:14', NULL, '2025-05-25 06:20:20', 'bank_soal', NULL, NULL),
+(273, 123456, 53, 43, NULL, 'A', NULL, 0, 1, 3, 0, 100, NULL, '2025-05-24 23:20:16', NULL, '2025-05-25 06:20:20', 'tbl_soal', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -686,13 +721,13 @@ ALTER TABLE `bank_soal`
 -- AUTO_INCREMENT for table `forum_diskusi`
 --
 ALTER TABLE `forum_diskusi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `jawaban_siswa`
 --
 ALTER TABLE `jawaban_siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `kategori_soal`
@@ -716,19 +751,19 @@ ALTER TABLE `materi_status`
 -- AUTO_INCREMENT for table `quiz`
 --
 ALTER TABLE `quiz`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `quiz_questions`
 --
 ALTER TABLE `quiz_questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `quiz_siswa`
 --
 ALTER TABLE `quiz_siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `tbl_jawaban_siswa`
