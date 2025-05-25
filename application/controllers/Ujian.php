@@ -161,21 +161,32 @@ class Ujian extends CI_Controller {
     }
 }
     
-    public function simpan_jawaban_ajax()
+public function simpan_jawaban_ajax()
 {
     $this->output->set_content_type('application/json');
 
-    // Validasi AJAX
     if (!$this->input->is_ajax_request()) {
         return $this->output->set_status_header(403)
             ->set_output(json_encode(['status' => 'error', 'message' => 'Forbidden']));
     }
 
-    // Validasi input
+    $tipe_soal = $this->input->post('tipe_soal');
+
+    
+
     $this->form_validation->set_rules('id_soal', 'ID Soal', 'required|numeric');
-    $this->form_validation->set_rules('jawaban', 'Jawaban', 'required|in_list[A,B,C,D]');
     $this->form_validation->set_rules('sumber', 'Sumber Soal', 'required|in_list[tbl_soal,bank_soal]');
+    $this->form_validation->set_rules('tipe_soal', 'Tipe Soal', 'required|in_list[pilihan,essay]');
     $this->form_validation->set_rules('ragu', 'Ragu-ragu', 'required|in_list[0,1]');
+
+    if ($tipe_soal == 'pilihan') {
+        $this->form_validation->set_rules('jawaban', 'Jawaban', 'required|in_list[A,B,C,D]');
+    } else if ($tipe_soal == 'essay') {
+        $this->form_validation->set_rules('jawaban', 'Jawaban Essay', 'required');
+    } else {
+        return $this->output->set_status_header(400)
+            ->set_output(json_encode(['status' => 'error', 'message' => 'Tipe soal tidak valid']));
+    }
 
     if (!$this->form_validation->run()) {
         return $this->output->set_status_header(400)
@@ -185,29 +196,24 @@ class Ujian extends CI_Controller {
             ]));
     }
 
-    // Proses penyimpanan
     $this->load->model('Ujian_model');
     $success = $this->Ujian_model->simpan_jawaban(
         $this->input->post('id_soal'),
         $this->input->post('jawaban'),
         $this->input->post('ragu'),
-        $this->input->post('sumber')
+        $this->input->post('sumber'),
+        $tipe_soal
     );
 
     if ($success) {
         return $this->output->set_status_header(200)
-            ->set_output(json_encode([
-                'status' => 'success',
-                'message' => 'Jawaban berhasil disimpan'
-            ]));
+            ->set_output(json_encode(['status' => 'success', 'message' => 'Jawaban berhasil disimpan']));
     } else {
         return $this->output->set_status_header(500)
-            ->set_output(json_encode([
-                'status' => 'error',
-                'message' => 'Gagal menyimpan ke database'
-            ]));
+            ->set_output(json_encode(['status' => 'error', 'message' => 'Gagal menyimpan ke database']));
     }
 }
+
 public function ranking($id_ujian)
 {
     $this->db->select('tbl_jawaban_siswa.nis, siswa.nama, MAX(tbl_jawaban_siswa.score) as total_score');

@@ -26,6 +26,7 @@ PR
 - beda user tetapi waktu tidak mulai dari 100
 - setiap function hapus, samakan seperti yang lainnya(ada modal hapus)
 - kedepannya jika ada form harus mengguna csrf
+- buatkan penilaian manual, untuk ujian essai (guru)
 
 next can be a problem
 - change id at database siswa to nis

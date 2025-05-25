@@ -48,7 +48,7 @@ public function get_all_soal_by_ujian($ujian_id)
     // Ambil dari bank_soal
     $this->db->select('bank_soal.id_soal as id, bank_soal.pertanyaan, bank_soal.pilihan_a, 
                       bank_soal.pilihan_b, bank_soal.pilihan_c, bank_soal.pilihan_d, 
-                      bank_soal.kunci_jawaban, "bank_soal" as sumber');
+                      bank_soal.kunci_jawaban,bank_soal.tipe_soal, "bank_soal" as sumber');
     $this->db->from('ujian_soal');
     $this->db->join('bank_soal', 'bank_soal.id_soal = ujian_soal.bank_soal_id');
     $this->db->where('ujian_soal.ujian_id', $ujian_id);
@@ -58,7 +58,7 @@ public function get_all_soal_by_ujian($ujian_id)
     // Ambil dari tbl_soal
     $this->db->select('tbl_soal.id_soal as id, tbl_soal.pertanyaan, tbl_soal.pilihan_a, 
                       tbl_soal.pilihan_b, tbl_soal.pilihan_c, tbl_soal.pilihan_d, 
-                      tbl_soal.kunci_jawaban, "tbl_soal" as sumber');
+                      tbl_soal.kunci_jawaban,tbl_soal.tipe_soal, "tbl_soal" as sumber');
     $this->db->from('ujian_soal');
     $this->db->join('tbl_soal', 'tbl_soal.id_soal = ujian_soal.soal_id');
     $this->db->where('ujian_soal.ujian_id', $ujian_id);
@@ -74,24 +74,27 @@ public function update_ujian($id_ujian, $data)
     $this->db->update('tbl_ujian', $data);  // Memperbarui data berdasarkan id_ujian
 }
 
-public function simpan_jawaban($id_soal, $jawaban, $ragu, $sumber = 'tbl_soal')
+public function simpan_jawaban($id_soal, $jawaban, $ragu, $sumber = 'tbl_soal', $tipe_soal = 'pilihan')
 {
-    // Validasi sumber soal
-    if (!in_array($sumber, ['tbl_soal', 'bank_soal'])) {
-        log_message('error', 'Sumber soal tidak valid: ' . $sumber);
-        return false;
-    }
+    if (!in_array($sumber, ['tbl_soal', 'bank_soal'])) return false;
 
     $data = [
         'nis' => $this->session->userdata('nis'),
         'id_ujian' => $this->session->userdata('ujian_id'),
-        'jawaban' => $jawaban,
         'ragu_ragu' => $ragu,
         'sumber' => $sumber,
         'waktu_jawab' => date('Y-m-d H:i:s')
     ];
 
-    // Set kolom sesuai sumber
+    // Simpan ke kolom jawaban atau jawaban_essay
+    if ($tipe_soal === 'pilihan') {
+        $data['jawaban'] = $jawaban;
+        $data['jawaban_essay'] = null;
+    } else {
+        $data['jawaban'] = null;
+        $data['jawaban_essay'] = $jawaban;
+    }
+
     if ($sumber === 'tbl_soal') {
         $data['id_soal'] = $id_soal;
         $data['bank_soal_id'] = null;
@@ -100,10 +103,8 @@ public function simpan_jawaban($id_soal, $jawaban, $ragu, $sumber = 'tbl_soal')
         $data['id_soal'] = null;
     }
 
-    // Mulai transaction
     $this->db->trans_start();
 
-    // Cek existing jawaban
     $where = [
         'nis' => $data['nis'],
         'id_ujian' => $data['id_ujian']
@@ -119,15 +120,17 @@ public function simpan_jawaban($id_soal, $jawaban, $ragu, $sumber = 'tbl_soal')
 
     if ($existing) {
         $this->db->where('id_jawaban', $existing->id_jawaban);
-        $result = $this->db->update('tbl_jawaban_siswa', $data);
+        $this->db->update('tbl_jawaban_siswa', $data);
     } else {
-        $result = $this->db->insert('tbl_jawaban_siswa', $data);
+        $this->db->insert('tbl_jawaban_siswa', $data);
     }
 
     $this->db->trans_complete();
-
     return $this->db->trans_status();
 }
+
+
+
 public function tandai_ragu($id_soal, $jawaban, $sumber)
 {
     $data = [
@@ -173,61 +176,60 @@ public function tandai_ragu($id_soal, $jawaban, $sumber)
 
 public function hitung_skor($id_ujian, $nis)
 {
-    // Ambil semua jawaban siswa untuk ujian ini
     $jawaban_siswa = $this->db->get_where('tbl_jawaban_siswa', [
         'id_ujian' => $id_ujian,
         'nis' => $nis
     ])->result();
 
     $jumlah_benar = 0;
-    $total_soal = count($jawaban_siswa);
+    $total_soal_pg = 0; // hanya menghitung soal PG
 
     foreach ($jawaban_siswa as $jawaban) {
         $kunci_jawaban = null;
-        
-        // Cek sumber soal
+        $tipe_soal = null;
+
+        // Ambil data soal untuk mengetahui tipe dan kunci
         if ($jawaban->sumber == 'bank_soal') {
-            // Ambil kunci jawaban dari bank_soal
-            $this->db->select('kunci_jawaban');
+            $this->db->select('kunci_jawaban, tipe_soal');
             $this->db->from('bank_soal');
             $this->db->where('id_soal', $jawaban->bank_soal_id);
             $soal = $this->db->get()->row();
-            
-            if ($soal) {
-                $kunci_jawaban = $soal->kunci_jawaban;
-            }
         } else {
-            // Ambil kunci jawaban dari tbl_soal
-            $this->db->select('kunci_jawaban');
+            $this->db->select('kunci_jawaban, tipe_soal');
             $this->db->from('tbl_soal');
             $this->db->where('id_soal', $jawaban->id_soal);
             $soal = $this->db->get()->row();
-            
-            if ($soal) {
-                $kunci_jawaban = $soal->kunci_jawaban;
-            }
         }
 
-        // Bandingkan jawaban siswa dengan kunci
-        if ($kunci_jawaban && $jawaban->jawaban == $kunci_jawaban) {
-            $jumlah_benar++;
+        if ($soal) {
+            $kunci_jawaban = $soal->kunci_jawaban;
+            $tipe_soal = $soal->tipe_soal;
+        }
+
+        // Hanya hitung soal pilihan ganda
+        if ($tipe_soal === 'pilihan') {
+            $total_soal_pg++; // jumlah soal PG
+            if ($jawaban->jawaban == $kunci_jawaban) {
+                $jumlah_benar++;
+            }
         }
     }
 
-    $score = $total_soal > 0 ? ($jumlah_benar / $total_soal) * 100 : 0;
+    $score = $total_soal_pg > 0 ? ($jumlah_benar / $total_soal_pg) * 100 : 0;
 
-    // Update skor
+    // Update skor hanya untuk jawaban PG
     $this->db->where(['id_ujian' => $id_ujian, 'nis' => $nis])
-            ->update('tbl_jawaban_siswa', [
+             ->update('tbl_jawaban_siswa', [
                 'jumlah_benar' => $jumlah_benar,
-                'jumlah_salah' => $total_soal - $jumlah_benar,
+                'jumlah_salah' => $total_soal_pg - $jumlah_benar,
                 'score' => $score,
                 'is_selesai' => 1,
                 'waktu_submit' => date('Y-m-d H:i:s')
-            ]);
+             ]);
 
     return $score;
 }
+
 
     public function get_ujian_by_id($id_ujian)
     {

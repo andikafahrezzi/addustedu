@@ -165,43 +165,58 @@
     <?php if (!empty($soal)): ?>
         <?php foreach ($soal as $index => $s): ?>
             <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
-    <div class="soal-card" id="soal<?= $index ?>" style="display: <?= $index == 0 ? 'block' : 'none' ?>;">
-        <p class="soal-title"><b>Soal <?= $index + 1 ?>:</b> <?= htmlspecialchars($s['pertanyaan']) ?></p>
-        <div class="pilihan-jawaban">
-            <label>
-                <input type="radio" name="jawaban<?= $s['id'] ?>" value="A" 
-                    <?= (isset($jawaban_siswa) && $jawaban_siswa->jawaban == 'A' ? 'checked' : '') ?>
-                    onclick="saveAnswer(<?= $s['id'] ?>,'A','<?= $s['sumber'] ?>')"> 
-                A. <?= htmlspecialchars($s['pilihan_a']) ?>
-            </label>
-            <label>
-                <input type="radio" name="jawaban<?= $s['id'] ?>" value="B" 
-                    <?= (isset($jawaban_siswa) && $jawaban_siswa->jawaban == 'B' ? 'checked' : '') ?>
-                    onclick="saveAnswer(<?= $s['id'] ?>,'B','<?= $s['sumber'] ?>')"> 
-                B. <?= htmlspecialchars($s['pilihan_b']) ?>
-            </label>
-            <label>
-                <input type="radio" name="jawaban<?= $s['id'] ?>" value="C" 
-                    <?= (isset($jawaban_siswa) && $jawaban_siswa->jawaban == 'C' ? 'checked' : '') ?>
-                    onclick="saveAnswer(<?= $s['id'] ?>,'C','<?= $s['sumber'] ?>')"> 
-                C. <?= htmlspecialchars($s['pilihan_c']) ?>
-            </label>
-            <label>
-                <input type="radio" name="jawaban<?= $s['id'] ?>" value="D" 
-                    <?= (isset($jawaban_siswa) && $jawaban_siswa->jawaban == 'D' ? 'checked' : '' )?>
-                    onclick="saveAnswer(<?= $s['id'] ?>,'D','<?= $s['sumber'] ?>')"> 
-                D. <?= htmlspecialchars($s['pilihan_d']) ?>
-            </label>
-        </div>
-        <div class="soal-actions">
-            <button class="btn btn-secondary" onclick="previousSoal()" <?= $index == 0 ? 'disabled' : '' ?>>Sebelumnya</button>
-            <button class="btn btn-warning" onclick="raguRagu(<?= $s['id'] ?>, '<?= $s['sumber'] ?>')">
-    <?= (isset($jawaban_siswa) && $jawaban_siswa->ragu_ragu ? 'Batal Ragu' : 'Tandai Ragu') ?>
-</button>
-            <button class="btn btn-primary" onclick="nextSoal()" <?= $index == count($soal) - 1 ? 'disabled' : '' ?>>Berikutnya</button>
-        </div>
-    </div>
-<?php endforeach; ?>
+            <div class="soal-card" id="soal<?= $index ?>" style="display: <?= $index == 0 ? 'block' : 'none' ?>;">
+                <p class="soal-title"><b>Soal <?= $index + 1 ?>:</b> <?= htmlspecialchars($s['pertanyaan']) ?></p>
+                
+                <?php if ($s['tipe_soal'] == 'pilihan'): ?>
+                    <!-- Tampilan untuk soal pilihan ganda -->
+                    <div class="pilihan-jawaban">
+                        <label>
+                            <input type="radio" name="jawaban<?= $s['id'] ?>" value="A" 
+                                <?= (isset($jawaban_siswa) && $jawaban_siswa->jawaban == 'A' ? 'checked' : '') ?>
+                                onclick="saveAnswer(<?= $s['id'] ?>,'A','<?= $s['sumber'] ?>','<?= $s['tipe_soal'] ?>')"> 
+                            A. <?= htmlspecialchars($s['pilihan_a']) ?>
+                        </label>
+                        <label>
+                            <input type="radio" name="jawaban<?= $s['id'] ?>" value="B" 
+                                <?= (isset($jawaban_siswa) && $jawaban_siswa->jawaban == 'B' ? 'checked' : '') ?>
+                                onclick="saveAnswer(<?= $s['id'] ?>,'B','<?= $s['sumber'] ?>','<?= $s['tipe_soal'] ?>')"> 
+                            B. <?= htmlspecialchars($s['pilihan_b']) ?>
+                        </label>
+                        <label>
+                            <input type="radio" name="jawaban<?= $s['id'] ?>" value="C" 
+                                <?= (isset($jawaban_siswa) && $jawaban_siswa->jawaban == 'C' ? 'checked' : '') ?>
+                                onclick="saveAnswer(<?= $s['id'] ?>,'C','<?= $s['sumber'] ?>','<?= $s['tipe_soal'] ?>')"> 
+                            C. <?= htmlspecialchars($s['pilihan_c']) ?>
+                        </label>
+                        <label>
+                            <input type="radio" name="jawaban<?= $s['id'] ?>" value="D" 
+                                <?= (isset($jawaban_siswa) && $jawaban_siswa->jawaban == 'D' ? 'checked' : '' )?>
+                                onclick="saveAnswer(<?= $s['id'] ?>,'D','<?= $s['sumber'] ?>','<?= $s['tipe_soal'] ?>')"> 
+                            D. <?= htmlspecialchars($s['pilihan_d']) ?>
+                        </label>
+                    </div>
+                <?php else: ?>
+                    <!-- Tampilan untuk soal essay -->
+                    <div class="jawaban-essay">
+                        <textarea class="form-control" id="jawabanEssay<?= $s['id'] ?>" 
+                            rows="5" placeholder="Tulis jawaban essay Anda di sini..."
+                            onblur="saveEssayAnswer(<?= $s['id'] ?>,'<?= $s['sumber'] ?>')"><?= 
+                                isset($jawaban_siswa) ? htmlspecialchars($jawaban_siswa->jawaban_essay) : '' 
+                            ?></textarea>
+                    </div>
+                <?php endif; ?>
+                
+                <!-- Satu set tombol navigasi saja -->
+                <div class="soal-actions">
+                    <button class="btn btn-secondary" onclick="previousSoal()" <?= $index == 0 ? 'disabled' : '' ?>>Sebelumnya</button>
+                    <button class="btn btn-warning" onclick="raguRagu(<?= $s['id'] ?>, '<?= $s['sumber'] ?>')">
+                        <?= (isset($jawaban_siswa) && $jawaban_siswa->ragu_ragu ? 'Batal Ragu' : 'Tandai Ragu') ?>
+                    </button>
+                    <button class="btn btn-primary" onclick="nextSoal()" <?= $index == count($soal) - 1 ? 'disabled' : '' ?>>Berikutnya</button>
+                </div>
+            </div>
+        <?php endforeach; ?>
     <?php else: ?>
         <div class="soal-card">
             <p class="soal-title">Tidak ada soal tersedia untuk ujian ini.</p>
@@ -209,6 +224,7 @@
     <?php endif; ?>
 </div>
 
+<!-- Navigasi Soal (tetap sama) -->
 <div id="navigasi">
     <h4 class="navigasi-title">Navigasi Soal</h4>
     <?php if (!empty($soal)): ?>
@@ -222,7 +238,9 @@
             
             $class = '';
             if ($jawaban) {
-                $class = $jawaban->ragu_ragu ? 'ragu' : ($jawaban->jawaban ? 'answered' : '');
+                $class = $jawaban->ragu_ragu ? 'ragu' : 
+                        ($s['tipe_soal'] == 'pilihan' && $jawaban->jawaban ? 'answered' : 
+                        ($s['tipe_soal'] == 'essay' && !empty($jawaban->jawaban_essay) ? 'answered' : ''));
             }
             ?>
             <button class="nav-btn <?= $class ?>" id="nav<?= $index ?>" onclick="gotoSoal(<?= $index ?>)">
@@ -245,10 +263,29 @@
     let ujian_id = <?= $ujian->id_ujian ?? 0 ?>;
 
     // Fungsi untuk menandai tombol navigasi saat ini
-    function updateNavigation() {
-        $('.nav-btn').removeClass('current');
-        $('#nav' + current).addClass('current');
-    }
+    // Modifikasi fungsi navigasi
+function updateNavigation() {
+    $('.soal-card').each(function(index) {
+        var idSoal = $(this).find('[id^="jawaban"]').attr('id').replace('jawabanEssay', '').replace('jawaban', '');
+        var isEssay = $(this).find('.jawaban-essay').length > 0;
+        var navBtn = $('#nav' + index);
+        
+        // Reset kelas navigasi
+        navBtn.removeClass('answered ragu');
+        
+        // Cek status jawaban
+        if (isEssay) {
+            var jawaban = $('#jawabanEssay' + idSoal).val();
+            if (jawaban.trim() !== '') {
+                navBtn.addClass('answered');
+            }
+        } else {
+            if ($('input[name="jawaban' + idSoal + '"]:checked').length > 0) {
+                navBtn.addClass('answered');
+            }
+        }
+    });
+}
 
     function gotoSoal(index) {
         if (index < 0 || index >= totalSoal) return;
@@ -284,17 +321,16 @@
         }
     }
 
-    function saveAnswer(id_soal, jawaban, sumber) {
-    // Validasi parameter
-    if (!id_soal || !jawaban || !sumber) {
-        console.error('Parameter tidak lengkap:', {id_soal, jawaban, sumber});
+    function saveAnswer(id_soal, jawaban, sumber, tipe_soal) {
+    if (!id_soal || !jawaban || !sumber || !tipe_soal) {
+        console.error('Parameter tidak lengkap:', {id_soal, jawaban, sumber, tipe_soal});
         alert('Data tidak lengkap untuk menyimpan jawaban');
         return;
     }
 
-    var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
-    var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
-    
+    var csrfName = '<?= $this->security->get_csrf_token_name(); ?>';
+    var csrfHash = '<?= $this->security->get_csrf_hash(); ?>';
+
     $.ajax({
         url: '<?= site_url("ujian/simpan_jawaban_ajax") ?>',
         method: 'POST',
@@ -302,6 +338,7 @@
         data: {
             id_soal: id_soal,
             jawaban: jawaban,
+            tipe_soal: tipe_soal,
             ragu: 0,
             sumber: sumber,
             [csrfName]: csrfHash
@@ -324,8 +361,49 @@
         }
     });
 }
+
 // Panggil dengan menyertakan sumber soal
-onclick="saveAnswer(<?= $s['id'] ?>,'A','<?= $s['sumber'] ?>')"
+onclick="saveAnswer(<?= $s['id'] ?>, 'A', '<?= $s['sumber'] ?>', '<?= $s['tipe_soal'] ?>')"
+
+function saveEssayAnswer(id_soal, sumber) {
+    var textarea = document.getElementById('jawabanEssay' + id_soal);
+    var jawaban = textarea.value;
+    var tipe_soal = 'essay'; // penting untuk membedakan tipe soal
+
+    var csrfName = '<?= $this->security->get_csrf_token_name(); ?>';
+    var csrfHash = '<?= $this->security->get_csrf_hash(); ?>';
+
+    $.ajax({
+        url: '<?= site_url("ujian/simpan_jawaban_ajax") ?>',
+        method: 'POST',
+        dataType: 'json',
+        data: {
+            id_soal: id_soal,
+            jawaban: jawaban,
+            tipe_soal: tipe_soal,
+            ragu: 0,
+            sumber: sumber,
+            [csrfName]: csrfHash
+        },
+        success: function(response) {
+            if (response.status === 'success') {
+                $('#nav' + current).addClass('answered').removeClass('ragu');
+            } else {
+                alert('Error: ' + response.message);
+            }
+        },
+        error: function(xhr) {
+            var errorMsg = 'Gagal menyimpan jawaban essay. ';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMsg += xhr.responseJSON.message;
+            } else {
+                errorMsg += 'Status: ' + xhr.status;
+            }
+            alert(errorMsg);
+        }
+    });
+}
+
 
 function raguRagu(id_soal, sumber) {
     // Dapatkan jawaban yang dipilih
