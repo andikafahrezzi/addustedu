@@ -36,7 +36,10 @@ class Materi extends CI_Controller
     }
     public function belajar($id) {
         $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);
-        
+        if ($id === null) {
+        show_404(); // atau redirect ke halaman aman
+    }
+
         // Ambil data
         $data['comments'] = $this->Forum_model->get_comments($id);
         $data['current_nis'] = $this->session->userdata('nis');

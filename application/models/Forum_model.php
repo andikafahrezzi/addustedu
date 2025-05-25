@@ -167,7 +167,7 @@ public function hapus_komentar($id) {
     public function getGuruByMateri($materi_id) {
         $this->db->select('g.nip, g.nama_guru, g.email');
         $this->db->from('materi m');
-        $this->db->join('guru g', 'm.nip = g.nip');
+        $this->db->join('guru g', 'm.id_guru = g.nip');
         $this->db->where('m.id', $materi_id);
         return $this->db->get()->row();
     }

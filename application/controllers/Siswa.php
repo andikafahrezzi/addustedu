@@ -322,7 +322,7 @@ public function belajar($id) {
 public function tambah_komentar() {
     // Pastikan user sudah login
     if (!$this->session->userdata('logged_in')) {
-        redirect('login');
+        redirect('welcome');
     }
 
     // Debug session - bisa dihapus setelah fix
@@ -332,7 +332,7 @@ public function tambah_komentar() {
     // Validasi user_type
     if (!in_array($user_type, ['siswa', 'guru'])) {
         $this->session->set_flashdata('error', 'Tipe user tidak valid');
-        redirect('login');
+        redirect('welcome');
     }
 
     $user_id = ($user_type === 'siswa') ? $this->session->userdata('nis') : $this->session->userdata('nip');
@@ -369,6 +369,23 @@ public function tambah_komentar() {
             'parent_id' => $this->input->post('parent_id') ?: NULL,
             'created_at' => date('Y-m-d H:i:s')
         ];
+        $materi_id = $this->input->post('materi_id');
+        $komentar = $this->input->post('komentar');
+        $guru = $this->Forum_model->getGuruByMateri($materi_id);
+        if (!$guru || empty($guru->email)) {
+            $this->session->set_flashdata('error', 'Email guru tidak ditemukan.');
+            redirect('materi/belajar/' . $materi_id);
+        }
+    
+        $this->email->from('noreply@addustedu', 'E-Learning');
+        $this->email->to($guru->email);
+        $this->email->subject('Komentar Baru di Forum Diskusi');
+        $this->email->message("Ada komentar baru dari siswa di forum materi: <b>{$materi_id}</b><br><br>Komentar:<br>{$komentar}");
+    
+        if (!$this->email->send()) {
+            $this->session->set_flashdata('error', 'Komentar terkirim, tapi email gagal dikirim.');
+            log_message('error', print_r($this->email->print_debugger(), true)); // log error ke log CI
+        }
 
         if ($this->Forum_model->tambah_komentar($data)) {
             $this->session->set_flashdata('success', 'Komentar berhasil ditambahkan');
