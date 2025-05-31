@@ -38,10 +38,10 @@ class Import extends CI_Controller {
         $sheet->setCellValue('H1', 'User_type');
 
         // Set contoh data
-        $sheet->setCellValue('A2', '12345');
-        $sheet->setCellValue('B2', 'John Doe');
-        $sheet->setCellValue('C2', '123456');
-        $sheet->setCellValue('D2', 'john@example.com');
+        $sheet->setCellValue('A2', '654321');
+        $sheet->setCellValue('B2', 'Lorem');
+        $sheet->setCellValue('C2', '654321');
+        $sheet->setCellValue('D2', 'lorem@example.com');
         $sheet->setCellValue('E2', 'default.jpg');
         $sheet->setCellValue('F2', '1');
         $sheet->setCellValue('G2', 'XI');

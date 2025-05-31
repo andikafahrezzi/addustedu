@@ -19,14 +19,13 @@ TODO
     - tampilan upload tugas siswa masih ngaco
     - pada tabel siswa ada kolom image yang kita bisa gunakan untuk mengambil gamabr siswa.
         - gambar ini bisa digunakan untuk gambar di kolom fordis serta mempercantik tampilan navigasi user
-    - tidak bisa replay++ di diskusi
 
 
 PR
 - beda user tetapi waktu tidak mulai dari 100
 - setiap function hapus, samakan seperti yang lainnya(ada modal hapus)
 - kedepannya jika ada form harus mengguna csrf
--  pada quiz, jawaban essay masih belum masuk kedalam database, jadi terhitung salah
+- pada quiz, jawaban essay masih belum masuk kedalam database, jadi terhitung salah
 
 next can be a problem
 - change id at database siswa to nis

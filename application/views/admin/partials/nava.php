@@ -86,7 +86,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                 <span>Siswa</span></a>
                             <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/data_siswa') ?>">Data Siswa</a></li>
-                                <li><a class="nav-link" href="<?= base_url('import') ?>">Tambah Data siswa</a>
+                                <li><a class="nav-link" href="<?= base_url('import') ?>">Import Data siswa</a>
                                     </li>
                             </ul>
                         </li>
