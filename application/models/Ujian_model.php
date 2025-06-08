@@ -253,4 +253,12 @@ public function hitung_skor($id_ujian, $nis)
         $query = $this->db->get_where('tbl_ujian', array('id_ujian' => $id_ujian))->row();
         return $query;
     }
+    public function get_peserta_ujian($ujian_id) {
+        $this->db->select('siswa.nis, siswa.nama, siswa.kelas, tbl_jawaban_siswa.id_ujian, MAX(tbl_jawaban_siswa.score) as total_score, MAX(tbl_jawaban_siswa.waktu_jawab) as waktu_dikerjakan');
+        $this->db->from('tbl_jawaban_siswa');
+        $this->db->join('siswa', 'siswa.nis = tbl_jawaban_siswa.nis');
+        $this->db->where('tbl_jawaban_siswa.id_ujian', $ujian_id);
+        $this->db->group_by('tbl_jawaban_siswa.nis, tbl_jawaban_siswa.id_ujian');
+        return $this->db->get()->result();
+    }
 }

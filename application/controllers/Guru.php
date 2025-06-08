@@ -1429,6 +1429,16 @@ public function beri_nilai_essay()
 
     redirect('guru/daftar_nilai_essay');
 }
+public function data_pesertaujian($ujian_id) {
+    $this->load->model('Ujian_model');
+
+    $data['peserta'] = $this->Ujian_model->get_peserta_ujian($ujian_id);
+    $data['ujian_id'] = $ujian_id;
+
+    $this->load->view('guru/navug');
+    $this->load->view('guru/data_pesertaujian', $data);
+    $this->load->view('guru/footg');
+}
 
 
 }

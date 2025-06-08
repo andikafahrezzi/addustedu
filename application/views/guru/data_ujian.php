@@ -32,7 +32,7 @@
                     <td><?= $u['tanggal_selesai'] ?></td>
                     <td><?= ucfirst($u['status']) ?></td>
                     <td>
-                        <a href="<?= site_url('guru/tambah_soal_ujian/' . $u['id_ujian']) ?>" class="btn btn-info">Tambah Soal</a>
+                        <a href="<?= site_url('guru/data_pesertaujian/' . $u['id_ujian']) ?>" class="btn btn-info">Daftar Peserta</a>
                         <a href="<?= site_url('guru/daftar_nilai_essay/' . $u['id_ujian']) ?>" class="btn btn-info">Lihat Essay</a>
                         <a href="<?= site_url('guru/tampilkan_soal/' . $u['id_ujian']) ?>" class="btn btn-info">Lihat Soal</a>
                         <a href="<?= site_url('guru/edit_ujian/' . $u['id_ujian']) ?>" class="btn btn-warning">Edit</a>
