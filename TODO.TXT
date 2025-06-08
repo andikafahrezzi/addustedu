@@ -3,6 +3,7 @@ TODO
     - cari tau bagaimana cara destroy session 
     - menambahkan fungsi delete materi, quiz dan bank soal, tugas pada siswa, dan admin
     - nama tidak boleh ada angka(validasi)
+    - guru harus memiliki fitur lihat hasil quiz dan ujian siswa
 
 - ADMIN
     - cek navbar admin setiap komponen untuk clean code

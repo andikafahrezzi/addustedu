@@ -55,15 +55,27 @@ class Tugas_model extends CI_Model {
         $this->db->where('id', $id);
         return $this->db->update('tugas_siswa', $data);
     }
+    public function get_materi_ids_by_guru($guru_id) {
+    $this->db->select('id as materi_id');
+    $this->db->from('materi');
+    $this->db->where('id_guru', $guru_id);
+    return $this->db->get()->result();
+}
+public function get_tugas_per_materi($materi_id, $guru_id = null) {
+    $this->db->select('tugas_siswa.*, siswa.nama as nama_siswa');
+    $this->db->from('tugas_siswa');
+    $this->db->join('siswa', 'siswa.nis = tugas_siswa.siswa_id');
+    $this->db->join('materi', 'materi.id = tugas_siswa.materi_id'); // tambahkan join ke materi
+    $this->db->where('tugas_siswa.materi_id', $materi_id);
 
-    public function get_tugas_per_materi($materi_id) {
-        $this->db->select('tugas_siswa.*, siswa.nama as nama_siswa');
-        $this->db->from('tugas_siswa');
-        $this->db->join('siswa', 'siswa.nis = tugas_siswa.siswa_id');
-        $this->db->where('tugas_siswa.materi_id', $materi_id);
-        $this->db->order_by('dikirim_pada', 'DESC');
-        return $this->db->get()->result();
+    if ($guru_id !== null) {
+        $this->db->where('materi.id_guru', $guru_id); // filter berdasarkan guru
     }
+
+    $this->db->order_by('dikirim_pada', 'DESC');
+    return $this->db->get()->result();
+}
+
     
     public function get_all_materi_ids() {
         return $this->db->distinct()->select('materi_id')->get('tugas_siswa')->result();

@@ -179,39 +179,39 @@ public function quiz_result($quiz_siswa_id)
     $this->load->view('materi/navm');
     $this->load->view('materi/quiz_result', $data);
 }
-public function upload_tugas($materi_id) {
-    $config['upload_path'] = './assets/materi_tugas/';
-    $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx';
-    $config['max_size'] = 5120; // 5MB
-    $config['encrypt_name'] = true;
+    public function upload_tugas($materi_id) {
+        $config['upload_path'] = './assets/materi_tugas/';
+        $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx';
+        $config['max_size'] = 5120; // 5MB
+        $config['encrypt_name'] = true;
 
-    $this->load->library('upload', $config);
+        $this->load->library('upload', $config);
 
-    if (!$this->upload->do_upload('file_tugas')) {
-        $error = $this->upload->display_errors();
-        $this->session->set_flashdata('error', $error);
-    } else {
-        $upload_data = $this->upload->data();
-        
-        $data = [
-            'siswa_id' => $this->session->userdata('nis'),
-            'materi_id' => $materi_id,
-            'file_path' => 'assets/materi_tugas/' . $upload_data['file_name'],
-            'original_filename' => pathinfo($upload_data['client_name'], PATHINFO_FILENAME) . ' (' . strtoupper(ltrim($upload_data['file_ext'], '.')) . ')',
-            'file_type' => $upload_data['file_type'],
-            'file_size' => $upload_data['file_size'],
-            'dikirim_pada' => date('Y-m-d H:i:s')
-        ];
-
-        if ($this->Tugas_model->upload_tugas($data)) {
-            $this->session->set_flashdata('success', 'Tugas berhasil diupload');
+        if (!$this->upload->do_upload('file_tugas')) {
+            $error = $this->upload->display_errors();
+            $this->session->set_flashdata('error', $error);
         } else {
-            $this->session->set_flashdata('error', 'Gagal menyimpan data tugas');
-        }
-    }
+            $upload_data = $this->upload->data();
+            
+            $data = [
+                'siswa_id' => $this->session->userdata('nis'),
+                'materi_id' => $materi_id,
+                'file_path' => 'assets/materi_tugas/' . $upload_data['file_name'],
+                'original_filename' => pathinfo($upload_data['client_name'], PATHINFO_FILENAME) . ' (' . strtoupper(ltrim($upload_data['file_ext'], '.')) . ')',
+                'file_type' => $upload_data['file_type'],
+                'file_size' => $upload_data['file_size'],
+                'dikirim_pada' => date('Y-m-d H:i:s')
+            ];
 
-    redirect('materi/belajar/' . $materi_id);
-}
+            if ($this->Tugas_model->upload_tugas($data)) {
+                $this->session->set_flashdata('success', 'Tugas berhasil diupload');
+            } else {
+                $this->session->set_flashdata('error', 'Gagal menyimpan data tugas');
+            }
+        }
+
+        redirect('materi/belajar/' . $materi_id);
+    }
 
 // Hapus tugas
 public function delete_tugas($id) {

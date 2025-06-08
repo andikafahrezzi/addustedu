@@ -692,18 +692,21 @@ private function tambah_soal($quiz_id)
     }
     
     public function daftar_tugas() {
-        $this->load->model('Tugas_model');
-    
-        $data['materi_list'] = [];
-        $materi_ids = $this->Tugas_model->get_all_materi_ids();
-    
-        foreach ($materi_ids as $row) {
-            $data['materi_list'][$row->materi_id] = $this->Tugas_model->get_tugas_per_materi($row->materi_id);
-        }
-        $this->load->view('guru/navug'); 
-        $this->load->view('guru/daftar_tugas_siswa', $data);
-        $this->load->view('guru/footg');
+    $this->load->model('Tugas_model');
+    $guru_id = $this->session->userdata('nip'); // Ambil dari session login
+
+    $data['materi_list'] = [];
+    $materi_ids = $this->Tugas_model->get_materi_ids_by_guru($guru_id);
+
+    foreach ($materi_ids as $row) {
+        $data['materi_list'][$row->materi_id] = $this->Tugas_model->get_tugas_per_materi($row->materi_id, $guru_id);
     }
+
+    $this->load->view('guru/navug'); 
+    $this->load->view('guru/daftar_tugas_siswa', $data);
+    $this->load->view('guru/footg');
+}
+
     public function edit_profile() {
         $nip = $this->session->userdata('nip');
         $data['guru'] = $this->M_siswa->get_by_nip($nip);

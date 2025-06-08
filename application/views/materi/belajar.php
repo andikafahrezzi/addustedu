@@ -237,6 +237,11 @@ $(document).ready(function() {
                     <div class="upload-section">
                         <?php echo form_open_multipart('siswa/upload_tugas/'.$materi->id); ?>
                             <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
+                                                <?php if ($this->session->flashdata('error')): ?>
+                                <div class="alert alert-danger mt-2">
+                                    <?= $this->session->flashdata('error'); ?>
+                                </div>
+                            <?php endif; ?>
                             <div class="form-group">
                                 <label>File Tugas (JPG, PNG, PDF, DOC/DOCX, max 5MB)</label>
                                 <input type="file" name="file_tugas" class="form-control-file" required>
