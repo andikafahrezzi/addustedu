@@ -168,6 +168,26 @@ public function get_quiz_by_guru($quiz_id, $nip) {
     return $this->db->get()->row();
 }
 
+public function get_pesertaquiz($quiz_id, $nip) {
+    $this->db->select('quiz_siswa.*, siswa.nama as nama_siswa, siswa.kelas, materi.deskripsi as judul_materi');
+    $this->db->from('quiz_siswa');
+    $this->db->join('quiz', 'quiz.id = quiz_siswa.quiz_id'); // Join ke quiz dulu
+    $this->db->join('materi', 'materi.id = quiz.materi_id'); // Lalu ke materi
+    $this->db->join('siswa', 'siswa.nis = quiz_siswa.siswa_id'); // Join ke siswa
+    $this->db->where('quiz_siswa.quiz_id', $quiz_id);
+    $this->db->where('materi.id_guru', $nip); // Batasi hanya untuk guru ini
+    return $this->db->get()->result();
+}
+
+public function delete_quiz_siswa($id) {
+    $this->db->where('quiz_siswa_id', $id);
+    $this->db->delete('jawaban_siswa');
+
+    // Baru hapus data quiz_siswa
+    $this->db->where('id', $id);
+    return $this->db->delete('quiz_siswa');
+}
+
 
 
 // Create new quiz
@@ -210,4 +230,5 @@ public function get_materi_options($nip) {
     $this->db->where('id_guru', $nip);
     return $this->db->get()->result();
 }
+
 }

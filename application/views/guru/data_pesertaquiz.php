@@ -1,10 +1,8 @@
 <div class="container">
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary">Daftar Quiz</h6>
-            <a href="<?= base_url('guru/buat_quiz_guru') ?>" class="btn btn-primary btn-sm">
-                <i class="fas fa-plus"></i> Buat Quiz Baru
-            </a>
+            <h6 class="m-0 font-weight-bold text-primary">Daftar Peserta  Quiz</h6>
+            
         </div>
         <div class="card-body">
             <?php if ($this->session->flashdata('success')) : ?>
@@ -20,41 +18,35 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Judul Quiz</th>
-                            <th>Materi</th>
+                            <th>Nis</th>
+                            <th>Nama</th>
                             <th>Kelas</th>
-                            <th>Waktu (menit)</th>
-                            <th>Percobaan</th>
-                            <th>Dibuat</th>
+                            <th>Mulai</th>
+                            <th>Selesai</th>
+                            <th>Status</th>
+                            <th>Score</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (!empty($quizzes)) : ?>
+                        <?php if (!empty($pesertaquiz)) : ?>
                             <?php $no = 1; ?>
-                            <?php foreach ($quizzes as $quiz) : ?>
+                            <?php foreach ($pesertaquiz as $quiz) : ?>
                                 <tr>
                                     <td><?= $no++ ?></td>
-                                    <td><?= htmlspecialchars($quiz->judul) ?></td>
-                                    <td><?= htmlspecialchars($quiz->judul_materi) ?></td>
+                                    <td><?= htmlspecialchars($quiz->siswa_id) ?></td>
+                                    <td><?= htmlspecialchars($quiz->nama_siswa) ?></td>
                                     <td><?= htmlspecialchars($quiz->kelas) ?></td>
-                                    <td><?= $quiz->waktu_pengerjaan ?></td>
-                                    <td><?= $quiz->attempts ?></td>
-                                    <td><?= date('d M Y', strtotime($quiz->created_at)) ?></td>
+                                    <td><?= date('d M Y', strtotime($quiz->start_time)) ?></td>
+                                    <td><?= date('d M Y', strtotime($quiz->end_time)) ?></td>
+                                    <td><?= $quiz->status ?></td>
+                                    <td><?= $quiz->score ?></td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="<?= base_url('guru/data_pesertaquiz/'.$quiz->id) ?>" class="btn btn-sm btn-success">
-                                                <i class="fas fa-user"></i>
-                                            </a>
-                                            <a href="<?= base_url('guru/edit_quiz/'.$quiz->id) ?>" class="btn btn-sm btn-warning">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                            
                                             <button onclick="confirmDeleteQuiz('<?= $quiz->id; ?>')" class="btn btn-sm btn-danger" title="Hapus">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                            <a href="<?= base_url('guru/kelola_quiz/'.$quiz->id) ?>" class="btn btn-sm btn-info">
-                                                <i class="fas fa-question"></i> Soal
-                                            </a>
                                         </div>
                                     </td>
                                 </tr>
@@ -95,7 +87,7 @@
 
 <script>
     function confirmDeleteQuiz(id) {
-        $('#deleteQuizLink').attr('href', '<?= site_url("guru/delete_quiz/"); ?>' + id);
+        $('#deleteQuizLink').attr('href', '<?= site_url("guru/delete_pesertaquiz/"); ?>' + id);
         $('#deleteQuizModal').modal('show');
     }
 </script>

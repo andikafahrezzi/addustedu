@@ -666,6 +666,30 @@ private function tambah_soal($quiz_id)
     }
     
 
+    public function data_pesertaquiz($quiz_id) {
+    $nip = $this->session->userdata('nip');
+    $data['pesertaquiz'] = $this->Quiz_model->get_pesertaquiz($quiz_id, $nip);
+    
+    $this->load->view('guru/navug'); 
+    $this->load->view('guru/data_pesertaquiz', $data);
+    $this->load->view('guru/footg');
+}
+public function delete_pesertaquiz($id) {
+    $this->load->model('Quiz_model');
+
+    // Optional: Cek apakah data ada sebelum hapus
+    $quiz = $this->db->get_where('quiz_siswa', ['id' => $id])->row();
+
+    if ($quiz) {
+        $this->Quiz_model->delete_quiz_siswa($id);
+        $this->session->set_flashdata('success', 'Data quiz siswa berhasil dihapus.');
+    } else {
+        $this->session->set_flashdata('error', 'Data quiz siswa tidak ditemukan.');
+    }
+
+    // Redirect ke halaman sebelumnya atau halaman daftar peserta
+    redirect($_SERVER['HTTP_REFERER']); 
+}
 
 
     // Hapus tugas (oleh admin/guru)
