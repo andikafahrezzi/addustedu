@@ -9,6 +9,8 @@
                     <?php endif; ?>
         
                     <form method="post" action="<?= base_url('guru/update_profile'); ?>">
+                        <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                    value="<?= $this->security->get_csrf_hash(); ?>" />
                         <input type="hidden" name="nip" value="<?= $guru->nip; ?>">
 
                         <div class="form-group">
