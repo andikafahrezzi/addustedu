@@ -3,11 +3,18 @@
             <div class="col-md-8 col-lg-6">
                 <div class="card shadow-sm p-4">
                     <h4 class="mb-4 text-center">Ubah Profil</h4>
+<?php if ($this->session->flashdata('error')) : ?>
+    <div class="alert alert-danger"><?= $this->session->flashdata('error'); ?></div>
+<?php endif; ?>
 
-                    <?php if($this->session->flashdata('success')): ?>
-                        <div class="alert alert-success"><?= $this->session->flashdata('success'); ?></div>
-                    <?php endif; ?>
-        
+<?php if ($this->session->flashdata('success')) : ?>
+    <div class="alert alert-success"><?= $this->session->flashdata('success'); ?></div>
+<?php endif; ?>
+
+<?= validation_errors('<div class="alert alert-danger">', '</div>'); ?>
+
+
+
                     <form method="post" action="<?= base_url('guru/update_profile'); ?>">
                         <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
                     value="<?= $this->security->get_csrf_hash(); ?>" />

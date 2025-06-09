@@ -742,7 +742,7 @@ public function delete_pesertaquiz($id) {
 }
 
     
-    public function update_profile()
+public function update_profile()
 {
     $nip = $this->input->post('nip');
     $nama_guru = $this->input->post('nama_guru');
@@ -750,35 +750,50 @@ public function delete_pesertaquiz($id) {
     $password = $this->input->post('password');
 
     $this->form_validation->set_rules('nama_guru', 'Nama Guru', 'required');
-    $this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_email_check');
+    $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
 
     if (!empty($password)) {
         $this->form_validation->set_rules('password', 'Password', 'min_length[8]');
     }
 
+    // Jalankan validasi form
     if ($this->form_validation->run() == FALSE) {
         $data['guru'] = $this->db->get_where('guru', ['nip' => $nip])->row();
-        
-        // ⬇️ Tambahkan layout agar tampilan tidak kosong
         $this->load->view('guru/navug');
         $this->load->view('guru/profile', $data);
         $this->load->view('guru/footg');
-    } else {
-        $updateData = [
-            'nama_guru' => $nama_guru,
-            'email' => $email
-        ];
-
-        if (!empty($password)) {
-            $updateData['password'] = password_hash($password, PASSWORD_DEFAULT);
-        }
-
-        $this->M_siswa->update_profile_guru($nip, $updateData);
-
-        $this->session->set_flashdata('success', 'Profil berhasil diperbarui.');
-        redirect('guru/edit_profile');
+        return;
     }
+
+    // Cek email sudah dipakai guru lain
+    $emailCheck = $this->db->get_where('guru', [
+        'email' => $email,
+        'nip !=' => $nip
+    ])->row();
+
+    if ($emailCheck) {
+        $this->session->set_flashdata('error', 'Email sudah digunakan oleh guru lain.');
+        redirect('guru/edit_profile');
+        return;
+    }
+
+    // Siapkan data update
+    $updateData = [
+        'nama_guru' => $nama_guru,
+        'email' => $email
+    ];
+
+    if (!empty($password)) {
+        $updateData['password'] = password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    // Simpan perubahan
+    $this->M_siswa->update_profile_guru($nip, $updateData);
+    $this->session->set_flashdata('success', 'Profil berhasil diperbarui.');
+    redirect('guru/edit_profile');
 }
+
+
 
     
     public function email_check($email)
