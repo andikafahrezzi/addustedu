@@ -1,66 +1,92 @@
 /* Testimonials Area css
 ============================================================================================ */
-.testimonials_area{
+.testimonials_area {
 	position: relative;
-	
-}
-.testi_slider{
-	max-width: 945px;
-	margin: auto;
-	.item{
-		padding-top: 50px;
-	}
-	.testi_item{
-		text-align: center;
-		border: 1px solid #eeeeee;
-		img{
-			width: auto;
-			margin: auto;
-			margin-top: -50px;
-		}
-	}
-	.owl-dots{
-		text-align: center;
-		margin-top: 50px;
-		.owl-dot{
-			height: 14px;
-			width: 14px;
-			border-radius: 50%;
-			background: #eeeeee;
-			display: inline-block;
-			margin-right: 10px;
-			@include transition;
-			&:last-child{
-				margin-right: 0px;
-			}
-			&:hover, &.active{
-				background: $baseColor;
-			}
-		}
-	}
-}
-.testi_item{
-	h4{
-		color: $dip;
-		font-size: 18px;
-		margin-top: 20px;
-		margin-bottom: 15px;
-	}
-	.list{
-		margin-bottom: 20px;
-		li{
-			display: inline-block;
-			a{
-				color: #ffc000;
-				font-size: 14px;
-			}
-		}
-	}
-	p{
-		max-width: 760px;
+	background: #f9f9ff;
+	padding: 60px 0;
+
+	.testi_slider {
+		max-width: 945px;
 		margin: auto;
-		margin-bottom: 60px;
+
+		.item {
+			padding-top: 60px;
+		}
+
+		.testi_item {
+			text-align: center;
+			background: #fff;
+			border-radius: 20px;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+			padding: 40px 30px 50px;
+			position: relative;
+			transition: all 0.3s ease;
+
+			img {
+				width: 180px; // sebelumnya 90px
+				height: 180px;
+				object-fit: cover;
+				border-radius: 50%;
+				margin: auto;
+				margin-top: -90px; // sesuaikan naiknya
+				border: 6px solid #fff;
+				box-shadow: 0 0 0 6px #00c9ff44;
+			}
+
+			h4 {
+				font-size: 20px;
+				font-weight: 700;
+				color: #222;
+				margin-top: 20px;
+				margin-bottom: 10px;
+				font-family: 'Poppins', sans-serif;
+			}
+
+			.list {
+				margin-bottom: 18px;
+
+				li {
+					display: inline-block;
+					margin: 0 2px;
+
+					a {
+						color: #ffc107;
+						font-size: 16px;
+					}
+				}
+			}
+
+			p {
+				font-size: 14px;
+				color: #555;
+				line-height: 1.9;
+				max-width: 720px;
+				margin: 0 auto;
+				font-family: 'Roboto', sans-serif;
+			}
+		}
+
+		.owl-dots {
+			text-align: center;
+			margin-top: 40px;
+
+			.owl-dot {
+				height: 12px;
+				width: 12px;
+				border-radius: 50%;
+				background: #ddd;
+				display: inline-block;
+				margin: 0 5px;
+				transition: all 0.3s ease;
+
+				&.active,
+				&:hover {
+					background: linear-gradient(135deg, #00c9ff, #92fe9d);
+				}
+			}
+		}
 	}
 }
+
 /* End Testimonials Area css
 ============================================================================================ */

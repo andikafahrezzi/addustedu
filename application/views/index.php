@@ -17,80 +17,129 @@
 
 <!--================Finance Area =================-->
 <section class="finance_area">
-	<div class="container">
-		<div class="finance_inner row">
-			<div class="col-lg-3 col-sm-6">
-				<div class="finance_item">
-					<div data-aos="fade-right" data-aos-duration="1600" class="media">
-						<div class="d-flex">
-							<i class="lnr lnr-users"></i>
-						</div>
-						<div class="media-body">
-							<h5>Admin, Murid & Guru Data Management</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-3 col-sm-6">
-				<div class="finance_item">
-					<div data-aos="fade-right" data-aos-duration="1800" class="media">
-						<div class="d-flex">
-							<i class="lnr lnr-file-empty"></i>
-						</div>
-						<div class="media-body">
-							<h5>Dokumentasi lengkap & Jelas</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div data-aos="fade-right" data-aos-duration="2000" class="col-lg-3 col-sm-6">
-				<div class="finance_item">
-					<div class="media">
-						<div class="d-flex">
-							<i class="lnr lnr-camera-video"></i>
-						</div>
-						<div class="media-body">
-							<h5>E-Learning Berbasis Video dan Disqus</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div data-aos="fade-right" data-aos-duration="2200" class="col-lg-3 col-sm-6">
-				<div class="finance_item">
-					<div class="media">
-						<div class="d-flex">
-							<i class="lnr lnr-tag"></i>
-						</div>
-						<div class="media-body">
-							<h5>Gratis dengan Lisensi MIT Open-Source</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div class="container">
+    <div class="finance_inner_wrapper">
+      <div class="finance_scroller">
+        <!-- Item 1 -->
+        <div class="finance_item">
+          <div class="media">
+            <div class="d-flex">
+              <i class="lnr lnr-users"></i>
+            </div>
+            <div class="media-body">
+              <h5>Admin, Murid & Guru Data Management</h5>
+            </div>
+          </div>
+        </div>
+        <!-- Item 2 -->
+        <div class="finance_item">
+          <div class="media">
+            <div class="d-flex">
+              <i class="lnr lnr-file-empty"></i>
+            </div>
+            <div class="media-body">
+              <h5>Dokumentasi lengkap & Jelas</h5>
+            </div>
+          </div>
+        </div>
+        <!-- Item 3 -->
+        <div class="finance_item">
+          <div class="media">
+            <div class="d-flex">
+              <i class="lnr lnr-camera-video"></i>
+            </div>
+            <div class="media-body">
+              <h5>E-Learning Berbasis Video dan Disqus</h5>
+            </div>
+          </div>
+        </div>
+        <!-- Item 4 -->
+        <div class="finance_item">
+          <div class="media">
+            <div class="d-flex">
+              <i class="lnr lnr-tag"></i>
+            </div>
+            <div class="media-body">
+              <h5>Gratis dengan Lisensi MIT Open-Source</h5>
+            </div>
+          </div>
+        </div>
+
+        <!-- Salinan item agar loop terlihat -->
+        <div class="finance_item">
+          <div class="media">
+            <div class="d-flex">
+              <i class="lnr lnr-users"></i>
+            </div>
+            <div class="media-body">
+              <h5>Admin, Murid & Guru Data Management</h5>
+            </div>
+          </div>
+        </div>
+        <div class="finance_item">
+          <div class="media">
+            <div class="d-flex">
+              <i class="lnr lnr-file-empty"></i>
+            </div>
+            <div class="media-body">
+              <h5>Dokumentasi lengkap & Jelas</h5>
+            </div>
+          </div>
+        </div>
+        <div class="finance_item">
+          <div class="media">
+            <div class="d-flex">
+              <i class="lnr lnr-camera-video"></i>
+            </div>
+            <div class="media-body">
+              <h5>E-Learning Berbasis Video dan Disqus</h5>
+            </div>
+          </div>
+        </div>
+        <div class="finance_item">
+          <div class="media">
+            <div class="d-flex">
+              <i class="lnr lnr-tag"></i>
+            </div>
+            <div class="media-body">
+              <h5>Gratis dengan Lisensi MIT Open-Source</h5>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </section>
+
 <!--================End Finance Area =================-->
 
 <!--================ Illustrations Area =================-->
 <section class="addustedu-for-indonesia p_20">
 	<div class="container">
-		<div class="row">
-			<div class="col-md-6 mx-auto">
-				<img data-aos="fade-up" data-aos-duration="1800" src="<?= base_url('assets/') ?>img/illustrations/index-study.svg" alt="" srcset="">
+		<div class="row justify-content-center align-items-center mb-5">
+			<div class="col-md-6 text-center">
+				<img class="illustration-img" data-aos="zoom-in" data-aos-duration="1600" src="<?= base_url('assets/') ?>img/illustrations/gemini.png" alt="Gemini Illustration">
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-md-7 mx-auto">
-				<div class="main_title">
-					<h2 data-aos="fade-up" data-aos-duration="2000">addustedu Dibuat Untuk Meningkatkan Kualitas Pembelajaran Di Indonesia</h2>
-					<p data-aos="fade-up" data-aos-duration="2200">Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free.</p>
-					<a href="https://github.com/andikafahrezzi/addustedu"><button data-aos="fade-up" data-aos-duration="2400" class="bubbly-button">Download addustedu <span class="lnr lnr-arrow-right"></span></button></a>
+		<div class="row justify-content-center text-center">
+			<div class="col-md-8">
+				<div class="main_title styled">
+					<h2 data-aos="fade-up" data-aos-duration="1800">
+						<span class="highlight-text">AddustEdu</span> Dibuat Untuk Meningkatkan Kualitas Pembelajaran Di Indonesia
+					</h2>
+					<p data-aos="fade-up" data-aos-duration="2000">
+						Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free.
+					</p>
+					<a href="https://github.com/andikafahrezzi/addustedu">
+						<button data-aos="fade-up" data-aos-duration="2200" class="btn-gradient">Download addustedu <span class="lnr lnr-arrow-right"></span></button>
+					</a>
 				</div>
 			</div>
 		</div>
 	</div>
 </section>
+
 <!--================End Illustrations Area =================-->
 
 <!--================Courses Area =================-->

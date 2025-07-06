@@ -80,7 +80,7 @@
                             </li>
                             <li class="nav-item" id="navkontak"><a class="nav-link" href="<?= base_url('welcome/kontak') ?>">Kontak</a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModalCenter">Masuk</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModalCenter"><span class="lnr lnr-arrow-right"></span> Masuk</a></li>
                         </ul>
                     </div>
                 </div>

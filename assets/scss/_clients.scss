@@ -22,5 +22,67 @@
 		}
 	}
 }
+.addustedu-for-indonesia {
+	padding-top: 60px;
+	padding-bottom: 60px;
+	background: #ffffff;
+
+	.illustration-img {
+		max-width: 100%;
+		width: 400px;
+		height: auto;
+		margin-bottom: 20px;
+		filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.08));
+		transition: transform 0.4s ease;
+		&:hover {
+			transform: scale(1.03);
+		}
+	}
+
+	.main_title.styled {
+		h2 {
+			font-family: 'Poppins', sans-serif;
+			font-weight: 700;
+			font-size: 28px;
+			color: #222;
+			line-height: 1.5;
+			margin-bottom: 20px;
+
+			.highlight-text {
+				background: linear-gradient(135deg, #00c9ff, #92fe9d);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				display: inline-block;
+			}
+		}
+
+		p {
+			font-size: 15px;
+			line-height: 1.8;
+			color: #555;
+			max-width: 720px;
+			margin: 0 auto 30px;
+		}
+
+		.btn-gradient {
+			background: linear-gradient(135deg, #00c9ff, #92fe9d);
+			color: #fff;
+			font-weight: 600;
+			border: none;
+			border-radius: 30px;
+			padding: 12px 28px;
+			font-size: 14px;
+			box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+			transition: all 0.3s ease;
+
+			&:hover {
+				background: #ffffff;
+				color: #00c9ff;
+				box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+			}
+		}
+	}
+}
+
 /* End Clients Logo Area css
 ============================================================================================ */

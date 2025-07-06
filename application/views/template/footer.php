@@ -270,6 +270,16 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
 <script src="<?= base_url('assets/') ?>js/mail-script.js"></script>
 <script src="<?= base_url('assets/') ?>js/theme.js"></script>
 <script>
+	$(window).on("scroll", function () {
+		if ($(window).scrollTop() > 100) {
+			$(".header_area").addClass("navbar_fixed");
+		} else {
+			$(".header_area").removeClass("navbar_fixed");
+		}
+	});
+</script>
+
+<script>
     var animateButton = function(e) {
         e.preventDefault;
         e.target.classList.remove('animate');
@@ -298,9 +308,16 @@ function toggleReplyForm(commentId) {
         console.error("Form reply dengan ID " + commentId + " tidak ditemukan!");
     }
 }
+$(window).scroll(function () {
+	if ($(this).scrollTop() > 100) {
+		$(".header_area").addClass("navbar_fixed");
+	} else {
+		$(".header_area").removeClass("navbar_fixed");
+	}
+});
+
 </script>
 
-    <!-- <script>
 
 </body>
 
