@@ -1,7 +1,7 @@
 <!--================Home Banner Area =================-->
 <section class="banner_area">
     <div class="banner_inner d-flex align-items-center">
-        <div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background="">
+        <div class="overlay about bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background="">
         </div>
         <div class="container">
             <div class="banner_content text-center">
@@ -98,7 +98,7 @@
                 </div>
             </div>
         </div>
-        <div class="about_details" data-aos="fade-up" data-aos-duration="1600">
+        <div class="about_details mt-5" data-aos="fade-up" data-aos-duration="1600">
             <p>
                 Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free. Abstract chaos snare play truth ultimate good self. God overcome sexuality pious abstract good decieve revaluation aversion good. Virtues chaos overcome society holiest truth.
             </p>

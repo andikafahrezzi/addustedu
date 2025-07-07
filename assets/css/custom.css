@@ -840,25 +840,6 @@ button:focus {
 	padding: 0px 45px;
 }
 
-.banner_box {
-	max-width: 1620px;
-	margin: auto;
-}
-
-.banner_area {
-	position: relative;
-	z-index: 1;
-	min-height: 300px;
-}
-
-.banner_area .banner_inner {
-	position: relative;
-	overflow: hidden;
-	width: 100%;
-	min-height: 300px;
-	background: #04091e;
-	z-index: 1;
-}
 
 .modal-body {
 	font-family: "Poppins", sans-serif !important;
@@ -906,81 +887,6 @@ button:focus {
 	font-size: 16px;
 }
 
-.banner_area .banner_inner .overlay {
-	background: url(../img/banner/banner.jpg) no-repeat scroll center center;
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	height: 125%;
-	bottom: 0;
-	z-index: -1;
-	opacity: 0.6;
-}
-
-.banner_area .banner_inner .pelajaran {
-	background: url(../img/banner/banner-pelajaran.jpg) no-repeat scroll center
-		center;
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	height: 125%;
-	bottom: 0;
-	z-index: -1;
-	opacity: 0.6;
-}
-
-.banner_area .banner_inner .kontak {
-	background: url(../img/banner/banner-kontak.jpg) no-repeat scroll center
-		center;
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	height: 125%;
-	bottom: 0;
-	z-index: -1;
-	opacity: 0.6;
-}
-
-.banner_area .banner_inner .banner_content h2 {
-	color: #fff;
-	font-size: 48px;
-	font-family: "Roboto", serif;
-	margin-bottom: 0px;
-	font-weight: bold;
-}
-
-.banner_area .banner_inner .banner_content .page_link a {
-	font-size: 14px;
-	color: #fff;
-	font-family: "Roboto", sans-serif;
-	margin-right: 32px;
-	position: relative;
-}
-
-.banner_area .banner_inner .banner_content .page_link a:before {
-	content: "\e87a";
-	font-family: "Linearicons-Free";
-	position: absolute;
-	right: -25px;
-	top: 50%;
-	transform: translateY(-50%);
-}
-
-.banner_area .banner_inner .banner_content .page_link a:last-child {
-	margin-right: 0px;
-}
-
-.banner_area .banner_inner .banner_content .page_link a:last-child:before {
-	display: none;
-}
-
-.banner_area .banner_inner .banner_content .page_link a:hover {
-	color: #4dbf1c;
-}
-/*---------------------------------------------------- */
 
 /*# sourceMappingURL=style.css.map */
 

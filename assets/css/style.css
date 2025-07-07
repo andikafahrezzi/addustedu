@@ -1314,34 +1314,41 @@ button:focus {
   margin-bottom: 80px;
 }
 
+.contact_info {
+  margin-top: 40px;
+}
 .contact_info .info_item {
   position: relative;
   padding-left: 45px;
+  margin-bottom: 25px;
 }
 .contact_info .info_item i {
   position: absolute;
   left: 0;
-  top: 0;
-  font-size: 20px;
-  line-height: 24px;
-  color: #4dbf1c;
-  font-weight: 600;
+  top: 6px;
+  font-size: 22px;
+  color: #00c9ff;
 }
 .contact_info .info_item h6 {
   font-size: 16px;
-  line-height: 24px;
-  color: "Roboto", sans-serif;
-  font-weight: bold;
-  margin-bottom: 0px;
-  color: #222222;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #222;
+  font-family: "Roboto", sans-serif;
 }
 .contact_info .info_item h6 a {
-  color: #222222;
+  color: #222;
+  text-decoration: none;
+}
+.contact_info .info_item h6 a:hover {
+  color: #00c9ff;
 }
 .contact_info .info_item p {
+  margin: 0;
   font-size: 14px;
-  line-height: 24px;
-  padding: 2px 0px;
+  color: #555;
+  line-height: 1.6;
+  font-family: "Roboto", sans-serif;
 }
 
 .contact_form .form-group {
@@ -3533,87 +3540,84 @@ h6 {
 ============================================================================================ */
 /*---------------------------------------------------- */
 /*----------------------------------------------------*/
-/* About Area css
+/*Color Variables*/
+/* Home Banner Area css
 ============================================================================================ */
-.about_inner .accordion .card {
-  border: none;
-  margin-bottom: 10px;
-}
-.about_inner .accordion .card .card-header {
-  padding: 0px;
-  border: none;
-  background: transparent;
-}
-.about_inner .accordion .card .card-header button {
-  padding: 0px;
-  display: block;
-  width: 100%;
-  text-align: left;
+.banner_area {
   position: relative;
-  border-radius: 0px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  font-size: 14px;
-  color: #222222;
-  font-family: "Playfair Display", serif;
-  font-weight: bold;
-  text-decoration: none;
-  cursor: pointer;
-  background: #4dbf1c;
+  z-index: 1;
+  min-height: 460px;
+  padding-top: 120px;
+}
+.banner_area .banner_inner {
+  position: relative;
+  width: 100%;
+  min-height: 460px;
+  padding-top: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.banner_area .banner_inner .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-blend-mode: overlay;
+}
+.banner_area .banner_inner .overlay.about {
+  background-image: linear-gradient(rgba(0, 201, 255, 0.3), rgba(146, 254, 157, 0.3)), url(../img/banner/about.png);
+}
+.banner_area .banner_inner .overlay.pelajaran {
+  background-image: linear-gradient(rgba(0, 201, 255, 0.3), rgba(146, 254, 157, 0.3)), url(../img/banner/pelajaran.png);
+}
+.banner_area .banner_inner .overlay.kontak {
+  background-image: linear-gradient(rgba(0, 201, 255, 0.3), rgba(146, 254, 157, 0.3)), url(../img/banner/kontak.png);
+}
+.banner_area .banner_inner .banner_content {
   color: #fff;
 }
-.about_inner .accordion .card .card-header button i {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: none;
+.banner_area .banner_inner .banner_content h2 {
+  font-size: 40px;
+  font-weight: 700;
+  font-family: "Playfair Display", serif;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
-.about_inner .accordion .card .card-header button i + i {
-  display: inline-block;
+.banner_area .banner_inner .banner_content .page_link {
+  margin-top: 10px;
 }
-.about_inner .accordion .card .card-header button.collapsed {
-  background: #f9f9ff;
-  color: #222222;
-}
-.about_inner .accordion .card .card-header button.collapsed i {
-  display: inline-block;
-}
-.about_inner .accordion .card .card-header button.collapsed i + i {
-  display: none;
-}
-.about_inner .accordion .card .card-body {
-  padding-top: 15px;
-  padding-bottom: 10px;
-}
-
-.video_area {
-  float: right;
-  display: inline-block;
+.banner_area .banner_inner .banner_content .page_link a {
+  font-size: 14px;
+  color: #fff;
+  margin: 0 8px;
+  font-weight: 500;
   position: relative;
 }
-.video_area .popup-youtube {
+.banner_area .banner_inner .banner_content .page_link a:before {
+  content: "\e87a";
+  font-family: "Linearicons-Free";
   position: absolute;
-  left: 0px;
-  text-align: center;
-  width: 100%;
+  right: -18px;
   top: 50%;
   transform: translateY(-50%);
+  opacity: 0.5;
+  font-size: 12px;
+}
+.banner_area .banner_inner .banner_content .page_link a:last-child:before {
+  display: none;
+}
+.banner_area .banner_inner .banner_content .page_link a:hover {
+  color: #92fe9d;
 }
 
-.about_details {
-  margin-top: 55px;
-}
-.about_details p {
-  margin-bottom: 20px;
-}
-.about_details p:last-child {
-  margin-bottom: 0px;
-}
-
-/* End About Area css
+/* End Home Banner Area css
 ============================================================================================ */
 /*---------------------------------------------------- */
 /*----------------------------------------------------*/
@@ -3651,7 +3655,7 @@ h6 {
   line-height: 1.8;
 }
 .footer-area .footer-bottom .footer-text a {
-  color: #444644;
+  color: #92fe9d;
   text-decoration: underline;
 }
 .footer-area .footer-bottom .footer-text a:hover {

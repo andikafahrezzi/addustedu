@@ -88,37 +88,49 @@
     height: 420px;
     margin-bottom: 80px;
 }
-.contact_info{
-    .info_item{
-        position: relative;
-        padding-left: 45px;
-        i{
-            position: absolute;
-            left: 0;
-            top: 0;
-            font-size: 20px;
-            line-height: 24px;
-            color: $baseColor;
-            font-weight: 600;
-        }
-        h6{
-            font-size: 16px;
-            line-height: 24px;
-            color: $rob;
-            font-weight: bold;
-            margin-bottom: 0px;
-			color: $dip;
-            a{
-                color: $dip;
-            }
-        }
-        p{
-            font-size: 14px;
-            line-height: 24px;
-            padding: 2px 0px;
-        }
+.contact_info {
+  margin-top: 40px;
+
+  .info_item {
+    position: relative;
+    padding-left: 45px;
+    margin-bottom: 25px;
+
+    i {
+      position: absolute;
+      left: 0;
+      top: 6px;
+      font-size: 22px;
+      color: #00c9ff; // gunakan gradasi dasar addustedu
     }
+
+    h6 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #222;
+      font-family: $rob;
+
+      a {
+        color: #222;
+        text-decoration: none;
+
+        &:hover {
+          color: #00c9ff;
+        }
+      }
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+      font-family: $rob;
+    }
+  }
 }
+
 .contact_form{
     .form-group{
         margin-bottom: 10px;
