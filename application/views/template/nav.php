@@ -47,9 +47,9 @@
             <div class="container">
                 <div class="float-left">
                     <ul class="list header_social">
-                        <li><a href="https://www.facebook.com/andikafahrezi"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://www.facebook.com/andikafahrezzi"><i class="fa fa-facebook"></i></a></li>
                         <li><a href="https://twitter.com/andikafahrezzi"><i class="fa fa-twitter"></i></a></li>
-                        <li><a href="https://www.github.com/Andikafahrezi"><i class="fa fa-github"></i></a></li>
+                        <li><a href="https://www.github.com/andikafahrezzi"><i class="fa fa-github"></i></a></li>
                         <li><a href="https://www.instagram.com/andikafahrezzi"><i class="fa fa-instagram"></i></a></li>
                     </ul>
                 </div>
