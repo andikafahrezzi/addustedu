@@ -23,31 +23,32 @@
                             </div>
                             <div id="detail" class="card-body">
                                 <form method="POST" enctype="multipart/form-data" action="<?= base_url('admin/add_materi') ?>">
-                                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
-                                value="<?= $this->security->get_csrf_hash(); ?>" />
-                                    <div class="col-md-12 bg-white" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px">
-                                        <form method="post" enctype="multipart/form-data" action="<?= base_url('guru/add_materi') ?>">
+                                   <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                                     value="<?= $this->security->get_csrf_hash(); ?>" />
+                                         <div class="col-md-12 bg-white" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px">
                                             <input type="hidden" name="id">
+                                            <input type="hidden" name="id_mapel" id="id_mapel">
                                             <div class="form-row">
                                                 <div class="form-group col-md-12">
                                                 <label for="guru">Pilih Guru</label>
-<select name="guru_info" id="guru_select" required onchange="fillGuruData()">
-    <option value="">-- Pilih Guru --</option>
-    <?php foreach ($guru as $g): ?>
-        <option 
-            value="<?= $g->nip ?>" 
-            data-nama="<?= $g->nama_guru ?>" 
-            data-mapel="<?= $g->nama_mapel ?>">
-            <?= $g->nama_guru ?> (<?= $g->nip ?>)
-        </option>
-    <?php endforeach; ?>
-</select>
-<label>Nama Guru</label>
-<input type="text" name="nama_guru" id="nama_guru" class="form-control" readonly required>
+                                                    <select name="guru_info" id="guru_select" required onchange="fillGuruData()">
+                                                        <option value="">-- Pilih Guru --</option>
+                                                        <?php foreach ($guru as $g): ?>
+                                                            <option 
+                                                                value="<?= $g->nip ?>" 
+                                                                data-nama="<?= $g->nama_guru ?>" 
+                                                                data-mapel="<?= $g->nama_mapel ?>"
+                                                                data-id_mapel="<?= $g->id_mapel ?>">
+                                                                <?= $g->nama_guru ?> (<?= $g->nip ?>)
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                    <label>Nama Guru</label>
+                                                    <input type="text" name="nama_guru" id="nama_guru" class="form-control" readonly required>
 
-<label>Nama Mata Pelajaran</label>
-<input type="text" name="nama_mapel" id="nama_mapel" class="form-control" readonly required>
-
+                                                    <label>Nama Mata Pelajaran</label>
+                                                    <input type="text" name="nama_mapel" id="nama_mapel" class="form-control" readonly required>
+                                                    <!-- Benar: -->
                                             <div class="form-group">
                                                 <label for="">Upload Video Materi</label>
                                                 <div class="input-group">
@@ -78,12 +79,12 @@
                                                 </div>
                                             <div class="form-group">
                                                 <label for="inputState">Kelas</label>
-                                                <select required id="inputState" name="kelas" class="form-control">
-                                                    <option selected>Pilih disini</option>
-                                                    <option value="X">X ( Kelas Sepuluh )</option>
-                                                    <option value="XI">XI ( Kelas Sebelas )</option>
-                                                    <option value="XII">XII ( Kelas Dua Belas )</option>
+                                                <select name="id_kelas" class="form-control selectric">
+                                                <?php foreach ($kelas as $k): ?>
+                                                    <option value="<?= $k->id ?>"><?= $k->nama_kelas ?></option>
+                                                <?php endforeach; ?>
                                                 </select>
+
                                             </div>
                                             <button type="submit" class="btn btn-block btn-success">Tambah
                                                 materi ⭢</button>
@@ -105,9 +106,11 @@
 
                 const namaGuru = selectedOption.getAttribute('data-nama');
                 const mapel = selectedOption.getAttribute('data-mapel');
+                const idMapel = selectedOption.getAttribute('data-id_mapel');
 
                 document.getElementById('nama_guru').value = namaGuru;
                 document.getElementById('nama_mapel').value = mapel;
+                document.getElementById('id_mapel').value = idMapel;
             }
         </script>
 

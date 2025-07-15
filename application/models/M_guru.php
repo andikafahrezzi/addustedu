@@ -4,14 +4,21 @@ class M_guru extends CI_Model
 {
     public function tampil_data()
     {
-        return $this->db->get('guru');
-    }
+        $this->db->select('guru.*, mata_pelajaran.nama_mapel');
+        $this->db->from('guru');
+        $this->db->join('mata_pelajaran', 'guru.id_mapel = mata_pelajaran.id', 'left');
+        return $this->db->get();
+        }
 
     public function detail_guru($nip = null)
-    {
-        $query = $this->db->get_where('guru', array('nip' => $nip))->row();
-        return $query;
-    }
+{
+    $this->db->select('guru.*, mata_pelajaran.nama_mapel');
+    $this->db->from('guru');
+    $this->db->join('mata_pelajaran', 'guru.id_mapel = mata_pelajaran.id', 'left');
+    $this->db->where('guru.nip', $nip);
+    return $this->db->get()->row(); // ambil 1 baris (detail)
+}
+
 
     public function delete_guru($where, $table)
     {

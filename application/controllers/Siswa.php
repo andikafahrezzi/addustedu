@@ -289,36 +289,46 @@ public function email_check($email)
         return TRUE;
     }
 }
-public function belajar($id) {
+    public function belajar($id_pertemuan = null) {
         $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);
-        
+            if ($id_pertemuan === null) {
+            show_404(); // atau redirect ke halaman aman
+            }
+
         // Ambil data
-        $data['comments'] = $this->Forum_model->get_comments($id);
+        $data['id_pertemuan'] = $id_pertemuan; // ✅ ini harus ada
+        $data['comments'] = $this->Forum_model->get_comments($id_pertemuan);
+        $data['id_pertemuan'] = $id_pertemuan;
         $data['current_nis'] = $this->session->userdata('nis');
-        $data['materi'] = $this->M_materi->get_materi_by_id($id);
+        $pertemuan = $this->db->get_where('pertemuan', ['id' => $id_pertemuan])->row_array();
+        // if (!$pertemuan) show_404();
+        if (!$pertemuan) {
+        show_404(); // atau redirect('materi');
+        }
+        $id_materi = $pertemuan['id_materi'];
+        $data['materi'] = $this->M_materi->get_materi_by_id($id_materi);
+
         $data['user'] = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row_array();
-        $data['forum'] = $this->Forum_model->get_komentar_by_materi($id);
+        $data['forum'] = $this->Forum_model->get_komentar_by_materi($id_pertemuan);
         $data['disqus'] = $this->disqus->get_html();
-        $data['quizzes'] = $this->Quiz_model->get_quizzes_by_materi($id);
+        $data['quizzes'] = $this->Quiz_model->get_quizzes_by_materi($id_pertemuan);
         $data['materi_id'] = $this->M_materi->get_all_materi_id();
         $data['tugas_saya'] = $this->Tugas_model->get_tugas_siswa(
             $this->session->userdata('nis'), 
-            $id
+            $id_pertemuan
         );
 
         
         // Debug akhir sebelum load view
-        if(empty($data['materi'])) {
-            show_404();
-            return;
-        }
+        // if(empty($data['materi'])) {
+        //     show_404();
+        //     return;
+        // }
         
         $this->load->view('materi/navm');
         $this->load->view('materi/belajar', $data);
         $this->load->view('materi/footm');
-
     }
-
 public function tambah_komentar() {
     // Pastikan user sudah login
     if (!$this->session->userdata('logged_in')) {
@@ -356,31 +366,30 @@ public function tambah_komentar() {
 
     // Validasi form
     $this->form_validation->set_rules('komentar', 'Komentar', 'required');
-    $this->form_validation->set_rules('materi_id', 'Materi ID', 'required|numeric');
+    $this->form_validation->set_rules('id_pertemuan', 'ID Pertemuan', 'required|numeric');
     $this->form_validation->set_rules('parent_id', 'Parent ID', 'numeric');
 
     if ($this->form_validation->run()) {
         $data = [
             'user_type' => $user_type,
             'user_id' => $user_id,
-            'user_name' => $user_name,
-            'materi_id' => $this->input->post('materi_id'),
+            'id_pertemuan' => $this->input->post('id_pertemuan'),
             'komentar' => $this->input->post('komentar'),
             'parent_id' => $this->input->post('parent_id') ?: NULL,
             'created_at' => date('Y-m-d H:i:s')
         ];
-        $materi_id = $this->input->post('materi_id');
+        $id_pertemuan = $this->input->post('id_pertemuan');
         $komentar = $this->input->post('komentar');
-        $guru = $this->Forum_model->getGuruByMateri($materi_id);
+        $guru = $this->Forum_model->getGuruByMateri($id_pertemuan);
         if (!$guru || empty($guru->email)) {
             $this->session->set_flashdata('error', 'Email guru tidak ditemukan.');
-            redirect('materi/belajar/' . $materi_id);
+            redirect('materi/belajar/' . $id_pertemuan);
         }
     
         $this->email->from('noreply@addustedu', 'E-Learning');
         $this->email->to($guru->email);
         $this->email->subject('Komentar Baru di Forum Diskusi');
-        $this->email->message("Ada komentar baru dari siswa di forum materi: <b>{$materi_id}</b><br><br>Komentar:<br>{$komentar}");
+        $this->email->message("Ada komentar baru dari siswa di forum materi: <b>{$id_pertemuan}</b><br><br>Komentar:<br>{$komentar}");
     
         if (!$this->email->send()) {
             $this->session->set_flashdata('error', 'Komentar terkirim, tapi email gagal dikirim.');
@@ -396,12 +405,14 @@ public function tambah_komentar() {
         $this->session->set_flashdata('error', validation_errors());
     }
 
-    // Redirect berdasarkan user_type
-    if ($user_type === 'siswa') {
-        redirect('siswa/belajar/' . $this->input->post('materi_id'));
-    } else {
-        redirect('guru/belajar/' . $this->input->post('materi_id'));
-    }
+
+// Ganti bagian redirect akhir menjadi:
+$id_pertemuan = $this->input->post('id_pertemuan');
+if ($user_type === 'siswa') {
+    redirect('siswa/belajar/' . $id_pertemuan); // Pastikan id_pertemuan ada
+} else {
+    redirect('guru/belajar/' . $id_pertemuan);
+}
 }
 public function edit_komentar() {
     $nis = $this->session->userdata('nis');

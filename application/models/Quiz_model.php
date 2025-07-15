@@ -91,12 +91,12 @@ public function get_quiz_result_detail($quiz_siswa_id)
                    ->get()
                    ->row();
 }
-public function get_quizzes_by_materi($materi_id)
+public function get_quizzes_by_materi($id_pertemuan)
 {
     return $this->db->select('quiz.*, COUNT(quiz_questions.id) as jumlah_soal')
                    ->from('quiz')
                    ->join('quiz_questions', 'quiz_questions.quiz_id = quiz.id', 'left')
-                   ->where('quiz.materi_id', $materi_id)
+                   ->where('quiz.id_pertemuan', $id_pertemuan)
                    ->group_by('quiz.id')
                    ->get()
                    ->result();

@@ -154,7 +154,11 @@
                 <!-- Mata Pelajaran -->
                 <div class="form-group">
                     <label for="mapel_diajarkan">Mata Pelajaran *</label>
-                    <input type="text" name="mapel_diajarkan" id="mapel_diajarkan" class="form-control" required>
+                    <select name="mapel" class="form-control selectric">
+                    <?php foreach ($mapel as $m): ?>
+                        <option value="<?= $m->id ?>"><?= $m->nama_mapel ?></option>
+                    <?php endforeach; ?>
+                    </select>
                 </div>
                 
                 <!-- Tingkat Kesulitan -->

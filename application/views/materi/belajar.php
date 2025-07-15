@@ -17,7 +17,7 @@
                 </div>
             </div>
             
-            <h2><?= $materi->nama_mapel ?> - Kelas <?= $materi->kelas ?></h2>
+            <h2><?= $materi->nama_mapel ?> - Kelas <?= $materi->nama_kelas ?></h2>
         </div>
         <div class="learning-hero-image">
             <img src="<?= base_url('assets/img/logou.png') ?>" alt="Learning Illustration">
@@ -59,11 +59,14 @@
     
     <!-- Form Komentar Utama -->
     <form class="comment-form" method="POST" action="<?= base_url('siswa/tambah_komentar') ?>">
-        <input type="hidden" name="materi_id" value="<?= $materi->id ?>">
-        <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
-        <textarea name="komentar" placeholder="Tulis komentar atau pertanyaan..." required></textarea>
-        <button type="submit"><i class="fa-regular fa fa-paper-plane"></i> Kirim</button>
+        <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" 
+        value="<?= $this->security->get_csrf_hash() ?>">
+        <input type="hidden" name="id_pertemuan" value="<?= $id_pertemuan ?>">
+    
+    <textarea name="komentar" placeholder="Tulis komentar atau pertanyaan..." required></textarea>
+    <button type="submit"><i class="fa fa-paper-plane"></i> Kirim</button>
     </form>
+
     
     <!-- Daftar Komentar -->
     <div id="komentar-list">

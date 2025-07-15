@@ -72,14 +72,13 @@
                                 <div id="" class="row">
                                     <div class="form-group col-12">
                                         <label>Mata Pelajaran yang diajar</label>
-                                        <select class="form-control selectric" name="mapel">
-                                            <option>Matematika</option>
-                                            <option>IPA</option>
-                                            <option>Bahasa Inggris</option>
-                                            <option>Bahasa Indonesia</option>
-                                            <option>Pendidikan Agama Islam</option>
-                                            <option>Test</option>
-                                        </select>
+                                        <select name="mapel" class="form-control selectric">
+  <?php foreach ($mapel as $m): ?>
+    <option value="<?= $m->id ?>"><?= $m->nama_mapel ?></option>
+  <?php endforeach; ?>
+</select>
+
+
                                         <?= form_error('mapel', '<small class="text-danger">', '</small>'); ?>
                                     </div>
                                 </div>

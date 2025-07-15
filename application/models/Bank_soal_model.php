@@ -4,7 +4,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Bank_soal_model extends CI_Model {
 
     public function get_all_soal() {
-        return $this->db->get('bank_soal')->result();
+        $this->db->select('bank_soal.*, mata_pelajaran.nama_mapel');
+        $this->db->from('bank_soal');
+        $this->db->join('mata_pelajaran', 'bank_soal.id_mapel = mata_pelajaran.id', 'left');
+        return $this->db->get();
     }
 
     public function get_soal_by_mapel($mapel) {
@@ -43,9 +46,7 @@ class Bank_soal_model extends CI_Model {
         
         return $this->db->get()->result();
     }
-    public function get_kategori() {
-        return $this->db->get('kategori_soal')->result();
-    }
+    
 
     public function tambah_soal($data) {
         // Handle perbedaan data untuk pilihan ganda vs essay

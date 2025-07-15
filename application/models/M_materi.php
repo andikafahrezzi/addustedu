@@ -4,7 +4,13 @@ class M_materi extends CI_Model
 {
     public function tampil_data()
     {
-        return $this->db->get('materi');
+        $this->db->select('materi.*, guru.nama_guru, mata_pelajaran.nama_mapel, kelas.nama_kelas');
+        $this->db->from('materi');
+        $this->db->join('guru', 'materi.id_guru = guru.nip', 'left');
+        $this->db->join('mata_pelajaran', 'materi.id_mapel = mata_pelajaran.id', 'left');
+        $this->db->join('kelas', 'materi.id_kelas = kelas.id', 'left');
+
+        return $this->db->get();
     }
     public function tampil_materi_guru($nip)
 {
@@ -20,15 +26,25 @@ class M_materi extends CI_Model
         return $this->db->get_where('materi', ['id' => $materi_id]);
     }
     public function get_materi_by_id($id) {
-        $this->db->where('id', $id);
-        $query = $this->db->get('materi');
-        
-        if($query->num_rows() > 0) {
-            return $query->row();
-        }
-        
-        return null;
+    $this->db->select('materi.*, 
+        guru.nama_guru, guru.nip, 
+        mata_pelajaran.nama_mapel, 
+        kelas.nama_kelas');
+    $this->db->from('materi');
+    $this->db->join('guru', 'guru.nip = materi.id_guru');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->join('kelas', 'kelas.id = materi.id_kelas');
+    $this->db->where('materi.id', $id);
+
+    $query = $this->db->get();
+
+    if($query->num_rows() > 0) {
+        return $query->row(); // object, bukan array
     }
+
+    return null;
+}
+
     public function get_materi_by_ids($id)
 {
     return $this->db->get_where('materi', ['id' => $id]);

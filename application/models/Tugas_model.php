@@ -7,11 +7,11 @@ class Tugas_model extends CI_Model {
     }
 
     // Get tugas siswa by ID
-    public function get_tugas_siswa($nis, $materi_id)
+    public function get_tugas_siswa($nis, $id_pertemuan)
 {
     return $this->db->get_where('tugas_siswa', [
         'siswa_id' => $nis,
-        'materi_id' => $materi_id
+        'id_pertemuan' => $id_pertemuan
     ])->row(); // atau row_array() jika di-view-nya kamu pakai array
 }
 

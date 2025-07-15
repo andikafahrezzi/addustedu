@@ -33,7 +33,7 @@
                         <tr>
                             <td><?= $no++ ?></td>
                             <td><?= character_limiter(strip_tags($s->pertanyaan), 100) ?></td>
-                            <td><?= $s->mapel_diajarkan ?></td>
+                            <td><?= $s->nama_mapel ?></td>
                             <td><?= $s->tipe_soal ?></td>
                             <td><?= $s->user_type == 'admin' ? 'Admin' : 'Guru #'.$s->created_by ?></td>
                             <td>

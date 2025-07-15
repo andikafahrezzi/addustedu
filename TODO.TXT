@@ -27,8 +27,11 @@ PR
 - setiap function hapus, samakan seperti yang lainnya(ada modal hapus)
 - kedepannya jika ada form harus mengguna csrf
 - pada quiz, jawaban essay masih belum masuk kedalam database, jadi terhitung salah
+- add_pertemuan masih menggunakan navigasi tambah guru
+- comment di slicing coba cari comment_replies
 
 next can be a problem
 - change id at database siswa to nis
 - login and register siswa with nis, no longer use email
 - score yang dikirim langsung hasilnya melalui submit, tidak ada perhitungan diluar itu
+- sekarang pembagian tidak melalui tabel materi secara langsung tapi di normalisasi menggunkan tabel pertemuan

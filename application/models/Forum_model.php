@@ -31,21 +31,22 @@ class Forum_model extends CI_Model {
         return $this->db->get('forum_diskusi')->result();
     }
 
-    public function get_comments($materi_id) {
+public function get_comments($id_pertemuan) {
     $this->db->select('fd.*, 
         IF(fd.user_type = "siswa", s.nama, g.nama_guru) as user,
         fd.user_type');
     $this->db->from('forum_diskusi fd');
     $this->db->join('siswa s', 'fd.user_type = "siswa" AND s.nis = fd.user_id', 'left');
     $this->db->join('guru g', 'fd.user_type = "guru" AND g.nip = fd.user_id', 'left');
-    $this->db->where('fd.materi_id', $materi_id);
+    $this->db->where('fd.id_pertemuan', $id_pertemuan); // ✅ perbaikan di sini
     $this->db->where('fd.deleted_at IS NULL');
     $this->db->order_by('fd.created_at', 'ASC');
     $query = $this->db->get();
-    
+
     $comments = $query->result();
     return $this->build_tree($comments);
 }
+
     
     private function build_tree($elements, $parent_id = null) {
     $branch = array();
@@ -108,7 +109,7 @@ public function can_edit_comment($comment_id, $user_type, $user_id) {
         return $this->db->update('comments', $data);
     }
    
-  public function get_komentar_by_materi($materi_id) {
+  public function get_komentar_by_materi($id_pertemuan) {
     // Ambil semua komentar untuk materi ini sekaligus
     $this->db->select('fd.*, 
         IF(fd.user_type = "siswa", s.nama, g.nama_guru) as user_name,
@@ -118,7 +119,7 @@ public function can_edit_comment($comment_id, $user_type, $user_id) {
     $this->db->from('forum_diskusi fd');
     $this->db->join('siswa s', 'fd.user_type = "siswa" AND s.nis = fd.user_id', 'left');
     $this->db->join('guru g', 'fd.user_type = "guru" AND g.nip = fd.user_id', 'left');
-    $this->db->where('fd.materi_id', $materi_id);
+    $this->db->where('fd.id_pertemuan', $id_pertemuan);
     $this->db->where('fd.deleted_at IS NULL');
     $this->db->order_by('fd.created_at', 'ASC');
     $query = $this->db->get();

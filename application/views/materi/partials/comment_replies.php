@@ -68,6 +68,8 @@ $margin = $level * 30; // 30px indent per level
         <div class="reply-form mt-3" id="reply-form-<?= $komentar->id ?>" style="display:none">
             <form method="post" action="<?= base_url('siswa/tambah_komentar') ?>">
                 <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
+                <input type="hidden" name="id_pertemuan" value="<?= $id_pertemuan ?>">
+                <input type="hidden" name="materi_id" value="<?= $materi->id ?>">
                 <input type="hidden" name="materi_id" value="<?= $materi->id ?>">
                 <input type="hidden" name="parent_id" value="<?= $komentar->id ?>">
                 <div class="form-group">

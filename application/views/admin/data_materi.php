@@ -54,7 +54,7 @@
                                                         <?php echo $u->linkform ?>
                                                     </td>
                                                     <td>
-                                                        <?php echo $u->kelas ?>
+                                                        <?php echo $u->nama_kelas ?>
                                                     </td>
 
                                                     <td class="text-center">

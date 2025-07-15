@@ -8,7 +8,7 @@ class Admin extends CI_Controller
     parent::__construct();
     $this->load->helper('url');
     $this->load->library('form_validation');
-    $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Bank_soal_model']);
+    $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Bank_soal_model', 'M_guru', "M_pertemuan"]);
     $this->load->helper('text');
     
     // Perbaikan pengecekan login
@@ -119,7 +119,7 @@ class Admin extends CI_Controller
             'email' => htmlspecialchars($this->input->post('email', true)),
             'nama' => htmlspecialchars($this->input->post('nama', true)),
             'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-            'kelas' => htmlspecialchars($this->input->post('kelas', true)),
+            'id_kelas' => htmlspecialchars($this->input->post('kelas', true)),
             'image' => 'default.jpg',
             'is_active' => 1,
             'date_created' => date('Y-m-d H:i:s'),
@@ -392,8 +392,9 @@ $data = array(
         ]);
 
         if ($this->form_validation->run() == false) {
+            $data['mapel'] = $this->db->get('mata_pelajaran')->result();
             $this->load->view('admin/partials/nava');
-            $this->load->view('admin/add_guru');
+            $this->load->view('admin/add_guru', $data);
             $this->load->view('admin/partials/foota');
 
         } else {
@@ -402,7 +403,7 @@ $data = array(
                 'email' => htmlspecialchars($this->input->post('email', true)),
                 'nama_guru' => htmlspecialchars($this->input->post('nama', true)),
                 'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-                'nama_mapel' => htmlspecialchars($this->input->post('mapel', true)),
+                'id_mapel' => htmlspecialchars($this->input->post('mapel', true)),
             ];
 
             $this->db->insert('guru', $data);
@@ -443,7 +444,8 @@ $data = array(
         $this->form_validation->set_rules('nama_mapel', 'Nama Mata Pelajaran', 'required');
         
         if ($this->form_validation->run() == false) {
-            $data['guru'] = $this->db->get('guru')->result();
+            $data['guru'] = $this->M_guru->tampil_data()->result();
+            $data['kelas'] = $this->db->get('kelas')->result();
             $this->load->view('admin/partials/nava');
             $this->load->view('admin/add_materi', $data);
             $this->load->view('admin/partials/foota');
@@ -487,13 +489,7 @@ $data = array(
                 }
             }
             $nip = $this->input->post('guru_info', true); // dari <select>
-            $nama_guru = $this->input->post('nama_guru', true);
-            $nip = $this->input->post('guru_info', true);
-$nama_guru = $this->input->post('nama_guru', true);
-
-if (!$nama_guru) {
-    die('Nama guru kosong! Pastikan JS berjalan dan field terisi.');
-}
+            
  // dari <input readonly>
             
 
@@ -502,13 +498,12 @@ if (!$nama_guru) {
             // **3️⃣ Simpan Data ke Database**
             $data = [
                 'id_guru'     => $nip,
-                'nama_guru'   => $nama_guru,
-                'nama_mapel'  => htmlspecialchars($this->input->post('nama_mapel', true)),
+                'id_mapel' => $this->input->post('id_mapel'),
+                'id_kelas' => $this->input->post('id_kelas'),
                 'video'       => $video_materi,
                 'modul'       => $modul,
                 'deskripsi'   => htmlspecialchars($this->input->post('deskripsi', true)),
-                'linkform'    => htmlspecialchars($this->input->post('linkform', true)),
-                'kelas'       => htmlspecialchars($this->input->post('kelas', true))
+                'linkform'    => htmlspecialchars($this->input->post('linkform', true))
             ];
     
             $this->db->insert('materi', $data);
@@ -659,8 +654,7 @@ public function data_quiz()
     // BANK SOAL - ADMIN
     public function bank_soal() {
         $data['title'] = 'Bank Soal';
-        $data['soal'] = $this->Bank_soal_model->get_all_soal();
-        $data['kategori'] = $this->Bank_soal_model->get_kategori();
+        $data['soal'] = $this->Bank_soal_model->get_all_soal()->result();
         
         $this->load->view('admin/partials/nava', $data);
         $this->load->view('admin/data_bank_soal', $data);
@@ -672,7 +666,7 @@ public function data_quiz()
         
         $this->form_validation->set_rules('pertanyaan', 'Pertanyaan', 'required');
         $this->form_validation->set_rules('tipe_soal', 'Tipe Soal', 'required|in_list[pilihan,essay]');
-        $this->form_validation->set_rules('mapel_diajarkan', 'Mata Pelajaran', 'required');
+        $this->form_validation->set_rules('mapel', 'Mata Pelajaran', 'required');
         
         // Validasi khusus untuk pilihan ganda
         if ($this->input->post('tipe_soal') == 'pilihan') {
@@ -684,6 +678,7 @@ public function data_quiz()
         }
         
         if ($this->form_validation->run() === FALSE) {
+            $data['mapel'] = $this->db->get('mata_pelajaran')->result();
             $this->load->view('admin/add_bank_soal', $data);
             $this->load->view('admin/partials/foota');
         } else {
@@ -695,7 +690,7 @@ public function data_quiz()
                 'tipe_kognitif' => $post_data['tipe_kognitif'] ?? 'paham',
                 'created_by' => $this->session->userdata('id'),
                 'user_type' => 'admin',
-                'mapel_diajarkan' => $post_data['mapel_diajarkan'],
+                'id_mapel' => $post_data['mapel'],
                 'created_at' => date('Y-m-d H:i:s')
             ];
     
@@ -802,4 +797,54 @@ public function data_quiz()
         $this->load->view('admin/detail_ujian', $data);
         $this->load->view('admin/partials/foota');
     }
+    public function form_pertemuan()
+{
+    $nip = $this->session->userdata('nip');
+
+    $this->load->model('M_pertemuan');
+    $data['guru'] = $this->M_guru->tampil_data()->result();
+    $data['materi'] = $this->M_pertemuan->get_materi_by_guru($nip);
+    $data['kelas']  = $this->M_pertemuan->get_all_kelas();
+
+    // $this->load->view('admin/partials/nava');
+    $this->load->view('admin/add_pertemuan', $data);
+    $this->load->view('admin/partials/foota');
+}
+
+public function add_pertemuan()
+{
+    $this->form_validation->set_rules('id_materi', 'Materi', 'required');
+    $this->form_validation->set_rules('id_kelas', 'Kelas', 'required');
+    $this->form_validation->set_rules('pertemuan_ke', 'Pertemuan Ke', 'required|integer');
+    $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
+
+    if ($this->form_validation->run() == FALSE) {
+        $this->form_pertemuan();
+    } else {
+        $data = [
+            'id_materi'     => $this->input->post('id_materi'),
+            'id_kelas'      => $this->input->post('id_kelas'),
+            'pertemuan_ke'  => $this->input->post('pertemuan_ke'),
+            'tanggal'       => $this->input->post('tanggal')
+        ];
+
+        $this->load->model('M_pertemuan');
+        $this->M_pertemuan->insert_pertemuan($data);
+
+        $this->session->set_flashdata('success', 'Pertemuan berhasil ditambahkan.');
+        redirect('admin/form_pertemuan');
+    }
+}
+    public function get_materi_by_guru($nip)
+{
+    $this->db->select('materi.id, materi.deskripsi, mata_pelajaran.nama_mapel');
+    $this->db->from('materi');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->where('materi.id_guru', $nip);
+    $query = $this->db->get()->result();
+
+    echo json_encode($query);
+}
+
+
 }

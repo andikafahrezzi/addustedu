@@ -6,7 +6,7 @@
                     Selamat Datang di addustedu <span style="font-size: 40px;">👋🏻</span>
                 </h1>
                 <p>Hello <?= $user['nama'] ?>, Ini merupakan halaman utama addustedu! Silahkan pilih kelas dan pelajari materi yang tersedia.</p>
-                <h6 data-aos="fade-down" data-aos-duration="1800"><i class="fas fa fa-trophy"></i> Kelas <?= $user['kelas'] ?> - addustedu Students</h6>
+                <h6 data-aos="fade-down" data-aos-duration="1800"><i class="fas fa fa-trophy"></i> Kelas <?= $user['nama_kelas'] ?> - addustedu Students</h6>
             </div>
         </div>
     </div>
@@ -43,28 +43,29 @@
                         <div class="col-12 pertemuan-container d-none">
                             <div class="row mt-3">
                                 <?php 
-                                $materi_pertemuan = [];
-                                foreach ($materi_list as $materi) {
-                                    $materi_pertemuan[$materi['pertemuan']] = $materi;
-                                }
+$materi_pertemuan = [];
+foreach ($pertemuan as $p) {
+    $materi_pertemuan[$p['pertemuan_ke']] = $p;
+}
 
-                                for ($i = 1; $i <= 10; $i++): ?>
-                                <div class="col-md-4 mb-4">
-                                    <div class="pertemuan-card h-100 shadow-sm">
-                                        <div class="card-body">
-                                            <h6>Pertemuan <?= $i ?></h6>
-                                            <?php if (isset($materi_pertemuan[$i])): ?>
-                                                <p><?= implode(' ', array_slice(explode(' ', $materi_pertemuan[$i]['deskripsi']), 0, 10)) ?>...</p>
-                                                <a href="<?= base_url('materi/belajar/' . $materi_pertemuan[$i]['id']) ?>" class="btn btn-sm btn-gradient">
-                                                    Pelajari <i class="lnr lnr-arrow-right"></i>
-                                                </a>
-                                            <?php else: ?>
-                                                <p><em>Materi belum tersedia</em></p>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                <?php endfor; ?>
+for ($i = 1; $i <= 10; $i++): ?>
+    <div class="col-md-4 mb-4">
+        <div class="pertemuan-card h-100 shadow-sm">
+            <div class="card-body">
+                <h6>Pertemuan <?= $i ?></h6>
+                <?php if (isset($materi_pertemuan[$i])): ?>
+                    <p><?= implode(' ', array_slice(explode(' ', $materi_pertemuan[$i]['deskripsi_materi']), 0, 10)) ?>...</p>
+                    <a href="<?= base_url('materi/belajar/' . $materi_pertemuan[$i]['id']) ?>" class="btn btn-sm btn-gradient">
+                        Pelajari <i class="lnr lnr-arrow-right"></i>
+                    </a>
+                <?php else: ?>
+                    <p><em>Materi belum tersedia</em></p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+<?php endfor; ?>
+
 
                                 <!-- UJIAN SECTION MULAI DISINI -->
                                 <?php 
