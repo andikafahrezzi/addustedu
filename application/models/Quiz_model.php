@@ -13,7 +13,16 @@ class Quiz_model extends CI_Model {
 
     public function get_materi_list()
     {
-        return $this->db->get('materi')->result();
+        $this->db->select('pertemuan.id AS id_pertemuan, 
+                       mata_pelajaran.nama_mapel, 
+                       kelas.nama_kelas, 
+                       guru.nama_guru');
+    $this->db->from('pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('mata_pelajaran', 'materi.id_mapel = mata_pelajaran.id');
+    $this->db->join('kelas', 'materi.id_kelas = kelas.id');
+    $this->db->join('guru', 'materi.id_guru = guru.nip');
+    return $this->db->get()->result();
     }
 
     public function get_quiz_with_questions($quiz_id)
@@ -22,8 +31,25 @@ class Quiz_model extends CI_Model {
         
         if($quiz) {
             $quiz->questions = $this->db->get_where('quiz_questions', ['quiz_id' => $quiz_id])->result();
-            $quiz->materi = $this->db->get_where('materi', ['id' => $quiz->materi_id])->row();
-        }
+            $this->db->select('
+                            pertemuan.id AS id_pertemuan,
+                            pertemuan.pertemuan_ke,
+                            pertemuan.tanggal,
+                            materi.id AS id_materi,
+                            materi.deskripsi,
+                            kelas.nama_kelas,
+                            mata_pelajaran.nama_mapel,
+                            guru.nama_guru
+                        ');
+                        $this->db->from('pertemuan');
+                        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+                        $this->db->join('kelas', 'kelas.id = materi.id_kelas');
+                        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+                        $this->db->join('guru', 'guru.nip = materi.id_guru');
+                        $this->db->where('pertemuan.id', $quiz->id_pertemuan);
+                        $quiz->materi = $this->db->get()->row();
+
+                     }
         
         return $quiz;
     }
@@ -83,14 +109,27 @@ public function get_quiz_siswa($quiz_siswa_id)
 
 public function get_quiz_result_detail($quiz_siswa_id)
 {
-    return $this->db->select('quiz_siswa.*, quiz.judul, materi.nama_mapel, materi.id as materi_id')
-                   ->from('quiz_siswa')
-                   ->join('quiz', 'quiz.id = quiz_siswa.quiz_id')
-                   ->join('materi', 'materi.id = quiz.materi_id')
-                   ->where('quiz_siswa.id', $quiz_siswa_id)
-                   ->get()
-                   ->row();
+    return $this->db->select('
+            quiz_siswa.*,
+            quiz.judul,
+            pertemuan.id AS id_pertemuan,
+            materi.id AS id_materi,
+            mata_pelajaran.nama_mapel,
+            kelas.nama_kelas,
+            guru.nama_guru
+        ')
+        ->from('quiz_siswa')
+        ->join('quiz', 'quiz.id = quiz_siswa.quiz_id')
+        ->join('pertemuan', 'pertemuan.id = quiz.id_pertemuan')
+        ->join('materi', 'materi.id = pertemuan.id_materi')
+        ->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel')
+        ->join('kelas', 'kelas.id = materi.id_kelas')
+        ->join('guru', 'guru.nip = materi.id_guru')
+        ->where('quiz_siswa.id', $quiz_siswa_id)
+        ->get()
+        ->row();
 }
+
 public function get_quizzes_by_materi($id_pertemuan)
 {
     return $this->db->select('quiz.*, COUNT(quiz_questions.id) as jumlah_soal')

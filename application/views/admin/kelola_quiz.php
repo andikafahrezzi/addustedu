@@ -56,7 +56,7 @@
                 <i class="fas fa-edit mr-2"></i>
                 Kelola Quiz: <?= $quiz->judul ?>
                 <small class="float-right">
-                    Materi: <?= $quiz->materi->nama_mapel ?> - <?= $quiz->materi->kelas ?>
+                    Materi: <?= $quiz->materi->nama_mapel ?> - <?= $quiz->materi->nama_kelas ?>
                 </small>
             </h4>
         </div>

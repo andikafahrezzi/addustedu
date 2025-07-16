@@ -75,12 +75,12 @@
             <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
             value="<?= $this->security->get_csrf_hash(); ?>" />
                 <div class="form-group">
-                    <label for="materi_id"><i class="fas fa-book mr-1"></i> Pilih Materi</label>
-                    <select name="materi_id" id="materi_id" class="form-control" required>
+                    <label for="id_pertemuan"><i class="fas fa-book mr-1"></i> Pilih Materi</label>
+                    <select name="id_pertemuan" id="id_pertemuan" class="form-control" required>
                         <option value="">-- Pilih Materi --</option>
                         <?php foreach($materi_list as $materi): ?>
-                        <option value="<?= $materi->id ?>" <?= set_select('materi_id', $materi->id) ?>>
-                            <?= $materi->nama_mapel ?> - <?= $materi->kelas ?> (<?= $materi->nama_guru ?>)
+                        <option value="<?= $materi->id_pertemuan ?>" <?= set_select('id_pertemuan', $materi->id_pertemuan) ?>>
+                            <?= $materi->nama_mapel ?> - <?= $materi->nama_kelas ?> (<?= $materi->nama_guru ?>)
                         </option>
                         <?php endforeach; ?>
                     </select>

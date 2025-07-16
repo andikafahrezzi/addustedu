@@ -26,8 +26,8 @@ class Forum_model extends CI_Model {
         return $this->db->delete('forum_diskusi');
     }
     
-    public function get_forum_by_materi($materi_id) {
-        $this->db->where('materi_id', $materi_id);
+    public function get_forum_by_materi($id_pertemuan) {
+        $this->db->where('id_pertemuan', $id_pertemuan);
         return $this->db->get('forum_diskusi')->result();
     }
 

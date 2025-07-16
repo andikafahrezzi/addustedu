@@ -75,10 +75,16 @@ public function get_materi_by_id($id)
     }
 
     public function get_all_materi() {
-        $this->db->order_by('kelas', 'asc');
-        $this->db->order_by('nama_mapel', 'asc');
-        return $this->db->get('materi')->result();
-    }
+    $this->db->select('materi.*, kelas.nama_kelas, mata_pelajaran.nama_mapel, guru.nama_guru');
+    $this->db->from('materi');
+    $this->db->join('kelas', 'kelas.id = materi.id_kelas');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->join('guru', 'guru.nip = materi.id_guru');
+    $this->db->order_by('kelas.nama_kelas', 'asc');
+    $this->db->order_by('mata_pelajaran.nama_mapel', 'asc');
+    return $this->db->get()->result();
+}
+
 
     public function update_materi($where, $table)
     {

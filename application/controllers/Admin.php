@@ -545,7 +545,7 @@ $data = array(
     $this->load->model('Quiz_model');
     
     // Validasi form
-    $this->form_validation->set_rules('materi_id', 'Materi', 'required');
+    $this->form_validation->set_rules('id_pertemuan', 'Materi', 'required');
     $this->form_validation->set_rules('judul', 'Judul Quiz', 'required|max_length[100]');
     $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'max_length[500]');
     $this->form_validation->set_rules('waktu_pengerjaan', 'Waktu Pengerjaan', 'required|numeric');
@@ -553,7 +553,7 @@ $data = array(
     
     if ($this->form_validation->run()) {
         $quiz_data = [
-            'materi_id' => $this->input->post('materi_id'),
+            'id_pertemuan' => $this->input->post('id_pertemuan'),
             'judul' => $this->input->post('judul'),
             'deskripsi' => $this->input->post('deskripsi'),
             'waktu_pengerjaan' => $this->input->post('waktu_pengerjaan'),

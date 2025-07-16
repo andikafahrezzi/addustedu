@@ -54,7 +54,7 @@
                             <tr>
                                 <td><?= $m->id ?></td>
                                 <td><?= $m->nama_mapel ?></td>
-                                <td>Kelas <?= $m->kelas ?></td>
+                                <td>Kelas <?= $m->nama_kelas ?></td>
                                 <td><?= $m->nama_guru ?></td>
                                 <td class="truncate-text" title="<?= htmlspecialchars($m->deskripsi) ?>">
                                     <?= substr(strip_tags($m->deskripsi), 0, 100) ?>
