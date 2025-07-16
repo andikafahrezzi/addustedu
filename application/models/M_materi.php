@@ -25,21 +25,28 @@ class M_materi extends CI_Model
 
         return $this->db->get_where('materi', ['id' => $materi_id]);
     }
-    public function get_materi_by_id($id) {
-    $this->db->select('materi.*, 
-        guru.nama_guru, guru.nip, 
-        mata_pelajaran.nama_mapel, 
-        kelas.nama_kelas');
+public function get_materi_by_id($id)
+{
+    $this->db->select('
+        materi.*,
+        guru.nama_guru, guru.nip,
+        mata_pelajaran.nama_mapel,
+        kelas.nama_kelas,
+        pertemuan.id AS id_pertemuan,
+        pertemuan.pertemuan_ke,
+        pertemuan.tanggal
+    ');
     $this->db->from('materi');
     $this->db->join('guru', 'guru.nip = materi.id_guru');
     $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
     $this->db->join('kelas', 'kelas.id = materi.id_kelas');
+    $this->db->join('pertemuan', 'pertemuan.id_materi = materi.id', 'left');
     $this->db->where('materi.id', $id);
 
     $query = $this->db->get();
 
-    if($query->num_rows() > 0) {
-        return $query->row(); // object, bukan array
+    if ($query->num_rows() > 0) {
+        return $query->row(); // object
     }
 
     return null;

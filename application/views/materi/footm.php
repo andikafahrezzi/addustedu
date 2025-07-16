@@ -114,57 +114,57 @@ function toggleReplyForm(commentId) {
 }
 
 // Konfirmasi Hapus
-function confirmDelete(commentId) {
-    if (confirm('Apakah Anda yakin ingin menghapus komentar ini?')) {
-        fetch(`<?= base_url('forum/hapus_komentar/') ?>${commentId}`, {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest' // Menandai sebagai AJAX request
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                // Hapus elemen komentar dari DOM
-                const commentElement = document.getElementById(`comment-${commentId}`);
-                if (commentElement) {
-                    commentElement.remove();
-                }
-                // Tampilkan notifikasi
-                Swal.fire({
-                        title: 'Berhasil!',
-                        text: 'Komentar telah dihapus',
-                        icon: 'success',
-                        timer: 2500,
-                        showConfirmButton: false
-                    });
-            } else {
-                Swal.fire({
-                        title: 'Berhasil!',
-                        text: 'Komentar telah dihapus',
-                        icon: 'success',
-                        timer: 2500,
-                        showConfirmButton: false
-                    });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            Swal.fire({
-                        title: 'Berhasil!',
-                        text: 'Komentar telah dihapus',
-                        icon: 'success',
-                        timer: 2500,
-                        showConfirmButton: false
-                    });           
-                     window.location.reload(); // Reload jika ada error session
-        });
-    }
-}
+// function confirmDelete(commentId) {
+//     if (confirm('Apakah Anda yakin ingin menghapus komentar ini?')) {
+//         fetch(`<?= base_url('forum/hapus_komentar/') ?>${commentId}`, {
+//             headers: {
+//                 'X-Requested-With': 'XMLHttpRequest' // Menandai sebagai AJAX request
+//             }
+//         })
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Network response was not ok');
+//             }
+//             return response.json();
+//         })
+//         .then(data => {
+//             if (data.success) {
+//                 // Hapus elemen komentar dari DOM
+//                 const commentElement = document.getElementById(`comment-${commentId}`);
+//                 if (commentElement) {
+//                     commentElement.remove();
+//                 }
+//                 // Tampilkan notifikasi
+//                 Swal.fire({
+//                         title: 'Berhasil!',
+//                         text: 'Komentar telah dihapus',
+//                         icon: 'success',
+//                         timer: 2500,
+//                         showConfirmButton: false
+//                     });
+//             } else {
+//                 Swal.fire({
+//                         title: 'Berhasil!',
+//                         text: 'Komentar telah dihapus',
+//                         icon: 'success',
+//                         timer: 2500,
+//                         showConfirmButton: false
+//                     });
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//             Swal.fire({
+//                         title: 'Berhasil!',
+//                         text: 'Komentar telah dihapus',
+//                         icon: 'success',
+//                         timer: 2500,
+//                         showConfirmButton: false
+//                     });           
+//                      window.location.reload(); // Reload jika ada error session
+//         });
+//     }
+// }
 
 // Fungsi untuk menampilkan notifikasi
 </script>

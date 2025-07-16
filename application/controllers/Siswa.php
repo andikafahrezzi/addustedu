@@ -179,7 +179,7 @@ public function quiz_result($quiz_siswa_id)
     $this->load->view('materi/navm');
     $this->load->view('materi/quiz_result', $data);
 }
-    public function upload_tugas($materi_id) {
+    public function upload_tugas($id_pertemuan) {
         $config['upload_path'] = './assets/materi_tugas/';
         $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx';
         $config['max_size'] = 5120; // 5MB
@@ -195,7 +195,7 @@ public function quiz_result($quiz_siswa_id)
             
             $data = [
                 'siswa_id' => $this->session->userdata('nis'),
-                'materi_id' => $materi_id,
+                'id_pertemuan' => $id_pertemuan,
                 'file_path' => 'assets/materi_tugas/' . $upload_data['file_name'],
                 'original_filename' => pathinfo($upload_data['client_name'], PATHINFO_FILENAME) . ' (' . strtoupper(ltrim($upload_data['file_ext'], '.')) . ')',
                 'file_type' => $upload_data['file_type'],
@@ -210,26 +210,39 @@ public function quiz_result($quiz_siswa_id)
             }
         }
 
-        redirect('materi/belajar/' . $materi_id);
+        redirect('materi/belajar/' . $id_pertemuan);
     }
 
 // Hapus tugas
 public function delete_tugas($id) {
-    $tugas = $this->Tugas_model->get_tugas_siswa($id);
-    
-    // Cek kepemilikan
+    $this->load->model('Tugas_model');
+    $tugas = $this->Tugas_model->get_tugas_by_id($id);
+
     if ($tugas && $tugas->siswa_id == $this->session->userdata('nis')) {
-        if ($this->Tugas_model->delete_tugas($id)) {
-            $this->session->set_flashdata('success', 'Tugas berhasil dihapus');
+        $berhasil = $this->Tugas_model->delete_tugas($id);
+
+        if ($berhasil) {
+            $this->session->set_flashdata('success', 'Tugas berhasil dihapus.');
         } else {
-            $this->session->set_flashdata('error', 'Gagal menghapus tugas');
+            $this->session->set_flashdata('error', 'Gagal menghapus tugas dari database.');
         }
+
+        redirect('siswa/belajar/' . $tugas->id_pertemuan);
     } else {
-        $this->session->set_flashdata('error', 'Anda tidak memiliki akses');
-    }
-    
-    redirect('materi/belajar/' . $tugas->materi_id);
+        $this->session->set_flashdata('error', 'Anda tidak memiliki akses untuk menghapus tugas ini.');
+        redirect('siswa/dashboard');
+        log_message('debug', 'ID tugas: ' . $id);
+log_message('debug', 'Siswa login: ' . $this->session->userdata('nis'));
+if ($tugas) {
+    log_message('debug', 'Tugas ditemukan. siswa_id: ' . $tugas->siswa_id . ', id_pertemuan: ' . $tugas->id_pertemuan);
+} else {
+    log_message('error', 'Tugas tidak ditemukan di DB.');
 }
+
+    }
+}
+
+
 public function edit_profile() {
     $nis = $this->session->userdata('nis');
     $data['siswa'] = $this->M_siswa->get_by_nis($nis);
@@ -458,7 +471,7 @@ public function hapus_komentar($id) {
 
     $this->load->model('Forum_model');
     
-    if ($this->Forum_model->can_edit_comment($id, $nis)) {
+    if ($this->Forum_model->can_edit_comment($id, "siswa", $nis)) {
         if ($this->Forum_model->hapus_komentar($id)) {
             $this->session->set_flashdata('success', 'Komentar berhasil dihapus');
         } else {

@@ -85,6 +85,7 @@ public function can_edit_comment($comment_id, $user_type, $user_id) {
 
     // Guru bisa edit semua komentar atau hanya miliknya sendiri
     // Siswa hanya bisa edit komentar mereka sendiri
+log_message('debug', 'UserType: ' . $user_type . ', UserID: ' . $user_id . ', CommentID: ' . $comment_id);
     return ($user_type === 'guru') || 
            (property_exists($comment, 'user_type') && 
             property_exists($comment, 'user_id') &&
@@ -161,6 +162,8 @@ public function hapus_komentar($id) {
     $this->db->where('id', $id);
     return $this->db->update('forum_diskusi', ['deleted_at' => date('Y-m-d H:i:s')]);
 }
+
+
 
 
     

@@ -238,8 +238,9 @@ $(document).ready(function() {
                 <div class="resource-content">
                     <h4>Upload Tugas</h4>
                     <div class="upload-section">
-                        <?php echo form_open_multipart('siswa/upload_tugas/'.$materi->id); ?>
+                        <?php echo form_open_multipart('siswa/upload_tugas/'.$materi->id_pertemuan); ?>
                             <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
+                            <input type="hidden" name="id_pertemuan" value="<?= $id_pertemuan ?>">
                                                 <?php if ($this->session->flashdata('error')): ?>
                                 <div class="alert alert-danger mt-2">
                                     <?= $this->session->flashdata('error'); ?>
@@ -255,29 +256,33 @@ $(document).ready(function() {
                     
                     <h5>Tugas</h5>
                     <?php if ($tugas_saya): ?>
-                        <div class="card mb-7">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <h6><?= $tugas_saya->original_filename ?></h6>
-                                        <small>Ukuran: <?= round($tugas_saya->file_size/1024, 2) ?> KB</small>
-                                        <small>| Dikirim: <?= date('d M Y H:i', strtotime($tugas_saya->dikirim_pada)) ?></small>
-                                        <small>| Nilai: <?= number_format($tugas_saya->nilai) ?></small>
-                                    </div>
-                                    <div>
-                                        <a href="<?= base_url($tugas_saya->file_path) ?>" 
-                                           class="btn btn-sm btn-success" 
-                                           download="<?= $tugas_saya->original_filename ?>.<?= pathinfo($tugas_saya->file_path, PATHINFO_EXTENSION) ?>">
-                                            <i class="fas fa fa-download"></i> Unduh
-                                        </a>
-                                        <button onclick="confirmDelete(<?= $tugas_saya->id ?>)" 
-                                                class="btn btn-sm btn-danger">
-                                            <i class="fas fa fa-trash"></i> Hapus
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Pastikan tidak NULL -->
+                       <div class="card mb-4">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <h6><?= $tugas_saya->original_filename ?></h6>
+        <small>Ukuran: <?= round($tugas_saya->file_size / 1024, 2) ?> KB</small><br>
+        <small>Dikirim: <?= date('d M Y H:i', strtotime($tugas_saya->dikirim_pada)) ?></small><br>
+        <small>Nilai: <?= number_format($tugas_saya->nilai) ?></small>
+      </div>
+      <div class="col-md-4 text-md-right text-left mt-3 mt-md-0">
+        <a href="<?= base_url($tugas_saya->file_path) ?>"
+           class="btn btn-sm btn-success mr-2"
+           download="<?= $tugas_saya->original_filename ?>.<?= pathinfo($tugas_saya->file_path, PATHINFO_EXTENSION) ?>">
+          <i class="fas fa-download"></i> Unduh
+        </a>
+        <a href="<?= base_url('siswa/delete_tugas/' . $tugas_saya->id) ?>"
+            onclick="return confirm('Apakah kamu yakin ingin menghapus tugas ini?')"
+            class="btn btn-sm btn-danger">
+            <i class="fas fa-trash"></i> Hapus
+            </a>
+
+      </div>
+    </div>
+  </div>
+</div>
+
                     <?php else: ?>
                         <p>Belum ada tugas terkirim</p>
                     <?php endif; ?>
@@ -337,3 +342,20 @@ $(document).ready(function() {
 });
 </script>
 
+<script>
+    function confirmDeletee(id) {
+  Swal.fire({
+    title: 'Apakah kamu yakin?',
+    text: "Tugas akan dihapus permanen!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Ya, hapus!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = '<?= base_url('siswa/delete_tugas/') ?>' + id;
+    }
+  });
+}
+</script>

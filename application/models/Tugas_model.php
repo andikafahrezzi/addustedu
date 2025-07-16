@@ -35,19 +35,20 @@ class Tugas_model extends CI_Model {
     
 
     // Hapus file tugas
-    public function delete_tugas($id) {
-        $tugas = $this->get_tugas_siswa($id);
-        if ($tugas) {
-            // Hapus file fisik
-            $file_path = FCPATH . $tugas->file_path;
-            if (file_exists($file_path)) {
-                unlink($file_path);
-            }
-            // Hapus record database
-            return $this->db->delete('tugas_siswa', ['id' => $id]);
+public function delete_tugas($id) {
+    $tugas = $this->get_tugas_by_id($id);
+    if ($tugas) {
+        $file_path = FCPATH . ltrim($tugas->file_path, '/');
+        if (file_exists($file_path)) {
+            unlink($file_path);
         }
-        return false;
+        $this->db->delete('tugas_siswa', ['id' => $id]);
+        return $this->db->affected_rows() > 0;
     }
+    return false;
+}
+
+
 
     // Update nilai/catatan oleh guru
     public function update_nilai($id, $data) {
@@ -80,5 +81,9 @@ public function get_tugas_per_materi($materi_id, $guru_id = null) {
     public function get_all_materi_ids() {
         return $this->db->distinct()->select('materi_id')->get('tugas_siswa')->result();
     }
-    
+    public function get_tugas_by_id($id) {
+    return $this->db->get_where('tugas_siswa', ['id' => $id])->row();
+}
+
+
 }
