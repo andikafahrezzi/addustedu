@@ -13,6 +13,7 @@ class Siswa extends CI_Controller
         }
         $this->load->library('form_validation');
         $this->load->library('disqus');
+        $this->load->library('email');
         $this->load->model('M_materi');
         $this->load->model('M_siswa');
         $this->load->model('Tugas_model');
@@ -344,6 +345,8 @@ public function email_check($email)
     }
 public function tambah_komentar() {
     // Pastikan user sudah login
+    $this->load->library('email');
+
     if (!$this->session->userdata('logged_in')) {
         redirect('welcome');
     }
@@ -414,19 +417,19 @@ public function tambah_komentar() {
         } else {
             $this->session->set_flashdata('error', 'Gagal menambahkan komentar');
         }
-    } else {
-        $this->session->set_flashdata('error', validation_errors());
-    }
+        } else {
+            $this->session->set_flashdata('error', validation_errors());
+        }
 
 
-// Ganti bagian redirect akhir menjadi:
-$id_pertemuan = $this->input->post('id_pertemuan');
-if ($user_type === 'siswa') {
-    redirect('siswa/belajar/' . $id_pertemuan); // Pastikan id_pertemuan ada
-} else {
-    redirect('guru/belajar/' . $id_pertemuan);
-}
-}
+        // Ganti bagian redirect akhir menjadi:
+        $id_pertemuan = $this->input->post('id_pertemuan');
+        if ($user_type === 'siswa') {
+            redirect('siswa/belajar/' . $id_pertemuan); // Pastikan id_pertemuan ada
+        } else {
+            redirect('guru/belajar/' . $id_pertemuan);
+        }
+        }
 public function edit_komentar() {
     $nis = $this->session->userdata('nis');
     if (!$nis) redirect('siswa/login');
