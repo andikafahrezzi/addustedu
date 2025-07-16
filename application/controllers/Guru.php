@@ -38,32 +38,25 @@ class Guru extends CI_Controller
     public function add_materi()
 {
     $this->load->library('form_validation');
-    $this->form_validation->set_rules('nama_mapel', 'Nama Mata Pelajaran', 'required');
+    $this->form_validation->set_rules('id_mapel', 'Nama Mata Pelajaran', 'required');
     $this->form_validation->set_rules('pertemuan', 'Pertemuan', 'required|numeric');
     
     $this->load->model(['M_materi', 'Forum_model', 'Quiz_model']);
 
     if ($this->form_validation->run() == false) {
         $nip = $this->session->userdata('nip');
-        $data['user'] = $this->db->get_where('guru', ['nip' => $nip])->row_array();
+        $data['user'] = $this->M_materi->get_detail_guru($nip);
+        $data['kelas'] = $this->db->get('kelas')->result();
         $this->load->view('guru/navug');
         $this->load->view('guru/add_materi', $data);
         $this->load->view('guru/footg');
     } else {
-        $pertemuan = $this->input->post('pertemuan');
-        $kelas = $this->input->post('kelas');
-        $mapel = $this->input->post('nama_mapel');
-        $nip = $this->session->userdata('nip');
+        $nip      = $this->session->userdata('nip');
+        $mapel    = $this->input->post('nama_mapel');
+        $kelas    = $this->input->post('kelas');
+        $pertemuan= $this->input->post('pertemuan');
 
-        //  Validasi pertemuan tidak duplikat
-        $cek_duplikat = $this->db->get_where('materi', [
-            'pertemuan' => $pertemuan,
-            'kelas' => $kelas,
-            'nama_mapel' => $mapel,
-            'id_guru' => $nip
-        ])->row();
-
-        if ($cek_duplikat) {
+        if ($this->M_materi->is_pertemuan_terpakai($mapel, $kelas, $pertemuan, $nip)) {
             $this->session->set_flashdata('error', 'Pertemuan ke-' . $pertemuan . ' untuk kelas dan mapel ini sudah ada.');
             redirect('guru/add_materi');
         }
@@ -104,21 +97,37 @@ class Guru extends CI_Controller
         }
 
         // Simpan ke database
-        $data = [
-            'id_guru'     => $nip,
-            'nama_guru'   => htmlspecialchars($this->input->post('nama_guru', true)),
-            'nama_mapel'  => htmlspecialchars($this->input->post('nama_mapel', true)),
-            'kelas'       => htmlspecialchars($this->input->post('kelas', true)),
-            'pertemuan'   => $pertemuan,
-            'video'       => $video_materi,
-            'modul'       => $modul,
-            'deskripsi'   => htmlspecialchars($this->input->post('deskripsi', true)),
-            'linkform'    => htmlspecialchars($this->input->post('linkform', true)),
+        // Data untuk tabel 'materi' (sudah dinormalisasi)
+        $data_materi = [
+            'id_guru'    => $nip,
+            'id_mapel'   => $this->input->post('id_mapel'),  // ini harus id_mapel
+            'id_kelas'   => $this->input->post('id_kelas'),       // ini harus id_kelas
+            'video'      => $video_materi,
+            'modul'      => $modul,
+            'deskripsi'  => $this->input->post('deskripsi', true),
+            'linkform'   => $this->input->post('linkform', true),
         ];
 
-        $this->db->insert('materi', $data);
-        $this->session->set_flashdata('success', 'Materi berhasil ditambahkan!');
-        redirect('guru');
+        // Insert ke tabel 'materi'
+        $this->db->insert('materi', $data_materi);
+
+        // Ambil id materi terakhir
+        $id_materi = $this->db->insert_id();
+
+        // Data untuk tabel 'pertemuan'
+        $data_pertemuan = [
+            'id_materi'     => $id_materi,
+            'id_kelas'      => $this->input->post('id_kelas'), // bisa sama dengan id_kelas di materi
+            'pertemuan_ke'  => $this->input->post('pertemuan'),
+            'tanggal'       => date('Y-m-d'), // atau bisa tambahkan input form tanggal
+        ];
+
+        // Insert ke tabel 'pertemuan'
+        $this->db->insert('pertemuan', $data_pertemuan);
+
+        $this->session->set_flashdata('success', 'Materi dan Pertemuan berhasil ditambahkan!');
+        redirect('guru/data_materi');
+
     }
 }
 
@@ -153,7 +162,7 @@ class Guru extends CI_Controller
     $data['user'] = $this->db->get_where('guru', ['nip' => $nip])->row_array();
     
     // Ambil materi yang hanya dibuat oleh guru ini
-    $data['materi'] = $this->m_materi->tampil_materi_guru($nip)->result();
+    $data['materi'] = $this->m_materi->tampil_materi_guru($nip);
     
     $this->load->view('guru/navug');
     $this->load->view('guru/data_materi', $data);
@@ -163,48 +172,51 @@ class Guru extends CI_Controller
 public function update_materi($id)
 {
     $this->load->library('form_validation');
-    $this->form_validation->set_rules('nama_mapel', 'Nama Mata Pelajaran', 'required');
+    $this->form_validation->set_rules('id_mapel', 'Mata Pelajaran', 'required|numeric');
+    $this->form_validation->set_rules('id_kelas', 'Kelas', 'required|numeric');
     $this->form_validation->set_rules('pertemuan', 'Pertemuan', 'required|numeric');
     $this->load->model(['M_materi', 'Forum_model', 'Quiz_model']);
 
     if ($this->form_validation->run() == false) {
         $nip = $this->session->userdata('nip');
         $data['user'] = $this->db->get_where('guru', ['nip' => $nip])->row_array();
-        $data['materi'] = $this->M_materi->get_materi_by_ids($id)->row();
-        
+        $data['materi'] = $this->M_materi->get_materi_by_ids($id);
+        $data['kelas'] = $this->db->get('kelas')->result();
         $this->load->view('guru/navug');
         $this->load->view('guru/update_materi', $data);
         $this->load->view('guru/footg');
     } else {
         $this->load->library('upload');
-
         $nip = $this->session->userdata('nip');
-        $guru = $this->db->get_where('guru', ['nip' => $nip])->row_array();
 
-        $pertemuan = $this->input->post('pertemuan');
-        $kelas = $this->input->post('kelas');
-        $mapel = $this->input->post('nama_mapel');
+        $id_mapel   = $this->input->post('id_mapel');
+        $id_kelas   = $this->input->post('id_kelas');
+        $pertemuan  = $this->input->post('pertemuan');
 
-        // 🔁 Cek duplikat pertemuan
-        $cek_duplikat = $this->db->get_where('materi', [
-            'pertemuan' => $pertemuan,
-            'kelas' => $kelas,
-            'nama_mapel' => $mapel,
-            'id_guru' => $nip
-        ])->row();
+        // ✅ VALIDASI: Cek duplikat pertemuan di tabel 'pertemuan'
+        $this->db->select('pertemuan.id');
+        $this->db->from('pertemuan');
+        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+        $this->db->where([
+            'pertemuan.pertemuan_ke' => $pertemuan,
+            'materi.id_kelas'        => $id_kelas,
+            'materi.id_mapel'        => $id_mapel,
+            'materi.id_guru'         => $nip,
+        ]);
+        $this->db->where('materi.id !=', $id); // jangan validasi terhadap materi itu sendiri
+        $cek_duplikat = $this->db->get()->row();
 
         if ($cek_duplikat) {
             $this->session->set_flashdata('error-per', 'Pertemuan ke-' . $pertemuan . ' untuk kelas dan mapel ini sudah ada.');
             redirect('guru/update_materi/' . $id);
         }
 
-        // ✅ Upload Video
-        $video_materi = '';
+        // ✅ Upload video
+        $video_materi = $this->input->post('video_lama'); // fallback
         if (!empty($_FILES['video']['name'])) {
             $config_video['upload_path']   = './assets/materi_video/';
             $config_video['allowed_types'] = 'mp4|avi|mov|wmv|mkv|webm';
             $config_video['max_size']      = 100000;
-
             $this->upload->initialize($config_video);
 
             if ($this->upload->do_upload('video')) {
@@ -216,13 +228,12 @@ public function update_materi($id)
             }
         }
 
-        // ✅ Upload Modul
-        $modul = '';
+        // ✅ Upload file materi
+        $modul = $this->input->post('modul_lama'); // fallback
         if (!empty($_FILES['modul']['name'])) {
             $config_modul['upload_path']   = './assets/materi_modul/';
             $config_modul['allowed_types'] = 'pdf|doc|docx|jpg|jpeg|png';
             $config_modul['max_size']      = 2048;
-
             $this->upload->initialize($config_modul);
 
             if ($this->upload->do_upload('modul')) {
@@ -234,25 +245,31 @@ public function update_materi($id)
             }
         }
 
-        // ✅ Simpan ke database
-        $data = [
-            'nama_guru'   => htmlspecialchars($this->input->post('nama_guru', true)),
-            'nama_mapel'  => htmlspecialchars($mapel),
-            'pertemuan'   => $pertemuan,
-            'video'       => $video_materi,
-            'modul'       => $modul,
-            'deskripsi'   => htmlspecialchars($this->input->post('deskripsi', true)),
-            'linkform'    => htmlspecialchars($this->input->post('linkform', true)),
-            'kelas'       => htmlspecialchars($kelas)
+        // ✅ Update tabel materi
+        $data_materi = [
+            'id_guru'    => $nip,
+            'id_mapel'   => $id_mapel,
+            'id_kelas'   => $id_kelas,
+            'video'      => $video_materi,
+            'modul'      => $modul,
+            'deskripsi'  => $this->input->post('deskripsi', true),
+            'linkform'   => $this->input->post('linkform', true)
         ];
+        $this->db->where('id', $id);
+        $this->db->update('materi', $data_materi);
 
+        // ✅ Update tabel pertemuan (berdasarkan id_materi)
         $this->db->where('id_materi', $id);
-        $this->db->update('materi', $data);
+        $this->db->update('pertemuan', [
+            'pertemuan_ke' => $pertemuan,
+            'id_kelas'     => $id_kelas
+        ]);
 
         $this->session->set_flashdata('success', 'Materi berhasil diperbarui!');
         redirect('guru');
     }
 }
+
 
     
     public function materi_edit()
@@ -261,10 +278,11 @@ public function update_materi($id)
     $this->load->library('form_validation');
 
     // Validasi form input
+    $this->form_validation->set_rules('id_mapel', 'Mata Pelajaran', 'required|numeric');
+    $this->form_validation->set_rules('id_kelas', 'Kelas', 'required|numeric');
     $this->form_validation->set_rules('pertemuan', 'Pertemuan', 'required|numeric');
 
-    if ($this->form_validation->run() == FALSE) {
-        // Jika validasi gagal, kembali ke halaman edit
+    if ($this->form_validation->run() == false) {
         $id = $this->input->post('id');
         $this->session->set_flashdata('error', validation_errors());
         redirect('guru/update_materi/' . $id);
@@ -272,33 +290,35 @@ public function update_materi($id)
     }
 
     // Ambil data input
-    $id          = $this->input->post('id');
-    $pertemuan   = $this->input->post('pertemuan');
-    $kelas       = $this->input->post('kelas');
-    $mapel       = $this->input->post('nama_mapel');
-    $nip         = $this->input->post('id_guru');
-    $nama_guru   = $this->input->post('nama_guru');
-    $deskripsi   = $this->input->post('deskripsi');
-    $linkform    = $this->input->post('linkform');
+    $id           = $this->input->post('id');
+    $id_mapel     = $this->input->post('id_mapel');
+    $id_kelas     = $this->input->post('id_kelas');
+    $pertemuan_ke = $this->input->post('pertemuan');
+    $nip          = $this->input->post('id_guru');
+    $deskripsi    = $this->input->post('deskripsi');
+    $linkform     = $this->input->post('linkform');
 
-    // Cek apakah pertemuan ke-x sudah dipakai guru, mapel, dan kelas lain
-    $cek_duplikat = $this->db
-        ->where('pertemuan', $pertemuan)
-        ->where('kelas', $kelas)
-        ->where('nama_mapel', $mapel)
-        ->where('id_guru', $nip)
-        ->where('id !=', $id) // hindari id sendiri
-        ->get('materi')
-        ->row();
+    // 🔁 Validasi duplikat pertemuan
+    $this->db->select('pertemuan.id');
+    $this->db->from('pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->where([
+        'pertemuan.pertemuan_ke' => $pertemuan_ke,
+        'materi.id_kelas'        => $id_kelas,
+        'materi.id_mapel'        => $id_mapel,
+        'materi.id_guru'         => $nip
+    ]);
+    $this->db->where('materi.id !=', $id); // Hindari bentrok dengan dirinya sendiri
+    $cek_duplikat = $this->db->get()->row();
 
     if ($cek_duplikat) {
-        $this->session->set_flashdata('error-per', 'Pertemuan ke-' . $pertemuan . ' sudah dipakai untuk mapel dan kelas ini.');
+        $this->session->set_flashdata('error-per', 'Pertemuan ke-' . $pertemuan_ke . ' sudah dipakai.');
         redirect('guru/update_materi/' . $id);
         return;
     }
 
     // ---------------- Upload Video ----------------
-    $video = '';
+    $video = $this->input->post('video_lama');
     if (!empty($_FILES['video']['name'])) {
         $config['upload_path']   = './assets/materi_video/';
         $config['allowed_types'] = 'mp4|avi|mov|wmv|mkv';
@@ -312,12 +332,10 @@ public function update_materi($id)
             redirect('guru/update_materi/' . $id);
             return;
         }
-    } else {
-        $video = $this->db->get_where('materi', ['id' => $id])->row()->video;
     }
 
     // ---------------- Upload Modul ----------------
-    $modul = '';
+    $modul = $this->input->post('modul_lama');
     if (!empty($_FILES['modul']['name'])) {
         $config['upload_path']   = './assets/materi_modul/';
         $config['allowed_types'] = 'pdf|doc|docx|jpg|jpeg|png';
@@ -331,51 +349,38 @@ public function update_materi($id)
             redirect('guru/update_materi/' . $id);
             return;
         }
-    } else {
-        $modul = $this->db->get_where('materi', ['id' => $id])->row()->modul;
     }
 
-    // ---------------- Update Data ----------------
-    $data = [
-        'id_guru'    => $nip,
-        'nama_guru'  => $nama_guru,
-        'nama_mapel' => $mapel,
-        'kelas'      => $kelas,
-        'pertemuan'  => $pertemuan,
-        'deskripsi'  => $deskripsi,
-        'linkform'   => $linkform,
-        'video'      => $video,
-        'modul'      => $modul
+    // ---------------- Update ke tabel materi ----------------
+    $data_materi = [
+        'id_guru'   => $nip,
+        'id_mapel'  => $id_mapel,
+        'id_kelas'  => $id_kelas,
+        'deskripsi' => $deskripsi,
+        'linkform'  => $linkform,
+        'video'     => $video,
+        'modul'     => $modul
     ];
+    $this->m_materi->update_data(['id' => $id], $data_materi, 'materi');
 
-    $where = ['id' => $id];
+    // ---------------- Update ke tabel pertemuan ----------------
+    $this->db->where('id_materi', $id);
+    $this->db->update('pertemuan', [
+        'pertemuan_ke' => $pertemuan_ke,
+        'id_kelas'     => $id_kelas
+    ]);
 
-    // Optional: Cek apakah ada perubahan data
-    $existing_data = $this->db->get_where('materi', $where)->row_array();
-    if ($existing_data) {
-        $difference = array_diff_assoc($data, $existing_data);
-        if (empty($difference)) {
-            $this->session->set_flashdata('info', 'Tidak ada perubahan data.');
-            redirect('guru/update_materi/' . $id);
-            return;
-        }
-    }
-
-    // Simpan ke DB
-    $this->m_materi->update_data($where, $data, 'materi');
     $this->session->set_flashdata('success-edit', 'Materi berhasil diperbarui.');
     redirect('guru/data_materi');
 }
+
 public function delete_materi($id)
 {
-    // Load model dan helper
     $this->load->model('M_materi');
     $this->load->helper('file');
 
-    // Ambil data materi berdasarkan ID
     $materi = $this->db->get_where('materi', ['id' => $id])->row();
 
-    // Jika materi tidak ditemukan
     if (!$materi) {
         $this->session->set_flashdata('error', 'Data materi tidak ditemukan.');
         redirect('guru/data_materi');
@@ -392,13 +397,17 @@ public function delete_materi($id)
         unlink('./assets/materi_modul/' . $materi->modul);
     }
 
-    // Hapus dari database
+    // 🔁 Hapus dulu data dari tabel 'pertemuan' yang mengacu ke materi ini
+    $this->db->where('id_materi', $id);
+    $this->db->delete('pertemuan');
+
+    // Baru kemudian hapus data materi
     $this->M_materi->delete_data(['id' => $id], 'materi');
 
-    // Notifikasi berhasil
     $this->session->set_flashdata('success', 'Data materi berhasil dihapus.');
     redirect('guru/data_materi');
 }
+
 
 
 
@@ -1273,31 +1282,63 @@ public function simpan_edit_ujian($id_ujian)
     }
     // application/controllers/guru/Forum_guru.php
 
+    public function belajar($id_pertemuan) {
+    $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);
+    $nip = $this->session->userdata('nip');
+    $role = $this->session->userdata('user_type');
+    $current_user = ($role === 'siswa') 
+        ? $this->session->userdata('nis') 
+        : $this->session->userdata('nip');
 
-
-
-   public function tambah_komentar() {
-    $user_type = $this->session->userdata('user_type');
-    $user_id = ($user_type === 'siswa') ? $this->session->userdata('nis') : $this->session->userdata('nip');
-    
-    if ($user_type === 'siswa') {
-        $user = $this->db->get_where('siswa', ['nis' => $user_id])->row_array();
-    } else {
-        $user = $this->db->get_where('guru', ['nip' => $user_id])->row_array();
+    $data['materi'] = $this->M_materi->get_materi_by_pertemuan($id_pertemuan); // ✅
+    if (!$data['materi']) {
+        show_404();
+        return;
     }
 
+    // Ambil data user
+    $data['user'] = ($role === 'siswa') 
+        ? $this->db->get_where('siswa', ['nis' => $current_user])->row_array()
+        : $this->db->get_where('guru', ['nip' => $current_user])->row_array();
+
+    // Ambil data forum dengan penanganan error
+    $forum_data = $this->Forum_model->get_komentar_by_materi($id_pertemuan);
+    $data['forum'] = is_array($forum_data) ? $forum_data : array();
+
+    // Data tambahan
+    $data['quizzes'] = $this->Quiz_model->get_quizzes_by_materi($id_pertemuan) ?: array();
+    $data['materi_id'] = $this->M_materi->get_all_materi_id($nip) ?: array();
+    $data['current_user'] = [
+        'type' => $role,
+        'identifier' => $current_user
+    ];
+
+    if ($role === 'siswa') {
+        $data['tugas_saya'] = $this->Tugas_model->get_tugas_siswa($current_user, $id) ?: array();
+    }
+
+    $this->load->view('guru/navug', $data);
+    $this->load->view($role . '/tampil_materi', $data);
+        $this->load->view('guru/footg');
+}
+
+
+public function tambah_komentar() {
+    $user_type = $this->session->userdata('user_type');
+    $user_id = ($user_type === 'siswa') ? $this->session->userdata('nis') : $this->session->userdata('nip');
+
     $this->form_validation->set_rules('komentar', 'Komentar', 'required');
-    $this->form_validation->set_rules('materi_id', 'Materi ID', 'required|numeric');
+    $this->form_validation->set_rules('id_pertemuan', 'ID Pertemuan', 'required|numeric');
     $this->form_validation->set_rules('parent_id', 'Parent ID', 'numeric');
 
     if ($this->form_validation->run()) {
         $data = [
-            'user_type' => $user_type,
-            'user_id' => $user_id,
-            'user_name' => $user['nama'] ?? $user['nama_guru'],
-            'materi_id' => $this->input->post('materi_id'),
-            'komentar' => $this->input->post('komentar'),
-            'parent_id' => $this->input->post('parent_id') ?: NULL
+            'user_type'    => $user_type,
+            'user_id'      => $user_id,
+            'id_pertemuan' => $this->input->post('id_pertemuan'),
+            'komentar'     => $this->input->post('komentar'),
+            'parent_id'    => $this->input->post('parent_id') ?: NULL,
+            'created_at'   => date('Y-m-d H:i:s')
         ];
 
         if ($this->Forum_model->tambah_komentar($data)) {
@@ -1310,8 +1351,9 @@ public function simpan_edit_ujian($id_ujian)
         $this->session->set_flashdata('error', validation_errors());
     }
 
-    redirect(($user_type === 'siswa' ? 'siswa' : 'guru') . '/belajar/' . $this->input->post('materi_id'));
+    redirect(($user_type === 'siswa' ? 'siswa' : 'guru') . '/belajar/' . $this->input->post('id_pertemuan'));
 }
+
 
     public function edit_komentar() {
         $this->form_validation->set_rules('comment_id', 'Comment ID', 'required');
@@ -1343,63 +1385,32 @@ public function simpan_edit_ujian($id_ujian)
     }
 
     public function hapus_komentar($comment_id) {
-        $nip = $this->session->userdata('nip');
-        
-        // Verifikasi kepemilikan komentar
-        $comment = $this->db->get_where('forum_diskusi', [
-            'id' => $comment_id,
-            'nip' => $nip
-        ])->row();
+    $user_type = $this->session->userdata('user_type');
+    $user_id = ($user_type === 'guru') ? $this->session->userdata('nip') : $this->session->userdata('nis');
 
-        if ($comment) {
+    // Ambil data komentar
+    $comment = $this->db->get_where('forum_diskusi', ['id' => $comment_id])->row();
+
+    // Jika komentar ditemukan
+    if ($comment) {
+        // ✅ Guru boleh hapus komentar siapa pun
+        // ✅ Siswa hanya boleh hapus komentarnya sendiri
+        if ($user_type === 'guru' || $comment->user_id == $user_id) {
             $this->Forum_model->hapus_komentar($comment_id);
             $this->session->set_flashdata('success', 'Komentar berhasil dihapus');
         } else {
             $this->session->set_flashdata('error', 'Anda tidak memiliki izin menghapus komentar ini');
         }
-        
-        redirect($_SERVER['HTTP_REFERER']);
+    } else {
+        $this->session->set_flashdata('error', 'Komentar tidak ditemukan');
     }
 
-    public function belajar($id) {
-    $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);
-    
-    $role = $this->session->userdata('user_type');
-    $current_user = ($role === 'siswa') 
-        ? $this->session->userdata('nis') 
-        : $this->session->userdata('nip');
-
-    $data['materi'] = $this->M_materi->get_materi_by_id($id);
-    if (!$data['materi']) {
-        show_404();
-        return;
-    }
-
-    // Ambil data user
-    $data['user'] = ($role === 'siswa') 
-        ? $this->db->get_where('siswa', ['nis' => $current_user])->row_array()
-        : $this->db->get_where('guru', ['nip' => $current_user])->row_array();
-
-    // Ambil data forum dengan penanganan error
-    $forum_data = $this->Forum_model->get_komentar_by_materi($id);
-    $data['forum'] = is_array($forum_data) ? $forum_data : array();
-
-    // Data tambahan
-    $data['quizzes'] = $this->Quiz_model->get_quizzes_by_materi($id) ?: array();
-    $data['materi_id'] = $this->M_materi->get_all_materi_id() ?: array();
-    $data['current_user'] = [
-        'type' => $role,
-        'identifier' => $current_user
-    ];
-
-    if ($role === 'siswa') {
-        $data['tugas_saya'] = $this->Tugas_model->get_tugas_siswa($current_user, $id) ?: array();
-    }
-
-    $this->load->view('guru/navug', $data);
-    $this->load->view($role . '/tampil_materi', $data);
-        $this->load->view('guru/footg');
+    redirect($_SERVER['HTTP_REFERER']);
 }
+
+
+
+
 
 public function daftar_nilai_essay()
 {

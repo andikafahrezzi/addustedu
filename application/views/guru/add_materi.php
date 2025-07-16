@@ -19,16 +19,16 @@
                                             <label for="inputEmail4">NIP</label>
                                             <input required type="text" readonly name="nama_guru" value="<?= $user['nip'] ?>" class="form-control" id="inputEmail4">                                                                           
                                             <label for="inputEmail4">Nama Guru</label>
-                                            <input required type="text" readonly name="nama_guru" value="<?= $user['nama_guru'] ?>" class="form-control" id="inputEmail4">                                                                           
+                                            <input required type="text" readonly name="nama_guru" value="<?= $user['nama_guru'] ?>" class="form-control" id="inputEmail4">      
+                                            <input type="hidden" name="id_mapel" value="<?= $user['id_mapel'] ?>">                                                                     
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
                                             <label for="inputEmail4">Nama Mata Pelajaran</label>
-                                            <input required type="text" readonly name="nama_mapel" value="<?php
-                                                $data['user'] = $this->db->get_where('guru', ['nip' =>
-                                                    $this->session->userdata('nip')])->row_array();
-                                                echo $data['user']['nama_mapel'];?>" class="form-control" id="inputEmail4">
+                                            <input required type="text" readonly value="<?= $user['nama_mapel'] ?>"
+                                                 class="form-control" id="inputEmail4">
+                                            <input type="hidden" name="id_mapel" value="<?= $user['id_mapel'] ?>">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -65,11 +65,10 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="inputState">Kelas</label>
-                                        <select required id="inputState" name="kelas" class="form-control">
-                                            <option selected>Pilih disini</option>
-                                            <option value="X">X ( Kelas Sepuluh )</option>
-                                            <option value="XI">XI ( Kelas Sebelas )</option>
-                                            <option value="XII">XII ( Kelas Dua Belas )</option>
+                                        <select required id="inputState" name="id_kelas" class="form-control">
+                                            <?php foreach ($kelas as $k): ?>
+                                                    <option value="<?= $k->id ?>"><?= $k->nama_kelas ?></option>
+                                                <?php endforeach; ?>
                                         </select>
                                     </div>
                                     <button type="submit" class="btn btn-success">Tambah materi</button>

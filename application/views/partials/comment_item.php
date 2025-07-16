@@ -74,7 +74,7 @@ $can_edit = isset($current_user) && $this->Forum_model->can_edit_comment(
         <div class="reply-form mt-3" id="reply-form-<?= $komentar->id ?>" style="display:none">
             <form method="post" action="<?= base_url('guru/tambah_komentar') ?>">
                 <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
-                <input type="hidden" name="materi_id" value="<?= $materi->id ?>">
+                <input type="hidden" name="id_pertemuan" value="<?= $materi->id_pertemuan ?>">
                 <input type="hidden" name="parent_id" value="<?= $komentar->id ?>">
                 <div class="form-group">
                     <textarea name="komentar" class="form-control" rows="2" 

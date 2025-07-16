@@ -11,7 +11,7 @@
                 </a>
             </div>
         </div>
-        
+        <?php var_dump($materi); ?> <!-- Pastikan tidak NULL -->
         <div class="row">
             <div class="col-md-12">
                 <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px">
@@ -37,11 +37,11 @@
                                             <td>
                                                 <?= strlen($m->deskripsi) > 50 ? substr(htmlspecialchars($m->deskripsi), 0, 50).'...' : htmlspecialchars($m->deskripsi); ?>
                                             </td>
-                                            <td>Kelas <?= htmlspecialchars($m->kelas); ?></td>
+                                            <td>Kelas <?= htmlspecialchars($m->nama_kelas); ?></td>
                                             <td><?= htmlspecialchars($m->modul); ?></td>
                                             <td class="text-center">
                                                 <div class="btn-group" role="group">
-                                                    <a href="<?= site_url('guru/belajar/'.$m->id); ?>" class="btn btn-sm btn-success" title="Edit">
+                                                    <a href="<?= site_url('guru/belajar/'.$m->id_pertemuan); ?>" class="btn btn-sm btn-success" title="Edit">
                                                         <i class="fas fa-comment"></i>
                                                     </a>
                                                     <a href="<?= site_url('guru/update_materi/'.$m->id); ?>" class="btn btn-sm btn-warning" title="Edit">

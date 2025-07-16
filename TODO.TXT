@@ -29,6 +29,9 @@ PR
 - pada quiz, jawaban essay masih belum masuk kedalam database, jadi terhitung salah
 - add_pertemuan masih menggunakan navigasi tambah guru
 - comment di slicing coba cari comment_replies
+- menyatukan data pertemuan dan materi, jadi jika pertemuan blm dibuat tetapi ada materi sudah dmuat
+    akan menampilkan notif, blm dimuat pertemuan
+- berikan notifikasi jika data pertemuan sudah digunakan
 
 next can be a problem
 - change id at database siswa to nis

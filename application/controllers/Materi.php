@@ -56,7 +56,7 @@ class Materi extends CI_Controller
         $data['forum'] = $this->Forum_model->get_komentar_by_materi($id_pertemuan);
         // $data['disqus'] = $this->disqus->get_html();
         $data['quizzes'] = $this->Quiz_model->get_quizzes_by_materi($id_pertemuan);
-        $data['materi_id'] = $this->M_materi->get_all_materi_id();
+        $data['materi_id'] = $this->M_materi->get_all_materi_idd();
         $data['tugas_saya'] = $this->Tugas_model->get_tugas_siswa(
             $this->session->userdata('nis'), 
             $id_pertemuan

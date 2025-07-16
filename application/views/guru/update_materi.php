@@ -1,42 +1,54 @@
-<!-- Tampilkan daftar pertemuan yang sudah dipakai -->
-
-
-<!-- Form Edit Materi -->
 <form method="POST" action="<?= base_url('guru/materi_edit/' . $materi->id) ?>" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?= $materi->id ?>">
     <input type="hidden" name="id_guru" value="<?= $materi->id_guru ?>">
-    <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
-                        value="<?= $this->security->get_csrf_hash(); ?>" />
+    <input type="hidden" name="video_lama" value="<?= $materi->video ?>">
+    <input type="hidden" name="modul_lama" value="<?= $materi->modul ?>">
+    <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>" />
 
     <div class="form-group">
         <label for="nama_guru">Nama Guru</label>
-        <input readonly id="nama_guru" type="text" class="form-control" value="<?= $materi->nama_guru ?>" name="nama_guru">
+        <input readonly id="nama_guru" type="text" class="form-control" value="<?= $materi->nama_guru ?>">
     </div>
+
     <?php if (!empty($pertemuan_terpakai)) : ?>
-    <div class="alert alert-warning">
-        <strong>Perhatian!</strong> Pertemuan yang sudah digunakan untuk <strong><?= $materi->nama_mapel ?></strong> kelas <strong><?= $materi->kelas ?></strong>:
-        <ul>
-            <?php foreach ($pertemuan_terpakai as $p) : ?>
-                <li>Pertemuan ke-<?= $p['pertemuan'] ?></li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-<?php endif; ?>
+        <div class="alert alert-warning">
+            <strong>Perhatian!</strong> Pertemuan yang sudah digunakan untuk <strong><?= $materi->nama_mapel ?></strong> kelas <strong><?= $materi->nama_kelas ?></strong>:
+            <ul>
+                <?php foreach ($pertemuan_terpakai as $p) : ?>
+                    <li>Pertemuan ke-<?= $p['pertemuan'] ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+
     <div class="form-group">
         <label for="pertemuan">Pertemuan Ke-</label>
-        <input type="number" name="pertemuan" id="pertemuan" class="form-control" min="1" value="<?= $materi->pertemuan ?>" required>
+        <input type="number" name="pertemuan" id="pertemuan" class="form-control" min="1" value="<?= $materi->pertemuan_ke ?>" required>
     </div>
 
     <div class="form-group">
-        <label for="nama_mapel">Mata Pelajaran</label>
-        <input readonly id="nama_mapel" type="text" value="<?= $materi->nama_mapel ?>" class="form-control" name="nama_mapel">
+        <label for="mapel">Mata Pelajaran</label>
+        <input readonly type="text" class="form-control" value="<?= $materi->nama_mapel ?>">
+        <input type="hidden" name="id_mapel" value="<?= $materi->id_mapel ?>">
+    </div>
+
+    <div class="form-group">
+        <label for="id_kelas">Kelas</label>
+        <select required id="id_kelas" name="id_kelas" class="form-control">
+            <option value="<?= $materi->id_kelas ?>" selected>Kelas: <?= $materi->nama_kelas ?></option>
+            <?php foreach ($kelas as $k): ?>
+                <?php if ($k->id != $materi->id_kelas): ?>
+                    <option value="<?= $k->id ?>"><?= $k->nama_kelas ?></option>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </select>
     </div>
 
     <div class="form-group">
         <div class="input-group">
             <div class="custom-file">
-                <input type="file" name="video" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                <label class="custom-file-label" for="inputGroupFile01"> <?= $materi->video ?> Upload Video Materi Disini</label>
+                <input type="file" name="video" class="custom-file-input" id="inputGroupFile01">
+                <label class="custom-file-label" for="inputGroupFile01"><?= $materi->video ?> Upload Video Materi</label>
             </div>
         </div>
     </div>
@@ -46,41 +58,29 @@
         <div class="input-group">
             <div class="custom-file">
                 <input type="file" name="modul" class="custom-file-input">
-                <label class="custom-file-label"> <?= $materi->modul ?> Pilih file</label>
+                <label class="custom-file-label"><?= $materi->modul ?> Pilih file</label>
             </div>
         </div>
     </div>
 
     <div class="form-group">
         <label for="deskripsi">Deskripsi Materi</label>
-        <textarea class="form-control txtarea" name="deskripsi" id="deskripsi" rows="3"><?= trim($materi->deskripsi) ?></textarea>
+        <textarea class="form-control" name="deskripsi" id="deskripsi" rows="3"><?= trim($materi->deskripsi) ?></textarea>
     </div>
 
     <div class="form-group">
         <label for="linkform">Link Google Form</label>
-        <textarea class="form-control txtarea" name="linkform" id="linkform"><?= trim($materi->linkform) ?></textarea>
+        <textarea class="form-control" name="linkform" id="linkform"><?= trim($materi->linkform) ?></textarea>
     </div>
-    <div class="form-group">
-                                        <label for="inputState">Kelas</label>
-                                        <select required id="inputState" name="kelas" class="form-control" >
-                                            <option selected value="<?= $materi->nama_mapel ?>">Pilih disini</option>
-                                            <option value="X">X ( Kelas Sepuluh )</option>
-                                            <option value="XI">XI ( Kelas Sebelas )</option>
-                                            <option value="XII">XII ( Kelas Dua Belas )</option>
-                                        </select>
-                                    </div>
 
     <div class="form-group">
         <button type="submit" class="btn btn-success btn-lg btn-block">Update ⭢</button>
     </div>
 </form>
 
-<!-- Validasi JS Pertemuan -->
-<?php
-    $dipakai = array_column($pertemuan_terpakai ?? [], 'pertemuan');
-?>
+
 <script>
-    const pertemuanTerpakai = <?= json_encode($dipakai) ?>;
+    const pertemuanTerpakai = <?= json_encode(array_column($pertemuan_terpakai ?? [], 'pertemuan')) ?>;
     const inputPertemuan = document.getElementById('pertemuan');
     const pertemuanLama = parseInt("<?= $materi->pertemuan ?>");
 
@@ -93,14 +93,3 @@
         }
     });
 </script>
-
-<?php if ($this->session->flashdata('error-per')): ?>
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: '<?php echo $this->session->flashdata('error-per'); ?>',
-            footer: 'Cek kembali data yang Anda inputkan.'
-        });
-    </script>
-<?php endif; ?>
