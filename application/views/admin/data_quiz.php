@@ -22,8 +22,9 @@
                                                 <th scope="col">Nama Guru</th>
                                                 <th scope="col">Nama Mapel</th>
                                                 <th scope="col">Deskripsi</th>
-                                                <th scope="col">Link Google Form</th>
+                                                <th scope="col">Lamanya Quiz</th>
                                                 <th scope="col">Kelas</th>
+                                                <th scope="col">Dibuat</th>
                                                 <th scope="col">Option</th>
                                             </tr>
                                         </thead>
@@ -40,7 +41,7 @@
                                                     </th>
 
                                                     <td>
-                                                        <?php echo $u->materi_id ?>
+                                                        <?php echo $u->nama_guru ?>
                                                     </td>
 
                                                     <td>
@@ -52,6 +53,9 @@
                                                     </td>
                                                     <td>
                                                         <?php echo $u->waktu_pengerjaan ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php echo $u->nama_kelas ?>
                                                     </td>
                                                     <td>
                                                         <?php echo $u->created_at ?>

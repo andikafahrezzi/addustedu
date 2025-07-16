@@ -45,17 +45,20 @@
                                 <?php 
 $materi_pertemuan = [];
 foreach ($pertemuan as $p) {
-    $materi_pertemuan[$p['pertemuan_ke']] = $p;
+    $materi_pertemuan[$p['id_guru']][$p['pertemuan_ke']] = $p;
 }
+
+$nip_guru_ini = $materi_list[0]['id_guru'] ?? null; // pastikan ada
 
 for ($i = 1; $i <= 10; $i++): ?>
     <div class="col-md-4 mb-4">
         <div class="pertemuan-card h-100 shadow-sm">
             <div class="card-body">
                 <h6>Pertemuan <?= $i ?></h6>
-                <?php if (isset($materi_pertemuan[$i])): ?>
-                    <p><?= implode(' ', array_slice(explode(' ', $materi_pertemuan[$i]['deskripsi_materi']), 0, 10)) ?>...</p>
-                    <a href="<?= base_url('materi/belajar/' . $materi_pertemuan[$i]['id']) ?>" class="btn btn-sm btn-gradient">
+                <?php if (isset($materi_pertemuan[$nip_guru_ini][$i])): 
+                    $ptm = $materi_pertemuan[$nip_guru_ini][$i]; ?>
+                    <p><?= implode(' ', array_slice(explode(' ', $ptm['deskripsi_materi']), 0, 10)) ?>...</p>
+                    <a href="<?= base_url('materi/belajar/' . $ptm['id']) ?>" class="btn btn-sm btn-gradient">
                         Pelajari <i class="lnr lnr-arrow-right"></i>
                     </a>
                 <?php else: ?>

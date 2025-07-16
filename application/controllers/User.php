@@ -45,9 +45,10 @@ public function index()
         $data['mapel_data'] = $mapel_data;
 
         // Ambil daftar pertemuan untuk kelas siswa
-        $this->db->select('pertemuan.*, materi.deskripsi AS deskripsi_materi');
+        $this->db->select('pertemuan.*, materi.deskripsi AS deskripsi_materi, guru.nip AS id_guru');
         $this->db->from('pertemuan');
         $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+        $this->db->join('guru', 'guru.nip = materi.id_guru');
         $this->db->where('pertemuan.id_kelas', $id_kelas_siswa);
         $pertemuan = $this->db->get()->result_array();
         $data['pertemuan'] = $pertemuan;

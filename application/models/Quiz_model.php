@@ -159,7 +159,19 @@ public function hitung_nilai_terakhir($id)
 }
 public function tampil_quiz()
 {
-    return $this->db->get('quiz');
+    $this->db->select('quiz.*, 
+                      mata_pelajaran.nama_mapel, 
+                      kelas.nama_kelas, 
+                      guru.nama_guru,
+                      pertemuan.pertemuan_ke');
+    $this->db->from('quiz');
+    $this->db->join('pertemuan', 'pertemuan.id = quiz.id_pertemuan', 'left');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi', 'left');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel', 'left');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas', 'left');
+    $this->db->join('guru', 'guru.nip = materi.id_guru', 'left');
+    $this->db->order_by('quiz.created_at', 'DESC');
+    return $this->db->get();
 }
 public function delete_quiz($id)
 {
