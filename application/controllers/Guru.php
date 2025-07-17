@@ -1109,28 +1109,40 @@ public function simpan_edit_ujian($id_ujian)
     }
     
     // BANK SOAL - GURU
-    public function bank_soal() {
-        $nip = $this->session->userdata('nip');
-    
-        // Ambil data guru untuk mendapatkan mapel yang diajarkan
-        $this->db->select('nama_mapel');
-        $guru = $this->db->get_where('guru', ['nip' => $nip])->row();
-        
-        if (!$guru) {
-            show_error('Data guru tidak ditemukan');
-        }
-        
-        // Ambil soal berdasarkan mapel yang diajarkan
-        $data['bank_soal'] = $this->Bank_soal_model->get_soal_by_mapel($guru->nama_mapel);
-        $data['title'] = 'Bank Soal';
-        
-        $this->load->view('guru/navug', $data);
-        $this->load->view('guru/bank_soal', $data);
-        $this->load->view('guru/footg');
+public function bank_soal()
+{
+    $this->load->model('Bank_soal_model');
+    $nip = $this->session->userdata('nip');
+
+    // Ambil info guru dan ID mapel
+    $guru = $this->Bank_soal_model->get_detail_by_nip($nip);
+    if (!$guru) {
+        show_error('Data guru tidak ditemukan');
+        return;
     }
+
+    $id_mapel = $guru->id_mapel;
+
+    // Ambil bank soal berdasarkan id_mapel
+    $data['bank_soal'] = $this->Bank_soal_model->get_soal_by_mapel($id_mapel);
+    $data['title'] = 'Bank Soal ' . $guru->nama_mapel;
+
+    $this->load->view('guru/navug', $data);
+    $this->load->view('guru/bank_soal', $data);
+    $this->load->view('guru/footg');
+}
+
+
+
 
     public function add_bank_soal() {
         $data['title'] = 'Tambah Soal';
+        // Di constructor controller atau model
+        $this->db->select('guru.*, mata_pelajaran.nama_mapel, mata_pelajaran.id AS id_mapel');
+        $this->db->from('guru');
+        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = guru.id_mapel'); // asumsinya 1 guru 1 mapel
+        $this->db->where('guru.nip', $this->session->userdata('nip'));
+        $this->guru_data = $this->db->get()->row();
         $data['mapel_guru'] = $this->guru_data->nama_mapel;
     
         $this->form_validation->set_rules('pertanyaan', 'Pertanyaan', 'required');
@@ -1154,7 +1166,7 @@ public function simpan_edit_ujian($id_ujian)
                 'tipe_kognitif' => $post_data['tipe_kognitif'],
                 'created_by' => $this->guru_data->nip,
                 'user_type' => 'guru',
-                'mapel_diajarkan' => $this->guru_data->nama_mapel
+                'id_mapel' => $this->guru_data->id_mapel
             ];
     
             // Hanya tambahkan jika pilihan ganda
@@ -1172,82 +1184,85 @@ public function simpan_edit_ujian($id_ujian)
         }
     }
     
-    public function edit_bank_soal($id_soal) {
-        // Validasi ID soal
-        if (!is_numeric($id_soal)) {
-            show_404();
-        }
-    
-        // Cek kepemilikan soal
-        $soal = $this->Bank_soal_model->get_detail_soal($id_soal);
-        
-        // Validasi data soal dan kepemilikan
-        if (!$soal) {
-            show_404();
-        }
-        
-        if ($soal->created_by != $this->guru_data->nip || 
-            $soal->user_type != 'guru' ||
-            $soal->mapel_diajarkan != $this->guru_data->nama_mapel) {
-            $this->session->set_flashdata('error', 'Anda tidak memiliki akses untuk mengedit soal ini');
-            redirect('guru/bank_soal');
-        }
-        
-        $data = [
-            'title' => 'Edit Soal',
-            'soal' => $soal,
-            'kategori' => $this->Bank_soal_model->get_kategori(),
-            'mapel_guru' => $this->guru_data->nama_mapel
-        ];
-        
-        $this->form_validation->set_rules('pertanyaan', 'Pertanyaan', 'required');
-        $this->form_validation->set_rules('tipe_soal', 'Tipe Soal', 'required|in_list[pilihan,essay]');
-        
-        // Validasi khusus untuk pilihan ganda
-        if ($this->input->post('tipe_soal') == 'pilihan') {
-            $this->form_validation->set_rules('pilihan_a', 'Pilihan A', 'required');
-            $this->form_validation->set_rules('pilihan_b', 'Pilihan B', 'required');
-            $this->form_validation->set_rules('pilihan_c', 'Pilihan C', 'required');
-            $this->form_validation->set_rules('pilihan_d', 'Pilihan D', 'required');
-            $this->form_validation->set_rules('kunci_jawaban', 'Kunci Jawaban', 'required|in_list[a,b,c,d]');
-        }
-    
-        if ($this->form_validation->run() === FALSE) {
-            $this->load->view('guru/navug', $data);
-            $this->load->view('guru/edit_bank_soal', $data);
-            $this->load->view('guru/footg');
-        } else {
-            $post_data = $this->input->post();
-            $update_data = [
-                'pertanyaan' => $post_data['pertanyaan'],
-                'tipe_soal' => $post_data['tipe_soal'],
-                'tingkat_kesulitan' => $post_data['tingkat_kesulitan'],
-                'tipe_kognitif' => $post_data['tipe_kognitif'],
-            ];
-    
-            // Hanya update jika pilihan ganda
-            if ($post_data['tipe_soal'] == 'pilihan') {
-                $update_data['pilihan_a'] = $post_data['pilihan_a'];
-                $update_data['pilihan_b'] = $post_data['pilihan_b'];
-                $update_data['pilihan_c'] = $post_data['pilihan_c'];
-                $update_data['pilihan_d'] = $post_data['pilihan_d'];
-                $update_data['kunci_jawaban'] = $post_data['kunci_jawaban'];
-            } else {
-                $update_data['pilihan_a'] = null;
-                $update_data['pilihan_b'] = null;
-                $update_data['pilihan_c'] = null;
-                $update_data['pilihan_d'] = null;
-                $update_data['kunci_jawaban'] = null;
-            }
-    
-            if ($this->Bank_soal_model->update_soal($id_soal, $update_data)) {
-                $this->session->set_flashdata('success', 'Soal berhasil diperbarui');
-            } else {
-                $this->session->set_flashdata('error', 'Gagal memperbarui soal');
-            }
-            redirect('guru/bank_soal');
-        }
+public function edit_bank_soal($id_soal)
+{
+    if (!is_numeric($id_soal)) {
+        show_404();
     }
+
+    $soal = $this->Bank_soal_model->get_detail_soal($id_soal);
+    
+    if (!$soal) {
+        show_404();
+    }
+
+    // Cek: Jika soal bukan milik guru (admin atau guru lain), tolak edit
+    if ($soal->user_type === 'admin') {
+        $this->session->set_flashdata('error', 'Soal ini dibuat oleh admin dan tidak dapat diedit oleh guru');
+        redirect('guru/bank_soal');
+    }
+
+    // Cek: Jika soal dibuat guru lain
+    if ($soal->user_type === 'guru' && $soal->created_by != $this->guru_data->nip) {
+        $this->session->set_flashdata('error', 'Anda tidak memiliki akses untuk mengedit soal ini');
+        redirect('guru/bank_soal');
+    }
+
+    $data = [
+        'title' => 'Edit Soal',
+        'soal' => $soal,
+        'kategori' => $this->Bank_soal_model->get_kategori(),
+        'id_mapel' => $this->guru_data->id_mapel
+    ];
+
+    $this->form_validation->set_rules('pertanyaan', 'Pertanyaan', 'required');
+    $this->form_validation->set_rules('tipe_soal', 'Tipe Soal', 'required|in_list[pilihan,essay]');
+
+    if ($this->input->post('tipe_soal') === 'pilihan') {
+        $this->form_validation->set_rules('pilihan_a', 'Pilihan A', 'required');
+        $this->form_validation->set_rules('pilihan_b', 'Pilihan B', 'required');
+        $this->form_validation->set_rules('pilihan_c', 'Pilihan C', 'required');
+        $this->form_validation->set_rules('pilihan_d', 'Pilihan D', 'required');
+        $this->form_validation->set_rules('kunci_jawaban', 'Kunci Jawaban', 'required|in_list[a,b,c,d]');
+    }
+
+    if ($this->form_validation->run() === FALSE) {
+        $this->load->view('guru/navug', $data);
+        $this->load->view('guru/edit_bank_soal', $data);
+        $this->load->view('guru/footg');
+    } else {
+        $post_data = $this->input->post();
+        $update_data = [
+            'pertanyaan' => $post_data['pertanyaan'],
+            'tipe_soal' => $post_data['tipe_soal'],
+            'tingkat_kesulitan' => $post_data['tingkat_kesulitan'],
+            'tipe_kognitif' => $post_data['tipe_kognitif'],
+        ];
+
+        if ($post_data['tipe_soal'] === 'pilihan') {
+            $update_data['pilihan_a'] = $post_data['pilihan_a'];
+            $update_data['pilihan_b'] = $post_data['pilihan_b'];
+            $update_data['pilihan_c'] = $post_data['pilihan_c'];
+            $update_data['pilihan_d'] = $post_data['pilihan_d'];
+            $update_data['kunci_jawaban'] = $post_data['kunci_jawaban'];
+        } else {
+            $update_data['pilihan_a'] = null;
+            $update_data['pilihan_b'] = null;
+            $update_data['pilihan_c'] = null;
+            $update_data['pilihan_d'] = null;
+            $update_data['kunci_jawaban'] = null;
+        }
+
+        if ($this->Bank_soal_model->update_soal($id_soal, $update_data)) {
+            $this->session->set_flashdata('success', 'Soal berhasil diperbarui');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal memperbarui soal');
+        }
+        redirect('guru/bank_soal');
+    }
+}
+
+
     
     public function hapus_bank_soal($id_soal) {
         // Cek kepemilikan soal
@@ -1256,7 +1271,7 @@ public function simpan_edit_ujian($id_ujian)
         if (!$soal || 
             $soal->created_by != $this->guru_data->nip || 
             $soal->user_type != 'guru' ||
-            $soal->mapel_diajarkan != $this->guru_data->nama_mapel) {
+            $soal->id_mapel != $this->guru_data->id_mapel) {
             show_error('Anda tidak memiliki akses untuk menghapus soal ini', 403);
         }
         

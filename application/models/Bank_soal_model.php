@@ -9,13 +9,21 @@ class Bank_soal_model extends CI_Model {
         $this->db->join('mata_pelajaran', 'bank_soal.id_mapel = mata_pelajaran.id', 'left');
         return $this->db->get();
     }
+    public function get_kategori() {
+    return []; // Bisa diisi kalau kamu punya kategori soal di masa depan
+}
+public function get_soal_by_mapel($id_mapel)
+{
+    $this->db->select('bank_soal.*, mata_pelajaran.nama_mapel');
+    $this->db->from('bank_soal');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = bank_soal.id_mapel');
+    $this->db->where('bank_soal.id_mapel', $id_mapel);
+    $this->db->order_by('bank_soal.created_at', 'DESC');
+    return $this->db->get()->result();
+}
 
-    public function get_soal_by_mapel($mapel) {
-        return $this->db->where('mapel_diajarkan', $mapel)
-                      ->order_by('created_at', 'DESC')
-                      ->get('bank_soal')
-                      ->result();
-    }
+
+
     
     public function get_soal_by_guru($nip) {
         // Join dengan tabel guru untuk memastikan mapel sesuai
@@ -28,6 +36,35 @@ class Bank_soal_model extends CI_Model {
                       ->get()
                       ->result();
     }
+    public function get_soal_by_mapel_kelas($id_mapel, $tingkat)
+{
+    $this->db->select('bank_soal.*');
+    $this->db->from('bank_soal');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = bank_soal.id_mapel');
+    $this->db->join('kelas', 'kelas.id = bank_soal.id_kelas');
+    $this->db->where('bank_soal.id_mapel', $id_mapel);
+    $this->db->where('kelas.tingkat', $tingkat);
+    $this->db->order_by('bank_soal.created_at', 'DESC');
+    return $this->db->get()->result();
+}
+public function get_detail_by_nip($nip)
+{
+    $this->db->select('guru.*, mata_pelajaran.id AS id_mapel, mata_pelajaran.nama_mapel');
+    $this->db->from('guru');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = guru.id_mapel', 'left');
+    $this->db->where('guru.nip', $nip);
+    return $this->db->get()->row();
+}
+    public function get_mapel_ids_by_guru($nip) {
+    $this->db->select('id_mapel');
+    $this->db->from('guru');
+    $this->db->where('nip', $nip);
+    $result = $this->db->get()->row();
+
+    return $result ? [$result->id_mapel] : []; // Dibuat array agar kompatibel dengan perulangan
+    }
+
+
     public function get_laporan_soal($nip = null) {
         $this->db->select('
             bank_soal.*,
@@ -78,11 +115,14 @@ class Bank_soal_model extends CI_Model {
                        ->delete('bank_soal');
     }
 
-    public function get_detail_soal($id_soal) {
-        return $this->db->where('id_soal', $id_soal)
-                       ->get('bank_soal')
-                       ->row();
-    }
+    public function get_detail_soal($id_soal)
+{
+    $this->db->select('bank_soal.*, mata_pelajaran.nama_mapel');
+    $this->db->from('bank_soal');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = bank_soal.id_mapel', 'left');
+    $this->db->where('bank_soal.id_soal', $id_soal);
+    return $this->db->get()->row();
+}
     // Di Bank_soal_model.php
 public function get_soal_for_ujian($ujian_id) {
     return $this->db->select('bank_soal.*')

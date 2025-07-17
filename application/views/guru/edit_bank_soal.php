@@ -89,7 +89,7 @@
                 <div class="form-group">
                     <label for="mapel_diajarkan">Mata Pelajaran *</label>
                     <input type="text" name="mapel_diajarkan" id="mapel_diajarkan" class="form-control" 
-                           value="<?= $soal->mapel_diajarkan ?>" readonly required>
+                           value="<?= $soal->nama_mapel ?>" readonly required>
                 </div>
                 
                 <!-- Tingkat Kesulitan -->
