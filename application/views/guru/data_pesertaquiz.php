@@ -53,7 +53,7 @@
                             <?php endforeach; ?>
                         <?php else : ?>
                             <tr>
-                                <td colspan="7" class="text-center">Belum ada quiz yang dibuat</td>
+                                <td colspan="7" class="text-center">Belum ada peserta quiz</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

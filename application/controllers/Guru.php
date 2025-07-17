@@ -634,8 +634,8 @@ private function tambah_soal($quiz_id)
         
         redirect('quiz');
     }
-    public function lihat_tugas($materi_id) {
-        $data['submissions'] = $this->Tugas_model->get_submissions($materi_id);
+    public function lihat_tugas($id_pertemuan) {
+        $data['submissions'] = $this->Tugas_model->get_submissions($id_pertemuan);
         $this->load->view('guru/navug'); 
         $this->load->view('guru/lihat_tugas', $data);
         $this->load->view('guru/footg');
@@ -724,21 +724,53 @@ public function delete_pesertaquiz($id) {
         redirect($_SERVER['HTTP_REFERER']);
     }
     
-    public function daftar_tugas() {
+public function daftar_tugas() {
     $this->load->model('Tugas_model');
-    $guru_id = $this->session->userdata('nip'); // Ambil dari session login
+    $guru_id = $this->session->userdata('nip');
 
     $data['materi_list'] = [];
-    $materi_ids = $this->Tugas_model->get_materi_ids_by_guru($guru_id);
+    $pertemuan_list = $this->Tugas_model->get_pertemuan_by_guru($guru_id);
 
-    foreach ($materi_ids as $row) {
-        $data['materi_list'][$row->materi_id] = $this->Tugas_model->get_tugas_per_materi($row->materi_id, $guru_id);
+    foreach ($pertemuan_list as $row) {
+        $tugas = $this->Tugas_model->get_tugas_per_materi($row->id_pertemuan, $guru_id);
+
+        $data['materi_list'][$row->id_pertemuan] = [
+            'nama_mapel' => $row->nama_mapel,
+            'nama_kelas' => $row->nama_kelas,
+            'pertemuan_ke' => $row->pertemuan_ke,
+            'judul_materi' => $row->judul_materi,
+            'tugas' => $tugas
+        ];
     }
 
     $this->load->view('guru/navug'); 
     $this->load->view('guru/daftar_tugas_siswa', $data);
     $this->load->view('guru/footg');
 }
+
+public function download_tugas($id)
+{
+    $this->load->model('Tugas_model');
+
+    $tugas = $this->Tugas_model->get_tugas_by_id($id);
+
+    if (!$tugas) {
+        show_404(); // Tidak ditemukan
+        return;
+    }
+
+    $path = FCPATH . $tugas->file_path;
+    $original_name = $tugas->original_filename;
+
+    if (file_exists($path)) {
+        $this->load->helper('download');
+        force_download($original_name, file_get_contents($path));
+    } else {
+        $this->session->set_flashdata('error', 'File tidak ditemukan.');
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+}
+
 
     public function edit_profile()
 {
