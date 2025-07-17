@@ -22,10 +22,10 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="materi_id">Materi</label>
-                            <select name="materi_id" id="materi_id" class="form-control">
+                            <select name="id_pertemuan" id="materi_id" class="form-control">
                                 <option value="">-- Pilih Materi --</option>
                                 <?php foreach ($materi_list as $materi): ?>
-                                    <option value="<?= $materi->id ?>"><?= $materi->nama_mapel ?> - <?= $materi->kelas ?> - <?= $materi->deskripsi ?></option>
+                                    <option value="<?= $materi->id_pertemuan ?>"><?= $materi->nama_mapel ?> - <?= $materi->nama_kelas ?> - <?= $materi->deskripsi ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>

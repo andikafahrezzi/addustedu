@@ -854,12 +854,16 @@ public function update_profile()
     public function tambah_ujian()
 {
     $nip = $this->session->userdata('nip');
-    $this->db->select('nama_mapel');
-    $guru = $this->db->get_where('guru', ['nip' => $nip])->row();
+    $this->db->select('guru.*, mata_pelajaran.nama_mapel');
+    $this->db->from('guru');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = guru.id_mapel');
+    $this->db->where('guru.nip', $nip);
+    $guru = $this->db->get()->row();
+
     // Ambil data materi dan soal dari bank soal
     $data = [
         'materi_list' => $this->Ujian_model->get_materi_options($nip),
-        'bank_soal' => $this->Bank_soal_model->get_soal_by_mapel($guru->nama_mapel),
+        'bank_soal' => $this->Bank_soal_model->get_soal_by_mapel($guru->id_mapel),
         'title' => 'Tambah Ujian Baru'
     ];
     
@@ -890,7 +894,7 @@ public function simpan_ujian()
             'tanggal_selesai' => $this->input->post('tanggal_selesai'),
             'durasi'          => $this->input->post('durasi'),
             'status'          => $this->input->post('status') ?? 'aktif',
-            'id_materi'       => $this->input->post('materi_id'),
+            'id_pertemuan'       => $this->input->post('id_pertemuan'),
             'nip_guru'        => $this->session->userdata('nip')
         ];
 

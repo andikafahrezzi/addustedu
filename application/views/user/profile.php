@@ -10,6 +10,8 @@
 
                     <form method="post" action="<?= base_url('siswa/update_profile'); ?>">
                         <input type="hidden" name="nis" value="<?= $siswa->nis; ?>">
+                        <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                    value="<?= $this->security->get_csrf_hash(); ?>" />
 
                         <div class="form-group">
                             <label for="nama">Nama Lengkap</label>

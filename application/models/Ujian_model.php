@@ -11,9 +11,11 @@ class Ujian_model extends CI_Model {
     }
     public function get_ujian_by_guru($nip)
     {
-        $this->db->select('tbl_ujian.*, materi.nama_mapel');
+        $this->db->select('tbl_ujian.*, mata_pelajaran.nama_mapel');
         $this->db->from('tbl_ujian');
-        $this->db->join('materi', 'materi.id = tbl_ujian.id_materi');
+        $this->db->join('pertemuan', 'pertemuan.id = tbl_ujian.id_pertemuan');
+        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
         $this->db->where('materi.id_guru', $nip);  // Menambahkan filter berdasarkan nip guru
         return $this->db->get()->result_array();  // Mengambil hasil sebagai array
     }
@@ -24,11 +26,18 @@ class Ujian_model extends CI_Model {
     }
 
     public function get_materi_options($nip) {
-        $this->db->select('id, deskripsi, kelas, nama_mapel');
-        $this->db->from('materi');
-        $this->db->where('id_guru', $nip);
+        $this->db->select('pertemuan.id AS id_pertemuan, materi.deskripsi, kelas.nama_kelas, kelas.tingkat, mata_pelajaran.nama_mapel, pertemuan.pertemuan_ke');
+        $this->db->from('pertemuan');
+        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+        $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+        $this->db->where('materi.id_guru', $nip);
+        $this->db->order_by('kelas.tingkat', 'ASC');
+        $this->db->order_by('kelas.nama_kelas', 'ASC');
+        $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
         return $this->db->get()->result();
     }
+
 
 
 public function get_ujian_by_kelas($id_kelas, $nip_guru)
