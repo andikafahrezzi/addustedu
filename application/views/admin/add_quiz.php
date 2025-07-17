@@ -80,7 +80,7 @@
                         <option value="">-- Pilih Materi --</option>
                         <?php foreach($materi_list as $materi): ?>
                         <option value="<?= $materi->id_pertemuan ?>" <?= set_select('id_pertemuan', $materi->id_pertemuan) ?>>
-                            <?= $materi->nama_mapel ?> - <?= $materi->nama_kelas ?> (<?= $materi->nama_guru ?>)
+                            <?= $materi->nama_mapel ?> - <?= $materi->nama_kelas ?> <?= $materi->deskripsi ?> (<?= $materi->nama_guru ?>)
                         </option>
                         <?php endforeach; ?>
                     </select>

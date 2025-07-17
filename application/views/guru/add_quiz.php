@@ -12,12 +12,12 @@
                 
                 <div class="form-group">
                     <label>Materi</label>
-                    <select name="materi_id" class="form-control" required>
+                    <select name="id_pertemuan" class="form-control" required>
                         <option value="">Pilih Materi</option>
                         <?php foreach ($materi_list as $materi): ?>
-                            <option value="<?php echo $materi->id; ?>">
-                            <?php echo $materi->id; ?>
-                            <?php echo htmlspecialchars($materi->kelas); ?>
+                            <option value="<?php echo $materi->id_pertemuan; ?>">
+                            <?php echo $materi->id_pertemuan; ?>
+                            <?php echo htmlspecialchars($materi->nama_kelas); ?>
                                 <?php echo htmlspecialchars($materi->deskripsi); ?>
                             </option>
                         <?php endforeach; ?>

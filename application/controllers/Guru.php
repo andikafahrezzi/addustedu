@@ -427,7 +427,7 @@ public function delete_materi($id)
         $nip = $this->session->userdata('nip');
         
         // Validasi form
-        $this->form_validation->set_rules('materi_id', 'Materi', 'required');
+        $this->form_validation->set_rules('id_pertemuan', 'pertemuan', 'required');
         $this->form_validation->set_rules('judul', 'Judul Quiz', 'required|max_length[100]');
         $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'max_length[500]');
         $this->form_validation->set_rules('waktu_pengerjaan', 'Waktu Pengerjaan', 'required|numeric');
@@ -435,7 +435,7 @@ public function delete_materi($id)
         
         if ($this->form_validation->run()) {
             $quiz_data = [
-                'materi_id' => $this->input->post('materi_id'),
+                'id_pertemuan' => $this->input->post('id_pertemuan'),
                 'judul' => $this->input->post('judul'),
                 'deskripsi' => $this->input->post('deskripsi'),
                 'waktu_pengerjaan' => $this->input->post('waktu_pengerjaan'),
@@ -450,7 +450,7 @@ public function delete_materi($id)
             redirect('guru/kelola_quiz/'.$quiz_id);
         }
         
-        $data['materi_list'] = $this->Quiz_model-> get_materi_options($nip);
+        $data['materi_list'] = $this->Quiz_model->get_materi_options($nip);
         
         // Debug path view
         $view_path = APPPATH.'views/guru/add_quiz.php';

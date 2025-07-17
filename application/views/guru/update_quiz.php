@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+
 <div class="container">
     <div class="card shadow mb-4">
         <div class="card-header py-3">

@@ -36,7 +36,7 @@
                                     <td><?= $no++ ?></td>
                                     <td><?= htmlspecialchars($quiz->siswa_id) ?></td>
                                     <td><?= htmlspecialchars($quiz->nama_siswa) ?></td>
-                                    <td><?= htmlspecialchars($quiz->kelas) ?></td>
+                                    <td><?= htmlspecialchars($quiz->nama_kelas) ?></td>
                                     <td><?= date('d M Y', strtotime($quiz->start_time)) ?></td>
                                     <td><?= date('d M Y', strtotime($quiz->end_time)) ?></td>
                                     <td><?= $quiz->status ?></td>

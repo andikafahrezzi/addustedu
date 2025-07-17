@@ -16,7 +16,7 @@ class Quiz_model extends CI_Model {
         $this->db->select('pertemuan.id AS id_pertemuan, 
                        mata_pelajaran.nama_mapel, 
                        kelas.nama_kelas, 
-                       guru.nama_guru');
+                       guru.nama_guru, materi.deskripsi');
     $this->db->from('pertemuan');
     $this->db->join('materi', 'materi.id = pertemuan.id_materi');
     $this->db->join('mata_pelajaran', 'materi.id_mapel = mata_pelajaran.id');
@@ -202,29 +202,47 @@ public function delete_quiz($id)
 
 
 public function get_quizzes_by_guru($nip) {
-    $this->db->select('quiz.*, materi.deskripsi as judul_materi, materi.kelas as kelas');
+    $this->db->select('
+        quiz.*, 
+        pertemuan.id AS id_pertemuan,
+        materi.deskripsi AS judul_materi, 
+        kelas.tingkat, 
+        kelas.nama_kelas, 
+        kelas.jurusan,
+        mata_pelajaran.nama_mapel
+    ');
     $this->db->from('quiz');
-    $this->db->join('materi', 'materi.id = quiz.materi_id');
+    $this->db->join('pertemuan', 'pertemuan.id = quiz.id_pertemuan', 'left');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi', 'left');
+    $this->db->join('kelas', 'kelas.id = materi.id_kelas', 'left');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel', 'left');
+
+    // Filter agar hanya quiz dari guru login (NIP)
     $this->db->where('materi.id_guru', $nip);
+
     return $this->db->get()->result();
 }
+
 
 // Get single quiz with ownership check
 public function get_quiz_by_guru($quiz_id, $nip) {
     $this->db->select('quiz.*, materi.deskripsi as judul_materi');
     $this->db->from('quiz');
-    $this->db->join('materi', 'materi.id = quiz.materi_id');
+    $this->db->join('pertemuan', 'pertemuan.id = quiz.id_pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi','left');
     $this->db->where('quiz.id', $quiz_id);
     $this->db->where('materi.id_guru', $nip);
     return $this->db->get()->row();
 }
 
 public function get_pesertaquiz($quiz_id, $nip) {
-    $this->db->select('quiz_siswa.*, siswa.nama as nama_siswa, siswa.kelas, materi.deskripsi as judul_materi');
+    $this->db->select('quiz_siswa.*, siswa.nama as nama_siswa, kelas.nama_kelas, materi.deskripsi as judul_materi');
     $this->db->from('quiz_siswa');
     $this->db->join('quiz', 'quiz.id = quiz_siswa.quiz_id'); // Join ke quiz dulu
-    $this->db->join('materi', 'materi.id = quiz.materi_id'); // Lalu ke materi
-    $this->db->join('siswa', 'siswa.nis = quiz_siswa.siswa_id'); // Join ke siswa
+    $this->db->join('pertemuan', 'pertemuan.id = quiz.id_pertemuan'); // Lalu ambil pertemuan
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi'); // Lalu ambil materi
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas'); // Lalu ambil kelas
+    $this->db->join('siswa', 'siswa.nis = quiz_siswa.siswa_id'); // ambil juga siswa
     $this->db->where('quiz_siswa.quiz_id', $quiz_id);
     $this->db->where('materi.id_guru', $nip); // Batasi hanya untuk guru ini
     return $this->db->get()->result();
@@ -245,10 +263,25 @@ public function delete_quiz_siswa($id) {
 
 // Update quiz with ownership check
 public function update_quiz($quiz_id, $nip, $data) {
-    $this->db->where('id', $quiz_id);
-    $this->db->where('materi_id IN (SELECT id FROM materi WHERE id_guru = "'.$nip.'")', NULL, FALSE);
-    return $this->db->update('quiz', $data);
+    // Langkah 1: Verifikasi quiz dimiliki oleh guru tersebut
+    $this->db->select('quiz.id');
+    $this->db->from('quiz');
+    $this->db->join('pertemuan', 'pertemuan.id = quiz.id_pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->where('quiz.id', $quiz_id);
+    $this->db->where('materi.id_guru', $nip);
+    $quiz = $this->db->get()->row();
+
+    if ($quiz) {
+        // Langkah 2: Update quiz jika milik guru
+        $this->db->where('id', $quiz_id);
+        return $this->db->update('quiz', $data);
+    } else {
+        return false; // Gagal update karena bukan milik guru
+    }
 }
+
+
 
 // Delete quiz with ownership check
 public function delete_quiz_guru($quiz_id, $nip) {
@@ -276,9 +309,11 @@ public function delete_quiz_guru($quiz_id, $nip) {
 
 // Get available materials for select dropdown
 public function get_materi_options($nip) {
-    $this->db->select('id, deskripsi, kelas');
-    $this->db->from('materi');
-    $this->db->where('id_guru', $nip);
+    $this->db->select('pertemuan.*, pertemuan.id AS id_pertemuan, materi.deskripsi, kelas.tingkat, kelas.nama_kelas');
+    $this->db->from('pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('kelas', 'kelas.id = materi.id_kelas');
+    $this->db->where('materi.id_guru', $nip);
     return $this->db->get()->result();
 }
 

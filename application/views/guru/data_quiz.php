@@ -22,7 +22,7 @@
                             <th>No</th>
                             <th>Judul Quiz</th>
                             <th>Materi</th>
-                            <th>Kelas</th>
+                            <th>Nama Kelas</th>
                             <th>Waktu (menit)</th>
                             <th>Percobaan</th>
                             <th>Dibuat</th>
@@ -37,7 +37,7 @@
                                     <td><?= $no++ ?></td>
                                     <td><?= htmlspecialchars($quiz->judul) ?></td>
                                     <td><?= htmlspecialchars($quiz->judul_materi) ?></td>
-                                    <td><?= htmlspecialchars($quiz->kelas) ?></td>
+                                    <td><?= htmlspecialchars($quiz->nama_kelas) ?></td>
                                     <td><?= $quiz->waktu_pengerjaan ?></td>
                                     <td><?= $quiz->attempts ?></td>
                                     <td><?= date('d M Y', strtotime($quiz->created_at)) ?></td>
