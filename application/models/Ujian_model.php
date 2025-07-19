@@ -274,12 +274,25 @@ public function hitung_skor($id_ujian, $nis)
     }
     public function tampil_ujian()
     {
-    return $this->db->get('tbl_ujian');
+    $this->db->select('tbl_ujian.*, guru.nama_guru, mata_pelajaran.nama_mapel, kelas.nama_kelas');
+        $this->db->from('tbl_ujian');
+        $this->db->join('guru', 'guru.nip = tbl_ujian.nip_guru');
+        $this->db->join('pertemuan', 'pertemuan.id = tbl_ujian.id_pertemuan');
+        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+        $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+        return $this->db->get();
     }
     public function detail_ujian($id_ujian = null)
     {
-        $query = $this->db->get_where('tbl_ujian', array('id_ujian' => $id_ujian))->row();
-        return $query;
+        $this->db->from('tbl_ujian');
+        $this->db->join('guru', 'guru.nip = tbl_ujian.nip_guru');
+        $this->db->join('pertemuan', 'pertemuan.id = tbl_ujian.id_pertemuan');
+        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+        $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+        $this->db->where('tbl_ujian.id_ujian', $id_ujian);
+        return $this->db->get()->row();
     }
     public function get_peserta_ujian($ujian_id) {
         $this->db->select('siswa.nis, siswa.nama, siswa.kelas, tbl_jawaban_siswa.id_ujian, MAX(tbl_jawaban_siswa.score) as total_score, MAX(tbl_jawaban_siswa.waktu_jawab) as waktu_dikerjakan');

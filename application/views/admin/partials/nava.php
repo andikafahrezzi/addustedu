@@ -97,7 +97,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                             <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/data_guru') ?>">Data Guru</a>
                                 </li>
-                                <li><a class="nav-link" href="<?= base_url('admin/add_pertemuan') ?>">Tambah Data Guru</a>
+                                <li><a class="nav-link" href="<?= base_url('admin/add_guru') ?>">Tambah Data Guru</a>
                                 </li>
                             </ul>
                         </li>
@@ -108,6 +108,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                             <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/data_materi') ?>">Data Materi</a>
                                 </li>
+                                <li><a class="nav-link" href="<?= base_url('admin/data_pertemuan') ?>">Data Pertemuan</a>
                                 <li><a class="nav-link" href="<?= base_url('admin/data_fordis') ?>">Data Fordis</a>
                                 <li><a class="nav-link" href="<?= base_url('admin/data_ujian') ?>">Data Ujian</a>
                                 <li><a class="nav-link" href="<?= base_url('admin/data_quiz') ?>">Data Quiz</a>

@@ -21,8 +21,8 @@
                                                 <th scope="col">ID</th>
                                                 <th scope="col">Nama Guru</th>
                                                 <th scope="col">Nama Mapel</th>
-                                                <th scope="col">Deskripsi</th>
-                                                <th scope="col">Link Google Form</th>
+                                                <th scope="col">Kelas</th>
+                                                <th scope="col">Status</th>
                                                 <th scope="col">Option</th>
                                             </tr>
                                         </thead>
@@ -46,10 +46,10 @@
                                                         <?php echo $u->nama_ujian ?>
                                                     </td>
                                                     <td>
-                                                        <?php echo $u->status ?>
+                                                        <?php echo $u->nama_kelas ?>
                                                     </td>
                                                     <td>
-                                                        <?php echo $u->id_materi ?>
+                                                        <?php echo $u->status ?>
                                                     </td>
 
                                                     <td class="text-center">

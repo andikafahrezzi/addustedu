@@ -141,23 +141,15 @@
                             <td style="padding: 12px 8px; text-align: left;"> <?= $detail->nama_ujian ?></td>
                         </tr>
                         <tr style="border-bottom: 0.5px solid #dee2e6;">
-                            <td style="padding: 12px 8px; text-align: right;"><span class="font-weight-bold" style="color: #333; font-weight: 600;">nip guru :</span></td>
+                            <td style="padding: 12px 8px; text-align: right;"><span class="font-weight-bold" style="color: #333; font-weight: 600;">Nip Guru :</span></td>
                             <td style="padding: 12px 8px; text-align: left;"> <?= $detail->nip_guru ?></td>
                         </tr>
                         <tr style="border-bottom: 0.5px solid #dee2e6;">
-                            <td style="padding: 12px 8px; text-align: right;"><span class="font-weight-bold" style="color: #333; font-weight: 600;">Password : </span></td>
-                            <td style="padding: 12px 8px; text-align: left;"> <?= $detail->nama_ujian ?></td>
+                            <td style="padding: 12px 8px; text-align: right;"><span class="font-weight-bold" style="color: #333; font-weight: 600;">Nama Guru : </span></td>
+                            <td style="padding: 12px 8px; text-align: left;"> <?= $detail->nama_guru ?></td>
                         </tr>
                         <tr style="border-bottom: 0.5px solid #dee2e6;">
-                            <td style="padding: 12px 8px; text-align: right;"><span class="font-weight-bold" style="color: #333; font-weight: 600;">Akun Aktif? :</span></td>
-                            <td style="padding: 12px 8px; text-align: left;"><?= $detail->tanggal_mulai ?></td>
-                        </tr>
-                        <tr style="border-bottom: 0.5px solid #dee2e6;">
-                            <td style="padding: 12px 8px; text-align: right;"><span class="font-weight-bold" style="color: #333; font-weight: 600;">Terdaftar pada :</span></td>
-                            <td style="padding: 12px 8px; text-align: left;"><?= $detail->tanggal_selesai ?></td>
-                        </tr>
-                        <tr style="border-bottom: 0.5px solid #dee2e6;">
-                            <td style="padding: 12px 8px; text-align: right;"><span class="font-weight-bold" style="color: #333; font-weight: 600;">Terdaftar pada :</span></td>
+                            <td style="padding: 12px 8px; text-align: right;"><span class="font-weight-bold" style="color: #333; font-weight: 600;">Status Ujian :</span></td>
                             <td style="padding: 12px 8px; text-align: left;">
                                 <span style="padding: 3px 8px; border-radius: 3px; font-size: 12px; background-color: <?= $detail->status == 'aktif' ? '#28a745' : '#dc3545' ?>; color: white;">
                                     <?= $detail->status ?>
@@ -165,11 +157,15 @@
                             </td>
                         </tr>
                         <tr style="border-bottom: 0.5px solid #dee2e6;">
-                            <td style="padding: 12px 8px; text-align: right;"><span class="font-weight-bold" style="color: #333; font-weight: 600;">Terdaftar pada :</span></td>
-                            <td style="padding: 12px 8px; text-align: left;"><?= $detail->id_materi ?></td>
+                            <td style="padding: 12px 8px; text-align: right;"><span class="font-weight-bold" style="color: #333; font-weight: 600;">Dimulai pada :</span></td>
+                            <td style="padding: 12px 8px; text-align: left;"><?= $detail->tanggal_mulai ?></td>
                         </tr>
                         <tr style="border-bottom: 0.5px solid #dee2e6;">
-                            <td style="padding: 12px 8px; text-align: right;"><span class="font-weight-bold" style="color: #333; font-weight: 600;">Terdaftar pada :</span></td>
+                            <td style="padding: 12px 8px; text-align: right;"><span class="font-weight-bold" style="color: #333; font-weight: 600;">Berakhir pada :</span></td>
+                            <td style="padding: 12px 8px; text-align: left;"><?= $detail->tanggal_selesai ?></td>
+                        </tr>
+                        <tr style="border-bottom: 0.5px solid #dee2e6;">
+                            <td style="padding: 12px 8px; text-align: right;"><span class="font-weight-bold" style="color: #333; font-weight: 600;">Durasi Ujian :</span></td>
                             <td style="padding: 12px 8px; text-align: left;"><?= $detail->durasi ?> menit</td>
                         </tr>
                     </tbody>

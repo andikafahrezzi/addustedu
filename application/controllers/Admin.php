@@ -879,6 +879,15 @@ public function data_quiz()
         $this->load->view('admin/detail_ujian', $data);
         $this->load->view('admin/partials/foota');
     }
+    public function data_pertemuan()
+{
+    $data['pertemuan_grouped'] = $this->M_materi->get_pertemuan_grouped();
+
+    $this->load->view('admin/partials/nava');
+    $this->load->view('admin/data_pertemuan', $data); // ini view baru
+    $this->load->view('admin/partials/foota');
+}
+
     public function form_pertemuan()
 {
     $nip = $this->session->userdata('nip');
