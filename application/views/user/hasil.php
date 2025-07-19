@@ -205,19 +205,19 @@
                 <div class="result-stats">
                     <div class="stat-box">
                         <i class="fas fa-check-circle"></i>
-                        <div class="stat-value"><?= $hasil->jumlah_benar ?></div>
-                        <div class="stat-label">Benar</div>
+                        <div class="stat-value"><?= $hasil->total_pg ?></div>
+                        <div class="stat-label">PG</div>
                     </div>
                     
                     <div class="stat-box">
                         <i class="fas fa-times-circle"></i>
-                        <div class="stat-value"><?= $hasil->jumlah_salah ?></div>
-                        <div class="stat-label">Salah</div>
+                        <div class="stat-value"><?= $hasil->total_nilai_essay ?></div>
+                        <div class="stat-label">Essay</div>
                     </div>
                     
                     <div class="stat-box">
                         <i class="fas fa-chart-pie"></i>
-                        <div class="stat-value score-highlight"><?= number_format($hasil->score, 2) ?>%</div>
+                        <div class="stat-value score-highlight"><?= number_format($hasil->total_nilai, 2) ?>%</div>
                         <div class="stat-label">Skor</div>
                     </div>
                 </div>

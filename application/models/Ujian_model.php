@@ -195,23 +195,25 @@ public function hitung_skor($id_ujian, $nis)
     ])->result();
 
     $jumlah_benar = 0;
-    $total_soal_pg = 0; // hanya menghitung soal PG
+    $total_soal_pg = 0;
+    $nilai_essay_total = 0;
+    $jumlah_soal_essay = 0;
 
     foreach ($jawaban_siswa as $jawaban) {
         $kunci_jawaban = null;
         $tipe_soal = null;
 
-        // Ambil data soal untuk mengetahui tipe dan kunci
+        // Ambil soal
         if ($jawaban->sumber == 'bank_soal') {
-            $this->db->select('kunci_jawaban, tipe_soal');
-            $this->db->from('bank_soal');
-            $this->db->where('id_soal', $jawaban->bank_soal_id);
-            $soal = $this->db->get()->row();
+            $soal = $this->db->select('kunci_jawaban, tipe_soal')
+                             ->from('bank_soal')
+                             ->where('id_soal', $jawaban->bank_soal_id)
+                             ->get()->row();
         } else {
-            $this->db->select('kunci_jawaban, tipe_soal');
-            $this->db->from('tbl_soal');
-            $this->db->where('id_soal', $jawaban->id_soal);
-            $soal = $this->db->get()->row();
+            $soal = $this->db->select('kunci_jawaban, tipe_soal')
+                             ->from('tbl_soal')
+                             ->where('id_soal', $jawaban->id_soal)
+                             ->get()->row();
         }
 
         if ($soal) {
@@ -219,29 +221,42 @@ public function hitung_skor($id_ujian, $nis)
             $tipe_soal = $soal->tipe_soal;
         }
 
-        // Hanya hitung soal pilihan ganda
         if ($tipe_soal === 'pilihan') {
-            $total_soal_pg++; // jumlah soal PG
+            $total_soal_pg++;
             if ($jawaban->jawaban == $kunci_jawaban) {
                 $jumlah_benar++;
             }
+        } elseif ($tipe_soal === 'essay') {
+            // 🔒 Cek apakah guru sudah menilai
+            if (is_null($jawaban->nilai_essay)) {
+                // Essay belum dinilai
+                return false; // atau return -1 jika mau
+            }
+
+            $nilai_essay_total += floatval($jawaban->nilai_essay);
+            $jumlah_soal_essay++;
         }
     }
 
-    $score = $total_soal_pg > 0 ? ($jumlah_benar / $total_soal_pg) * 100 : 0;
+    $nilai_pg = $total_soal_pg > 0 ? ($jumlah_benar / $total_soal_pg) * 100 : 0;
+    $rata_essay = $jumlah_soal_essay > 0 ? $nilai_essay_total / $jumlah_soal_essay : 0;
 
-    // Update skor hanya untuk jawaban PG
+    $total_nilai = ($nilai_pg * 0.7) + ($rata_essay * 0.3);
+
+    // Update skor
     $this->db->where(['id_ujian' => $id_ujian, 'nis' => $nis])
              ->update('tbl_jawaban_siswa', [
                 'jumlah_benar' => $jumlah_benar,
                 'jumlah_salah' => $total_soal_pg - $jumlah_benar,
-                'score' => $score,
+                'score' => $total_nilai,
                 'is_selesai' => 1,
                 'waktu_submit' => date('Y-m-d H:i:s')
              ]);
 
-    return $score;
+    return $total_nilai;
 }
+
+
 
 
     public function get_ujian_by_id($id_ujian)

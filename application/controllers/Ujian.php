@@ -98,21 +98,80 @@ class Ujian extends CI_Controller {
     }
 
     public function hasil($id_ujian)
-    {
-        $nis = $this->session->userdata('nis');
-        $data['hasil'] = $this->db->select('*')
-                                 ->from('tbl_jawaban_siswa')
-                                 ->where('id_ujian', $id_ujian)
-                                 ->where('nis', $nis)
-                                 ->get()
-                                 ->row();
+{
+    $nis = $this->session->userdata('nis');
 
-        $data['ujian'] = $this->Ujian_model->get_ujian_by_id($id_ujian);
+    // Ambil semua jawaban siswa
+    $jawaban_siswa = $this->db->get_where('tbl_jawaban_siswa', [
+        'id_ujian' => $id_ujian,
+        'nis' => $nis
+    ])->result();
 
-        $this->load->view('user/navu');
-        $this->load->view('user/hasil', $data);
-        
+    $jumlah_benar = 0;
+    $total_soal_pg = 0;
+    $total_nilai_essay = 0;
+    $jumlah_soal_essay = 0;
+    $tanggal_submit = null;
+    $ada_essay_belum_dinilai = false;
+
+    foreach ($jawaban_siswa as $jawaban) {
+        // Ambil data soal dari sumbernya
+        if ($jawaban->sumber == 'bank_soal') {
+            $soal = $this->db->get_where('bank_soal', ['id_soal' => $jawaban->bank_soal_id])->row();
+        } else {
+            $soal = $this->db->get_where('tbl_soal', ['id_soal' => $jawaban->id_soal])->row();
+        }
+
+        // Cek PG
+        if ($soal && $soal->tipe_soal == 'pilihan') {
+            $total_soal_pg++;
+            if ($jawaban->jawaban == $soal->kunci_jawaban) {
+                $jumlah_benar++;
+            }
+        }
+
+        // Cek Essay
+        if ($soal && $soal->tipe_soal == 'essay') {
+            if (is_null($jawaban->nilai_essay)) {
+                $ada_essay_belum_dinilai = true;
+            } else {
+                $total_nilai_essay += floatval($jawaban->nilai_essay);
+                $jumlah_soal_essay++;
+            }
+        }
+
+        if (!$tanggal_submit) {
+            $tanggal_submit = $jawaban->waktu_submit;
+        }
     }
+
+    // ❌ TOLAK jika masih ada essay belum dinilai
+    if ($ada_essay_belum_dinilai) {
+        $this->session->set_flashdata('warning', 'Mohon tunggu, nilai essay Anda belum dinilai oleh guru.');
+        redirect('user/dashboard'); // atau redirect ke halaman lain yang sesuai
+        return;
+    }
+
+    $nilai_pg = $total_soal_pg > 0 ? ($jumlah_benar / $total_soal_pg) * 100 : 0;
+    $rata_essay = $jumlah_soal_essay > 0 ? $total_nilai_essay / $jumlah_soal_essay : 0;
+    $total_nilai = ($nilai_pg * 0.7) + ($rata_essay * 0.3);
+
+    $data['ujian'] = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
+
+    $data['hasil'] = (object)[
+        'total_pg' => number_format($nilai_pg, 2),
+        'total_nilai_essay' => number_format($rata_essay, 2),
+        'total_nilai' => number_format($total_nilai, 2),
+        'jumlah_benar' => $jumlah_benar,
+        'jumlah_salah' => $total_soal_pg - $jumlah_benar,
+        'score' => $total_nilai,
+        'tanggal_submit' => $tanggal_submit
+    ];
+
+    $this->load->view('user/hasil', $data);
+}
+
+
     public function tandai_ragu()
 {
     $this->output->set_content_type('application/json');
@@ -216,19 +275,84 @@ public function simpan_jawaban_ajax()
 
 public function ranking($id_ujian)
 {
-    $this->db->select('tbl_jawaban_siswa.nis, siswa.nama, MAX(tbl_jawaban_siswa.score) as total_score');
+    // Ambil semua siswa yang sudah selesai ujian
+    $this->db->select('tbl_jawaban_siswa.*', false);
     $this->db->from('tbl_jawaban_siswa');
-    $this->db->join('siswa', 'siswa.nis = tbl_jawaban_siswa.nis');
-    $this->db->where('tbl_jawaban_siswa.id_ujian', $id_ujian);
-    $this->db->where('tbl_jawaban_siswa.is_selesai', 1);
-    $this->db->group_by('tbl_jawaban_siswa.nis');
-    $this->db->order_by('total_score', 'DESC');
+    $this->db->where('id_ujian', $id_ujian);
+    $this->db->where('is_selesai', 1);
+    $jawaban_all = $this->db->get()->result();
 
-    $data['ranking'] = $this->db->get()->result();
+    $ranking_data = [];
+
+    foreach ($jawaban_all as $jawaban) {
+        $nis = $jawaban->nis;
+
+        // Inisialisasi jika belum ada
+        if (!isset($ranking_data[$nis])) {
+            $ranking_data[$nis] = [
+                'nis' => $nis,
+                'nama' => '', // diisi nanti
+                'jumlah_benar' => 0,
+                'jumlah_salah' => 0,
+                'nilai_pg' => 0,
+                'nilai_essay_total' => 0,
+                'jumlah_essay' => 0,
+                'total_nilai' => 0
+            ];
+        }
+
+        // Ambil nama siswa (sekali saja)
+        if (empty($ranking_data[$nis]['nama'])) {
+            $siswa = $this->db->get_where('siswa', ['nis' => $nis])->row();
+            $ranking_data[$nis]['nama'] = $siswa ? $siswa->nama : 'Unknown';
+        }
+
+        // Ambil data soal
+        if ($jawaban->sumber == 'bank_soal') {
+            $soal = $this->db->get_where('bank_soal', ['id_soal' => $jawaban->bank_soal_id])->row();
+        } else {
+            $soal = $this->db->get_where('tbl_soal', ['id_soal' => $jawaban->id_soal])->row();
+        }
+
+        if (!$soal) continue;
+
+        if ($soal->tipe_soal == 'pilihan') {
+            if ($jawaban->jawaban == $soal->kunci_jawaban) {
+                $ranking_data[$nis]['jumlah_benar']++;
+            } else {
+                $ranking_data[$nis]['jumlah_salah']++;
+            }
+        }
+
+        if ($soal->tipe_soal == 'essay') {
+            if (!is_null($jawaban->nilai_essay)) {
+                $ranking_data[$nis]['nilai_essay_total'] += floatval($jawaban->nilai_essay);
+                $ranking_data[$nis]['jumlah_essay']++;
+            }
+        }
+    }
+
+    // Hitung nilai total semua siswa
+    foreach ($ranking_data as &$data) {
+        $total_pg = $data['jumlah_benar'] + $data['jumlah_salah'];
+        $nilai_pg = $total_pg > 0 ? ($data['jumlah_benar'] / $total_pg) * 100 : 0;
+        $rata_essay = $data['jumlah_essay'] > 0 ? $data['nilai_essay_total'] / $data['jumlah_essay'] : 0;
+
+        $data['nilai_pg'] = $nilai_pg;
+        $data['total_nilai'] = ($nilai_pg * 0.7) + ($rata_essay * 0.3);
+    }
+
+    // Urutkan manual berdasarkan total_nilai DESC
+    usort($ranking_data, function ($a, $b) {
+        return $b['total_nilai'] <=> $a['total_nilai'];
+    });
+
+    $data['ranking'] = $ranking_data;
     $data['ujian'] = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
 
     $this->load->view('user/navu');
-    $this->load->view('user/rankinng', $data);   
+    $this->load->view('user/rankinng', $data);
 }
+
 
 }

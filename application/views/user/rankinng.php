@@ -278,7 +278,7 @@
                     else $rankStyle = 'other-rank';
                     
                     // Generate initials for avatar
-                    $nameParts = explode(' ', $r->nama);
+                    $nameParts = explode(' ', $r['nama']);
                     $initials = '';
                     foreach($nameParts as $part) {
                         $initials .= strtoupper(substr($part, 0, 1));
@@ -293,12 +293,12 @@
                         <div class="student-info">
                             <div class="student-avatar"><?= $initials ?></div>
                             <div>
-                                <div class="student-name"><?= $r->nama ?></div>
-                                <div class="student-id">NIS: <?= $r->nis ?></div>
+                                <div class="student-name"><?= $r['nama'] ?></div>
+                                <div class="student-id">NIS: <?= $r['nis'] ?></div>
                             </div>
                         </div>
                     </td>
-                    <td><div class="score"><?= number_format($r->total_score, 2) ?>%</div></td>
+                    <td><div class="score"><?= number_format($r['total_nilai'], 2) ?>%</div></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -311,6 +311,7 @@
         </a>
     </div>
 </div>
+
 
 <!-- jQuery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
