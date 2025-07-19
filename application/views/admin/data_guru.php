@@ -24,6 +24,17 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                 Data Guru ⭢</a>
                         </div>
                     </div>
+                    <?php if($this->session->flashdata('error-delete')): ?>
+    <div class="alert alert-danger">
+        <?= $this->session->flashdata('error-delete'); ?>
+    </div>
+<?php endif; ?>
+<?php if($this->session->flashdata('success-delete')): ?>
+    <div class="alert alert-success">
+        <?= $this->session->flashdata('success-delete'); ?>
+    </div>
+<?php endif; ?>
+
                     <div class="row">
                         <div class="col-md-12">
                             <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px">
@@ -60,7 +71,8 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
 
 
                                                     <td>
-                                                        <?php echo $u->nama_mapel ?>
+                                                        <?php echo $u->mapel_diajar ?? '-' ?>
+
                                                     </td>
 
                                                     <td class="text-center">

@@ -22,71 +22,64 @@
                                 dibawah </p>
                             <hr>
                         </div>
-                        <?php foreach ($user as $u) { ?>
-                            <div class="card-body">
-                                <form method="POST" action="<?= base_url('admin/materi_edit') ?>" enctype="multipart/form-data">
-                                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
-                                value="<?= $this->security->get_csrf_hash(); ?>" />
-                                    <input type="hidden" name="id" value="<?= $u->id ?>">
-                                    <div class="form-group">
-                                        <label for="nip">Nip</label>
-                                        <input readonly id="nip" type="text" class="form-control" value="<?= $u->id_guru ?>" name="nama_guru">
-                                        <?= form_error('nip', '<small class="text-danger">', '</small>'); ?>
-                                        <label for="nip">Nama Guru</label>
-                                        <input readonly id="nama_guru" type="text" class="form-control" value="<?= $u->nama_guru ?>" name="nama_guru">
-                                        <?= form_error('nama_guru', '<small class="text-danger">', '</small>'); ?>
-                                        <div class="invalid-feedback">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="nama_mapel">Mata Pelajaran</label>
-                                        <input readonly id="nama_mapel" type="text" value="<?= $u->nama_mapel ?>" class="form-control" name="nama_mapel">
-                                        <?= form_error('email', '<small class="text-danger">', '</small>'); ?>
-                                        <div class="invalid-feedback">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input required type="file" name="video" class="custom-file-input"
-                                                    id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                                                <label class="custom-file-label" for="inputGroupFile01"> <?= $u->video ?> Upload Video
-                                                    Materi Disini</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Upload File Materi (PDF, Word, JPG)</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" name="modul" class="custom-file-input" required>
-                                                <label class="custom-file-label"> <?= $u->modul ?>Pilih file</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- <input type="hidden" name="old_video" value="<?= $u->video ?>">
-                                    <input type="hidden" name="old_modul" value="<?= $u->modul ?>">
+                    <div class="card-body">
+    <form method="POST" action="<?= base_url('admin/materi_edit') ?>" enctype="multipart/form-data">
+        <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+        value="<?= $this->security->get_csrf_hash(); ?>" />
+        <input type="hidden" name="id" value="<?= $user->id ?>">
 
-                                    <input type="file" name="video">
-                                    <input type="file" name="modul"> -->
-                                    <div class="form-group">
-                                        <label for="exampleFormControlTextarea1">Deskripsi Materi</label>
-                                        <textarea class="form-control txtarea" name="deskripsi" id="exampleFormControlTextarea1" rows="3">
-                                        <?= $u->deskripsi ?></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleFormControlTextarea1">Link Google Form</label>
-                                        <textarea class="form-control txtarea" name="linkform" id="exampleFormControlTextarea1">
-                                        <?= $u->linkform ?></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-success btn-lg btn-block">
-                                            Update ⭢
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                            <?php } ?>
+        <!-- Nama Guru -->
+        <div class="form-group">
+            <label for="nip">NIP</label>
+            <input readonly id="nip" type="text" class="form-control" value="<?= $user->id_guru ?>" name="id_guru">
+
+            <label for="nama_guru">Nama Guru</label>
+            <input readonly id="nama_guru" type="text" class="form-control" value="<?= $user->nama_guru ?>">
+        </div>
+
+        <!-- Mata Pelajaran -->
+        <div class="form-group">
+            <label for="nama_mapel">Mata Pelajaran</label>
+            <input readonly id="nama_mapel" type="text" value="<?= $user->nama_mapel ?>" class="form-control">
+        </div>
+
+        <!-- Video -->
+        <div class="form-group">
+            <label>Upload Video Materi</label>
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" name="video" class="custom-file-input">
+                    <label class="custom-file-label"><?= $user->video ?> (Upload untuk ganti)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modul -->
+        <div class="form-group">
+            <label>Upload File Materi (PDF, Word, JPG)</label>
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" name="modul" class="custom-file-input">
+                    <label class="custom-file-label"><?= $user->modul ?> (Upload untuk ganti)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deskripsi -->
+        <div class="form-group">
+            <label>Deskripsi Materi</label>
+            <textarea class="form-control txtarea" name="deskripsi"><?= $user->deskripsi ?></textarea>
+        </div>
+
+        <!-- Link Form -->
+        <div class="form-group">
+            <label>Link Google Form</label>
+            <textarea class="form-control txtarea" name="linkform"><?= $user->linkform ?></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success btn-lg btn-block">Update ⭢</button>
+    </form>
+</div>
                     </div>
                 </section>
             </div>

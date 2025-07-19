@@ -63,6 +63,21 @@
                                         <div class="invalid-feedback">
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label>Mata Pelajaran yang Diajar</label><br>
+                                        <?php foreach ($mapel as $m): ?>
+                                            <?php 
+                                                $isChecked = in_array($m->id, $mapel_selected) ? 'checked' : ''; 
+                                            ?>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" name="mapel[]" id="mapel<?= $m->id ?>" value="<?= $m->id ?>" <?= $isChecked ?>>
+                                                <label class="form-check-label" for="mapel<?= $m->id ?>"><?= $m->nama_mapel ?></label>
+                                            </div>
+                                        <?php endforeach; ?>
+                                        <?= form_error('mapel[]', '<small class="text-danger">', '</small>'); ?>
+                                    </div>
+
+
 
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-success btn-lg btn-block">

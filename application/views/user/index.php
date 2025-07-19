@@ -13,22 +13,32 @@
 
     <h2 id="judul" class="text-center">Mata Pelajaran Kelas <?= $kelas_siswa ?></h2>
 
-    <div class="accordion" id="mapelAccordion">
-        <?php foreach ($mapel_data as $mapel => $guru_list): 
-            $mapel_id = preg_replace('/\s+/', '', strtolower($mapel));
-        ?>
-        <div class="card accordion-card shadow-sm">
-            <div class="card-header" id="headingMapel<?= $mapel_id ?>">
-                <button class="btn btn-link collapsed w-100 d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#collapseMapel<?= $mapel_id ?>">
-                    <h4 class="card-mapel mb-0"><?= $mapel ?></h4>
-                    <i class="lnr lnr-chevron-down"></i>
-                </button>
-            </div>
-            <div id="collapseMapel<?= $mapel_id ?>" class="collapse" data-parent="#mapelAccordion">
-                <div class="card-body">
-                    <div class="row">
-                        <?php foreach ($guru_list as $nip => $materi_list): 
-                            $guru = $materi_list[0]['nama_guru'];
+   <?php 
+// Persiapkan struktur pertemuan
+$materi_pertemuan = [];
+foreach ($pertemuan as $p) {
+    $materi_pertemuan[$p['id_guru']][$p['id_mapel']][$p['pertemuan_ke']] = $p;
+}
+?>
+
+<div class="accordion" id="mapelAccordion">
+<?php foreach ($mapel_data as $nama_mapel => $guru_list): 
+    $mapel_id = preg_replace('/\s+/', '', strtolower($nama_mapel));
+?>
+    <div class="card accordion-card shadow-sm">
+        <div class="card-header" id="headingMapel<?= $mapel_id ?>">
+            <button class="btn btn-link collapsed w-100 d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#collapseMapel<?= $mapel_id ?>">
+                <h4 class="card-mapel mb-0"><?= $nama_mapel ?></h4>
+                <i class="lnr lnr-chevron-down"></i>
+            </button>
+        </div>
+        <div id="collapseMapel<?= $mapel_id ?>" class="collapse" data-parent="#mapelAccordion">
+            <div class="card-body">
+                <div class="row">
+                <?php foreach ($guru_list as $nip => $mapel_guru): ?>
+                    <?php foreach ($mapel_guru as $id_mapel => $materi_list): ?>
+                        <?php 
+                        $guru = $materi_list[0]['nama_guru'];
                         ?>
                         <div class="col-md-4">
                             <div class="guru-card" onclick="togglePertemuan(this)">
@@ -42,97 +52,83 @@
 
                         <div class="col-12 pertemuan-container d-none">
                             <div class="row mt-3">
-                                <?php 
-$materi_pertemuan = [];
-foreach ($pertemuan as $p) {
-    $materi_pertemuan[$p['id_guru']][$p['pertemuan_ke']] = $p;
-}
-
-$nip_guru_ini = $materi_list[0]['id_guru'] ?? null; // pastikan ada
-
-for ($i = 1; $i <= 10; $i++): ?>
-    <div class="col-md-4 mb-4">
-        <div class="pertemuan-card h-100 shadow-sm">
-            <div class="card-body">
-                <h6>Pertemuan <?= $i ?></h6>
-                <?php if (isset($materi_pertemuan[$nip_guru_ini][$i])): 
-                    $ptm = $materi_pertemuan[$nip_guru_ini][$i]; ?>
-                    <p><?= implode(' ', array_slice(explode(' ', $ptm['deskripsi_materi']), 0, 10)) ?>...</p>
-                    <a href="<?= base_url('materi/belajar/' . $ptm['id']) ?>" class="btn btn-sm btn-gradient">
-                        Pelajari <i class="lnr lnr-arrow-right"></i>
-                    </a>
-                <?php else: ?>
-                    <p><em>Materi belum tersedia</em></p>
-                <?php endif; ?>
-            </div>
-        </div>
-    </div>
-<?php endfor; ?>
-
-
-                                <!-- UJIAN SECTION MULAI DISINI -->
-                                <?php 
-$nip_guru_ini = $materi_list[0]['id_guru']; // ini adalah nip untuk guru yang sedang ditampilkan
-$ujian_list = $ujian_data[$nip_guru_ini] ?? [];
-?>
-
-<?php if (!empty($ujian_list)): ?>
-    <?php foreach ($ujian_list as $ujian): ?>
-
-    <div class="col-md-4 mb-4">
-        <div class="pertemuan-card h-100 shadow-sm" style="background: linear-gradient(135deg, #42e695, #3bb2b8); border: 2px solidrgb(95, 255, 210);">
-            <div class="card-body text-center">
-                <h5 class="font-weight-bold"><?= $ujian['nama_ujian'] ?></h5>
-                <p><?= $ujian['deskripsi'] ?? 'Ujian telah tersedia untuk dikerjakan.' ?></p>
-                
-                <?php
-                // Cek apakah siswa sudah menyelesaikan ujian ini
-                $sudah_selesai = $this->db->get_where('tbl_jawaban_siswa', [
-                    'nis' => $this->session->userdata('nis'),
-                    'id_ujian' => $ujian['id_ujian'],
-                    'is_selesai' => 1
-                ])->row();
-                
-                $mulai = strtotime($ujian['tanggal_mulai'] . ' 00:00:00');
-                $selesai = strtotime($ujian['tanggal_selesai'] . ' 23:59:59');
-                $sekarang = time();
-                
-                if ($sudah_selesai): ?>
-                    <!-- Jika sudah selesai -->
-                    <button class="btn btn-sm btn-success" disabled>
-                        <i class="lnr lnr-checkmark-circle"></i> Sudah Dikerjakan
-                    </button>
-                    <a href="<?= base_url('ujian/hasil/' . $ujian['id_ujian']) ?>" class="btn btn-sm btn-info mt-2">
-                        Lihat Hasil <i class="lnr lnr-eye"></i>
-                    </a>
-                <?php elseif ($mulai <= $sekarang && $selesai >= $sekarang): ?>
-                    <!-- Jika ujian tersedia dan belum dikerjakan -->
-                    <a href="<?= base_url('ujian/mulai/' . $ujian['id_ujian']) ?>" class="btn btn-sm btn-danger">
-                        Mulai Ujian <i class="lnr lnr-pencil"></i>
-                    </a>
-                <?php else: ?>
-                    <!-- Jika ujian belum tersedia -->
-                    <button class="btn btn-sm btn-secondary" disabled>Belum tersedia</button>
-                <?php endif; ?>
-            </div>
-        </div>
-    </div>
-    <?php endforeach; ?>
-<?php else: ?>
-    <p><em>Ujian belum tersedia.</em></p>
-<?php endif; ?>
-                                <!-- UJIAN SECTION SELESAI -->
-
+                                <?php for ($i = 1; $i <= 10; $i++): ?>
+                                    <div class="col-md-4 mb-4">
+                                        <div class="pertemuan-card h-100 shadow-sm">
+                                            <div class="card-body">
+                                                <h6>Pertemuan <?= $i ?></h6>
+                                                <?php if (isset($materi_pertemuan[$nip][$id_mapel][$i])): 
+                                                    $ptm = $materi_pertemuan[$nip][$id_mapel][$i]; ?>
+                                                    <p><?= implode(' ', array_slice(explode(' ', $ptm['deskripsi_materi']), 0, 10)) ?>...</p>
+                                                    <a href="<?= base_url('materi/belajar/' . $ptm['id']) ?>" class="btn btn-sm btn-gradient">
+                                                        Pelajari <i class="lnr lnr-arrow-right"></i>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <p><em>Materi belum tersedia</em></p>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endfor; ?>
                             </div>
+
+                            <!-- UJIAN SECTION -->
+                            <?php 
+                            $ujian_list = $ujian_data[$nip][$id_mapel] ?? [];
+                            ?>
+                            <?php if (!empty($ujian_list)): ?>
+                                <div class="row mt-4">
+                                    <?php foreach ($ujian_list as $ujian): ?>
+                                    <div class="col-md-4 mb-4">
+                                        <div class="pertemuan-card h-100 shadow-sm" style="background: linear-gradient(135deg, #42e695, #3bb2b8);">
+                                            <div class="card-body text-center text-white">
+                                                <h5 class="font-weight-bold"><?= $ujian['nama_ujian'] ?></h5>
+                                                <p><?= $ujian['deskripsi'] ?? 'Ujian tersedia.' ?></p>
+
+                                                <?php
+                                                $sudah_selesai = $this->db->get_where('tbl_jawaban_siswa', [
+                                                    'nis' => $this->session->userdata('nis'),
+                                                    'id_ujian' => $ujian['id_ujian'],
+                                                    'is_selesai' => 1
+                                                ])->row();
+
+                                                $mulai = strtotime($ujian['tanggal_mulai'] . ' 00:00:00');
+                                                $selesai = strtotime($ujian['tanggal_selesai'] . ' 23:59:59');
+                                                $sekarang = time();
+                                                ?>
+
+                                                <?php if ($sudah_selesai): ?>
+                                                    <button class="btn btn-sm btn-success" disabled>
+                                                        <i class="lnr lnr-checkmark-circle"></i> Sudah Dikerjakan
+                                                    </button>
+                                                    <a href="<?= base_url('ujian/hasil/' . $ujian['id_ujian']) ?>" class="btn btn-sm btn-info mt-2">
+                                                        Lihat Hasil <i class="lnr lnr-eye"></i>
+                                                    </a>
+                                                <?php elseif ($mulai <= $sekarang && $sekarang <= $selesai): ?>
+                                                    <a href="<?= base_url('ujian/mulai/' . $ujian['id_ujian']) ?>" class="btn btn-sm btn-danger">
+                                                        Mulai Ujian <i class="lnr lnr-pencil"></i>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <button class="btn btn-sm btn-secondary" disabled>Belum tersedia</button>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php else: ?>
+                                <p><em>Ujian belum tersedia</em></p>
+                            <?php endif; ?>
                         </div>
-                        <?php endforeach; ?>
-                    </div>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
                 </div>
             </div>
         </div>
-        <?php endforeach; ?>
     </div>
+<?php endforeach; ?>
 </div>
+                            </div>
 
 <!-- Start Animate On Scroll -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

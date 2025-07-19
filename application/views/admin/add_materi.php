@@ -29,27 +29,26 @@
                                             <input type="hidden" name="id">
                                             <input type="hidden" name="id_mapel" id="id_mapel">
                                             <div class="form-row">
-                                                <div class="form-group col-md-12">
-                                                <label for="guru">Pilih Guru</label>
-                                                    <select name="guru_info" id="guru_select" required onchange="fillGuruData()">
-                                                        <option value="">-- Pilih Guru --</option>
-                                                        <?php foreach ($guru as $g): ?>
-                                                            <option 
-                                                                value="<?= $g->nip ?>" 
-                                                                data-nama="<?= $g->nama_guru ?>" 
-                                                                data-mapel="<?= $g->nama_mapel ?>"
-                                                                data-id_mapel="<?= $g->id_mapel ?>">
-                                                                <?= $g->nama_guru ?> (<?= $g->nip ?>)
-                                                            </option>
-                                                        <?php endforeach; ?>
-                                                    </select>
-                                                    <label>Nama Guru</label>
-                                                    <input type="text" name="nama_guru" id="nama_guru" class="form-control" readonly required>
+                                               <div class="form-group col-md-12">
+    <label for="guru">Pilih Guru</label>
+    <select name="id_guru" id="guru_select" class="form-control selectric" required>
+        <option value="">-- Pilih Guru --</option>
+        <?php foreach ($guru as $g): ?>
+            <option value="<?= $g->nip ?>"><?= $g->nama_guru ?> (<?= $g->nip ?>)</option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <input type="hidden" name="id_mapel" id="id_mapel"> 
+    
+    <div class="form-group col-md-12">
+        <label for="mapel">Pilih Mata Pelajaran</label>
+    <select name="id_mapel" id="mapel_select" class="form-control selectric" required>
+        <option value="">-- Pilih mapel yang diajarkan guru --</option>
+    </select>
+</div>
 
-                                                    <label>Nama Mata Pelajaran</label>
-                                                    <input type="text" name="nama_mapel" id="nama_mapel" class="form-control" readonly required>
                                                     <!-- Benar: -->
-                                            <div class="form-group">
+                                            <div class="form-group col-md-12">
                                                 <label for="">Upload Video Materi</label>
                                                 <div class="input-group">
                                                     <div class="custom-file">
@@ -60,7 +59,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group col-md-12">
                                         <label>Upload File Materi (PDF, Word, JPG)</label>
                                         <div class="input-group">
                                             <div class="custom-file">
@@ -69,15 +68,15 @@
                                             </div>
                                         </div>
                                     </div>
-                                            <div class="form-group">
+                                            <div class="form-group col-md-12">
                                                 <label for="exampleFormControlTextarea1">Deskripsi Materi</label>
                                                 <textarea class="form-control" required name="deskripsi" id="exampleFormControlTextarea1" rows="3"></textarea>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group col-md-12">
                                                 <label for="exampleFormControlTextarea1">Link Google Form</label>
                                                 <textarea class="form-control" required name="linkform" id="exampleLinkForm"> </textarea>
                                                 </div>
-                                            <div class="form-group">
+                                            <div class="form-group col-md-12">
                                                 <label for="inputState">Kelas</label>
                                                 <select name="id_kelas" class="form-control selectric">
                                                 <?php foreach ($kelas as $k): ?>
@@ -125,3 +124,28 @@
                 $('#example').DataTable();
             });
         </script>
+        <script>
+$(document).ready(function () {
+    $('#guru_select').change(function () {
+        const nipGuru = $(this).val();
+        if (nipGuru) {
+            $.ajax({
+                url: '<?= base_url("admin/get_mapel_by_guru/") ?>' + nipGuru,
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $('#mapel_select').html('<option value="">-- Pilih mapel --</option>');
+                    $.each(data, function (i, item) {
+                        $('#mapel_select').append('<option value="' + item.id + '">' + item.nama_mapel + '</option>');
+                    });
+                },
+                error: function () {
+                    alert('Gagal mengambil data mapel');
+                }
+            });
+        } else {
+            $('#mapel_select').html('<option value="">-- Pilih mapel --</option>');
+        }
+    });
+});
+</script>

@@ -4,18 +4,22 @@ class M_guru extends CI_Model
 {
     public function tampil_data()
     {
-        $this->db->select('guru.*, mata_pelajaran.nama_mapel');
+        $this->db->select('guru.nip, guru.nama_guru, guru.email, GROUP_CONCAT(mata_pelajaran.nama_mapel SEPARATOR ", ") as mapel_diajar');
         $this->db->from('guru');
-        $this->db->join('mata_pelajaran', 'guru.id_mapel = mata_pelajaran.id', 'left');
+        $this->db->join('guru_mapel', 'guru_mapel.id_guru = guru.nip', 'left');
+        $this->db->join('mata_pelajaran', 'guru_mapel.id_mapel = mata_pelajaran.id', 'left');
+        $this->db->group_by('guru.nip');
         return $this->db->get();
-        }
+    }
 
-    public function detail_guru($nip = null)
+public function detail_guru($nip = null)
 {
-    $this->db->select('guru.*, mata_pelajaran.nama_mapel');
+    $this->db->select('guru.*, GROUP_CONCAT(mata_pelajaran.nama_mapel SEPARATOR ", ") as mapel_diajar');
     $this->db->from('guru');
-    $this->db->join('mata_pelajaran', 'guru.id_mapel = mata_pelajaran.id', 'left');
+    $this->db->join('guru_mapel', 'guru.nip = guru_mapel.id_guru', 'left');
+    $this->db->join('mata_pelajaran', 'guru_mapel.id_mapel = mata_pelajaran.id', 'left');
     $this->db->where('guru.nip', $nip);
+    $this->db->group_by('guru.nip');
     return $this->db->get()->row(); // ambil 1 baris (detail)
 }
 

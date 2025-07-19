@@ -174,10 +174,20 @@ public function get_materi_by_pertemuan($id_pertemuan)
 }
 
 
-    public function update_materi($where, $table)
-    {
-        return $this->db->get_where($table, $where);
-    }
+    public function update_materi($where)
+{
+    $this->db->select('materi.*, 
+                       guru.nama_guru, guru.nip, 
+                       mata_pelajaran.nama_mapel, mata_pelajaran.id as id_mapel,
+                       kelas.nama_kelas, kelas.id as id_kelas');
+    $this->db->from('materi');
+    $this->db->join('guru', 'guru.nip = materi.id_guru');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->join('kelas', 'kelas.id = materi.id_kelas');
+    $this->db->where($where);
+    return $this->db->get();
+}
+
     public function update_matery($id, $data)
 {
     $this->db->where('id', $id);

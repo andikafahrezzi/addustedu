@@ -69,19 +69,20 @@
                                     </div>
                                 </div>
 
-                                <div id="" class="row">
+                               <div class="row">
                                     <div class="form-group col-12">
-                                        <label>Mata Pelajaran yang diajar</label>
-                                        <select name="mapel" class="form-control selectric">
-  <?php foreach ($mapel as $m): ?>
-    <option value="<?= $m->id ?>"><?= $m->nama_mapel ?></option>
-  <?php endforeach; ?>
-</select>
-
-
-                                        <?= form_error('mapel', '<small class="text-danger">', '</small>'); ?>
+                                        <label>Mata Pelajaran yang diajar</label><br>
+                                        <?php foreach ($mapel as $m): ?>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" name="mapel[]" value="<?= $m->id ?>" id="mapel_<?= $m->id ?>">
+                                                <label class="form-check-label" for="mapel_<?= $m->id ?>"><?= $m->nama_mapel ?></label>
+                                            </div>
+                                        <?php endforeach; ?>
+                                        <?= form_error('mapel[]', '<small class="text-danger d-block mt-2">', '</small>'); ?>
                                     </div>
                                 </div>
+
+
 
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox">

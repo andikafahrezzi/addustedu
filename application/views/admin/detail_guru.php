@@ -38,7 +38,7 @@
                                 </tr>
                                 <tr style="border-bottom: 0.5px solid #6c757d;">
                                     <td><span class="font-weight-bold">Mata Pelajaran :</span></td>
-                                    <td><?= $detail->nama_mapel ?></td>
+                                    <td><?= $detail->mapel_diajar ?? '-' ?></td>
                                 </tr>
                             </tbody>
                         </table>
