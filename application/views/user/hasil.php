@@ -202,6 +202,12 @@
             </div>
             
             <div class="result-body">
+                <?php if (!empty($hasil->peringatan_essay)): ?>
+                    <div class="alert alert-warning" style="background: #fff3cd; color: #856404; border-radius: var(--border-radius); padding: 15px; margin-bottom: 20px; box-shadow: var(--shadow);">
+                        <i class="fas fa-exclamation-triangle"></i> <?= $hasil->peringatan_essay ?>
+                    </div>
+                <?php endif; ?>
+
                 <div class="result-stats">
                     <div class="stat-box">
                         <i class="fas fa-check-circle"></i>
@@ -273,5 +279,17 @@
             });
         });
     </script>
+    <?php if (!empty($hasil->peringatan_essay)): ?>
+<script>
+Swal.fire({
+    icon: 'info',
+    title: 'Nilai Belum Final',
+    text: 'Beberapa soal essay Anda belum dinilai. Nilai akhir masih bersifat sementara.',
+    confirmButtonText: 'Mengerti',
+    confirmButtonColor: '#3498db'
+});
+</script>
+<?php endif; ?>
+
 </body>
 </html>

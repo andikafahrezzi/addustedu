@@ -97,7 +97,7 @@ class Ujian extends CI_Controller {
         redirect('ujian/hasil/'.$id_ujian);
     }
 
-    public function hasil($id_ujian)
+public function hasil($id_ujian)
 {
     $nis = $this->session->userdata('nis');
 
@@ -145,17 +145,18 @@ class Ujian extends CI_Controller {
         }
     }
 
-    // ❌ TOLAK jika masih ada essay belum dinilai
+    // Pesan jika ada essay belum dinilai
+    $pesan_essay = '';
     if ($ada_essay_belum_dinilai) {
-        $this->session->set_flashdata('warning', 'Mohon tunggu, nilai essay Anda belum dinilai oleh guru.');
-        redirect('user/dashboard'); // atau redirect ke halaman lain yang sesuai
-        return;
+        $pesan_essay = '⚠️ Beberapa soal essay belum dinilai oleh guru. Nilai akhir bersifat sementara.';
     }
 
+    // Hitung nilai
     $nilai_pg = $total_soal_pg > 0 ? ($jumlah_benar / $total_soal_pg) * 100 : 0;
     $rata_essay = $jumlah_soal_essay > 0 ? $total_nilai_essay / $jumlah_soal_essay : 0;
     $total_nilai = ($nilai_pg * 0.7) + ($rata_essay * 0.3);
 
+    // Data untuk view
     $data['ujian'] = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
 
     $data['hasil'] = (object)[
@@ -165,11 +166,13 @@ class Ujian extends CI_Controller {
         'jumlah_benar' => $jumlah_benar,
         'jumlah_salah' => $total_soal_pg - $jumlah_benar,
         'score' => $total_nilai,
-        'tanggal_submit' => $tanggal_submit
+        'tanggal_submit' => $tanggal_submit,
+        'peringatan_essay' => $pesan_essay
     ];
 
     $this->load->view('user/hasil', $data);
 }
+
 
 
     public function tandai_ragu()
