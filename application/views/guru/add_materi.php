@@ -11,8 +11,8 @@
                                 <form method="post" enctype="multipart/form-data"
                                     action="<?=base_url('guru/add_materi')?>">
                                     <?php echo $this->security->get_csrf_token_name(); ?>
-                            <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
-                        value="<?= $this->security->get_csrf_hash(); ?>" />
+                                        <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                                        value="<?= $this->security->get_csrf_hash(); ?>" />
                                     <input type="hidden" name="id">
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
@@ -24,13 +24,21 @@
                                         </div>
                                     </div>
                                     <div class="form-row">
-                                        <div class="form-group col-md-12">
-                                            <label for="inputEmail4">Nama Mata Pelajaran</label>
-                                            <input required type="text" readonly value="<?= $user['nama_mapel'] ?>"
-                                                 class="form-control" id="inputEmail4">
-                                            <input type="hidden" name="id_mapel" value="<?= $user['id_mapel'] ?>">
-                                            </div>
-                                        </div>
+                                        <div class="form-group">
+    <label>Pilih Mata Pelajaran</label>
+    <div class="d-flex flex-wrap">
+        <?php foreach ($user['mapel_diajar'] as $mapel): ?>
+            <div class="form-check mr-3">
+                <input class="form-check-input" type="checkbox" name="id_mapel[]" value="<?= $mapel['id'] ?>" id="mapel<?= $mapel['id'] ?>">
+                <label class="form-check-label" for="mapel<?= $mapel['id'] ?>">
+                    <?= $mapel['nama_mapel'] ?>
+                </label>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+                                    </div>
                                         <div class="form-group">
                                             <label for="pertemuan">Pertemuan Ke-</label>
                                             <input type="number" name="pertemuan" id="pertemuan" class="form-control" min="1" required>

@@ -11,7 +11,7 @@
                 </a>
             </div>
         </div>
-        <?php var_dump($materi); ?> <!-- Pastikan tidak NULL -->
+        <!-- Pastikan tidak NULL -->
         <div class="row">
             <div class="col-md-12">
                 <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px">
@@ -21,45 +21,57 @@
                                 <tr class="text-center">
                                     <th scope="col">No</th>
                                     <th scope="col">Mata Pelajaran</th>
+                                    <th scope="col">Pertemuan</th>
                                     <th scope="col">Deskripsi</th>
                                     <th scope="col">Kelas</th>
-                                    <th scope="col">Dibuat</th>
+                                    <th scope="col">Videot</th>
                                     <th scope="col">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if (!empty($materi)) : ?>
-                                    <?php $no = 1; ?>
-                                    <?php foreach ($materi as $m) : ?>
-                                        <tr class="text-center">
-                                            <td><?= $no++; ?></td>
-                                            <td><?= htmlspecialchars($m->nama_mapel); ?></td>
-                                            <td>
-                                                <?= strlen($m->deskripsi) > 50 ? substr(htmlspecialchars($m->deskripsi), 0, 50).'...' : htmlspecialchars($m->deskripsi); ?>
-                                            </td>
-                                            <td>Kelas <?= htmlspecialchars($m->nama_kelas); ?></td>
-                                            <td><?= htmlspecialchars($m->modul); ?></td>
-                                            <td class="text-center">
-                                                <div class="btn-group" role="group">
-                                                    <a href="<?= site_url('guru/belajar/'.$m->id_pertemuan); ?>" class="btn btn-sm btn-success" title="Edit">
-                                                        <i class="fas fa-comment"></i>
-                                                    </a>
-                                                    <a href="<?= site_url('guru/update_materi/'.$m->id); ?>" class="btn btn-sm btn-warning" title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <button onclick="confirmDelete('<?= $m->id; ?>')" class="btn btn-sm btn-danger" title="Hapus">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else : ?>
-                                    <tr>
-                                        <td colspan="7" class="text-center">Belum ada materi yang dibuat</td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
+<?php if (!empty($materi_grouped)) : ?>
+    <?php $no = 1; ?>
+    <?php foreach ($materi_grouped as $group => $items) : ?>
+        <tr class="table-info">
+            <td colspan="7" style="font-weight: bold"><?= $group ?></td>
+        </tr>
+        <?php foreach ($items as $m) : ?>
+            <tr class="text-center">
+                <td><?= $no++; ?></td>
+                <td><?= htmlspecialchars($m->nama_mapel); ?></td>
+                <td>
+                    <?= $m->pertemuan_ke ? 'Pertemuan ke-' . $m->pertemuan_ke : '<span class="text-danger">Belum dibuat</span>' ?>
+                </td>
+                <td>
+                    <?= strlen($m->deskripsi) > 50 ? substr(htmlspecialchars($m->deskripsi), 0, 50).'...' : htmlspecialchars($m->deskripsi); ?>
+                </td>
+                <td>Kelas <?= htmlspecialchars($m->nama_kelas); ?></td>
+                <td><?= htmlspecialchars($m->video); ?></td>
+                <td class="text-center">
+                    <div class="btn-group" role="group">
+                        <?php if ($m->id_pertemuan) : ?>
+                            <a href="<?= site_url('guru/belajar/'.$m->id_pertemuan); ?>" class="btn btn-sm btn-success" title="Belajar">
+                                <i class="fas fa-comment"></i>
+                            </a>
+                        <?php endif; ?>
+                        <a href="<?= site_url('guru/update_materi/'.$m->id); ?>" class="btn btn-sm btn-warning" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button onclick="confirmDelete('<?= $m->id; ?>')" class="btn btn-sm btn-danger" title="Hapus">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endforeach; ?>
+<?php else : ?>
+    <tr>
+        <td colspan="7" class="text-center">Belum ada materi yang dibuat</td>
+    </tr>
+<?php endif; ?>
+</tbody>
+
                         </table>
                     </div>
                 </div>

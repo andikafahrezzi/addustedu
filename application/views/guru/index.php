@@ -68,13 +68,12 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                         <div class="kt-widget19__pic kt-portlet-fit--top kt-portlet-fit--sides">
                                             <img src="<?=base_url('assets/')?>img/user.png" class=" img-fluid" alt=""
                                                 srcset="">
-                                            <h1 class="kt-widget19__title kt-font-light display-4 font-weight-bold"
-                                                style="letter-spacing: -1px;">
+                                            <h1 class="welcome-heading">
                                                 Selamat Datang, <?php
-                                            $data['user'] = $this->db->get_where('guru', ['nip' =>
-                                                $this->session->userdata('nip')])->row_array();
-                                            echo $data['user']['nama_guru'];
-                                            ?> !
+                                                    $data['user'] = $this->db->get_where('guru', ['nip' =>
+                                                        $this->session->userdata('nip')])->row_array();
+                                                    echo $data['user']['nama_guru'];
+                                                ?> !
                                             </h1>
                                             <div class="kt-widget19__shadow"></div>
                                             <div class="kt-widget19__labels">

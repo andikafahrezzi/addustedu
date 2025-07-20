@@ -896,3 +896,25 @@ button:focus {
         width: 80px;
     }
 }
+/* Gaya default untuk layar yang lebih besar (desktop) */
+.welcome-heading {
+    font-size: 3.5rem; /* Ukuran ini akan terlihat di layar desktop */
+    letter-spacing: -1px; /* Pertahankan ini jika Anda suka di desktop */
+}
+
+/* Media query untuk sebagian besar ponsel (termasuk Galaxy A12 Anda) */
+@media (max-width: 480px) { /* Targetkan hingga lebar 480px */
+    .welcome-heading {
+        font-size: 1.5rem; /* Ukuran huruf yang lebih kecil untuk ponsel */
+        letter-spacing: normal; /* Atur ulang letter-spacing agar tidak terlalu rapat */
+    }
+}
+
+/* Jika Anda ingin lebih spesifik lagi untuk lebar 360px */
+@media (max-width: 360px) {
+    .welcome-heading {
+        font-size: 1.3rem; /* Mungkin sedikit lebih kecil lagi untuk layar 360px */
+        /* Anda juga bisa mengatur line-height jika teks terpotong */
+        line-height: 1.2;
+    }
+}

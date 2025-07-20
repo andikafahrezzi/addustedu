@@ -12,26 +12,38 @@ class M_materi extends CI_Model
 
         return $this->db->get();
     }
-    public function tampil_materi_guru($nip)
-    {
-        $this->db->select('materi.*, mata_pelajaran.nama_mapel, kelas.nama_kelas, pertemuan.id AS id_pertemuan');
-        $this->db->from('materi');
-        $this->db->join('mata_pelajaran', 'materi.id_mapel = mata_pelajaran.id');
-        $this->db->join('kelas', 'materi.id_kelas = kelas.id');
-        $this->db->join('pertemuan', 'pertemuan.id_materi = materi.id', 'left');
-        $this->db->where('materi.id_guru', $nip);
-        return $this->db->get()->result();
-    }
+public function tampil_materi_guru($nip)
+{
+    $this->db->select('materi.*, mata_pelajaran.nama_mapel, kelas.nama_kelas, pertemuan.pertemuan_ke, pertemuan.id AS id_pertemuan');
+    $this->db->from('materi');
+    $this->db->join('mata_pelajaran', 'materi.id_mapel = mata_pelajaran.id');
+    $this->db->join('kelas', 'materi.id_kelas = kelas.id');
+    $this->db->join('pertemuan', 'pertemuan.id_materi = materi.id', 'left');
+    $this->db->where('materi.id_guru', $nip);
+    $this->db->order_by('mata_pelajaran.nama_mapel, kelas.nama_kelas, pertemuan.pertemuan_ke', 'ASC');
+    return $this->db->get()->result();
+}
+
+
+    
     public function get_detail_guru($nip) {
-        $this->db->select('guru.*, mata_pelajaran.nama_mapel, kelas.nama_kelas');
-        $this->db->from('guru');
-        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = guru.id_mapel', 'left');
-        $this->db->join('materi', 'materi.id_guru = guru.nip', 'left');
-        $this->db->join('kelas', 'kelas.id = materi.id_kelas', 'left');
-        $this->db->where('guru.nip', $nip);
-        $this->db->group_by('guru.nip');
-        return $this->db->get()->row_array();
-    }
+    // Ambil info dasar guru
+    $this->db->select('guru.*');
+    $this->db->from('guru');
+    $this->db->where('guru.nip', $nip);
+    $guru = $this->db->get()->row_array();
+
+    // Ambil semua mapel yang diajar guru ini
+    $this->db->select('mata_pelajaran.id, mata_pelajaran.nama_mapel');
+    $this->db->from('guru_mapel');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = guru_mapel.id_mapel');
+    $this->db->where('guru_mapel.id_guru', $nip);
+    $mapel = $this->db->get()->result_array();
+
+    $guru['mapel_diajar'] = $mapel;
+    return $guru;
+}
+
     public function is_pertemuan_terpakai($id_mapel, $id_kelas, $pertemuan_ke, $id_guru)
     {
         $this->db->select('pertemuan.id');

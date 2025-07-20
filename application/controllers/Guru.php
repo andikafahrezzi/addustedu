@@ -38,7 +38,7 @@ class Guru extends CI_Controller
     public function add_materi()
 {
     $this->load->library('form_validation');
-    $this->form_validation->set_rules('id_mapel', 'Nama Mata Pelajaran', 'required');
+    $this->form_validation->set_rules('id_mapel[]', 'Nama Mata Pelajaran', 'required');
     $this->form_validation->set_rules('pertemuan', 'Pertemuan', 'required|numeric');
     
     $this->load->model(['M_materi', 'Forum_model', 'Quiz_model']);
@@ -98,32 +98,32 @@ class Guru extends CI_Controller
 
         // Simpan ke database
         // Data untuk tabel 'materi' (sudah dinormalisasi)
-        $data_materi = [
-            'id_guru'    => $nip,
-            'id_mapel'   => $this->input->post('id_mapel'),  // ini harus id_mapel
-            'id_kelas'   => $this->input->post('id_kelas'),       // ini harus id_kelas
-            'video'      => $video_materi,
-            'modul'      => $modul,
-            'deskripsi'  => $this->input->post('deskripsi', true),
-            'linkform'   => $this->input->post('linkform', true),
-        ];
+        $id_mapel_array = $this->input->post('id_mapel');
+foreach ($id_mapel_array as $id_mapel) {
+    // Data untuk tabel 'materi'
+    $data_materi = [
+        'id_guru'     => $nip,
+        'id_mapel'    => $id_mapel,
+        'id_kelas'    => $this->input->post('id_kelas'),
+        'deskripsi'   => $this->input->post('deskripsi'),
+        'linkform'   => $this->input->post('linkform'),
+        'video'  => $video_materi,
+        'modul' => $modul
+    ];
 
-        // Insert ke tabel 'materi'
-        $this->db->insert('materi', $data_materi);
+    $this->db->insert('materi', $data_materi);
+    $id_materi = $this->db->insert_id();
 
-        // Ambil id materi terakhir
-        $id_materi = $this->db->insert_id();
+    // Insert ke tabel 'pertemuan' untuk setiap materi
+    $data_pertemuan = [
+        'id_materi'    => $id_materi,
+        'id_kelas'     => $this->input->post('id_kelas'),
+        'pertemuan_ke' => $this->input->post('pertemuan'),
+        'tanggal'      => date('Y-m-d')
+    ];
 
-        // Data untuk tabel 'pertemuan'
-        $data_pertemuan = [
-            'id_materi'     => $id_materi,
-            'id_kelas'      => $this->input->post('id_kelas'), // bisa sama dengan id_kelas di materi
-            'pertemuan_ke'  => $this->input->post('pertemuan'),
-            'tanggal'       => date('Y-m-d'), // atau bisa tambahkan input form tanggal
-        ];
-
-        // Insert ke tabel 'pertemuan'
-        $this->db->insert('pertemuan', $data_pertemuan);
+    $this->db->insert('pertemuan', $data_pertemuan);
+}
 
         $this->session->set_flashdata('success', 'Materi dan Pertemuan berhasil ditambahkan!');
         redirect('guru/data_materi');
@@ -160,7 +160,13 @@ class Guru extends CI_Controller
     
     // Ambil data guru
     $data['user'] = $this->db->get_where('guru', ['nip' => $nip])->row_array();
-    
+    $data['materi_grouped'] = [];
+
+foreach ($this->M_materi->tampil_materi_guru($nip) as $row) {
+    $key = $row->nama_mapel . ' - ' . $row->nama_kelas;
+    $data['materi_grouped'][$key][] = $row;
+}
+
     // Ambil materi yang hanya dibuat oleh guru ini
     $data['materi'] = $this->m_materi->tampil_materi_guru($nip);
     
