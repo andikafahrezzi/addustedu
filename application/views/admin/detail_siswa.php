@@ -31,6 +31,10 @@
                             <table style="width: 100%" class="container text-center">
                                 <tbody>
                                     <tr style="border-bottom: 0.5px solid #6c757d;">
+                                        <td><span class="font-weight-bold">Nis :</span></td>
+                                        <td> <?= $detail->nis ?></td>
+                                    </tr>
+                                    <tr style="border-bottom: 0.5px solid #6c757d;">
                                         <td><span class="font-weight-bold">Nama Siswa :</span></td>
                                         <td> <?= $detail->nama ?></td>
                                     </tr>

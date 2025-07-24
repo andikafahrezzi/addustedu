@@ -174,16 +174,51 @@ public function get_materi_by_pertemuan($id_pertemuan)
         $this->db->delete($table);
     }
 
-    public function get_all_materi() {
-    $this->db->select('materi.*, kelas.nama_kelas, mata_pelajaran.nama_mapel, guru.nama_guru');
+public function get_all_materi() {
+    $this->db->select('materi.*, kelas.nama_kelas, kelas.tingkat, mata_pelajaran.nama_mapel, guru.nama_guru, pertemuan.pertemuan_ke, pertemuan.tanggal');
     $this->db->from('materi');
     $this->db->join('kelas', 'kelas.id = materi.id_kelas');
     $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
     $this->db->join('guru', 'guru.nip = materi.id_guru');
+
+    // INNER JOIN agar hanya ambil materi yang punya pertemuan
+    $this->db->join('pertemuan', 'pertemuan.id_materi = materi.id AND pertemuan.id_kelas = kelas.id');
+
+    // Urutkan sesuai permintaan
+    $this->db->order_by('guru.nama_guru', 'asc');
+    $this->db->order_by('kelas.tingkat', 'asc');
     $this->db->order_by('kelas.nama_kelas', 'asc');
-    $this->db->order_by('mata_pelajaran.nama_mapel', 'asc');
+    $this->db->order_by('pertemuan.pertemuan_ke', 'asc');
+
     return $this->db->get()->result();
 }
+public function get_materi_terjadwal_grouped()
+{
+    $this->db->select('materi.*, mata_pelajaran.nama_mapel, guru.nama_guru, kelas.nama_kelas, kelas.tingkat, pertemuan.pertemuan_ke, pertemuan.tanggal');
+    $this->db->from('pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas'); // kelas dari tabel pertemuan
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->join('guru', 'guru.nip = materi.id_guru');
+
+    $this->db->order_by('guru.nama_guru');
+    $this->db->order_by('kelas.tingkat');
+    $this->db->order_by('kelas.nama_kelas');
+    $this->db->order_by('pertemuan.pertemuan_ke');
+
+    $query = $this->db->get()->result();
+
+    $result = [];
+    foreach ($query as $row) {
+        $result[$row->nama_guru][$row->tingkat][$row->nama_kelas][] = $row;
+    }
+
+    return $result;
+}
+
+
+
+
 
 
     public function update_materi($where)
@@ -200,26 +235,31 @@ public function get_materi_by_pertemuan($id_pertemuan)
     return $this->db->get();
 }
     public function get_pertemuan_grouped()
-    {
-        $this->db->select('pertemuan.*, guru.nama_guru, guru.nip, mata_pelajaran.nama_mapel, materi.deskripsi');
-        $this->db->from('pertemuan');
-        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
-        $this->db->join('guru', 'guru.nip = materi.id_guru');
-        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
-        $this->db->order_by('guru.nama_guru');
-        $this->db->order_by('mata_pelajaran.nama_mapel');
-        $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
+{
+    $this->db->select('pertemuan.*,pertemuan.id AS id_pertemuan, guru.nama_guru, guru.nip, mata_pelajaran.nama_mapel, materi.deskripsi, kelas.nama_kelas, kelas.tingkat');
+    $this->db->from('pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('guru', 'guru.nip = materi.id_guru');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
 
-        $query = $this->db->get()->result();
+    // Ubah urutan sorting sesuai keinginan
+    $this->db->order_by('guru.nama_guru', 'ASC');
+    $this->db->order_by('kelas.tingkat', 'ASC');
+    $this->db->order_by('kelas.nama_kelas', 'ASC');
+    $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
 
-        // Kelompokkan per guru dan mapel
-        $result = [];
-        foreach ($query as $row) {
-            $result[$row->nama_guru][$row->nama_mapel][] = $row;
-        }
+    $query = $this->db->get()->result();
 
-        return $result;
+    // Kelompokkan data: guru → tingkat → kelas → pertemuan
+    $result = [];
+    foreach ($query as $row) {
+        $result[$row->nama_guru][$row->tingkat][$row->nama_kelas][] = $row;
     }
+
+    return $result;
+}
+
     public function update_matery($id, $data)
 {
     $this->db->where('id', $id);
@@ -235,6 +275,16 @@ public function get_materi_by_pertemuan($id_pertemuan)
 {
     $this->db->where($where);
     $this->db->delete($table);
+}
+public function get_all() {
+    $this->db->select('materi.*, mata_pelajaran.nama_mapel');
+    $this->db->from('materi');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    return $this->db->get()->result();
+}
+
+public function get_all_kelas() {
+    return $this->db->get('kelas')->result();
 }
 
 }

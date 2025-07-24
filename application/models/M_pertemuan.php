@@ -18,4 +18,17 @@ class M_pertemuan extends CI_Model
     {
         return $this->db->get('kelas')->result();
     }
+    public function get_by_id($id_pertemuan) {
+        return $this->db->get_where('pertemuan', ['id' => $id_pertemuan])->row();
+    }
+
+    public function update($id_pertemuan, $data) {
+        $this->db->where('id', $id_pertemuan);
+        return $this->db->update('pertemuan', $data);
+    }
+
+    public function delete($id_pertemuan) {
+        $this->db->where('id', $id_pertemuan);
+        return $this->db->delete('pertemuan');
+    }
 }

@@ -613,10 +613,8 @@ public function add_materi()
         redirect('admin/data_fordis');
     }
     public function data_fordis() {
-        // Cek role admin
-    
         $this->load->model('M_materi');
-        $data['materi'] = $this->M_materi->get_all_materi();
+        $data['materi_terjadwal'] = $this->M_materi->get_materi_terjadwal_grouped();
         $this->load->view('admin/partials/nava');
         $this->load->view('admin/data_fordis', $data);
         $this->load->view('admin/partials/foota');
@@ -926,6 +924,36 @@ public function add_pertemuan()
         redirect('admin/form_pertemuan');
     }
 }
+public function edit($id_pertemuan) {
+        $data['pertemuan'] = $this->M_pertemuan->get_by_id($id_pertemuan);
+        $data['materi'] = $this->M_materi->get_all();
+        $data['kelas'] = $this->M_materi->get_all_kelas();
+
+        $this->load->view('admin/partials/nava');
+        $this->load->view('admin/update_pertemuan', $data);
+        $this->load->view('admin/partials/foota');
+    }
+
+public function update_pertemuan($id_pertemuan)
+{
+    $data = [
+        'id_materi' => $this->input->post('id_materi'),
+        'id_kelas' => $this->input->post('id_kelas'),
+        'pertemuan_ke' => $this->input->post('pertemuan_ke'),
+        'tanggal' => $this->input->post('tanggal')
+    ];
+
+    $this->M_pertemuan->update($id_pertemuan, $data);
+    $this->session->set_flashdata('success', 'Data pertemuan berhasil diperbarui.');
+    redirect('admin/data_pertemuan');
+}
+
+
+    public function delete_pertemuan($id_pertemuan) {
+        $this->M_pertemuan->delete($id_pertemuan);
+        $this->session->set_flashdata('success', 'Data pertemuan berhasil dihapus.');
+        redirect('admin/data_pertemuan');
+    }
     public function get_materi_by_guru($nip)
 {
     $this->db->select('materi.id, materi.deskripsi, mata_pelajaran.nama_mapel');
