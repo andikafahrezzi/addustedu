@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Ujian <?= htmlspecialchars($ujian->nama_ujian) ?></title>
+    <link rel="icon" href="<?= base_url('assets/') ?>img/logoh.png" type="image/png">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {

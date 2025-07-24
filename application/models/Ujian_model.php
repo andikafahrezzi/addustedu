@@ -40,19 +40,21 @@ class Ujian_model extends CI_Model {
 
 
 
-public function get_ujian_by_kelas($id_kelas, $nip_guru)
+public function get_ujian_by_kelas($id_kelas, $nip_guru, $id_mapel)
 {
     $this->db->select('tbl_ujian.*, mata_pelajaran.nama_mapel, kelas.nama_kelas');
     $this->db->from('tbl_ujian');
     $this->db->join('pertemuan', 'pertemuan.id = tbl_ujian.id_pertemuan');
     $this->db->join('materi', 'materi.id = pertemuan.id_materi');
     $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
-    $this->db->join('kelas', 'kelas.id = materi.id_kelas');
-    $this->db->where('materi.id_kelas', $id_kelas);
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+    $this->db->where('pertemuan.id_kelas', $id_kelas); // HARUS ambil dari pertemuan, bukan materi!
+    $this->db->where('materi.id_mapel', $id_mapel);     // ✅ Tambahkan filter mapel di sini
     $this->db->where('tbl_ujian.status', 'aktif');
     $this->db->where('tbl_ujian.nip_guru', $nip_guru);
     return $this->db->get()->result_array();
 }
+
 
 public function get_all_soal_by_ujian($ujian_id)
 {

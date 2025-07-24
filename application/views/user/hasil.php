@@ -1,4 +1,9 @@
-
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Hasil <?= $ujian->nama_ujian ?></title>
+    <link rel="icon" href="<?= base_url('assets/') ?>img/logoh.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
