@@ -78,6 +78,20 @@
                         </label>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                             <label for="bobot_pg">Bobot Nilai PG (%)</label>
+                             <input type="number" name="bobot_pg" value="70" min="0" max="100" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                              <label for="bobot_essay">Bobot Nilai Essay (%)</label>
+                              <input type="number" name="bobot_essay" value="30" min="0" max="100" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Daftar Soal dari Bank Soal -->
                 <div id="bank-soal-container">

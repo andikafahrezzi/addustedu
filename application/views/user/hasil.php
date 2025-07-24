@@ -200,6 +200,9 @@
         <div class="result-card">
             <div class="result-header">
                 <h2>Hasil Ujian: <?= $ujian->nama_ujian ?></h2>
+                <strong>Bobot Penilaian:</strong><br>
+                    • PG: <strong><?= $ujian->bobot_pg ?>%</strong><br>
+                    • Essay: <strong><?= $ujian->bobot_essay ?>%</strong>
                 <div class="badge">
                     <i class="fas fa-calendar-alt"></i> 
                     <?= date('d M Y H:i', strtotime($hasil->tanggal_submit)) ?>
@@ -232,7 +235,7 @@
                         <div class="stat-label">Skor</div>
                     </div>
                 </div>
-                
+
                 <div class="result-detail">
                     <table>
                         <tr>

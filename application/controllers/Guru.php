@@ -893,6 +893,14 @@ public function simpan_ujian()
     $this->db->trans_start();
 
     try {
+        $bobot_pg = intval($this->input->post('bobot_pg'));
+        $bobot_essay = intval($this->input->post('bobot_essay'));
+
+        if (($bobot_pg + $bobot_essay) !== 100) {
+            $this->session->set_flashdata('error', 'Total bobot PG + Essay harus 100%.');
+            $this->tambah_ujian(); return;
+        }
+
         // Data utama ujian
         $ujian_data = [
             'nama_ujian'      => $this->input->post('nama_ujian'),
@@ -901,7 +909,9 @@ public function simpan_ujian()
             'durasi'          => $this->input->post('durasi'),
             'status'          => $this->input->post('status') ?? 'aktif',
             'id_pertemuan'       => $this->input->post('id_pertemuan'),
-            'nip_guru'        => $this->session->userdata('nip')
+            'nip_guru'        => $this->session->userdata('nip'),
+            'bobot_pg'        => $bobot_pg,
+            'bobot_essay'     => $bobot_essay
         ];
 
         // Simpan ujian
@@ -1049,8 +1059,7 @@ public function simpan_ujian()
     // Pastikan ujian ditemukan
     if ($ujian) {
         // Ambil daftar materi untuk pilihan pada dropdown
-        $data['materi_list'] = $this->Ujian_model->get_materi_options($nip);
-        var_dump($data['materi_list']);
+        $data['materi_list'] = $this->Ujian_model->get_materi_optionss($nip);
         // Kirim data ujian dan materi ke view
         $data['ujian'] = $ujian;
         $this->load->view('guru/navug');
@@ -1064,6 +1073,14 @@ public function simpan_ujian()
 
 public function simpan_edit_ujian($id_ujian)
 {
+    $bobot_pg = intval($this->input->post('bobot_pg'));
+    $bobot_essay = intval($this->input->post('bobot_essay'));
+
+    if (($bobot_pg + $bobot_essay) !== 100) {
+            $this->session->set_flashdata('error', 'Total bobot PG + Essay harus 100%.');
+            $this->tambah_ujian(); return;
+    }
+
     // Ambil data dari form
     $data = array(
         'nama_ujian' => $this->input->post('nama_ujian'),
@@ -1071,7 +1088,9 @@ public function simpan_edit_ujian($id_ujian)
         'tanggal_selesai' => $this->input->post('tanggal_selesai'),
         'durasi' => $this->input->post('durasi'),
         'status' => $this->input->post('status'),
-        'id_materi' => $this->input->post('materi_id')
+        'id_pertemuan' => $this->input->post('id_pertemuan'),
+        'bobot_pg'        => $bobot_pg,
+        'bobot_essay'     => $bobot_essay
     );
     
     // Simpan perubahan data ujian
@@ -1108,15 +1127,21 @@ public function simpan_edit_ujian($id_ujian)
     }
 
     // Menghapus soal
-    public function hapus_soal($id_soal)
-    {
-        $soal = $this->Ujian_model->get_soal_by_id($id_soal);
-        if ($this->Ujian_model->delete_soal($id_soal)) {
-            redirect('guru/tampilkan_soal/' . $soal['id_ujian']);
-        } else {
-            echo "Gagal menghapus soal.";
-        }
+public function hapus_ujian($id_ujian)
+{
+    $this->load->model('Ujian_model');
+
+    if ($this->Ujian_model->hapus_ujian($id_ujian)) {
+        $this->session->set_flashdata('success', 'Ujian berhasil dihapus.');
+    } else {
+        $this->session->set_flashdata('error', 'Gagal menghapus ujian.');
     }
+
+    redirect('guru/daftar_ujian'); // ganti sesuai halaman daftar ujian kamu
+}
+
+
+
     
     // BANK SOAL - GURU
 public function bank_soal()
@@ -1469,26 +1494,39 @@ public function tambah_komentar() {
 
 
 
-public function daftar_nilai_essay()
+public function daftar_nilai_essay($id_ujian = null)
 {
-    // Pastikan guru sudah login (opsional)
     if (!$this->session->userdata('nip')) {
         redirect('welcome');
     }
+    if (!$id_ujian) {
+        show_404(); // atau redirect('guru/ujian') jika mau redirect
+    }
+    $nip = $this->session->userdata('nip');
 
-    // Ambil semua jawaban essay yang belum dinilai atau sudah dinilai
-    $this->db->select('j.id_jawaban, j.jawaban_essay, j.nilai_essay, j.catatan_essay, j.id_ujian, j.nis, 
-                   s.nama AS nama_siswa, 
-                   COALESCE(ts.pertanyaan, bs.pertanyaan) AS pertanyaan,
-                   COALESCE(ts.tipe_soal, bs.tipe_soal) AS tipe_soal');
-$this->db->from('tbl_jawaban_siswa j');
-$this->db->join('siswa s', 's.nis = j.nis');
-$this->db->join('tbl_soal ts', 'ts.id_soal = j.id_soal', 'left');
-$this->db->join('bank_soal bs', 'bs.id_soal = j.bank_soal_id', 'left');
-$this->db->where('COALESCE(ts.tipe_soal, bs.tipe_soal) =', 'essay');
-$this->db->order_by('j.id_jawaban', 'DESC');
+    // Ambil semua jawaban essay untuk ujian ini
+    $this->db->select('
+        j.id_jawaban,
+        j.jawaban_essay,
+        j.nilai_essay,
+        j.catatan_essay,
+        j.id_ujian,
+        j.nis,
+        s.nama AS nama_siswa,
+        COALESCE(ts.pertanyaan, bs.pertanyaan) AS pertanyaan,
+        COALESCE(ts.tipe_soal, bs.tipe_soal) AS tipe_soal,
+        u.nama_ujian
+    ');
+    $this->db->from('tbl_jawaban_siswa j');
+    $this->db->join('siswa s', 's.nis = j.nis');
+    $this->db->join('tbl_soal ts', 'ts.id_soal = j.id_soal', 'left');
+    $this->db->join('bank_soal bs', 'bs.id_soal = j.bank_soal_id', 'left');
+    $this->db->join('tbl_ujian u', 'u.id_ujian = j.id_ujian');
 
+    $this->db->where('j.id_ujian', $id_ujian); // ✅ Ambil hanya jawaban ujian ini
+    $this->db->where('COALESCE(ts.tipe_soal, bs.tipe_soal) =', 'essay');
 
+    $this->db->order_by('j.id_jawaban', 'DESC');
 
     $data['jawaban_essay'] = $this->db->get()->result();
 
@@ -1497,11 +1535,14 @@ $this->db->order_by('j.id_jawaban', 'DESC');
     $this->load->view('guru/footg');
 }
 
+
+
 public function beri_nilai_essay()
 {
     $id_jawaban = $this->input->post('id_jawaban');
     $nilai_essay = $this->input->post('nilai_essay');
     $catatan = $this->input->post('catatan_essay');
+    $id_ujian = $this->input->post('id_ujian');
 
     if ($id_jawaban && is_numeric($nilai_essay)) {
         $this->db->where('id_jawaban', $id_jawaban);
@@ -1510,13 +1551,17 @@ public function beri_nilai_essay()
             'catatan_essay' => $catatan
         ]);
 
+        $this->load->model('Ujian_model');
+        $this->Ujian_model->update_nilai_akhir($id_jawaban);
+
         $this->session->set_flashdata('success', 'Nilai essay berhasil disimpan.');
     } else {
         $this->session->set_flashdata('error', 'Gagal menyimpan nilai. Pastikan nilai valid.');
     }
 
-    redirect('guru/daftar_nilai_essay');
+    redirect('guru/daftar_nilai_essay/' . $id_ujian);
 }
+
 public function data_pesertaujian($ujian_id) {
     $this->load->model('Ujian_model');
 

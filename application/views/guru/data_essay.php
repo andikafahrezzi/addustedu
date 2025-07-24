@@ -101,30 +101,32 @@
         <div class="modal-content">
           <form method="post" action="<?= site_url('guru/beri_nilai_essay') ?>">
             <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>"
-                   value="<?= $this->security->get_csrf_hash() ?>">
+                  value="<?= $this->security->get_csrf_hash() ?>">
             <input type="hidden" name="id_jawaban" value="<?= $jawaban->id_jawaban ?>">
+            <input type="hidden" name="id_ujian" value="<?= $jawaban->id_ujian ?>">
 
             <div class="modal-header">
-              <h5 class="modal-title">Penilaian Essay: <?= $jawaban->nama_siswa ?></h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                <h5 class="modal-title">Penilaian Essay: <?= $jawaban->nama_siswa ?></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
             <div class="modal-body">
-              <div class="mb-3">
-                <label>Nilai (0-100)</label>
-                <input type="number" name="nilai_essay" class="form-control" required min="0" max="100"
-                       value="<?= $jawaban->nilai_essay ?>">
-              </div>
-              <div class="mb-3">
-                <label>Catatan</label>
-                <textarea name="catatan_essay" class="form-control"
-                          rows="3"><?= $jawaban->catatan_essay ?></textarea>
-              </div>
+                <div class="mb-3">
+                    <label>Nilai (0-100)</label>
+                    <input type="number" name="nilai_essay" class="form-control" required min="0" max="100"
+                          value="<?= $jawaban->nilai_essay ?>">
+                </div>
+                <div class="mb-3">
+                    <label>Catatan</label>
+                    <textarea name="catatan_essay" class="form-control"
+                              rows="3"><?= $jawaban->catatan_essay ?></textarea>
+                </div>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-success">Simpan Nilai</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-success">Simpan Nilai</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
             </div>
-          </form>
+        </form>
+
         </div>
       </div>
     </div>

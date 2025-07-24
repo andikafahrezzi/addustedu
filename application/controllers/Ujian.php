@@ -80,22 +80,30 @@ class Ujian extends CI_Controller {
     }
 
     public function submit_ujian()
-    {
-        $id_ujian = $this->session->userdata('ujian_id');
-        $nis = $this->session->userdata('nis');
+{
+    $id_ujian = $this->session->userdata('ujian_id');
+    $nis = $this->session->userdata('nis');
 
-        if (!$id_ujian || !$nis) {
-            redirect('ujian');
-        }
-
-        // Hitung skor
-        $this->Ujian_model->hitung_skor($id_ujian, $nis);
-
-        // Clear session ujian
-        $this->session->unset_userdata('ujian_id');
-
-        redirect('ujian/hasil/'.$id_ujian);
+    if (!$id_ujian || !$nis) {
+        redirect('ujian');
     }
+
+    // Hitung skor PG langsung (jika ada)
+    $this->Ujian_model->hitung_skor($id_ujian, $nis);
+
+    // ✅ Tandai ujian sudah diselesaikan (meskipun nilai essay belum keluar)
+    $this->db->where(['id_ujian' => $id_ujian, 'nis' => $nis]);
+    $this->db->update('tbl_jawaban_siswa', [
+        'is_selesai' => 1,
+        'waktu_submit' => date('Y-m-d H:i:s') // opsional
+    ]);
+
+    // Hapus session ujian
+    $this->session->unset_userdata('ujian_id');
+
+    // Redirect ke hasil
+    redirect('ujian/hasil/' . $id_ujian);
+}
 
 public function hasil($id_ujian)
 {
@@ -122,21 +130,23 @@ public function hasil($id_ujian)
             $soal = $this->db->get_where('tbl_soal', ['id_soal' => $jawaban->id_soal])->row();
         }
 
-        // Cek PG
-        if ($soal && $soal->tipe_soal == 'pilihan') {
-            $total_soal_pg++;
-            if ($jawaban->jawaban == $soal->kunci_jawaban) {
-                $jumlah_benar++;
+        if ($soal) {
+            // Cek PG
+            if ($soal->tipe_soal == 'pilihan') {
+                $total_soal_pg++;
+                if ($jawaban->jawaban == $soal->kunci_jawaban) {
+                    $jumlah_benar++;
+                }
             }
-        }
 
-        // Cek Essay
-        if ($soal && $soal->tipe_soal == 'essay') {
-            if (is_null($jawaban->nilai_essay)) {
-                $ada_essay_belum_dinilai = true;
-            } else {
-                $total_nilai_essay += floatval($jawaban->nilai_essay);
-                $jumlah_soal_essay++;
+            // Cek Essay
+            if ($soal->tipe_soal == 'essay') {
+                if (is_null($jawaban->nilai_essay)) {
+                    $ada_essay_belum_dinilai = true;
+                } else {
+                    $total_nilai_essay += floatval($jawaban->nilai_essay);
+                    $jumlah_soal_essay++;
+                }
             }
         }
 
@@ -151,14 +161,37 @@ public function hasil($id_ujian)
         $pesan_essay = '⚠️ Beberapa soal essay belum dinilai oleh guru. Nilai akhir bersifat sementara.';
     }
 
-    // Hitung nilai
+    // Hitung nilai PG dan Essay
     $nilai_pg = $total_soal_pg > 0 ? ($jumlah_benar / $total_soal_pg) * 100 : 0;
     $rata_essay = $jumlah_soal_essay > 0 ? $total_nilai_essay / $jumlah_soal_essay : 0;
-    $total_nilai = ($nilai_pg * 0.7) + ($rata_essay * 0.3);
+
+    // ✅ Bobot fleksibel: 70:30 jika dua-duanya ada, 100% jika hanya satu
+    if ($total_soal_pg > 0 && $jumlah_soal_essay > 0) {
+        $total_nilai = ($nilai_pg * 0.7) + ($rata_essay * 0.3);
+    } elseif ($total_soal_pg > 0 && $jumlah_soal_essay == 0) {
+        $total_nilai = $nilai_pg;
+    } elseif ($total_soal_pg == 0 && $jumlah_soal_essay > 0) {
+        $total_nilai = $rata_essay;
+    } else {
+        $total_nilai = 0;
+    }
 
     // Data untuk view
     $data['ujian'] = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
+    
+    $bobot_pg = isset($ujian->bobot_pg) ? $ujian->bobot_pg : 70;
+    $bobot_essay = isset($ujian->bobot_essay) ? $ujian->bobot_essay : 30;
 
+    // Perhitungan akhir
+    if ($total_soal_pg > 0 && $jumlah_soal_essay > 0) {
+        $total_nilai = ($nilai_pg * ($bobot_pg / 100)) + ($rata_essay * ($bobot_essay / 100));
+    } elseif ($total_soal_pg > 0) {
+        $total_nilai = $nilai_pg;
+    } elseif ($jumlah_soal_essay > 0) {
+        $total_nilai = $rata_essay;
+    } else {
+        $total_nilai = 0;
+    }
     $data['hasil'] = (object)[
         'total_pg' => number_format($nilai_pg, 2),
         'total_nilai_essay' => number_format($rata_essay, 2),

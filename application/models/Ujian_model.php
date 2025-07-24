@@ -24,6 +24,58 @@ class Ujian_model extends CI_Model {
         $this->db->where('id_ujian', $id_ujian);
         return $this->db->get('tbl_soal')->result();
     }
+public function get_soal_by_id($id)
+{
+    return $this->db->get_where('ujian_soal', ['id' => $id])->row_array();
+}
+
+public function delete_soal($id)
+{
+    return $this->db->delete('ujian_soal', ['id' => $id]);
+}
+
+public function soal_sudah_dikerjakan($id)
+{
+    $soal = $this->get_soal_by_id($id);
+    if (!$soal) return false;
+
+    $this->db->from('tbl_jawaban_siswa');
+
+    if ($soal['sumber'] === 'bank_soal') {
+        $this->db->where('bank_soal_id', $soal['bank_soal_id']);
+    } else {
+        $this->db->where('id_soal', $soal['soal_id']);
+    }
+
+    $this->db->where('id_ujian', $soal['ujian_id']);
+
+    return $this->db->count_all_results() > 0;
+}
+public function hapus_ujian($id_ujian)
+{
+    // 1. Ambil semua soal pribadi
+    $soal_pribadi = $this->db->get_where('tbl_soal', ['id_ujian' => $id_ujian])->result();
+
+    foreach ($soal_pribadi as $soal) {
+        // Hapus jawaban siswa untuk soal ini
+        $this->db->where('id_soal', $soal->id_soal);
+        $this->db->delete('tbl_jawaban_siswa');
+    }
+
+    // 2. Hapus soal pribadi dari tbl_soal
+    $this->db->where('id_ujian', $id_ujian);
+    $this->db->delete('tbl_soal');
+
+    // 3. Hapus relasi di ujian_soal
+    $this->db->where('ujian_id', $id_ujian);
+    $this->db->delete('ujian_soal');
+
+    // 4. Hapus ujian-nya
+    $this->db->where('id_ujian', $id_ujian);
+    return $this->db->delete('tbl_ujian');
+}
+
+
 
     public function get_materi_options($nip) {
         $this->db->select('pertemuan.id AS id_pertemuan, materi.deskripsi, kelas.nama_kelas, kelas.tingkat, mata_pelajaran.nama_mapel, pertemuan.pertemuan_ke');
@@ -38,6 +90,31 @@ class Ujian_model extends CI_Model {
         return $this->db->get()->result();
     }
 
+public function get_materi_optionss($nip)
+{
+    $this->db->select('
+        pertemuan.id AS id_pertemuan,
+        materi.id AS id_materi,
+        materi.deskripsi,
+        kelas.id AS id_kelas,
+        kelas.nama_kelas,
+        kelas.tingkat,
+        mata_pelajaran.id AS id_mapel,
+        mata_pelajaran.nama_mapel,
+        pertemuan.pertemuan_ke
+    ');
+    $this->db->from('pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->where('materi.id_guru', $nip); // hanya materi milik guru
+    $this->db->order_by('mata_pelajaran.nama_mapel', 'ASC');
+    $this->db->order_by('kelas.tingkat', 'ASC');
+    $this->db->order_by('kelas.nama_kelas', 'ASC');
+    $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
+
+    return $this->db->get()->result();
+}
 
 
 public function get_ujian_by_kelas($id_kelas, $nip_guru, $id_mapel)
@@ -296,12 +373,97 @@ public function hitung_skor($id_ujian, $nis)
         $this->db->where('tbl_ujian.id_ujian', $id_ujian);
         return $this->db->get()->row();
     }
-    public function get_peserta_ujian($ujian_id) {
-        $this->db->select('siswa.nis, siswa.nama, siswa.kelas, tbl_jawaban_siswa.id_ujian, MAX(tbl_jawaban_siswa.score) as total_score, MAX(tbl_jawaban_siswa.waktu_jawab) as waktu_dikerjakan');
-        $this->db->from('tbl_jawaban_siswa');
-        $this->db->join('siswa', 'siswa.nis = tbl_jawaban_siswa.nis');
-        $this->db->where('tbl_jawaban_siswa.id_ujian', $ujian_id);
-        $this->db->group_by('tbl_jawaban_siswa.nis, tbl_jawaban_siswa.id_ujian');
-        return $this->db->get()->result();
+public function get_peserta_ujian($ujian_id)
+{
+    $this->db->select('
+        siswa.nis,
+        siswa.nama,
+        kelas.nama_kelas,
+        kelas.tingkat,
+        tbl_jawaban_siswa.id_ujian,
+        MAX(tbl_jawaban_siswa.nilai_akhir) as total_score,
+        MAX(tbl_jawaban_siswa.waktu_jawab) as waktu_dikerjakan
+    ');
+    $this->db->from('tbl_jawaban_siswa');
+    $this->db->join('siswa', 'siswa.nis = tbl_jawaban_siswa.nis');
+    $this->db->join('tbl_ujian', 'tbl_ujian.id_ujian = tbl_jawaban_siswa.id_ujian');
+    $this->db->join('pertemuan', 'pertemuan.id = tbl_ujian.id_pertemuan');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+    $this->db->where('tbl_jawaban_siswa.id_ujian', $ujian_id);
+    $this->db->group_by('siswa.nis, siswa.nama, kelas.nama_kelas, kelas.tingkat, tbl_jawaban_siswa.id_ujian');
+
+    return $this->db->get()->result();
+}
+
+public function update_nilai_akhir($id_jawaban)
+{
+    // Ambil jawaban siswa
+    $jawaban = $this->db->get_where('tbl_jawaban_siswa', ['id_jawaban' => $id_jawaban])->row();
+
+    if (!$jawaban) return;
+
+    $id_ujian = $jawaban->id_ujian;
+    $nis = $jawaban->nis;
+
+    // Ambil semua jawaban siswa untuk ujian itu
+    $jawaban_siswa = $this->db->get_where('tbl_jawaban_siswa', [
+        'id_ujian' => $id_ujian,
+        'nis' => $nis
+    ])->result();
+
+    $jumlah_benar = 0;
+    $total_soal_pg = 0;
+    $total_nilai_essay = 0;
+    $jumlah_soal_essay = 0;
+
+    foreach ($jawaban_siswa as $j) {
+        // Ambil soal
+        $soal = null;
+        if ($j->sumber == 'bank_soal') {
+            $soal = $this->db->get_where('bank_soal', ['id_soal' => $j->bank_soal_id])->row();
+        } else {
+            $soal = $this->db->get_where('tbl_soal', ['id_soal' => $j->id_soal])->row();
+        }
+
+        if (!$soal) continue;
+
+        // Hitung PG
+        if ($soal->tipe_soal == 'pilihan') {
+            $total_soal_pg++;
+            if ($j->jawaban == $soal->kunci_jawaban) {
+                $jumlah_benar++;
+            }
+        }
+
+        // Hitung Essay
+        if ($soal->tipe_soal == 'essay' && $j->nilai_essay !== null) {
+            $total_nilai_essay += floatval($j->nilai_essay);
+            $jumlah_soal_essay++;
+        }
     }
+
+    $nilai_pg = $total_soal_pg > 0 ? ($jumlah_benar / $total_soal_pg) * 100 : 0;
+    $rata_essay = $jumlah_soal_essay > 0 ? $total_nilai_essay / $jumlah_soal_essay : 0;
+
+    // Ambil bobot dari ujian
+    $ujian = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
+    $bobot_pg = $ujian->bobot_pg ?? 70;
+    $bobot_essay = $ujian->bobot_essay ?? 30;
+
+    if ($total_soal_pg > 0 && $jumlah_soal_essay > 0) {
+        $total_nilai = ($nilai_pg * ($bobot_pg / 100)) + ($rata_essay * ($bobot_essay / 100));
+    } elseif ($total_soal_pg > 0) {
+        $total_nilai = $nilai_pg;
+    } elseif ($jumlah_soal_essay > 0) {
+        $total_nilai = $rata_essay;
+    } else {
+        $total_nilai = 0;
+    }
+
+    // Update semua jawaban siswa untuk ujian itu (boleh hanya salah satu juga)
+    $this->db->where('id_ujian', $id_ujian);
+    $this->db->where('nis', $nis);
+    $this->db->update('tbl_jawaban_siswa', ['nilai_akhir' => $total_nilai]);
+}
+
 }

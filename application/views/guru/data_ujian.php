@@ -36,7 +36,7 @@
                         <a href="<?= site_url('guru/daftar_nilai_essay/' . $u['id_ujian']) ?>" class="btn btn-info">Lihat Essay</a>
                         <a href="<?= site_url('guru/tampilkan_soal/' . $u['id_ujian']) ?>" class="btn btn-info">Lihat Soal</a>
                         <a href="<?= site_url('guru/edit_ujian/' . $u['id_ujian']) ?>" class="btn btn-warning">Edit</a>
-                        <a href="<?= site_url('guru/hapus_soal/' . $u['id_ujian']) ?>" class="btn btn-danger">Hapus</a>
+                        <a href="<?= site_url('guru/hapus_ujian/' . $u['id_ujian']) ?>" class="btn btn-danger">Hapus</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

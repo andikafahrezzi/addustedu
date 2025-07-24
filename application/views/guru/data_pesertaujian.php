@@ -18,7 +18,7 @@
                     <td><?= $no++ ?></td>
                     <td><?= htmlspecialchars($p->nis) ?></td>
                     <td><?= htmlspecialchars($p->nama) ?></td>
-                    <td><?= htmlspecialchars($p->kelas) ?></td>
+                    <td><?= htmlspecialchars($p->nama_kelas) ?></td>
                     <td><?= $p->total_score ?></td>
                     <td><?= date('d M Y H:i', strtotime($p->waktu_dikerjakan)) ?></td>
                 </tr>

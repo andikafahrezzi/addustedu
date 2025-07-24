@@ -31,16 +31,34 @@
                 <option value="nonaktif" <?= $ujian->status == 'nonaktif' ? 'selected' : '' ?>>Nonaktif</option>
             </select>
         </div>
+                        <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                             <label for="bobot_pg">Bobot Nilai PG (%)</label>
+                             <input type="number" name="bobot_pg" value="70" min="0" max="100" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                              <label for="bobot_essay">Bobot Nilai Essay (%)</label>
+                              <input type="number" name="bobot_essay" value="30" min="0" max="100" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
         <div class="form-group">
             <label for="materi_id">Mata Pelajaran</label>
-            <select name="materi_id" class="form-control" required>
+            <select name="id_pertemuan" class="form-control" required>
                 <option value="">Pilih Materi</option>
                 <?php foreach ($materi_list as $materi): ?>
-                    <option value="<?= $materi->id ?>"
-                        <?= $materi->id == $ujian->id_materi ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($materi->nama_mapel) ?> - <?= htmlspecialchars($materi->kelas) ?> - <?= htmlspecialchars($materi->deskripsi) ?>
+                    <option value="<?= $materi->id_pertemuan ?>"
+                        <?= $materi->id_pertemuan == $ujian->id_pertemuan ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($materi->nama_mapel) ?>
+                        - <?= htmlspecialchars($materi->tingkat . ' ' . $materi->nama_kelas) ?>
+                        - <?= htmlspecialchars($materi->deskripsi) ?>
+                        (Pertemuan <?= $materi->pertemuan_ke ?>)
                     </option>
                 <?php endforeach; ?>
+
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
