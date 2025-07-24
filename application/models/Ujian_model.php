@@ -277,6 +277,7 @@ public function hitung_skor($id_ujian, $nis)
     $total_soal_pg = 0;
     $nilai_essay_total = 0;
     $jumlah_soal_essay = 0;
+    $ada_essay_belum_dinilai = false;
 
     foreach ($jawaban_siswa as $jawaban) {
         $kunci_jawaban = null;
@@ -306,12 +307,10 @@ public function hitung_skor($id_ujian, $nis)
                 $jumlah_benar++;
             }
         } elseif ($tipe_soal === 'essay') {
-            // 🔒 Cek apakah guru sudah menilai
             if (is_null($jawaban->nilai_essay)) {
-                // Essay belum dinilai
-                return false; // atau return -1 jika mau
+                $ada_essay_belum_dinilai = true;
+                continue; // lanjut, jangan hitung nilai essay
             }
-
             $nilai_essay_total += floatval($jawaban->nilai_essay);
             $jumlah_soal_essay++;
         }
@@ -320,17 +319,29 @@ public function hitung_skor($id_ujian, $nis)
     $nilai_pg = $total_soal_pg > 0 ? ($jumlah_benar / $total_soal_pg) * 100 : 0;
     $rata_essay = $jumlah_soal_essay > 0 ? $nilai_essay_total / $jumlah_soal_essay : 0;
 
-    $total_nilai = ($nilai_pg * 0.7) + ($rata_essay * 0.3);
+    // Atur bobot
+    $bobot_pg = ($total_soal_pg > 0 && $jumlah_soal_essay > 0) ? 0.7 : 1;
+    $bobot_essay = ($total_soal_pg > 0 && $jumlah_soal_essay > 0) ? 0.3 : 0;
 
-    // Update skor
+    $total_nilai = ($nilai_pg * $bobot_pg) + ($rata_essay * $bobot_essay);
+
+    // Data yang akan disimpan
+    $data_update = [
+        'jumlah_benar' => $jumlah_benar,
+        'jumlah_salah' => $total_soal_pg - $jumlah_benar,
+        'score' => $total_nilai,
+        'is_selesai' => 1,
+        'waktu_submit' => date('Y-m-d H:i:s')
+    ];
+
+    // Jika semua essay sudah dinilai atau tidak ada essay, simpan nilai_akhir
+    if (!$ada_essay_belum_dinilai) {
+        $data_update['nilai_akhir'] = $total_nilai;
+    }
+
+    // Simpan ke database
     $this->db->where(['id_ujian' => $id_ujian, 'nis' => $nis])
-             ->update('tbl_jawaban_siswa', [
-                'jumlah_benar' => $jumlah_benar,
-                'jumlah_salah' => $total_soal_pg - $jumlah_benar,
-                'score' => $total_nilai,
-                'is_selesai' => 1,
-                'waktu_submit' => date('Y-m-d H:i:s')
-             ]);
+             ->update('tbl_jawaban_siswa', $data_update);
 
     return $total_nilai;
 }
