@@ -4,11 +4,10 @@
                 <section class="section">
                     <div class="card" style="width:100%;">
                         <div class="card-body">
-                            <h2 class="card-title" style="color: black;">Management Data Materi addustedu</h2>
+                            <h2 class="card-title" style="color: black;">Management Data Ujian addustedu</h2>
                             <hr>
                             <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction.</p>
-                            <a href="<?= base_url('admin/add_quiz') ?>" class="btn btn-success">Tambah
-                                Quiz⭢</a>
+                            
                         </div>
                     </div>
                     <div class="row">
@@ -21,6 +20,7 @@
                                                 <th scope="col">ID</th>
                                                 <th scope="col">Nama Guru</th>
                                                 <th scope="col">Nama Mapel</th>
+                                                <th scope="col">Jenis Ujian</th>
                                                 <th scope="col">Kelas</th>
                                                 <th scope="col">Status</th>
                                                 <th scope="col">Option</th>
@@ -42,6 +42,9 @@
                                                         <?php echo $u->nip_guru ?>
                                                     </td>
 
+                                                    <td>
+                                                        <?php echo $u->nama_mapel ?>
+                                                    </td>
                                                     <td>
                                                         <?php echo $u->nama_ujian ?>
                                                     </td>

@@ -799,7 +799,7 @@ public function data_quiz()
         
         $this->form_validation->set_rules('pertanyaan', 'Pertanyaan', 'required');
         $this->form_validation->set_rules('tipe_soal', 'Tipe Soal', 'required|in_list[pilihan,essay]');
-        $this->form_validation->set_rules('mapel_diajarkan', 'Mata Pelajaran', 'required');
+        $this->form_validation->set_rules('id_mapel', 'Mata Pelajaran', 'required');
         
         // Validasi khusus untuk pilihan ganda
         if ($this->input->post('tipe_soal') == 'pilihan') {
@@ -820,7 +820,7 @@ public function data_quiz()
                 'tipe_soal' => $post_data['tipe_soal'],
                 'tingkat_kesulitan' => $post_data['tingkat_kesulitan'],
                 'tipe_kognitif' => $post_data['tipe_kognitif'],
-                'mapel_diajarkan' => $post_data['mapel_diajarkan'],
+                'id_mapel' => $post_data['id_mapel'],
             ];
     
             // Tambahkan data khusus pilihan ganda jika diperlukan

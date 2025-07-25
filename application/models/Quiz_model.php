@@ -13,7 +13,8 @@ class Quiz_model extends CI_Model {
 
     public function get_materi_list()
     {
-        $this->db->select('pertemuan.id AS id_pertemuan, 
+        $this->db->select('pertemuan.id AS id_pertemuan,
+                        pertemuan.pertemuan_ke, 
                        mata_pelajaran.nama_mapel, 
                        kelas.nama_kelas, 
                        guru.nama_guru, materi.deskripsi');

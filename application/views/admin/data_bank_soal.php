@@ -101,7 +101,7 @@
     <script>
 function hapusSoal(id) {
     if (confirm('Apakah Anda yakin ingin menghapus soal ini?')) {
-        window.location.href = "<?= site_url('admin/bank_soal/hapus/') ?>" + id;
+        window.location.href = "<?= site_url('admin/hapus_soal/') ?>" + id;
     }
 }
 </script>

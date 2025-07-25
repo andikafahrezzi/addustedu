@@ -55,7 +55,7 @@
         <div class="card-header bg-primary text-white">
             <h4 class="mb-0">
                 <i class="fas fa-plus-circle mr-2"></i>
-                Buat Quiz Baru
+                Buat Bank Soal
             </h4>
         </div>
         
@@ -185,7 +185,7 @@
                 </div>
                 
                 <button type="submit" class="btn btn-primary">Simpan Soal</button>
-                <a href="<?= site_url('guru/bank_soal') ?>" class="btn btn-secondary">Batal</a>
+                <a href="<?= site_url('admin/bank_soal') ?>" class="btn btn-secondary">Batal</a>
             </form>
         </div>
     </div>

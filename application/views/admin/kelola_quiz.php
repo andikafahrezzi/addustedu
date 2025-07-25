@@ -148,7 +148,7 @@
                             <h6 class="mb-1">
                                 <span class="badge badge-primary mr-2"><?= $index+1 ?></span>
                                 <?= $soal->pertanyaan ?>
-                                <small class="text-muted">(<?= strtoupper($soal->tipe) ?> - <?= $soal->poin ?> poin)</small>
+                                <small class="text-muted">(<?= strtoupper($soal->tipe) ?> (<?= $soal->jawaban?>) - <?= $soal->poin ?> poin)</small>
                             </h6>
                             <div>
                                 <a href="<?= site_url('admin/hapus_soal/'.$soal->id.'/'.$quiz->id) ?>" 

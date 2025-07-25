@@ -124,9 +124,9 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                 <li><a class="nav-link" href="<?= base_url('admin/about_developer') ?>">Tentang
                                         Pembuat</a>
                                 </li>
-                                <li><a class="nav-link" href="<?= base_url('admin/about_addustedu') ?>">Tentang
+                                <!-- <li><a class="nav-link" href="<?= base_url('admin/about_addustedu') ?>">Tentang
                                         addustedu</a>
-                                </li>
+                                </li> -->
                             </ul>
                         </li>
                 </aside>

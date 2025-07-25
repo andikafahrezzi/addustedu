@@ -48,7 +48,11 @@
                                     </tr>
                                     <tr style="border-bottom: 0.5px solid #6c757d;">
                                         <td><span class="font-weight-bold">Akun Aktif? :</span></td>
-                                        <td><?= $detail->is_active ?></td>
+                                        <td><?php if ($detail->is_active == 1): ?>
+                                                    <span class="badge badge-success">Aktif</span>
+                                                <?php else: ?>
+                                                    <span class="badge badge-secondary">Tidak Aktif</span>
+                                                <?php endif; ?></td>
                                     </tr>
                                     <tr style="border-bottom: 0.5px solid #6c757d;">
                                         <td><span class="font-weight-bold">Terdaftar pada :</span></td>
