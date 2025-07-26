@@ -73,52 +73,74 @@ foreach ($pertemuan as $p) {
                             </div>
 
                             <!-- UJIAN SECTION -->
-                            <?php 
-                            $ujian_list = $ujian_data[$nip][$id_mapel] ?? [];
-                            ?>
-                            <?php if (!empty($ujian_list)): ?>
-                                <div class="row mt-4">
-                                    <?php foreach ($ujian_list as $ujian): ?>
-                                    <div class="col-md-4 mb-4">
-                                        <div class="pertemuan-card h-100 shadow-sm" style="background: linear-gradient(135deg, #42e695, #3bb2b8);">
-                                            <div class="card-body text-center text-white">
-                                                <h5 class="font-weight-bold"><?= $ujian['nama_ujian'] ?></h5>
-                                                <p><?= $ujian['deskripsi'] ?? 'Ujian tersedia.' ?></p>
+                           <?php 
+$ujian_list = $ujian_data[$nip][$id_mapel] ?? [];
+?>
+<?php if (!empty($ujian_list)): ?>
+    <div class="row mt-4">
+        <?php foreach ($ujian_list as $ujian): ?>
+        <div class="col-md-4 mb-4">
+            <div class="pertemuan-card h-100 shadow-sm" style="background: linear-gradient(135deg, #42e695, #3bb2b8);">
+                <div class="card-body text-center text-white">
+                    <h5 class="font-weight-bold text-dark"><?= $ujian['nama_ujian'] ?></h5>
 
-                                                <?php
-                                                $sudah_selesai = $this->db->get_where('tbl_jawaban_siswa', [
-                                                    'nis' => $this->session->userdata('nis'),
-                                                    'id_ujian' => $ujian['id_ujian'],
-                                                    'is_selesai' => 1
-                                                ])->row();
+                    <?php
+                    $sudah_selesai = $this->db->get_where('tbl_jawaban_siswa', [
+                        'nis' => $this->session->userdata('nis'),
+                        'id_ujian' => $ujian['id_ujian'],
+                        'is_selesai' => 1
+                    ])->row();
 
-                                                $mulai = strtotime($ujian['tanggal_mulai'] . ' 00:00:00');
-                                                $selesai = strtotime($ujian['tanggal_selesai'] . ' 23:59:59');
-                                                $sekarang = time();
-                                                ?>
+                    $mulai = strtotime($ujian['tanggal_mulai'] . ' 00:00:00');
+                    $selesai = strtotime($ujian['tanggal_selesai'] . ' 23:59:59');
+                    $sekarang = time();
+                    $status = $ujian['status']; // aktif atau nonaktif
+                    ?>
+                    <!-- ✅ Info deskripsi dinamis -->
+                    <p>
+                        <?php if ($sudah_selesai): ?>
+                            Ujian telah diselesaikan.
+                        <?php elseif ($status != 'aktif'): ?>
+                            Ujian belum aktif.
+                        <?php elseif ($sekarang < $mulai): ?>
+                            Ujian belum dimulai.
+                        <?php elseif ($sekarang > $selesai): ?>
+                            Waktu ujian telah berakhir.
+                        <?php else: ?>
+                            Ujian tersedia.
+                        <?php endif; ?>
+                    </p>
 
-                                                <?php if ($sudah_selesai): ?>
-                                                    <button class="btn btn-sm btn-success" disabled>
-                                                        <i class="lnr lnr-checkmark-circle"></i> Sudah Dikerjakan
-                                                    </button>
-                                                    <a href="<?= base_url('ujian/hasil/' . $ujian['id_ujian']) ?>" class="btn btn-sm btn-info mt-2">
-                                                        Lihat Hasil <i class="lnr lnr-eye"></i>
-                                                    </a>
-                                                <?php elseif ($mulai <= $sekarang && $sekarang <= $selesai): ?>
-                                                    <a href="<?= base_url('ujian/mulai/' . $ujian['id_ujian']) ?>" class="btn btn-sm btn-danger">
-                                                        Mulai Ujian <i class="lnr lnr-pencil"></i>
-                                                    </a>
-                                                <?php else: ?>
-                                                    <button class="btn btn-sm btn-secondary" disabled>Belum tersedia</button>
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            <?php else: ?>
-                                <p><em>Ujian belum tersedia</em></p>
-                            <?php endif; ?>
+                    <!-- ✅ Tombol dinamis -->
+                    <?php if ($sudah_selesai): ?>
+                        <button class="btn btn-sm btn-success" disabled>
+                            <i class="lnr lnr-checkmark-circle"></i> Sudah Dikerjakan
+                        </button>
+                        <a href="<?= base_url('ujian/hasil/' . $ujian['id_ujian']) ?>" class="btn btn-sm btn-info mt-2">
+                            Lihat Hasil <i class="lnr lnr-eye"></i>
+                        </a>
+                    <?php elseif ($status != 'aktif' || $sekarang < $mulai): ?>
+                        <button class="btn btn-sm btn-secondary" disabled>
+                            Belum bisa diakses
+                        </button>
+                    <?php elseif ($sekarang > $selesai): ?>
+                        <button class="btn btn-sm btn-dark" disabled>
+                            Waktu Habis
+                        </button>
+                    <?php else: ?>
+                        <a href="<?= base_url('ujian/mulai/' . $ujian['id_ujian']) ?>" class="btn btn-sm btn-danger">
+                            Mulai Ujian <i class="lnr lnr-pencil"></i>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+<?php else: ?>
+    <p><em>Ujian belum tersedia</em></p>
+<?php endif; ?>
+
                         </div>
                     <?php endforeach; ?>
                 <?php endforeach; ?>

@@ -156,11 +156,11 @@
     <meta name="csrf_token" content="<?php echo $this->security->get_csrf_hash(); ?>">
 </head>
 <body>
-<pre><?php print_r($soal); ?></pre>
+
 
 
 <h2 class="ujian-title">Ujian: <?= htmlspecialchars($ujian->nama_ujian) ?></h2>
-<h3 id="timer" class="timer"></h3>
+<div id="timer" class="timer"></div>
 
 <div id="soal-container">
     <?php if (!empty($soal)): ?>
@@ -503,6 +503,22 @@ function raguRagu(id_soal, sumber) {
         }
     });
 </script>
+<script>
+    let remainingTime = <?= $sisa_waktu ?>;
+    function updateTimer() {
+        let minutes = Math.floor(remainingTime / 60);
+        let seconds = remainingTime % 60;
+        document.getElementById('timer').textContent = `${minutes}m ${seconds}s`;
 
+        if (remainingTime <= 0) {
+            alert("Waktu ujian habis! Ujian akan disubmit otomatis.");
+            window.location.href = "<?= base_url('ujian/submit_ujian') ?>"; // pastikan route submit ujian
+        } else {
+            remainingTime--;
+            setTimeout(updateTimer, 1000);
+        }
+    }
+    updateTimer();
+</script>
 </body>
 </html>

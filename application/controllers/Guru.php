@@ -1146,7 +1146,7 @@ public function hapus_ujian($id_ujian)
         $this->session->set_flashdata('error', 'Gagal menghapus ujian.');
     }
 
-    redirect('guru/daftar_ujian'); // ganti sesuai halaman daftar ujian kamu
+    redirect('guru/tampilkan_ujian'); // ganti sesuai halaman daftar ujian kamu
 }
 
 

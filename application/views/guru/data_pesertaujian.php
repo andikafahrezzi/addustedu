@@ -16,11 +16,11 @@
             <?php $no = 1; foreach ($peserta as $p) : ?>
                 <tr>
                     <td><?= $no++ ?></td>
-                    <td><?= htmlspecialchars($p->nis) ?></td>
-                    <td><?= htmlspecialchars($p->nama) ?></td>
-                    <td><?= htmlspecialchars($p->nama_kelas) ?></td>
-                    <td><?= $p->total_score ?></td>
-                    <td><?= date('d M Y H:i', strtotime($p->waktu_dikerjakan)) ?></td>
+                <td><?= htmlspecialchars($p['nama']) ?></td>
+                <td><?= htmlspecialchars($p['nis']) ?></td>
+                <td><?= $p['jumlah_benar'] ?></td>
+                <td><?= number_format($p['total_nilai'], 2) ?></td>
+                <td><?= $p['waktu_dikerjakan'] ? date('d M Y H:i', strtotime($p['waktu_dikerjakan'])) : '-' ?></td>
                 </tr>
             <?php endforeach; ?>
         <?php else : ?>

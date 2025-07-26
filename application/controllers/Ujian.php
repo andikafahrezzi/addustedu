@@ -6,7 +6,7 @@ class Ujian extends CI_Controller {
         parent::__construct();
         $this->load->model('Ujian_model');
         if (!$this->session->userdata('nis')) {
-            redirect('auth');
+            redirect('welcome');
         }
     }
 
@@ -20,10 +20,10 @@ class Ujian extends CI_Controller {
     {
         // Cek apakah ujian aktif
         $ujian = $this->Ujian_model->get_ujian_by_id($id_ujian);
-        if (!$ujian || $ujian->status != 'aktif') {
-            show_404();
-            return;
-        }
+            if (!$ujian || $ujian->status != 'aktif') {
+                show_404();
+                return;
+                }
 
         // Cek tanggal ujian
         $today = date('Y-m-d');
@@ -52,12 +52,45 @@ class Ujian extends CI_Controller {
         } else {
             $sisa_waktu = $ujian->durasi * 60;
         }
+        if (!$sudah_mulai) {
+            $waktu_mulai = date('Y-m-d H:i:s');
+            $this->session->set_userdata('waktu_mulai_ujian', strtotime($waktu_mulai));
+
+            // Simpan waktu mulai ke semua soal pada ujian ini
+            $soal_ujian = $this->Ujian_model->get_all_soal_by_ujian($id_ujian);
+
+            foreach ($soal_ujian as $s) {
+                $id_soal = $s['id_soal'] ?? null;
+                $bank_soal_id = $s['bank_soal_id'] ?? null;
+
+                // Pastikan hanya salah satu yang tidak null
+                $this->db->insert('tbl_jawaban_siswa', [
+                    'nis' => $nis,
+                    'id_ujian' => $id_ujian,
+                    'id_soal' => $id_soal,
+                    'bank_soal_id' => $bank_soal_id,
+                    'sumber' => $s['sumber'],
+                    'waktu_mulai_ujian' => $waktu_mulai
+                ]);
+            }
+        }
+
 
         // Jika waktu habis, submit otomatis
         if ($sisa_waktu <= 0) {
             $this->submit_ujian();
             return;
         }
+        // Hitung sisa waktu dari database, bukan session
+        $waktu_mulai_row = $this->db
+            ->select('MIN(waktu_mulai_ujian) AS waktu_mulai')
+            ->from('tbl_jawaban_siswa')
+            ->where(['nis' => $nis, 'id_ujian' => $id_ujian])
+            ->get()->row();
+
+        $waktu_mulai = strtotime($waktu_mulai_row->waktu_mulai ?? date('Y-m-d H:i:s'));
+        $waktu_selesai = $waktu_mulai + ($ujian->durasi * 60);
+        $sisa_waktu = $waktu_selesai - time();
 
             $data['ujian'] = $ujian;
             $data['soal'] = $this->Ujian_model->get_all_soal_by_ujian($id_ujian);
@@ -109,6 +142,35 @@ public function hasil($id_ujian)
 {
     $nis = $this->session->userdata('nis');
 
+    // Ambil ujian & bobot
+    $ujian = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
+    if (!$ujian) {
+        show_error("Ujian tidak ditemukan.");
+    }
+
+    $bobot_pg = isset($ujian->bobot_pg) ? $ujian->bobot_pg : 70;
+    $bobot_essay = isset($ujian->bobot_essay) ? $ujian->bobot_essay : 30;
+
+    // Ambil semua soal dari ujian_soal
+    $soal_pg_total = 0;
+    $soal_essay_total = 0;
+    $soal_map = []; // key: sumber_id => tipe_soal
+
+    $ujian_soal = $this->db->get_where('ujian_soal', ['ujian_id' => $id_ujian])->result();
+    foreach ($ujian_soal as $s) {
+        $id = $s->sumber === 'bank_soal' ? $s->bank_soal_id : $s->soal_id;
+        $tabel = $s->sumber === 'bank_soal' ? 'bank_soal' : 'tbl_soal';
+        $soal = $this->db->select('tipe_soal')->get_where($tabel, ['id_soal' => $id])->row();
+
+        if ($soal) {
+            $key = $s->sumber . '_' . $id;
+            $soal_map[$key] = $soal->tipe_soal;
+
+            if ($soal->tipe_soal === 'pilihan') $soal_pg_total++;
+            if ($soal->tipe_soal === 'essay')   $soal_essay_total++;
+        }
+    }
+
     // Ambil semua jawaban siswa
     $jawaban_siswa = $this->db->get_where('tbl_jawaban_siswa', [
         'id_ujian' => $id_ujian,
@@ -116,37 +178,30 @@ public function hasil($id_ujian)
     ])->result();
 
     $jumlah_benar = 0;
-    $total_soal_pg = 0;
     $total_nilai_essay = 0;
-    $jumlah_soal_essay = 0;
+    $essay_belum_dinilai = false;
     $tanggal_submit = null;
-    $ada_essay_belum_dinilai = false;
 
     foreach ($jawaban_siswa as $jawaban) {
-        // Ambil data soal dari sumbernya
-        if ($jawaban->sumber == 'bank_soal') {
-            $soal = $this->db->get_where('bank_soal', ['id_soal' => $jawaban->bank_soal_id])->row();
-        } else {
-            $soal = $this->db->get_where('tbl_soal', ['id_soal' => $jawaban->id_soal])->row();
+        $key = $jawaban->sumber . '_' . ($jawaban->sumber === 'bank_soal' ? $jawaban->bank_soal_id : $jawaban->id_soal);
+        $tipe = $soal_map[$key] ?? null;
+
+        if ($tipe === 'pilihan') {
+            // Ambil kunci jawaban
+            $soal = $jawaban->sumber === 'bank_soal'
+                ? $this->db->get_where('bank_soal', ['id_soal' => $jawaban->bank_soal_id])->row()
+                : $this->db->get_where('tbl_soal', ['id_soal' => $jawaban->id_soal])->row();
+
+            if ($soal && $jawaban->jawaban == $soal->kunci_jawaban) {
+                $jumlah_benar++;
+            }
         }
 
-        if ($soal) {
-            // Cek PG
-            if ($soal->tipe_soal == 'pilihan') {
-                $total_soal_pg++;
-                if ($jawaban->jawaban == $soal->kunci_jawaban) {
-                    $jumlah_benar++;
-                }
-            }
-
-            // Cek Essay
-            if ($soal->tipe_soal == 'essay') {
-                if (is_null($jawaban->nilai_essay)) {
-                    $ada_essay_belum_dinilai = true;
-                } else {
-                    $total_nilai_essay += floatval($jawaban->nilai_essay);
-                    $jumlah_soal_essay++;
-                }
+        if ($tipe === 'essay') {
+            if (is_null($jawaban->nilai_essay)) {
+                $essay_belum_dinilai = true;
+            } else {
+                $total_nilai_essay += floatval($jawaban->nilai_essay);
             }
         }
 
@@ -155,49 +210,26 @@ public function hasil($id_ujian)
         }
     }
 
-    // Pesan jika ada essay belum dinilai
-    $pesan_essay = '';
-    if ($ada_essay_belum_dinilai) {
-        $pesan_essay = '⚠️ Beberapa soal essay belum dinilai oleh guru. Nilai akhir bersifat sementara.';
-    }
+    // Hitung nilai
+    $nilai_pg = $soal_pg_total > 0 ? ($jumlah_benar / $soal_pg_total) * 100 : 0;
+    $rata_essay = $soal_essay_total > 0 ? $total_nilai_essay / $soal_essay_total : 0;
 
-    // Hitung nilai PG dan Essay
-    $nilai_pg = $total_soal_pg > 0 ? ($jumlah_benar / $total_soal_pg) * 100 : 0;
-    $rata_essay = $jumlah_soal_essay > 0 ? $total_nilai_essay / $jumlah_soal_essay : 0;
+    $total_nilai = ($nilai_pg * ($bobot_pg / 100)) + ($rata_essay * ($bobot_essay / 100));
 
-    // ✅ Bobot fleksibel: 70:30 jika dua-duanya ada, 100% jika hanya satu
-    if ($total_soal_pg > 0 && $jumlah_soal_essay > 0) {
-        $total_nilai = ($nilai_pg * 0.7) + ($rata_essay * 0.3);
-    } elseif ($total_soal_pg > 0 && $jumlah_soal_essay == 0) {
-        $total_nilai = $nilai_pg;
-    } elseif ($total_soal_pg == 0 && $jumlah_soal_essay > 0) {
-        $total_nilai = $rata_essay;
-    } else {
-        $total_nilai = 0;
-    }
+    // Peringatan jika ada essay belum dinilai
+    $pesan_essay = $essay_belum_dinilai
+        ? '⚠️ Beberapa soal essay belum dinilai oleh guru. Nilai akhir bersifat sementara.'
+        : '';
 
-    // Data untuk view
-    $data['ujian'] = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
-    
-    $bobot_pg = isset($ujian->bobot_pg) ? $ujian->bobot_pg : 70;
-    $bobot_essay = isset($ujian->bobot_essay) ? $ujian->bobot_essay : 30;
-
-    // Perhitungan akhir
-    if ($total_soal_pg > 0 && $jumlah_soal_essay > 0) {
-        $total_nilai = ($nilai_pg * ($bobot_pg / 100)) + ($rata_essay * ($bobot_essay / 100));
-    } elseif ($total_soal_pg > 0) {
-        $total_nilai = $nilai_pg;
-    } elseif ($jumlah_soal_essay > 0) {
-        $total_nilai = $rata_essay;
-    } else {
-        $total_nilai = 0;
-    }
+    // View data
+    $data['ujian'] = $ujian;
+    $data['id_ujian'] = $id_ujian;
     $data['hasil'] = (object)[
         'total_pg' => number_format($nilai_pg, 2),
         'total_nilai_essay' => number_format($rata_essay, 2),
         'total_nilai' => number_format($total_nilai, 2),
         'jumlah_benar' => $jumlah_benar,
-        'jumlah_salah' => $total_soal_pg - $jumlah_benar,
+        'jumlah_salah' => $soal_pg_total - $jumlah_benar,
         'score' => $total_nilai,
         'tanggal_submit' => $tanggal_submit,
         'peringatan_essay' => $pesan_essay
@@ -205,6 +237,7 @@ public function hasil($id_ujian)
 
     $this->load->view('user/hasil', $data);
 }
+
 
 
 
@@ -311,80 +344,107 @@ public function simpan_jawaban_ajax()
 
 public function ranking($id_ujian)
 {
-    // Ambil semua siswa yang sudah selesai ujian
-    $this->db->select('tbl_jawaban_siswa.*', false);
-    $this->db->from('tbl_jawaban_siswa');
-    $this->db->where('id_ujian', $id_ujian);
-    $this->db->where('is_selesai', 1);
-    $jawaban_all = $this->db->get()->result();
+    // Ambil data ujian & bobot
+    $ujian = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
+    if (!$ujian) show_404();
+
+    $bobot_pg = $ujian->bobot_pg ?? 70;
+    $bobot_essay = $ujian->bobot_essay ?? 30;
+
+    // Ambil semua soal dari ujian_soal
+    $soal_pg_total = 0;
+    $soal_essay_total = 0;
+    $soal_map = []; // key: sumber_id → tipe_soal
+
+    $ujian_soal = $this->db->get_where('ujian_soal', ['ujian_id' => $id_ujian])->result();
+    foreach ($ujian_soal as $s) {
+        $id = $s->sumber === 'bank_soal' ? $s->bank_soal_id : $s->soal_id;
+        $tabel = $s->sumber === 'bank_soal' ? 'bank_soal' : 'tbl_soal';
+        $soal = $this->db->select('id_soal, tipe_soal, kunci_jawaban')->get_where($tabel, ['id_soal' => $id])->row();
+
+        if ($soal) {
+            $key = $s->sumber . '_' . $id;
+            $soal_map[$key] = [
+                'tipe_soal' => $soal->tipe_soal,
+                'kunci_jawaban' => $soal->kunci_jawaban,
+                'sumber' => $s->sumber,
+                'id_soal' => $id
+            ];
+
+            if ($soal->tipe_soal == 'pilihan') $soal_pg_total++;
+            if ($soal->tipe_soal == 'essay')   $soal_essay_total++;
+        }
+    }
+
+    // Ambil semua siswa yang sudah menyelesaikan ujian
+    $this->db->where(['id_ujian' => $id_ujian, 'is_selesai' => 1]);
+    $jawaban_all = $this->db->get('tbl_jawaban_siswa')->result();
+
+    // Kelompokkan jawaban per siswa
+    $jawaban_per_siswa = [];
+    foreach ($jawaban_all as $j) {
+        $key = $j->nis;
+        if (!isset($jawaban_per_siswa[$key])) {
+            $jawaban_per_siswa[$key] = [];
+        }
+        $jawaban_per_siswa[$key][] = $j;
+    }
 
     $ranking_data = [];
 
-    foreach ($jawaban_all as $jawaban) {
-        $nis = $jawaban->nis;
+    foreach ($jawaban_per_siswa as $nis => $jawaban_list) {
+        $jumlah_benar = 0;
+        $nilai_essay_total = 0;
+        $essay_dinilai = 0;
 
-        // Inisialisasi jika belum ada
-        if (!isset($ranking_data[$nis])) {
-            $ranking_data[$nis] = [
-                'nis' => $nis,
-                'nama' => '', // diisi nanti
-                'jumlah_benar' => 0,
-                'jumlah_salah' => 0,
-                'nilai_pg' => 0,
-                'nilai_essay_total' => 0,
-                'jumlah_essay' => 0,
-                'total_nilai' => 0
-            ];
+        // Mapping jawaban untuk lookup cepat
+        $jawaban_map = [];
+        foreach ($jawaban_list as $jawaban) {
+            $soal_key = $jawaban->sumber . '_' . ($jawaban->sumber === 'bank_soal' ? $jawaban->bank_soal_id : $jawaban->id_soal);
+            $jawaban_map[$soal_key] = $jawaban;
         }
 
-        // Ambil nama siswa (sekali saja)
-        if (empty($ranking_data[$nis]['nama'])) {
-            $siswa = $this->db->get_where('siswa', ['nis' => $nis])->row();
-            $ranking_data[$nis]['nama'] = $siswa ? $siswa->nama : 'Unknown';
-        }
+        foreach ($soal_map as $key => $info) {
+            $tipe = $info['tipe_soal'];
+            $jawaban = $jawaban_map[$key] ?? null;
 
-        // Ambil data soal
-        if ($jawaban->sumber == 'bank_soal') {
-            $soal = $this->db->get_where('bank_soal', ['id_soal' => $jawaban->bank_soal_id])->row();
-        } else {
-            $soal = $this->db->get_where('tbl_soal', ['id_soal' => $jawaban->id_soal])->row();
-        }
-
-        if (!$soal) continue;
-
-        if ($soal->tipe_soal == 'pilihan') {
-            if ($jawaban->jawaban == $soal->kunci_jawaban) {
-                $ranking_data[$nis]['jumlah_benar']++;
-            } else {
-                $ranking_data[$nis]['jumlah_salah']++;
+            if ($tipe === 'pilihan') {
+                if ($jawaban && $jawaban->jawaban == $info['kunci_jawaban']) {
+                    $jumlah_benar++;
+                }
+                // else dianggap salah
+            } elseif ($tipe === 'essay') {
+                if ($jawaban && !is_null($jawaban->nilai_essay)) {
+                    $nilai_essay_total += floatval($jawaban->nilai_essay);
+                    $essay_dinilai++;
+                } else {
+                    $nilai_essay_total += 0; // tidak diisi = 0
+                }
             }
         }
 
-        if ($soal->tipe_soal == 'essay') {
-            if (!is_null($jawaban->nilai_essay)) {
-                $ranking_data[$nis]['nilai_essay_total'] += floatval($jawaban->nilai_essay);
-                $ranking_data[$nis]['jumlah_essay']++;
-            }
-        }
+        $nilai_pg = $soal_pg_total > 0 ? ($jumlah_benar / $soal_pg_total) * 100 : 0;
+        $rata_essay = $soal_essay_total > 0 ? $nilai_essay_total / $soal_essay_total : 0;
+        $total_nilai = ($nilai_pg * ($bobot_pg / 100)) + ($rata_essay * ($bobot_essay / 100));
+
+        $siswa = $this->db->get_where('siswa', ['nis' => $nis])->row();
+
+        $ranking_data[] = [
+            'nis' => $nis,
+            'nama' => $siswa ? $siswa->nama : 'Unknown',
+            'jumlah_benar' => $jumlah_benar,
+            'jumlah_salah' => $soal_pg_total - $jumlah_benar,
+            'nilai_pg' => number_format($nilai_pg, 2),
+            'rata_essay' => number_format($rata_essay, 2),
+            'total_nilai' => number_format($total_nilai, 2),
+        ];
     }
 
-    // Hitung nilai total semua siswa
-    foreach ($ranking_data as &$data) {
-        $total_pg = $data['jumlah_benar'] + $data['jumlah_salah'];
-        $nilai_pg = $total_pg > 0 ? ($data['jumlah_benar'] / $total_pg) * 100 : 0;
-        $rata_essay = $data['jumlah_essay'] > 0 ? $data['nilai_essay_total'] / $data['jumlah_essay'] : 0;
-
-        $data['nilai_pg'] = $nilai_pg;
-        $data['total_nilai'] = ($nilai_pg * 0.7) + ($rata_essay * 0.3);
-    }
-
-    // Urutkan manual berdasarkan total_nilai DESC
-    usort($ranking_data, function ($a, $b) {
-        return $b['total_nilai'] <=> $a['total_nilai'];
-    });
+    // Urutkan berdasarkan total_nilai DESC
+    usort($ranking_data, fn($a, $b) => $b['total_nilai'] <=> $a['total_nilai']);
 
     $data['ranking'] = $ranking_data;
-    $data['ujian'] = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
+    $data['ujian'] = $ujian;
 
     $this->load->view('user/navu');
     $this->load->view('user/rankinng', $data);

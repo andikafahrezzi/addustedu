@@ -104,7 +104,6 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                         </div>
                         <div class=" col-md-6">
                             <form action="<?= base_url('welcome/validateLogin') ?>" method="post">
-                            <?php echo $this->security->get_csrf_token_name(); ?>
                             <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
                         value="<?= $this->security->get_csrf_hash(); ?>" />
                                 <div class="form-group">

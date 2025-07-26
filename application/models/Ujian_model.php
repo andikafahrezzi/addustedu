@@ -53,27 +53,37 @@ public function soal_sudah_dikerjakan($id)
 }
 public function hapus_ujian($id_ujian)
 {
-    // 1. Ambil semua soal pribadi
-    $soal_pribadi = $this->db->get_where('tbl_soal', ['id_ujian' => $id_ujian])->result();
+    // 1. Ambil semua soal dari ujian_soal
+    $soal_ujian = $this->db->get_where('ujian_soal', ['ujian_id' => $id_ujian])->result();
 
-    foreach ($soal_pribadi as $soal) {
-        // Hapus jawaban siswa untuk soal ini
-        $this->db->where('id_soal', $soal->id_soal);
+    foreach ($soal_ujian as $soal) {
+        if ($soal->sumber === 'pribadi') {
+            $this->db->where('id_soal', $soal->id_soal);
+        } elseif ($soal->sumber === 'bank') {
+            $this->db->where('bank_soal_id', $soal->bank_soal_id);
+        }
+        $this->db->where('id_ujian', $id_ujian); // pastikan filter tetap kuat
         $this->db->delete('tbl_jawaban_siswa');
     }
 
-    // 2. Hapus soal pribadi dari tbl_soal
+    // 🔥 Hapus semua jawaban yang mungkin tidak terkait id_soal/bank (sisa orphan)
+    $this->db->where('id_ujian', $id_ujian);
+    $this->db->delete('tbl_jawaban_siswa');
+
+    // 2. Hapus soal pribadi
     $this->db->where('id_ujian', $id_ujian);
     $this->db->delete('tbl_soal');
 
-    // 3. Hapus relasi di ujian_soal
+    // 3. Hapus relasi soal
     $this->db->where('ujian_id', $id_ujian);
     $this->db->delete('ujian_soal');
 
-    // 4. Hapus ujian-nya
+    // 4. Hapus ujian
     $this->db->where('id_ujian', $id_ujian);
     return $this->db->delete('tbl_ujian');
 }
+
+
 
 
 
@@ -266,83 +276,99 @@ public function tandai_ragu($id_soal, $jawaban, $sumber)
     return $this->db->trans_status();
 }
 
-public function hitung_skor($id_ujian, $nis)
-{
+public function hitung_skor($id_ujian, $nis) {
+    $this->load->database();
+
+    // 1. Ambil semua soal ujian (PG + Essay)
+    $ujian_soal = $this->db->get_where('ujian_soal', ['ujian_id' => $id_ujian])->result();
+    
+    // 2. Hitung total soal per tipe
+    $soal_pg_total = 0;
+    $soal_essay_total = 0;
+    $jumlah_benar = 0;
+    $nilai_essay_total = 0;
+    $essay_terkoreksi = 0;
+    $essay_belum_dinilai = false;
+
+    // 3. Ambil semua jawaban siswa sekaligus (optimasi query)
     $jawaban_siswa = $this->db->get_where('tbl_jawaban_siswa', [
-        'id_ujian' => $id_ujian,
+        'id_ujian' => $id_ujian, 
         'nis' => $nis
     ])->result();
 
-    $jumlah_benar = 0;
-    $total_soal_pg = 0;
-    $nilai_essay_total = 0;
-    $jumlah_soal_essay = 0;
-    $ada_essay_belum_dinilai = false;
+    foreach ($ujian_soal as $item) {
+        $is_bank = $item->sumber === 'bank_soal';
+        $soal_id = $is_bank ? $item->bank_soal_id : $item->soal_id;
+        $tabel_soal = $is_bank ? 'bank_soal' : 'tbl_soal';
 
-    foreach ($jawaban_siswa as $jawaban) {
-        $kunci_jawaban = null;
-        $tipe_soal = null;
+        $soal = $this->db->select('id_soal, tipe_soal, kunci_jawaban')
+                         ->get_where($tabel_soal, ['id_soal' => $soal_id])
+                         ->row();
 
-        // Ambil soal
-        if ($jawaban->sumber == 'bank_soal') {
-            $soal = $this->db->select('kunci_jawaban, tipe_soal')
-                             ->from('bank_soal')
-                             ->where('id_soal', $jawaban->bank_soal_id)
-                             ->get()->row();
-        } else {
-            $soal = $this->db->select('kunci_jawaban, tipe_soal')
-                             ->from('tbl_soal')
-                             ->where('id_soal', $jawaban->id_soal)
-                             ->get()->row();
+        if (!$soal) continue;
+
+        // 4. Cari jawaban siswa (jika ada)
+        $jawaban = null;
+        foreach ($jawaban_siswa as $js) {
+            if (($is_bank && $js->bank_soal_id == $soal_id) || 
+                (!$is_bank && $js->id_soal == $soal_id)) {
+                $jawaban = $js;
+                break;
+            }
         }
 
-        if ($soal) {
-            $kunci_jawaban = $soal->kunci_jawaban;
-            $tipe_soal = $soal->tipe_soal;
-        }
-
-        if ($tipe_soal === 'pilihan') {
-            $total_soal_pg++;
-            if ($jawaban->jawaban == $kunci_jawaban) {
+        if ($soal->tipe_soal === 'pilihan') {
+            $soal_pg_total++;
+            
+            // 5. Jika tidak dijawab atau jawaban salah → salah
+            if ($jawaban && $jawaban->jawaban === $soal->kunci_jawaban) {
                 $jumlah_benar++;
             }
-        } elseif ($tipe_soal === 'essay') {
-            if (is_null($jawaban->nilai_essay)) {
-                $ada_essay_belum_dinilai = true;
-                continue; // lanjut, jangan hitung nilai essay
+            // Jika tidak ada record jawaban, otomatis dianggap salah (tidak perlu penanganan)
+
+        } elseif ($soal->tipe_soal === 'essay') {
+            $soal_essay_total++;
+            
+            // 6. Essay: Tidak diisi = 0, Sudah dinilai = ambil nilai, Belum dinilai = flag
+            if (!$jawaban || empty($jawaban->jawaban_essay)) {
+                // Tidak diisi sama sekali
+                $nilai_essay_total += 0;
+            } elseif (is_null($jawaban->nilai_essay)) {
+                $essay_belum_dinilai = true;
+            } else {
+                $nilai_essay_total += floatval($jawaban->nilai_essay);
             }
-            $nilai_essay_total += floatval($jawaban->nilai_essay);
-            $jumlah_soal_essay++;
         }
     }
 
-    $nilai_pg = $total_soal_pg > 0 ? ($jumlah_benar / $total_soal_pg) * 100 : 0;
-    $rata_essay = $jumlah_soal_essay > 0 ? $nilai_essay_total / $jumlah_soal_essay : 0;
+    // 7. Hitung nilai akhir (PG salah otomatis, Essay 0 jika tidak diisi)
+    $nilai_pg = $soal_pg_total > 0 ? ($jumlah_benar / $soal_pg_total) * 100 : 0;
+    $rata_essay = $soal_essay_total > 0 ? ($nilai_essay_total / $soal_essay_total) : 0;
 
-    // Atur bobot
-    $bobot_pg = ($total_soal_pg > 0 && $jumlah_soal_essay > 0) ? 0.7 : 1;
-    $bobot_essay = ($total_soal_pg > 0 && $jumlah_soal_essay > 0) ? 0.3 : 0;
+    $ujian = $this->db->get_where('tbl_ujian', ['id_ujian' => $id_ujian])->row();
+    $bobot_pg = $ujian->bobot_pg / 100;
+    $bobot_essay = $ujian->bobot_essay / 100;
 
     $total_nilai = ($nilai_pg * $bobot_pg) + ($rata_essay * $bobot_essay);
 
-    // Data yang akan disimpan
+    // 8. Update database
     $data_update = [
         'jumlah_benar' => $jumlah_benar,
-        'jumlah_salah' => $total_soal_pg - $jumlah_benar,
+        'jumlah_salah' => $soal_pg_total - $jumlah_benar, // Otomatis hitung salah
         'score' => $total_nilai,
         'is_selesai' => 1,
         'waktu_submit' => date('Y-m-d H:i:s')
     ];
 
-    // Jika semua essay sudah dinilai atau tidak ada essay, simpan nilai_akhir
-    if (!$ada_essay_belum_dinilai) {
+    if (!$essay_belum_dinilai) {
         $data_update['nilai_akhir'] = $total_nilai;
     }
 
-    // Simpan ke database
     $this->db->where(['id_ujian' => $id_ujian, 'nis' => $nis])
              ->update('tbl_jawaban_siswa', $data_update);
-
+    log_message('debug', 'Total PG: '.$soal_pg_total.' | Benar: '.$jumlah_benar.' | NIS: '.$nis.' | Ujian: '.$id_ujian);
+    log_message('debug', 'Soal Essay Total: '.$soal_essay_total.' | Sudah dinilai: '.$essay_terkoreksi);
+    log_message('debug', 'Nilai PG: '.$nilai_pg.' | Rata Essay: '.$rata_essay.' | Total Nilai: '.$total_nilai);
     return $total_nilai;
 }
 
@@ -386,25 +412,81 @@ public function hitung_skor($id_ujian, $nis)
     }
 public function get_peserta_ujian($ujian_id)
 {
-    $this->db->select('
-        siswa.nis,
-        siswa.nama,
-        kelas.nama_kelas,
-        kelas.tingkat,
-        tbl_jawaban_siswa.id_ujian,
-        MAX(tbl_jawaban_siswa.nilai_akhir) as total_score,
-        MAX(tbl_jawaban_siswa.waktu_jawab) as waktu_dikerjakan
-    ');
-    $this->db->from('tbl_jawaban_siswa');
-    $this->db->join('siswa', 'siswa.nis = tbl_jawaban_siswa.nis');
-    $this->db->join('tbl_ujian', 'tbl_ujian.id_ujian = tbl_jawaban_siswa.id_ujian');
-    $this->db->join('pertemuan', 'pertemuan.id = tbl_ujian.id_pertemuan');
-    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
-    $this->db->where('tbl_jawaban_siswa.id_ujian', $ujian_id);
-    $this->db->group_by('siswa.nis, siswa.nama, kelas.nama_kelas, kelas.tingkat, tbl_jawaban_siswa.id_ujian');
+    // Ambil data ujian
+    $ujian = $this->db->get_where('tbl_ujian', ['id_ujian' => $ujian_id])->row();
+    $bobot_pg = $ujian ? ($ujian->bobot_pg / 100) : 0.7;
+    $bobot_essay = $ujian ? ($ujian->bobot_essay / 100) : 0.3;
 
-    return $this->db->get()->result();
+    // Ambil soal
+    $ujian_soal = $this->db->get_where('ujian_soal', ['ujian_id' => $ujian_id])->result();
+
+    $soal_pg_total = 0;
+    $soal_essay_total = 0;
+    $soal_map = [];
+
+    foreach ($ujian_soal as $s) {
+        $id_soal = $s->sumber == 'bank_soal' ? $s->bank_soal_id : $s->soal_id;
+        $table = $s->sumber == 'bank_soal' ? 'bank_soal' : 'tbl_soal';
+        $soal = $this->db->select('id_soal, tipe_soal, kunci_jawaban')->get_where($table, ['id_soal' => $id_soal])->row();
+        if ($soal) {
+            $key = $s->sumber . '_' . $id_soal;
+            $soal_map[$key] = $soal;
+            if ($soal->tipe_soal == 'pilihan') $soal_pg_total++;
+            if ($soal->tipe_soal == 'essay') $soal_essay_total++;
+        }
+    }
+
+    // Ambil semua jawaban siswa
+    $this->db->select('js.*, s.nama');
+    $this->db->from('tbl_jawaban_siswa js');
+    $this->db->join('siswa s', 's.nis = js.nis');
+    $this->db->where('js.id_ujian', $ujian_id);
+    $this->db->order_by('s.nama');
+    $jawaban_all = $this->db->get()->result();
+
+    // Kelompokkan per siswa
+    $ranking = [];
+    foreach ($jawaban_all as $j) {
+        $key = $j->sumber . '_' . ($j->sumber == 'bank_soal' ? $j->bank_soal_id : $j->id_soal);
+        $nis = $j->nis;
+
+        if (!isset($ranking[$nis])) {
+            $ranking[$nis] = [
+                'nis' => $j->nis,
+                'nama' => $j->nama,
+                'jumlah_benar' => 0,
+                'nilai_essay_total' => 0,
+                'jumlah_essay_terkoreksi' => 0,
+                'waktu_dikerjakan' => $j->waktu_jawab ?? null
+            ];
+        }
+
+        if (!isset($soal_map[$key])) continue;
+        $soal = $soal_map[$key];
+
+        if ($soal->tipe_soal == 'pilihan') {
+            if ($j->jawaban == $soal->kunci_jawaban) {
+                $ranking[$nis]['jumlah_benar']++;
+            }
+        } elseif ($soal->tipe_soal == 'essay') {
+            if (!is_null($j->nilai_essay)) {
+                $ranking[$nis]['nilai_essay_total'] += floatval($j->nilai_essay);
+                $ranking[$nis]['jumlah_essay_terkoreksi']++;
+            }
+        }
+    }
+
+    // Hitung nilai akhir
+    foreach ($ranking as &$r) {
+        $nilai_pg = $soal_pg_total > 0 ? ($r['jumlah_benar'] / $soal_pg_total) * 100 : 0;
+        $rata_essay = $soal_essay_total > 0 ? ($r['nilai_essay_total'] / $soal_essay_total) : 0;
+        $r['total_nilai'] = ($nilai_pg * $bobot_pg) + ($rata_essay * $bobot_essay);
+    }
+
+    return array_values($ranking);
 }
+
+
 
 public function update_nilai_akhir($id_jawaban)
 {

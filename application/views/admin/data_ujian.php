@@ -142,7 +142,7 @@
 
 <script>
     function confirmDeleteQuiz(id) {
-        $('#deleteQuizLink').attr('href', '<?= site_url("admin/delete_quiz/"); ?>' + id);
+        $('#deleteQuizLink').attr('href', '<?= site_url("admin/delete_ujian/"); ?>' + id);
         $('#deleteQuizModal').modal('show');
     }
 </script>
