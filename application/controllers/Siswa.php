@@ -81,10 +81,10 @@ public function lanjutkan_quiz($quiz_siswa_id)
         $this->session->set_flashdata('timeout', 'Waktu pengerjaan quiz telah habis! ' . 
             ($nilai > 0 ? 'Nilai akhir: ' . $nilai : 'Anda tidak mengisi jawaban apapun.'));
         
-        redirect("materi/quiz_result/{$quiz_siswa_id}");
+        redirect("siswa/quiz_result/{$quiz_siswa_id}");
     }
     
-    redirect("materi/do_quiz/{$quiz_siswa_id}");
+    redirect("siswa/do_quiz/{$quiz_siswa_id}");
 }
 
 public function do_quiz($quiz_siswa_id)

@@ -10,7 +10,6 @@
                                 style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px">
                                 <form method="post" enctype="multipart/form-data"
                                     action="<?=base_url('guru/add_materi')?>">
-                                    <?php echo $this->security->get_csrf_token_name(); ?>
                                         <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
                                         value="<?= $this->security->get_csrf_hash(); ?>" />
                                     <input type="hidden" name="id">

@@ -26,34 +26,46 @@ class Quiz_model extends CI_Model {
     return $this->db->get()->result();
     }
 
-    public function get_quiz_with_questions($quiz_id)
-    {
-        $quiz = $this->db->get_where('quiz', ['id' => $quiz_id])->row();
-        
-        if($quiz) {
-            $quiz->questions = $this->db->get_where('quiz_questions', ['quiz_id' => $quiz_id])->result();
-            $this->db->select('
-                            pertemuan.id AS id_pertemuan,
-                            pertemuan.pertemuan_ke,
-                            pertemuan.tanggal,
-                            materi.id AS id_materi,
-                            materi.deskripsi,
-                            kelas.nama_kelas,
-                            mata_pelajaran.nama_mapel,
-                            guru.nama_guru
-                        ');
-                        $this->db->from('pertemuan');
-                        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
-                        $this->db->join('kelas', 'kelas.id = materi.id_kelas');
-                        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
-                        $this->db->join('guru', 'guru.nip = materi.id_guru');
-                        $this->db->where('pertemuan.id', $quiz->id_pertemuan);
-                        $quiz->materi = $this->db->get()->row();
+public function get_quiz_with_questions($quiz_id)
+{
+    $quiz = $this->db->get_where('quiz', ['id' => $quiz_id])->row();
+    
+    if ($quiz) {
+        // Ambil semua soal
+        $quiz->questions = $this->db
+            ->get_where('quiz_questions', ['quiz_id' => $quiz_id])
+            ->result();
 
-                     }
-        
-        return $quiz;
+        // 🔀 Jika shuffle_question = 1, acak urutan soal
+       if ((int) $quiz->shuffle_questions === 1) {
+            shuffle($quiz->questions);
+        }
+
+
+        // Ambil info materi/pertemuan
+        $this->db->select('
+            pertemuan.id AS id_pertemuan,
+            pertemuan.pertemuan_ke,
+            pertemuan.tanggal,
+            materi.id AS id_materi,
+            materi.deskripsi,
+            kelas.nama_kelas,
+            mata_pelajaran.nama_mapel,
+            guru.nama_guru
+        ');
+        $this->db->from('pertemuan');
+        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+        $this->db->join('kelas', 'kelas.id = materi.id_kelas');
+        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+        $this->db->join('guru', 'guru.nip = materi.id_guru');
+        $this->db->where('pertemuan.id', $quiz->id_pertemuan);
+
+        $quiz->materi = $this->db->get()->row();
     }
+
+    return $quiz;
+}
+
     public function tambah_soal($data)
 {
     return $this->db->insert('quiz_questions', $data);
@@ -199,13 +211,11 @@ public function delete_quiz($id)
     return true;
 }
 
-
-
-
 public function get_quizzes_by_guru($nip) {
     $this->db->select('
         quiz.*, 
         pertemuan.id AS id_pertemuan,
+        pertemuan.pertemuan_ke,
         materi.deskripsi AS judul_materi, 
         kelas.tingkat, 
         kelas.nama_kelas, 
@@ -215,11 +225,16 @@ public function get_quizzes_by_guru($nip) {
     $this->db->from('quiz');
     $this->db->join('pertemuan', 'pertemuan.id = quiz.id_pertemuan', 'left');
     $this->db->join('materi', 'materi.id = pertemuan.id_materi', 'left');
-    $this->db->join('kelas', 'kelas.id = materi.id_kelas', 'left');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas', 'left');
     $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel', 'left');
 
-    // Filter agar hanya quiz dari guru login (NIP)
     $this->db->where('materi.id_guru', $nip);
+
+    //  Urutan: mapel -> kelas -> pertemuan_ke
+    $this->db->order_by('mata_pelajaran.nama_mapel', 'ASC');
+    $this->db->order_by('kelas.tingkat', 'ASC');
+    $this->db->order_by('kelas.nama_kelas', 'ASC');
+    $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
 
     return $this->db->get()->result();
 }
@@ -310,12 +325,28 @@ public function delete_quiz_guru($quiz_id, $nip) {
 
 // Get available materials for select dropdown
 public function get_materi_options($nip) {
-    $this->db->select('pertemuan.*, pertemuan.id AS id_pertemuan, materi.deskripsi, kelas.tingkat, kelas.nama_kelas');
+    $this->db->select('
+        pertemuan.id AS id_pertemuan,
+        materi.deskripsi,
+        kelas.nama_kelas,
+        kelas.tingkat,
+        mata_pelajaran.nama_mapel,
+        pertemuan.pertemuan_ke
+    ');
     $this->db->from('pertemuan');
     $this->db->join('materi', 'materi.id = pertemuan.id_materi');
-    $this->db->join('kelas', 'kelas.id = materi.id_kelas');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
     $this->db->where('materi.id_guru', $nip);
+    
+    // 🔽 Urutkan berdasarkan mapel → tingkat → nama_kelas → pertemuan_ke
+    $this->db->order_by('mata_pelajaran.nama_mapel', 'ASC');
+    $this->db->order_by('kelas.tingkat', 'ASC');
+    $this->db->order_by('kelas.nama_kelas', 'ASC');
+    $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
+    
     return $this->db->get()->result();
 }
+
 
 }

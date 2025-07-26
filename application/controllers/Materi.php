@@ -11,7 +11,12 @@ class Materi extends CI_Controller
         $this->load->library('form_validation');
         $this->load->library('disqus');
         $this->load->model('M_materi');
+        if (!$this->session->userdata('nis')) {
+        redirect('welcome'); // arahkan ke halaman login
+        }
     }
+    
+    
     public function index() 
     {
         $query = $this->db->get_where('pertemuan', ['id' => $id_pertemuan]);
@@ -35,6 +40,7 @@ class Materi extends CI_Controller
     //     $this->load->view('template/footer');
     // }
     public function belajar($id_pertemuan) {
+
         $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);
             if ($id_pertemuan === null) {
             show_404(); // atau redirect ke halaman aman

@@ -2,7 +2,7 @@
 <div class="container">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Buat Quiz Baru</h6>
+            <h6 class="m-0 font-weight-bold text-success">Buat Quiz Baru</h6>
         </div>
         <div class="card-body">
             <?php echo form_open(current_url()); ?>
@@ -11,14 +11,12 @@
                 <?php endif; ?>
                 
                 <div class="form-group">
-                    <label>Materi</label>
+                    <label>Pertemuan dan Mata Pelajaran</label>
                     <select name="id_pertemuan" class="form-control" required>
-                        <option value="">Pilih Materi</option>
+                        <option value="">Pilih Pertemuan dan Mata Pelajaran</option>
                         <?php foreach ($materi_list as $materi): ?>
-                            <option value="<?php echo $materi->id_pertemuan; ?>">
-                            <?php echo $materi->id_pertemuan; ?>
-                            <?php echo htmlspecialchars($materi->nama_kelas); ?>
-                                <?php echo htmlspecialchars($materi->deskripsi); ?>
+                            <option value="<?= $materi->id_pertemuan ?>">
+                               [<?= $materi->nama_mapel ?>] - Kelas: <?= $materi->nama_kelas ?> - Pertemuan <?= $materi->pertemuan_ke ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -54,8 +52,8 @@
                     <label class="form-check-label" for="shuffleCheck">Acak urutan soal</label>
                 </div>
                 
-                <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="<?php echo site_url('admin/kelola_quiz'); ?>" class="btn btn-secondary">Batal</a>
+                <button type="submit" class="btn btn-success">Simpan</button>
+                <a href="<?php echo site_url('guru/data_quiz'); ?>" class="btn btn-secondary">Batal</a>
             <?php echo form_close(); ?>
         </div>
     </div>

@@ -39,3 +39,25 @@ next can be a problem
 - login and register siswa with nis, no longer use email
 - score yang dikirim langsung hasilnya melalui submit, tidak ada perhitungan diluar itu
 - sekarang pembagian tidak melalui tabel materi secara langsung tapi di normalisasi menggunkan tabel pertemuan
+
+Severity: Notice
+
+Message: Trying to access array offset on value of type null
+
+Filename: materi/belajar.php
+
+Line Number: 183
+
+Backtrace:
+
+File: C:\xampp\htdocs\addustedu\application\views\materi\belajar.php
+Line: 183
+Function: _error_handler
+
+File: C:\xampp\htdocs\addustedu\application\controllers\Materi.php
+Line: 73
+Function: view
+
+File: C:\xampp\htdocs\addustedu\index.php
+Line: 323
+Function: require_once
