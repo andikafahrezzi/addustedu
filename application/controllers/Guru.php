@@ -889,6 +889,23 @@ public function update_profile()
     $this->load->view('guru/add_ujian', $data);
     $this->load->view('guru/footg');
 }
+public function get_soal_by_pertemuan_ajax()
+{
+    $id_pertemuan = $this->input->post('id_pertemuan');
+
+    $this->db->select('bank_soal.*, mata_pelajaran.nama_mapel');
+    $this->db->from('bank_soal');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = bank_soal.id_mapel');
+    $this->db->join('materi', 'materi.id_mapel = mata_pelajaran.id');
+    $this->db->join('pertemuan', 'pertemuan.id_materi = materi.id');
+    $this->db->where('pertemuan.id', $id_pertemuan);
+    $this->db->group_by('bank_soal.id_soal'); // untuk jaga-jaga jika join menimbulkan duplikat
+    $this->db->order_by('bank_soal.created_at', 'DESC');
+
+    $soal = $this->db->get()->result();
+
+    echo json_encode($soal);
+}
 
 public function simpan_ujian()
 {
@@ -1171,23 +1188,24 @@ public function hapus_ujian($id_ujian)
     // BANK SOAL - GURU
 public function bank_soal()
 {
-    $this->load->model('Bank_soal_model');
     $nip = $this->session->userdata('nip');
 
-    // Ambil info guru dan ID mapel
-    $guru = $this->Bank_soal_model->get_detail_by_nip($nip);
-    if (!$guru) {
-        show_error('Data guru tidak ditemukan');
-        return;
-    }
+    $this->db->select('
+        bank_soal.*,
+        mata_pelajaran.nama_mapel,
+        IF(bank_soal.user_type = "guru", guru.nama_guru, "Admin") AS pembuat
+    ');
+    $this->db->from('bank_soal');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = bank_soal.id_mapel', 'left');
+    $this->db->join('guru', 'guru.nip = bank_soal.created_by AND bank_soal.user_type = "guru"', 'left');
+    $this->db->order_by('bank_soal.id_soal', 'DESC');
 
-    $id_mapel = $guru->id_mapel;
+    $data['bank_soal'] = $this->db->get()->result();
 
-    // Ambil bank soal berdasarkan id_mapel
-    $data['bank_soal'] = $this->Bank_soal_model->get_soal_by_mapel($id_mapel);
-    $data['title'] = 'Bank Soal ' . $guru->nama_mapel;
+    // Ambil daftar mapel yang diajarkan guru ini
+    $data['mapel_diajarkan'] = $this->Bank_soal_model->get_mapel_by_nip($nip);
 
-    $this->load->view('guru/navug', $data);
+    $this->load->view('guru/navug');
     $this->load->view('guru/bank_soal', $data);
     $this->load->view('guru/footg');
 }
@@ -1195,54 +1213,59 @@ public function bank_soal()
 
 
 
-    public function add_bank_soal() {
-        $data['title'] = 'Tambah Soal';
-        // Di constructor controller atau model
-        $this->db->select('guru.*, mata_pelajaran.nama_mapel, mata_pelajaran.id AS id_mapel');
-        $this->db->from('guru');
-        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = guru.id_mapel'); // asumsinya 1 guru 1 mapel
-        $this->db->where('guru.nip', $this->session->userdata('nip'));
-        $this->guru_data = $this->db->get()->row();
-        $data['mapel_guru'] = $this->guru_data->nama_mapel;
-    
-        $this->form_validation->set_rules('pertanyaan', 'Pertanyaan', 'required');
-        $this->form_validation->set_rules('tipe_soal', 'Tipe Soal', 'required');
-        
-        // Validasi khusus untuk pilihan ganda
-        if ($this->input->post('tipe_soal') == 'pilihan') {
-            $this->form_validation->set_rules('kunci_jawaban', 'Kunci Jawaban', 'required');
-        }
-    
-        if ($this->form_validation->run() === FALSE) {
-            $this->load->view('guru/navug', $data);
-            $this->load->view('guru/add_bank_soal', $data);
-            $this->load->view('guru/footg');
-        } else {
-            $post_data = $this->input->post();
-            $data = [
-                'pertanyaan' => $post_data['pertanyaan'],
-                'tipe_soal' => $post_data['tipe_soal'],
-                'tingkat_kesulitan' => $post_data['tingkat_kesulitan'],
-                'tipe_kognitif' => $post_data['tipe_kognitif'],
-                'created_by' => $this->guru_data->nip,
-                'user_type' => 'guru',
-                'id_mapel' => $this->guru_data->id_mapel
-            ];
-    
-            // Hanya tambahkan jika pilihan ganda
-            if ($post_data['tipe_soal'] == 'pilihan') {
-                $data['pilihan_a'] = $post_data['pilihan_a'];
-                $data['pilihan_b'] = $post_data['pilihan_b'];
-                $data['pilihan_c'] = $post_data['pilihan_c'];
-                $data['pilihan_d'] = $post_data['pilihan_d'];
-                $data['kunci_jawaban'] = $post_data['kunci_jawaban'];
-            }
-    
-            $this->Bank_soal_model->tambah_soal($data);
-            $this->session->set_flashdata('success', 'Soal berhasil ditambahkan');
-            redirect('guru/bank_soal');
-        }
+
+
+public function add_bank_soal()
+{
+    $data['title'] = 'Tambah Soal';
+
+    // Ambil semua mata pelajaran dari guru yang sedang login
+    $nip = $this->session->userdata('nip');
+    $this->db->select('mata_pelajaran.id, mata_pelajaran.nama_mapel');
+    $this->db->from('guru_mapel');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = guru_mapel.id_mapel');
+    $this->db->where('guru_mapel.id_guru', $nip);
+    $data['list_mapel'] = $this->db->get()->result();
+
+    // Validasi
+    $this->form_validation->set_rules('id_mapel', 'Mata Pelajaran', 'required');
+    $this->form_validation->set_rules('pertanyaan', 'Pertanyaan', 'required');
+    $this->form_validation->set_rules('tipe_soal', 'Tipe Soal', 'required');
+
+    if ($this->input->post('tipe_soal') == 'pilihan') {
+        $this->form_validation->set_rules('kunci_jawaban', 'Kunci Jawaban', 'required');
     }
+
+    if ($this->form_validation->run() === FALSE) {
+        $this->load->view('guru/navug', $data);
+        $this->load->view('guru/add_bank_soal', $data);
+        $this->load->view('guru/footg');
+    } else {
+        $post_data = $this->input->post();
+        $data_insert = [
+            'pertanyaan' => $post_data['pertanyaan'],
+            'tipe_soal' => $post_data['tipe_soal'],
+            'tingkat_kesulitan' => $post_data['tingkat_kesulitan'],
+            'tipe_kognitif' => $post_data['tipe_kognitif'],
+            'created_by' => $nip,
+            'user_type' => 'guru',
+            'id_mapel' => $post_data['id_mapel']
+        ];
+
+        if ($post_data['tipe_soal'] == 'pilihan') {
+            $data_insert['pilihan_a'] = $post_data['pilihan_a'];
+            $data_insert['pilihan_b'] = $post_data['pilihan_b'];
+            $data_insert['pilihan_c'] = $post_data['pilihan_c'];
+            $data_insert['pilihan_d'] = $post_data['pilihan_d'];
+            $data_insert['kunci_jawaban'] = $post_data['kunci_jawaban'];
+        }
+
+        $this->Bank_soal_model->tambah_soal($data_insert);
+        $this->session->set_flashdata('success', 'Soal berhasil ditambahkan');
+        redirect('guru/bank_soal');
+    }
+}
+
     
 public function edit_bank_soal($id_soal)
 {
@@ -1271,6 +1294,7 @@ public function edit_bank_soal($id_soal)
     $data = [
         'title' => 'Edit Soal',
         'soal' => $soal,
+        'mapel_diajar' => $this->Bank_soal_model->get_mapel_by_nips($this->session->userdata('nip')),
         'kategori' => $this->Bank_soal_model->get_kategori(),
         'id_mapel' => $this->guru_data->id_mapel
     ];
@@ -1293,6 +1317,7 @@ public function edit_bank_soal($id_soal)
     } else {
         $post_data = $this->input->post();
         $update_data = [
+            'id_mapel' => $post_data['id_mapel'],
             'pertanyaan' => $post_data['pertanyaan'],
             'tipe_soal' => $post_data['tipe_soal'],
             'tingkat_kesulitan' => $post_data['tingkat_kesulitan'],

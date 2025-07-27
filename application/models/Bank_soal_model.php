@@ -55,6 +55,39 @@ public function get_detail_by_nip($nip)
     $this->db->where('guru.nip', $nip);
     return $this->db->get()->row();
 }
+public function get_detail_by_nips($nip)
+{
+    // Ambil data guru
+    $this->db->select('nip, nama_guru, email,  image,');
+    $this->db->from('guru');
+    $this->db->where('nip', $nip);
+    $guru = $this->db->get()->row();
+
+    if (!$guru) {
+        return null;
+    }
+
+    // Ambil semua mata pelajaran yang diajarkan
+    $this->db->select('mata_pelajaran.id AS id_mapel, mata_pelajaran.nama_mapel');
+    $this->db->from('guru_mapel');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = guru_mapel.id_mapel');
+    $this->db->where('guru_mapel.id_guru', $nip);
+    $mapel = $this->db->get()->result();
+
+    // Gabungkan data guru dan mapel
+    $guru->mapel_diajarkan = $mapel; // array of mapel
+
+    return $guru;
+}
+public function get_mapel_by_nip($nip)
+{
+    $this->db->select('mata_pelajaran.id, mata_pelajaran.nama_mapel');
+    $this->db->from('guru_mapel');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = guru_mapel.id_mapel');
+    $this->db->where('guru_mapel.id_guru', $nip);
+    return $this->db->get()->result();
+}
+
     public function get_mapel_ids_by_guru($nip) {
     $this->db->select('id_mapel');
     $this->db->from('guru');
@@ -114,6 +147,14 @@ public function get_detail_by_nip($nip)
         return $this->db->where('id_soal', $id_soal)
                        ->delete('bank_soal');
     }
+public function get_mapel_by_nips($nip)
+{
+    $this->db->select('mata_pelajaran.id, mata_pelajaran.nama_mapel');
+    $this->db->from('guru_mapel');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = guru_mapel.id_mapel');
+    $this->db->where('guru_mapel.id_guru', $nip);
+    return $this->db->get()->result();
+}
 
     public function get_detail_soal($id_soal)
 {

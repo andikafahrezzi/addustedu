@@ -107,22 +107,21 @@
                                         <th>Tingkat Kesulitan</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <?php if (!empty($bank_soal)): ?>
-                                        <?php foreach ($bank_soal as $soal): ?>
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox" name="soal_ids[]" value="<?= $soal->id_soal ?>">
-                                                </td>
-                                                <td><?= character_limiter(strip_tags($soal->pertanyaan), 100) ?></td>
-                                                <td><?= $soal->tipe_soal == 'pilihan' ? 'Pilihan Ganda' : 'Essay' ?></td>
-                                                <td><?= ucfirst($soal->tingkat_kesulitan) ?></td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <tr><td colspan="4" class="text-center">Tidak ada soal tersedia</td></tr>
-                                    <?php endif; ?>
-                                </tbody>
+                               <tbody id="bank-soal-container">
+    <?php if (!empty($bank_soal)): ?>
+        <?php foreach ($bank_soal as $soal): ?>
+            <tr>
+                <td><input type="checkbox" name="soal_ids[]" value="<?= $soal->id_soal ?>"></td>
+                <td><?= character_limiter(strip_tags($soal->pertanyaan), 100) ?></td>
+                <td><?= $soal->tipe_soal == 'pilihan' ? 'Pilihan Ganda' : 'Essay' ?></td>
+                <td><?= ucfirst($soal->tingkat_kesulitan) ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr><td colspan="4" class="text-center">Tidak ada soal tersedia</td></tr>
+    <?php endif; ?>
+</tbody>
+
                             </table>
                         </div>
                     </div>
@@ -164,4 +163,44 @@
             }
         });
     });
+    $(document).ready(function () {
+    $('#materi_id').change(function () {
+        let id_pertemuan = $(this).val();
+        if (id_pertemuan !== '') {
+            $.ajax({
+                url: '<?= site_url('guru/get_soal_by_pertemuan_ajax') ?>',
+                method: 'POST',
+                data: {
+                    id_pertemuan: id_pertemuan,
+                    '<?= $this->security->get_csrf_token_name() ?>': '<?= $this->security->get_csrf_hash() ?>'
+                },
+                dataType: 'json',
+                success: function (data) {
+                    let html = '';
+                    if (data.length > 0) {
+                        data.forEach(function (soal) {
+                            html += `
+                                <tr>
+                                    <td><input type="checkbox" name="soal_ids[]" value="${soal.id_soal}"></td>
+                                    <td>${soal.pertanyaan.length > 100 ? soal.pertanyaan.substr(0, 100) + '...' : soal.pertanyaan}</td>
+                                    <td>${soal.tipe_soal === 'pilihan' ? 'Pilihan Ganda' : 'Essay'}</td>
+                                    <td>${soal.tingkat_kesulitan.charAt(0).toUpperCase() + soal.tingkat_kesulitan.slice(1)}</td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        html = '<tr><td colspan="4" class="text-center">Tidak ada soal tersedia</td></tr>';
+                    }
+                    $('#bank-soal-container tbody').html(html);
+                },
+                error: function () {
+                    alert('Gagal mengambil soal dari server.');
+                }
+            });
+        } else {
+            $('#bank-soal-container tbody').html('<tr><td colspan="4" class="text-center">Pilih mapel terlebih dahulu</td></tr>');
+        }
+    });
+});
+
 </script>

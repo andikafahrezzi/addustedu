@@ -86,11 +86,20 @@
                 </div>
 
                 <!-- Mata Pelajaran -->
-                <div class="form-group">
-                    <label for="mapel_diajarkan">Mata Pelajaran *</label>
-                    <input type="text" name="mapel_diajarkan" id="mapel_diajarkan" class="form-control" 
-                           value="<?= $soal->nama_mapel ?>" readonly required>
-                </div>
+<!-- Mata Pelajaran -->
+<div class="form-group">
+    <label for="id_mapel">Mata Pelajaran *</label>
+    <select name="id_mapel" id="id_mapel" class="form-control" required>
+        <option value="">-- Pilih Mata Pelajaran --</option>
+        <?php foreach ($mapel_diajar as $mapel): ?>
+            <option value="<?= $mapel->id ?>" <?= set_select('id_mapel', $mapel->id, $soal->id_mapel == $mapel->id) ?>>
+                <?= $mapel->nama_mapel ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <?= form_error('id_mapel', '<small class="text-danger">', '</small>') ?>
+</div>
+
                 
                 <!-- Tingkat Kesulitan -->
                 <div class="form-group">
