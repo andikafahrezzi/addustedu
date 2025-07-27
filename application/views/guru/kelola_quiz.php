@@ -1,7 +1,7 @@
 
 <div class="container mt-4">
     <div class="card shadow mb-4">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-success text-white">
             <h4>
                 <i class="fas fa-edit mr-2"></i>
                 Kelola Quiz: <?= $quiz->judul ?>
@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-success">
                         <i class="fas fa-save mr-1"></i> Simpan Soal
                     </button>
                 </form>
@@ -92,7 +92,7 @@
                     <div class="list-group-item mb-3">
                         <div class="d-flex justify-content-between">
                             <h6 class="mb-1">
-                                <span class="badge badge-primary mr-2"><?= $index+1 ?></span>
+                                <span class="badge badge-success mr-2"><?= $index+1 ?></span>
                                 <?= $soal->pertanyaan ?>
                                 <small class="text-muted">(<?= strtoupper($soal->tipe) ?> - <?= $soal->poin ?> poin)</small>
                             </h6>

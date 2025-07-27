@@ -73,7 +73,32 @@ public function get_pertemuan_by_guru($guru_id) {
     $this->db->order_by('pertemuan.pertemuan_ke', 'ASC'); // urut berdasarkan pertemuan ke
     return $this->db->get()->result();
 }
+public function get_pertemuan_by_gurus($guru_id) {
+    $this->db->select('
+        pertemuan.id AS id_pertemuan,
+        pertemuan.pertemuan_ke,
+        materi.deskripsi AS judul_materi,
+        kelas.nama_kelas,
+        kelas.tingkat,
+        mata_pelajaran.nama_mapel
+    ');
+    $this->db->from('pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('kelas', 'kelas.id = materi.id_kelas');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->where('materi.id_guru', $guru_id);
 
+    // Urutan rapi: tingkat ➜ mapel ➜ kelas ➜ pertemuan
+    $this->db->order_by('kelas.tingkat', 'ASC');
+    $this->db->order_by("
+    FIELD(kelas.tingkat, 'X', 'XI', 'XII')
+    ", '', false);  // MySQL only
+    $this->db->order_by('mata_pelajaran.nama_mapel', 'ASC');
+    $this->db->order_by('kelas.nama_kelas', 'ASC');
+    $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
+
+    return $this->db->get()->result();
+}
 
 public function get_tugas_per_materi($id_pertemuan, $guru_id = null) {
     $this->db->select('tugas_siswa.*, siswa.nama as nama_siswa, materi.id_guru, kelas.tingkat, kelas.nama_kelas,mata_pelajaran.nama_mapel');

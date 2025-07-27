@@ -741,22 +741,25 @@ public function delete_pesertaquiz($id) {
     
 public function daftar_tugas() {
     $this->load->model('Tugas_model');
-    $guru_id = $this->session->userdata('nip');
+$guru_id = $this->session->userdata('nip');
+$data['materi_list'] = [];
 
-    $data['materi_list'] = [];
-    $pertemuan_list = $this->Tugas_model->get_pertemuan_by_guru($guru_id);
+$pertemuan_list = $this->Tugas_model->get_pertemuan_by_gurus($guru_id);
 
-    foreach ($pertemuan_list as $row) {
-        $tugas = $this->Tugas_model->get_tugas_per_materi($row->id_pertemuan, $guru_id);
+foreach ($pertemuan_list as $row) {
+    $tugas = $this->Tugas_model->get_tugas_per_materi($row->id_pertemuan, $guru_id);
 
-        $data['materi_list'][$row->id_pertemuan] = [
-            'nama_mapel' => $row->nama_mapel,
-            'nama_kelas' => $row->nama_kelas,
-            'pertemuan_ke' => $row->pertemuan_ke,
-            'judul_materi' => $row->judul_materi,
-            'tugas' => $tugas
-        ];
-    }
+    $tingkat = $row->tingkat;
+    $mapel = $row->nama_mapel;
+    $kelas = $row->nama_kelas;
+
+    $data['materi_list'][$tingkat][$mapel][$kelas][] = [
+        'pertemuan_ke' => $row->pertemuan_ke,
+        'judul_materi' => $row->judul_materi,
+        'tugas' => $tugas
+    ];
+}
+
 
     $this->load->view('guru/navug'); 
     $this->load->view('guru/daftar_tugas_siswa', $data);
@@ -1018,8 +1021,21 @@ public function simpan_ujian()
     // Menampilkan daftar ujian yang dibuat oleh guru
     public function tampilkan_ujian()
     {
-        $nip_guru = $this->session->userdata('nip'); // Ambil NIP dari session (pastikan sudah login); // Mengambil ujian yang terkait dengan guru
-        $data['ujian_list'] = $this->Ujian_model->get_ujian_by_guru($nip_guru);
+        $nip = $this->session->userdata('nip');
+        $ujian_raw = $this->Ujian_model->get_ujian_by_gurus($nip);
+
+        $data['ujian_terstruktur'] = [];
+
+        foreach ($ujian_raw as $u) {
+            // Pastikan ambil nama_kelas dan tingkat juga di query
+            $tingkat = $u['tingkat'];
+            $mapel = $u['nama_mapel'];
+            $kelas = $u['nama_kelas']; // Tambahkan join kelas di model
+            $pertemuan = $u['pertemuan_ke'];
+
+            $data['ujian_terstruktur'][$tingkat][$mapel][$kelas][] = $u;
+        }
+
         
 
         // Tampilkan data ujian

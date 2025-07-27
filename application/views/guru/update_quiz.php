@@ -2,7 +2,7 @@
 <div class="container">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Update Quiz: <?= htmlspecialchars($quiz->judul) ?></h6>
+            <h6 class="m-0 font-weight-bold text-success">Update Quiz: <?= htmlspecialchars($quiz->judul) ?></h6>
         </div>
         <div class="card-body">
             <?php echo form_open('guru/update/'.$quiz->id); ?>
@@ -52,7 +52,7 @@
                     <label class="form-check-label" for="shuffleCheck">Acak urutan soal</label>
                 </div>
                 
-                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                <button type="submit" class="btn btn-success">Simpan Perubahan</button>
                 <a href="<?= site_url('guru/data_quiz') ?>" class="btn btn-secondary">Batal</a>
                 
             <?php echo form_close(); ?>

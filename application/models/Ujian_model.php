@@ -19,6 +19,24 @@ class Ujian_model extends CI_Model {
         $this->db->where('materi.id_guru', $nip);  // Menambahkan filter berdasarkan nip guru
         return $this->db->get()->result_array();  // Mengambil hasil sebagai array
     }
+    public function get_ujian_by_gurus($nip)
+    {
+        $this->db->select('
+            tbl_ujian.*, 
+            mata_pelajaran.nama_mapel,
+            kelas.nama_kelas,
+            kelas.tingkat,
+            pertemuan.pertemuan_ke
+        ');
+        $this->db->from('tbl_ujian');
+        $this->db->join('pertemuan', 'pertemuan.id = tbl_ujian.id_pertemuan');
+        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+        $this->db->join('kelas', 'kelas.id = materi.id_kelas');
+        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+        $this->db->where('materi.id_guru', $nip);
+        return $this->db->get()->result_array();
+    }
+
     public function get_soal($id_ujian)
     {
         $this->db->where('id_ujian', $id_ujian);
@@ -437,9 +455,10 @@ public function get_peserta_ujian($ujian_id)
     }
 
     // Ambil semua jawaban siswa
-    $this->db->select('js.*, s.nama');
+    $this->db->select('js.*, s.nama,  k.nama_kelas');
     $this->db->from('tbl_jawaban_siswa js');
     $this->db->join('siswa s', 's.nis = js.nis');
+    $this->db->join('kelas k', 'k.id = s.id_kelas');
     $this->db->where('js.id_ujian', $ujian_id);
     $this->db->order_by('s.nama');
     $jawaban_all = $this->db->get()->result();
@@ -454,6 +473,7 @@ public function get_peserta_ujian($ujian_id)
             $ranking[$nis] = [
                 'nis' => $j->nis,
                 'nama' => $j->nama,
+                'nama_kelas' => $j->nama_kelas,
                 'jumlah_benar' => 0,
                 'nilai_essay_total' => 0,
                 'jumlah_essay_terkoreksi' => 0,

@@ -1,7 +1,6 @@
 <div class="container">
     <h2>Edit Ujian</h2>
     <form method="post" action="<?= site_url('guru/simpan_edit_ujian/' . $ujian->id_ujian) ?>">
-    <?php echo $this->security->get_csrf_token_name(); ?>
                             <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
                         value="<?= $this->security->get_csrf_hash(); ?>" />
         <div class="form-group">
