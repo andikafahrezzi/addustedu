@@ -1,4 +1,4 @@
-<div class="container mt-4">
+<div class="container mt-15">
     <div class="card shadow">
     <?php if($this->session->flashdata('timeout')): ?>
 <div class="alert alert-warning">
@@ -36,7 +36,7 @@
             <hr>
             
             <a href="<?= site_url('user') ?>" class="btn btn-primary">
-                <i class="fas fa fa-arrow-left mr-2"></i>Kembali ke Daftar Quiz
+                <i class="fas fa fa-arrow-left mr-2"></i>Kembali ke Halaman Utama
             </a>
         </div>
     </div>

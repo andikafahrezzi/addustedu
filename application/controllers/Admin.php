@@ -469,7 +469,8 @@ public function delete_guru($nip)
             'nip' => $nip,
             'email' => htmlspecialchars($this->input->post('email', true)),
             'nama_guru' => htmlspecialchars($this->input->post('nama', true)),
-            'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT)
+            'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+            'image' => 'default.jpg'
         ]);
 
         foreach ($mapel_array as $id_mapel) {
