@@ -29,13 +29,22 @@ if ($data['user']) {
     $id_kelas_siswa = $data['user']['id_kelas'];
     $data['kelas_siswa'] = $id_kelas_siswa;
 
-    // Ambil materi berdasarkan kelas siswa
-    $this->db->select('materi.*, guru.nama_guru, guru.nip, mata_pelajaran.nama_mapel');
+    // Ambil nama_kelas dari id_kelas siswa
+    $kelas = $this->db->get_where('kelas', ['id' => $id_kelas_siswa])->row();
+    $nama_kelas_siswa = $kelas ? $kelas->nama_kelas : '';
+
+    // Ambil materi berdasarkan nama_kelas
+    $this->db->select('materi.*, guru.nama_guru, guru.nip, mata_pelajaran.nama_mapel, kelas.nama_kelas');
     $this->db->from('materi');
     $this->db->join('guru', 'guru.nip = materi.id_guru');
     $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
-    $this->db->where('materi.id_kelas', $id_kelas_siswa);
+    $this->db->join('kelas', 'kelas.id = materi.id_kelas');
+    $this->db->where('kelas.nama_kelas', $nama_kelas_siswa); // 🔍 berbasis nama_kelas
+    $this->db->order_by('kelas.nama_kelas', 'ASC'); // 📋 agar terurut
+
     $materi = $this->db->get()->result_array();
+
+
 
     // Kelompokkan berdasarkan mapel dan guru
     $mapel_data = [];

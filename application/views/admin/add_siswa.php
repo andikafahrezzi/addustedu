@@ -42,11 +42,10 @@
                         </div>
                         <div class="form-group">
                             <label for="inputState">Kelas</label>
-                            <select required id="inputState" name="kelas" class="form-control">
-                                <option selected>Pilih disini</option>
-                                <option value="1">X ( Kelas Sepuluh ) A adm</option>
-                                <option value="2">XI ( Kelas Sebelas ) A adm</option>
-                                <option value="3">XII ( Kelas Dua Belas ) A adm</option>
+                            <select name="kelas" class="form-control selectric">
+                                <?php foreach ($kelas as $k): ?>
+                                    <option value="<?= $k->id ?>"><?= $k->nama_kelas ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                            </div>

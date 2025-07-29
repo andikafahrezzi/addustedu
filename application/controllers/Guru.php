@@ -418,23 +418,23 @@ public function delete_materi($id)
 
 
     //QUIZ
-    public function data_quiz()
-    {
-        $nip = $this->session->userdata('nip');
-        $quizzes = $this->Quiz_model->get_quizzes_by_guru($nip);
+public function data_quiz()
+{
+    $nip = $this->session->userdata('nip');
+    $quizzes = $this->Quiz_model->get_quizzes_by_guru($nip);
 
-        // Group by mapel
-        $grouped_quizzes = [];
-        foreach ($quizzes as $q) {
-            $grouped_quizzes[$q->nama_mapel][] = $q;
-        }
-
-        $data['quizzes_grouped'] = $grouped_quizzes;
-
-        $this->load->view('guru/navug');
-        $this->load->view('guru/data_quiz', $data);
-        $this->load->view('guru/footg');
+    $grouped = [];
+    foreach ($quizzes as $q) {
+        $grouped[$q->tingkat][$q->nama_mapel][$q->nama_kelas][] = $q;
     }
+
+    $data['quizzes_grouped'] = $grouped;
+
+    $this->load->view('guru/navug');
+    $this->load->view('guru/data_quiz', $data);
+    $this->load->view('guru/footg');
+}
+
 
     public function buat_quiz_guru()
     {

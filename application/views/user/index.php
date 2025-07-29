@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <h2 id="judul" class="text-center">Mata Pelajaran Kelas <?= $kelas_siswa ?></h2>
+<h2 id="judul" class="text-center">Mata Pelajaran Kelas <?= $user['nama_kelas'] ?></h2>
 
    <?php 
 // Persiapkan struktur pertemuan

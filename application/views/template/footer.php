@@ -130,8 +130,6 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                     menyetujui
                                     <i>privasi dan persyaratan ketentuan
                                         hukum kami </i> .
-                                    belum punya akun? daftar <a href=" <?= base_url('user/registration') ?>">
-                                        disini.</a>
                                 </p>
                                 <button class="btn btn-block font-weight-bold" style="background-color: #4dbf1c;color:white;font-size:18px;">Login
                                     Sekarang!</button>
