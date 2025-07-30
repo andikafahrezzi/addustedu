@@ -1092,5 +1092,84 @@ public function hapus_kelas($id) {
     redirect('admin/kelas');
 }
 
+public function data_mapel()
+{
+    $this->load->model('M_materi');
+    $data['mapel'] = $this->M_materi->get_all_mapel();
+    $this->load->view('admin/partials/nava');
+    $this->load->view('admin/data_mapel', $data);
+    $this->load->view('admin/partials/foota');
+}
+public function add_mapel()
+{
+    $this->load->view('admin/partials/nava');
+    $this->load->view('admin/add_mapel');
+    $this->load->view('admin/partials/foota');
+}
+public function simpan_mapel()
+{
+    $this->form_validation->set_rules('nama_mapel', 'Nama Mapel', 'required|is_unique[mata_pelajaran.nama_mapel]');
+
+    if ($this->form_validation->run() == false) {
+        $this->add_mapel();
+    } else {
+        $this->load->model('M_materi');
+        $data = [
+            'nama_mapel' => $this->input->post('nama_mapel', true),
+            'deskripsi' => $this->input->post('deskripsi', true)
+        ];
+        $this->M_materi->insert_mapel($data);
+        $this->session->set_flashdata('success', 'Mata pelajaran berhasil ditambahkan.');
+        redirect('admin/data_mapel');
+    }
+}
+public function edit_mapel($id)
+{
+    $this->load->model('M_materi');
+    $data['mapel_edit'] = $this->M_materi->get_mapel_by_id($id);
+    $this->load->view('admin/partials/nava');
+    $this->load->view('admin/update_mapel', $data);
+    $this->load->view('admin/partials/foota');
+}
+public function update_mapel($id)
+{
+    $this->load->model('M_materi');
+    $lama = $this->M_materi->get_mapel_by_id($id);
+    $baru = $this->input->post('nama_mapel','deskripsi', true);
+
+    if ($lama->nama_mapel != $baru) {
+        $this->form_validation->set_rules('nama_mapel', 'Nama Mapel', 'required|is_unique[mata_pelajaran.nama_mapel]');
+    } else {
+        $this->form_validation->set_rules('nama_mapel', 'Nama Mapel', 'required');
+    }
+
+    if ($this->form_validation->run() == false) {
+        $data['mapel_edit'] = $lama;
+        $this->load->view('admin/partials/nava');
+        $this->load->view('admin/update_mapel', $data);
+        $this->load->view('admin/partials/foota');
+    } else {
+        $data = ['nama_mapel' => $baru];
+        $this->M_materi->update_mapel($id, $data);
+        $this->session->set_flashdata('success', 'Mata pelajaran berhasil diperbarui.');
+        redirect('admin/data_mapel');
+    }
+}
+public function hapus_mapel($id)
+{
+    $this->load->model('M_materi');
+
+    // Cek apakah dipakai di tabel materi
+    $digunakan = $this->db->get_where('materi', ['id_mapel' => $id])->num_rows();
+
+    if ($digunakan > 0) {
+        $this->session->set_flashdata('error', 'Mapel tidak dapat dihapus karena masih digunakan.');
+    } else {
+        $this->M_materi->delete_mapel($id);
+        $this->session->set_flashdata('success', 'Mapel berhasil dihapus.');
+    }
+
+    redirect('admin/data_mapel');
+}
 
 }

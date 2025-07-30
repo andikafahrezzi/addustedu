@@ -301,5 +301,29 @@ public function update_kelas($id, $data) {
 public function delete_kelas($id) {
     return $this->db->delete('kelas', ['id' => $id]);
 }
+public function get_all_mapel()
+{
+    return $this->db->get('mata_pelajaran')->result();
+}
+
+public function get_mapel_by_id($id)
+{
+    return $this->db->get_where('mata_pelajaran', ['id' => $id])->row();
+}
+
+public function insert_mapel($data)
+{
+    return $this->db->insert('mata_pelajaran', $data);
+}
+
+public function update_mapel($id, $data)
+{
+    return $this->db->update('mata_pelajaran', $data, ['id' => $id]);
+}
+
+public function delete_mapel($id)
+{
+    return $this->db->delete('mata_pelajaran', ['id' => $id]);
+}
 
 }

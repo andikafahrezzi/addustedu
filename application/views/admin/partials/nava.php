@@ -86,7 +86,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                 <span>Akademik</span></a>
                             <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="<?= base_url('admin/kelas') ?>">Data Kelas</a></li>
-                                <li><a class="nav-link" href="<?= base_url('import') ?>">Data Mata Pelajaran</a>
+                                <li><a class="nav-link" href="<?= base_url('admin/data_mapel') ?>">Data Mata Pelajaran</a>
                                     </li>
                             </ul>
                         </li>
