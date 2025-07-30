@@ -80,6 +80,16 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                         <li class="nav-item dropdown active">
                             <a href="<?= base_url('admin') ?>" class="nav-link"><i class="fas fa-desktop"></i><span>Dashboard</span></a>
                         </li>
+                        <li class="menu-header">Management Akademik</li>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-calendar"></i>
+                                <span>Akademik</span></a>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="<?= base_url('admin/kelas') ?>">Data Kelas</a></li>
+                                <li><a class="nav-link" href="<?= base_url('import') ?>">Data Mata Pelajaran</a>
+                                    </li>
+                            </ul>
+                        </li>
                         <li class="menu-header">Management Siswa</li>
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-user"></i>

@@ -192,14 +192,38 @@ $data = array(
 }
 
 
-    public function delete_siswa($id)
-    {
-        $this->load->model('m_siswa');
-        $where = array('nis' => $id);
-        $this->m_siswa->delete_siswa($where, 'siswa');
-        $this->session->set_flashdata('user-delete', 'berhasil');
-        redirect('admin/data_siswa');
+public function delete_siswa($id)
+{
+    $this->load->model('M_siswa');
+
+    // Cek apakah siswa digunakan di tabel lain
+    $dipakai = false;
+
+    // Cek di tbl_jawaban_siswa
+    $jawaban = $this->db->get_where('tbl_jawaban_siswa', ['nis' => $id])->num_rows();
+    if ($jawaban > 0) $dipakai = true;
+
+    // Cek di tbl_nilai (jika kamu punya)
+    $tugas = $this->db->get_where('tugas_siswa', ['siswa_id' => $id])->num_rows();
+    if ($tugas > 0) $dipakai = true;
+    $quizs = $this->db->get_where('quiz_siswa', ['siswa_id' => $id])->num_rows();
+    if ($quizs > 0) $dipakai = true;
+    $fordis = $this->db->get_where('forum_diskusi', ['user_id' => $id])->num_rows();
+    if ($fordis > 0) $dipakai = true;
+    
+    // Cek di tabel lain (tambah di sini jika ada)
+
+    if ($dipakai) {
+        $this->session->set_flashdata('error', 'Siswa tidak dapat dihapus karena masih digunakan di data lain.');
+    } else {
+        $where = ['nis' => $id];
+        $this->M_siswa->delete_siswa($where, 'siswa');
+        $this->session->set_flashdata('success', 'Siswa berhasil dihapus.');
     }
+
+    redirect('admin/data_siswa');
+}
+
 
     // manajemen guru
 
@@ -965,6 +989,107 @@ public function update_pertemuan($id_pertemuan)
     $query = $this->db->get()->result();
 
     echo json_encode($query);
+}
+
+public function kelas()
+{
+    // Ambil data semua kelas dari tabel kelas
+    $data['kelas'] = $this->db->get('kelas')->result();
+
+    // Load view seperti struktur kamu
+    $this->load->view('admin/partials/nava');
+    $this->load->view('admin/data_kelas', $data); // view yang sudah kamu pakai formatnya
+    $this->load->view('admin/partials/foota');
+}
+public function add_kelas() {
+    $data['kelas_edit'] = null;
+    $this->load->view('admin/partials/nava');
+    $this->load->view('admin/add_kelas', $data);
+    $this->load->view('admin/partials/foota');
+}
+public function simpan_kelas() {
+    $this->form_validation->set_rules('nama_kelas', 'Nama Kelas', 'required|is_unique[kelas.nama_kelas]');
+    $this->form_validation->set_rules('tingkat', 'Tingkat', 'required');
+
+    if ($this->form_validation->run() == false) {
+        $this->load->view('admin/partials/nava');
+        $this->load->view('admin/add_kelas');
+        $this->load->view('admin/partials/foota');
+    } else {
+        $this->load->model('M_materi');
+        $data = [
+            'nama_kelas' => $this->input->post('nama_kelas', true),
+            'tingkat' => $this->input->post('tingkat', true),
+            'jurusan' => $this->input->post('jurusan', true)
+        ];
+        $this->M_materi->insert_kelas($data);
+        redirect('admin/kelas');
+    }
+}
+
+public function edit_kelas($id) {
+    $this->load->model('M_materi');
+    $data['kelas_edit'] = $this->M_materi->get_kelas_by_id($id);
+    $this->load->view('admin/partials/nava');
+    $this->load->view('admin/update_kelas', $data);
+    $this->load->view('admin/partials/foota');
+}
+public function update_kelas($id) {
+    $this->load->model('M_materi');
+    $kelas_lama = $this->M_materi->get_kelas_by_id($id);
+    $nama_kelas_baru = $this->input->post('nama_kelas', true);
+
+    // Jika nama berubah, validasi is_unique
+    if ($kelas_lama->nama_kelas != $nama_kelas_baru) {
+        $this->form_validation->set_rules('nama_kelas', 'Nama Kelas', 'required|is_unique[kelas.nama_kelas]');
+    } else {
+        $this->form_validation->set_rules('nama_kelas', 'Nama Kelas', 'required');
+    }
+
+    $this->form_validation->set_rules('tingkat', 'Tingkat', 'required');
+
+    if ($this->form_validation->run() == false) {
+        $data['kelas_edit'] = $kelas_lama;
+        $this->load->view('admin/partials/nava');
+        $this->load->view('admin/update_kelas', $data);
+        $this->load->view('admin/partials/foota');
+    } else {
+        $data = [
+            'nama_kelas' => $nama_kelas_baru,
+            'tingkat' => $this->input->post('tingkat', true),
+            'jurusan' => $this->input->post('jurusan', true)
+        ];
+        $this->M_materi->update_kelas($id, $data);
+        redirect('admin/kelas');
+    }
+}
+
+public function hapus_kelas($id) {
+    $this->load->model('M_materi');
+
+    // Cek apakah kelas masih digunakan
+    $digunakan = false;
+
+    // Cek di tabel siswa
+    $siswa = $this->db->get_where('siswa', ['id_kelas' => $id])->num_rows();
+    if ($siswa > 0) $digunakan = true;
+
+    // Cek di tabel materi
+    $materi = $this->db->get_where('materi', ['id_kelas' => $id])->num_rows();
+    if ($materi > 0) $digunakan = true;
+
+    // Cek di tabel pertemuan
+    $pertemuan = $this->db->get_where('pertemuan', ['id_kelas' => $id])->num_rows();
+    if ($pertemuan > 0) $digunakan = true;
+
+    if ($digunakan) {
+        $this->session->set_flashdata('error', 'Kelas tidak dapat dihapus karena masih digunakan di data lain.');
+    } else {
+        $this->M_materi->delete_kelas($id);
+        $this->session->set_flashdata('success', 'Kelas berhasil dihapus.');
+    }
+
+    redirect('admin/kelas');
 }
 
 

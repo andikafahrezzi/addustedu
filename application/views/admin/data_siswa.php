@@ -11,6 +11,14 @@
                                 Data Siswa ⭢ </a>
                         </div>
                     </div>
+                    <?php if ($this->session->flashdata('success')): ?>
+                        <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+                    <?php endif; ?>
+
+                    <?php if ($this->session->flashdata('error')): ?>
+                        <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
+                    <?php endif; ?>
+
                     <div class="row">
                         <div class="col-md-12">
                             <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px;">
