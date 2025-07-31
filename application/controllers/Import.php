@@ -34,7 +34,7 @@ class Import extends CI_Controller {
         $sheet->setCellValue('D1', 'Email');
         $sheet->setCellValue('E1', 'Image');
         $sheet->setCellValue('F1', 'Is_active');
-        $sheet->setCellValue('G1', 'Kelas');
+        $sheet->setCellValue('G1', 'id_kelas');
         $sheet->setCellValue('H1', 'User_type');
 
         // Set contoh data
@@ -44,7 +44,7 @@ class Import extends CI_Controller {
         $sheet->setCellValue('D2', 'lorem@example.com');
         $sheet->setCellValue('E2', 'default.jpg');
         $sheet->setCellValue('F2', '1');
-        $sheet->setCellValue('G2', 'XI');
+        $sheet->setCellValue('G2', '1');
         $sheet->setCellValue('H2', 'siswa');
 
         // Set width kolom
@@ -61,6 +61,27 @@ class Import extends CI_Controller {
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="template_import_siswa.xlsx"');
         header('Cache-Control: max-age=0');
+
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(1);
+        $sheet2 = $spreadsheet->getActiveSheet();
+        $sheet2->setTitle('Referensi Kelas');
+        $sheet2->setCellValue('A1', 'ID Kelas');
+        $sheet2->setCellValue('B1', 'Nama Kelas');
+        $sheet2->setCellValue('C1', 'Tingkat');
+        $sheet2->setCellValue('D1', 'Jurusan');
+
+        // Misalnya isi dengan data dari database
+        $kelas = $this->db->get('kelas')->result();
+        $row = 2;
+        foreach ($kelas as $k) {
+            $sheet2->setCellValue('A' . $row, $k->id);
+            $sheet2->setCellValue('B' . $row, $k->nama_kelas);
+            $sheet2->setCellValue('C' . $row, $k->tingkat);
+            $sheet2->setCellValue('D' . $row, $k->jurusan);
+            $row++;
+        }
+        $spreadsheet->setActiveSheetIndex(0);
 
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save('php://output');
