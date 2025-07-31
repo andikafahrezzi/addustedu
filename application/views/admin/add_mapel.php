@@ -21,7 +21,7 @@
                         <input type="text" class="form-control" name="nama_mapel" id="nama_mapel" required>
                     </div>
                     <div class="form-group">
-                        <label for="deskripsi">Nama Mata Pelajaran</label>
+                        <label for="deskripsi">Deskripsi</label>
                         <input type="text" class="form-control" name="deskripsi" id="deskripsi" required>
                     </div>
 

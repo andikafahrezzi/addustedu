@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 25, 2025 at 02:07 PM
+-- Generation Time: Jul 31, 2025 at 06:44 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -134,7 +134,8 @@ INSERT INTO `forum_diskusi` (`id`, `user_type`, `user_id`, `materi_id`, `user_na
 (42, 'siswa', '123456', 2, 'zccust', 'ewfewf', NULL, '2025-05-25 03:20:02', NULL, NULL),
 (43, 'siswa', '123456', 2, 'zccust', 'qwqdwq', NULL, '2025-05-25 03:20:36', NULL, NULL),
 (44, 'siswa', '123456', 2, 'zccust', 'dwd', 26, '2025-05-25 03:22:38', NULL, NULL),
-(45, 'guru', '21101140', 2, 'guru terbaikss', 'test', 42, '2025-05-25 13:59:44', NULL, NULL);
+(45, 'guru', '21101140', 2, 'guru terbaikss', 'test', 42, '2025-05-25 13:59:44', NULL, NULL),
+(46, 'siswa', '123456', 2, 'zccust', 'test', 31, '2025-07-06 09:15:16', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -157,7 +158,7 @@ CREATE TABLE `guru` (
 --
 
 INSERT INTO `guru` (`nip`, `email`, `nama_guru`, `password`, `nama_mapel`, `user_type`, `image`) VALUES
-(21101140, 'pahrulmaji@gmail.com', 'guru terbaikss', '$2y$10$5b/MJhDxwMBoOBZ0m4nofOCPrwn9XM/RZu7xuG528R7P71k629SUS', 'Matematika', 'guru', 'default.jpg'),
+(21101140, 'pahrulmaji@gmail.com', 'guru terbaiksss', '$2y$10$lA3ZNJtjvaadgZF8s7g/6eSv4hcvA7gC2K6bMRpywL/ueaGWrHM.C', 'Matematika', 'guru', 'default.jpg'),
 (21101141, 'fahreziandika10@gmail.com', 'addust11', '$2y$10$nDOjyUB0msJL1E1FTC7PdeQTCR0ip441LfLFbHZk/g7f2EoQ2vOAO', 'Bahasa Inggris', 'guru', ''),
 (21101142, 'test@gmail.com', 'addust111', '$2y$10$SnRGlMYTwJSElDgt6DUza.qK/8tCzJQQfogjZxZxTMXkqMDgeBRU.', 'IPA', 'guru', ''),
 (21101143, 'test12@gmail.com', 'useraa', '$2y$10$nk3jFu4/ANCEkgrYFq4F6uYl2UZQHLGtdCAYLSQ6eEkfT9quBoDo.', 'Test', 'guru', ''),
@@ -192,30 +193,6 @@ INSERT INTO `jawaban_siswa` (`id`, `quiz_siswa_id`, `question_id`, `jawaban`, `p
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kategori_soal`
---
-
-CREATE TABLE `kategori_soal` (
-  `id_kategori` int(11) NOT NULL,
-  `nama_kategori` varchar(100) NOT NULL,
-  `deskripsi` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `kelas`
---
-
-CREATE TABLE `kelas` (
-  `id` int(255) NOT NULL,
-  `kelas` varchar(128) NOT NULL,
-  `nama_siswa` varchar(128) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `materi`
 --
 
@@ -244,24 +221,8 @@ INSERT INTO `materi` (`id`, `nama_guru`, `nama_mapel`, `video`, `deskripsi`, `ke
 (5, 'Ahmad Saugi', 'Pendidikan Agama Islam', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef150954.mp4', 's', 'XI', 's', '4845-17134-1-PB3.pdf', 214748364, 1),
 (6, 'guru terbaikss', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef150955.mp4', 'asa', 'XI', ' swa', '4845-17134-1-PB4.pdf', 21101140, 2),
 (7, 'guru terbaikss', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef150956.mp4', 'aasdsad', 'XI', ' adada', 'riyo.jpg', 21101140, 3),
-(8, 'guru terbaik semesta', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef150957.mp4', 'dwqd', 'XI', ' dqwdqdw', '5141-11123-2-PB1.pdf', 21101144, 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `materi_status`
---
-
-CREATE TABLE `materi_status` (
-  `id` int(11) NOT NULL,
-  `siswa_id` int(11) NOT NULL,
-  `materi_id` int(11) NOT NULL,
-  `bookmarked` tinyint(1) DEFAULT 0,
-  `completed` tinyint(1) DEFAULT 0,
-  `completion_date` datetime DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+(8, 'guru terbaik semesta', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef150957.mp4', 'dwqd', 'XI', ' dqwdqdw', '5141-11123-2-PB1.pdf', 21101144, 1),
+(9, 'guru terbaiksss', 'Matematika', 'WhatsApp_Video_2025-03-11_at_07_52_16_6ef150958.mp4', 'asw', 'XI', ' https://chat.deepseek.com/a/chat/s/233e98bb-ca7b-44cc-a1bf-fb6b42d8a3c2', 'Tugas_Regulasi_HAKI_Indonesia.pdf', 21101140, 6);
 
 -- --------------------------------------------------------
 
@@ -442,7 +403,11 @@ INSERT INTO `tbl_soal` (`id_soal`, `id_ujian`, `pertanyaan`, `pilihan_a`, `pilih
 (40, 51, 'wdqwd', 'qwdqd', 'dqwdqw', 'dqdqd', 'dqwd', 'A', 'pilihan'),
 (41, 51, 'qwddqw', 'qwdqwdwq', 'dqwdqwd', 'qwdwqdw', 'qdwqdq', 'A', 'pilihan'),
 (42, 52, 'qdqwdqwd', 'qwdqwd', 'qwdqwd', 'qwdqwdq', 'dq', 'A', 'pilihan'),
-(43, 53, 'wcwcw', 'ccwcw', 'wcwc', 'cwwc', 'wcwc', 'A', 'pilihan');
+(43, 53, 'wcwcw', 'ccwcw', 'wcwc', 'cwwc', 'wcwc', 'A', 'pilihan'),
+(44, 52, 'fewfwf', 'weewfew', 'fwefewf', 'wfewf', 'wfeew', 'A', 'pilihan'),
+(45, 52, 'wqddq', 'qwdqwd', 'dqdqw', 'qwdqwd', 'dqwqd', 'A', 'pilihan'),
+(46, 52, 'agaregaegaegrae', 'gregaegaegaegae', 'graege', 'geagaegaeg', 'raeggae', 'A', 'pilihan'),
+(47, 52, 'ewfawfawfawgfawg', 'efwrt3wr34', 'ewrf23rw', 'wefewfewf', 'wefewf', 'A', 'pilihan');
 
 -- --------------------------------------------------------
 
@@ -474,19 +439,6 @@ INSERT INTO `tbl_ujian` (`id_ujian`, `nip_guru`, `nama_ujian`, `tanggal_mulai`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `token`
---
-
-CREATE TABLE `token` (
-  `id` int(11) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `token` varchar(255) NOT NULL,
-  `date_created` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tugas_siswa`
 --
 
@@ -509,7 +461,10 @@ CREATE TABLE `tugas_siswa` (
 --
 
 INSERT INTO `tugas_siswa` (`id`, `siswa_id`, `materi_id`, `file_path`, `original_filename`, `file_type`, `file_size`, `catatan`, `nilai`, `dikirim_pada`, `diupdate_pada`) VALUES
-(7, 123456, 2, 'assets/materi_tugas/b3399cea54e7c036a78984a5bd297bf8.pdf', '559_+Alvaro+Alexander+22507-22513 (PDF)', 'application/pdf', 157, NULL, NULL, '2025-05-21 09:37:30', NULL);
+(7, 123456, 2, 'assets/materi_tugas/b3399cea54e7c036a78984a5bd297bf8.pdf', '559_+Alvaro+Alexander+22507-22513 (PDF)', 'application/pdf', 157, NULL, NULL, '2025-05-21 09:37:30', NULL),
+(8, 123456, 1, 'assets/materi_tugas/34201d16be023a1a6c7874303f7fb6ee.png', 'test\' (PNG)', 'image/png', 45, '', '100.00', '2025-06-07 09:08:35', '2025-06-08 02:03:33'),
+(9, 123456, 8, 'assets/materi_tugas/6e4d3bcaa6365c89671f0f125267ad6e.png', 'DVSV (PNG)', 'image/png', 43, NULL, NULL, '2025-06-08 02:02:06', NULL),
+(10, 123456, 7, 'assets/materi_tugas/909a78572485098f79dfc27c67de62d4.png', 'weff (PNG)', 'image/png', 44, 'cwe', '40.00', '2025-06-08 02:14:34', '2025-06-08 02:19:55');
 
 -- --------------------------------------------------------
 
@@ -566,7 +521,11 @@ INSERT INTO `ujian_soal` (`id`, `ujian_id`, `soal_id`, `bank_soal_id`, `sumber`)
 (117, 53, NULL, 17, 'bank_soal'),
 (118, 53, NULL, 16, 'bank_soal'),
 (119, 53, NULL, 8, 'bank_soal'),
-(120, 53, 43, NULL, 'tbl_soal');
+(120, 53, 43, NULL, 'tbl_soal'),
+(121, 52, 44, NULL, 'tbl_soal'),
+(122, 52, 45, NULL, 'tbl_soal'),
+(123, 52, 46, NULL, 'tbl_soal'),
+(124, 52, 47, NULL, 'tbl_soal');
 
 --
 -- Indexes for dumped tables
@@ -609,31 +568,11 @@ ALTER TABLE `jawaban_siswa`
   ADD KEY `question_id` (`question_id`);
 
 --
--- Indexes for table `kategori_soal`
---
-ALTER TABLE `kategori_soal`
-  ADD PRIMARY KEY (`id_kategori`);
-
---
--- Indexes for table `kelas`
---
-ALTER TABLE `kelas`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `materi`
 --
 ALTER TABLE `materi`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_materi_guru` (`id_guru`);
-
---
--- Indexes for table `materi_status`
---
-ALTER TABLE `materi_status`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `siswa_materi_unique` (`siswa_id`,`materi_id`),
-  ADD KEY `fk_materi_status_materi` (`materi_id`);
 
 --
 -- Indexes for table `quiz`
@@ -687,12 +626,6 @@ ALTER TABLE `tbl_ujian`
   ADD PRIMARY KEY (`id_ujian`);
 
 --
--- Indexes for table `token`
---
-ALTER TABLE `token`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `tugas_siswa`
 --
 ALTER TABLE `tugas_siswa`
@@ -721,31 +654,19 @@ ALTER TABLE `bank_soal`
 -- AUTO_INCREMENT for table `forum_diskusi`
 --
 ALTER TABLE `forum_diskusi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `jawaban_siswa`
 --
 ALTER TABLE `jawaban_siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
-
---
--- AUTO_INCREMENT for table `kategori_soal`
---
-ALTER TABLE `kategori_soal`
-  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `materi`
 --
 ALTER TABLE `materi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `materi_status`
---
-ALTER TABLE `materi_status`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `quiz`
@@ -763,7 +684,7 @@ ALTER TABLE `quiz_questions`
 -- AUTO_INCREMENT for table `quiz_siswa`
 --
 ALTER TABLE `quiz_siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `tbl_jawaban_siswa`
@@ -775,7 +696,7 @@ ALTER TABLE `tbl_jawaban_siswa`
 -- AUTO_INCREMENT for table `tbl_soal`
 --
 ALTER TABLE `tbl_soal`
-  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `tbl_ujian`
@@ -784,22 +705,16 @@ ALTER TABLE `tbl_ujian`
   MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
--- AUTO_INCREMENT for table `token`
---
-ALTER TABLE `token`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
-
---
 -- AUTO_INCREMENT for table `tugas_siswa`
 --
 ALTER TABLE `tugas_siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `ujian_soal`
 --
 ALTER TABLE `ujian_soal`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
 -- Constraints for dumped tables
@@ -823,13 +738,6 @@ ALTER TABLE `jawaban_siswa`
 --
 ALTER TABLE `materi`
   ADD CONSTRAINT `fk_materi_guru` FOREIGN KEY (`id_guru`) REFERENCES `guru` (`nip`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `materi_status`
---
-ALTER TABLE `materi_status`
-  ADD CONSTRAINT `fk_materi_status_materi` FOREIGN KEY (`materi_id`) REFERENCES `materi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_materi_status_siswa` FOREIGN KEY (`siswa_id`) REFERENCES `siswa` (`nis`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `quiz`

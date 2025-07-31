@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 24, 2025 at 12:54 PM
+-- Generation Time: Jul 31, 2025 at 06:48 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -70,11 +70,16 @@ CREATE TABLE `bank_soal` (
 --
 
 INSERT INTO `bank_soal` (`id_soal`, `pertanyaan`, `pilihan_a`, `pilihan_b`, `pilihan_c`, `pilihan_d`, `kunci_jawaban`, `tingkat_kesulitan`, `tipe_kognitif`, `created_by`, `user_type`, `created_at`, `tipe_soal`, `id_mapel`) VALUES
-(1, '1ds12s1', 'ds1d1d11', 'd1d1d', '1d1d1d', '1d112d1', 'B', 'sulit', 'paham', 1, 'admin', '2025-07-15 08:53:58', 'pilihan', 2),
-(2, 'aaaa', 'aaa', 'aa', 'aa', 'aa', 'A', 'mudah', 'paham', 1, 'admin', '2025-07-15 09:05:30', 'pilihan', 1),
+(2, 'duhs', 'aaa', 'aa', 'aa', 'aa', 'A', 'mudah', 'paham', 1, 'admin', '2025-07-15 09:05:30', 'pilihan', 1),
 (3, 'qq', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', 1, 'admin', '2025-07-15 09:05:59', 'essay', 1),
 (4, 'aaa', 'aaa', 'aa', 'aa', 'aa', 'A', 'sedang', 'analisis', 21101140, 'guru', '2025-07-17 16:29:43', 'pilihan', 1),
-(5, 'yang bener', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', 21101140, 'guru', '2025-07-17 16:29:56', 'essay', 1);
+(5, 'yang bener', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', 21101140, 'guru', '2025-07-17 16:29:56', 'essay', 1),
+(8, 'asa', 'dqdqd', 'qdqdqd', 'qdqdwq', 'dqwdqdqwd', 'A', 'sedang', 'paham', 1, 'admin', '2025-07-25 13:36:23', 'pilihan', 1),
+(9, 'dfwfewwf', 'wfwefw', '', 'fwfwfwff', '', 'A', 'sedang', 'paham', 21101141, 'guru', '2025-07-26 20:20:06', 'pilihan', 2),
+(10, 'fewewfwfwfwfwf', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', 21101141, 'guru', '2025-07-26 20:20:13', 'essay', 2),
+(11, 'fwewfwfwf', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', 21101141, 'guru', '2025-07-26 20:20:20', 'essay', 2),
+(12, 'thsrth', 'hsthsrhr', 'hsrhr', 'hsrh', 'hsrthrsh', 'A', 'sedang', 'paham', 21101140, 'guru', '2025-07-27 17:31:34', 'pilihan', 1),
+(13, 'tests', 'eraggrga', 'rgege', 'reaa', 'rgagg', 'A', 'sedang', 'paham', 21101140, 'guru', '2025-07-27 17:31:52', 'pilihan', 2);
 
 -- --------------------------------------------------------
 
@@ -124,7 +129,9 @@ INSERT INTO `forum_diskusi` (`id`, `user_type`, `user_id`, `id_pertemuan`, `pare
 (23, 'guru', '21101140', 1, 1, 'sss', '2025-07-16 16:44:02', NULL, NULL),
 (24, 'guru', '21101140', 1, 23, 'sss', '2025-07-16 16:44:09', '2025-07-16 21:44:18', '2025-07-16 16:44:18'),
 (25, 'siswa', '12345678', 1, 23, 'sss', '2025-07-16 16:44:55', NULL, NULL),
-(26, 'siswa', '12345678', 1, 1, 'sss', '2025-07-16 16:45:06', '2025-07-16 21:45:39', '2025-07-16 16:45:39');
+(26, 'siswa', '12345678', 1, 1, 'sss', '2025-07-16 16:45:06', '2025-07-16 21:45:39', '2025-07-16 16:45:39'),
+(27, 'siswa', '1234567898', 10, NULL, 'dwqqwd', '2025-07-29 08:19:41', NULL, NULL),
+(28, 'guru', '21101140', 10, 27, 'yessir', '2025-07-29 08:20:17', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -148,8 +155,7 @@ CREATE TABLE `guru` (
 
 INSERT INTO `guru` (`nip`, `email`, `nama_guru`, `password`, `user_type`, `image`, `id_mapel`) VALUES
 (21101140, 'pahrulmaji@gmail.com', 'guru terbaik semestas', '$2y$10$UorwtaEU9o.RBf5ueod/4u7K97tOeuVZZjYfvGEmogwjs1wjIB1OC', 'guru', '', 1),
-(21101141, 'test1q222@gmail.com', 'guru tacu', '$2y$10$mkyupMAp59xkFET3LEnVieiDzYB.62A71qsiJXG5kbl8t7Q2mFTpi', 'guru', '', 2),
-(21101142, 'testqq1q2@gmail.com', 'ache', '$2y$10$8OIrvP.ljmdBaRF85Tm2uu2nXVd4Ct1pEEfx0gMDFnO9y9aLhEobO', 'guru', '', 1);
+(21101141, 'test1q222@gmail.com', 'guru tacu', '$2y$10$mkyupMAp59xkFET3LEnVieiDzYB.62A71qsiJXG5kbl8t7Q2mFTpi', 'guru', '', 2);
 
 -- --------------------------------------------------------
 
@@ -168,12 +174,12 @@ CREATE TABLE `guru_mapel` (
 --
 
 INSERT INTO `guru_mapel` (`id`, `id_guru`, `id_mapel`) VALUES
-(6, 21101142, 1),
-(7, 21101142, 2),
-(8, 21101142, 3),
 (9, 21101140, 1),
 (10, 21101140, 2),
-(11, 21101140, 3);
+(11, 21101140, 3),
+(12, 21101141, 1),
+(13, 21101141, 2),
+(14, 21101141, 3);
 
 -- --------------------------------------------------------
 
@@ -198,7 +204,14 @@ INSERT INTO `jawaban_siswa` (`id`, `quiz_siswa_id`, `question_id`, `jawaban`, `p
 (7, 2, 2, 'a', '1.00'),
 (8, 2, 3, 'a', '1.00'),
 (9, 2, 4, 'a', '1.00'),
-(10, 2, 5, 'a', '1.00');
+(10, 2, 5, 'a', '1.00'),
+(11, 4, 14, 'a', '1.00'),
+(12, 4, 15, 'd', '0.00'),
+(13, 5, 1, NULL, '0.00'),
+(14, 5, 2, NULL, '0.00'),
+(15, 5, 3, NULL, '0.00'),
+(16, 5, 4, NULL, '0.00'),
+(17, 5, 5, 'a', '1.00');
 
 -- --------------------------------------------------------
 
@@ -220,7 +233,10 @@ CREATE TABLE `kelas` (
 INSERT INTO `kelas` (`id`, `nama_kelas`, `tingkat`, `jurusan`) VALUES
 (1, 'X A', 'X', 'Administrasi'),
 (2, 'XI A', 'XI', 'Administrasi'),
-(3, 'XII A', 'XII', 'Administrasi');
+(3, 'XII A', 'XII', 'Administrasi'),
+(4, 'X B', 'X', 'Administrasi'),
+(6, 'PC1IPS1', 'X', 'Ilmu Pengetahuan Sos'),
+(8, 'PC1IPS2', 'XI', 'Ilmu Pengetahuan Sos');
 
 -- --------------------------------------------------------
 
@@ -270,9 +286,10 @@ INSERT INTO `materi` (`id`, `id_guru`, `id_mapel`, `id_kelas`, `video`, `deskrip
 (3, 21101141, 2, 1, 'WIN_20241104_17_06_10_Pro5.mp4', 'ssssssssssssssssssssssssssssssssssssssssssssssssss', ' https://www.youtube.com/watch?v=_eDpH4hMW1o&amp;list=RDN9bKBAA22Go&amp;index=27', 'WIN_20231030_13_35_02_Pro3.jpg'),
 (5, 21101140, 1, 1, 'WIN_20241104_17_06_10_Pro12.mp4', 'aku', ' aku', 'WIN_20231030_13_35_02_Pro10.jpg'),
 (7, 21101140, 2, 1, 'WIN_20241104_17_06_10_Pro13.mp4', 'wcwcwcw', 'cwcwcwc', 'WIN_20231030_13_35_02_Pro11.jpg'),
-(8, 21101140, 1, 1, 'WIN_20241104_17_06_10_Pro20.mp4', 'aaa', ' aaa', 'WIN_20231030_13_35_02_Pro18.jpg'),
 (9, 21101140, 1, 1, 'WIN_20241104_17_06_10_Pro21.mp4', 'aaa', 'aaa', 'WIN_20231030_13_35_02_Pro19.jpg'),
-(10, 21101140, 2, 1, 'WIN_20241104_17_06_10_Pro22.mp4', 'asxasxasx', ' axasxaxasxa', 'WIN_20231030_13_35_02_Pro20.jpg');
+(10, 21101140, 2, 1, 'WIN_20241104_17_06_10_Pro22.mp4', 'asxasxasx', ' axasxaxasxa', 'WIN_20231030_13_35_02_Pro20.jpg'),
+(11, 21101140, 1, 4, 'WIN_20241104_17_06_10_Pro23.mp4', 'test', 'https://www.youtube.com/', 'WIN_20231030_13_35_02_Pro21.jpg'),
+(12, 21101140, 1, 4, 'WIN_20241104_17_06_10_Pro20.mp4', 'dqwdw', ' wqdwqd', 'WIN_20231030_13_35_02_Pro18.jpg');
 
 -- --------------------------------------------------------
 
@@ -299,7 +316,9 @@ INSERT INTO `pertemuan` (`id`, `id_materi`, `id_kelas`, `pertemuan_ke`, `tanggal
 (5, 5, 1, 3, '2025-07-16'),
 (7, 7, 1, 5, '2025-07-19'),
 (8, 9, 1, 4, '2025-07-20'),
-(9, 10, 1, 1, '2025-07-24');
+(9, 10, 1, 1, '2025-07-24'),
+(10, 11, 4, 1, '2025-07-29'),
+(11, 12, 4, 2, '2025-07-29');
 
 -- --------------------------------------------------------
 
@@ -324,7 +343,9 @@ CREATE TABLE `quiz` (
 
 INSERT INTO `quiz` (`id`, `id_pertemuan`, `judul`, `deskripsi`, `waktu_pengerjaan`, `attempts`, `shuffle_questions`, `created_at`) VALUES
 (3, 1, 'qq', 'qqq', 30, 1, 1, '2025-07-16 09:28:28'),
-(4, 2, 'Asique', 'asiq', 30, 1, 1, '2025-07-17 07:36:18');
+(4, 2, 'Asique', 'asiq', 30, 1, 1, '2025-07-17 07:36:18'),
+(7, 9, 'Aku baik', 'aljabar adalah', 30, 1, 1, '2025-07-26 12:55:10'),
+(8, 10, 'qsqs', 'hrth', 30, 1, 1, '2025-07-29 08:28:03');
 
 -- --------------------------------------------------------
 
@@ -358,7 +379,12 @@ INSERT INTO `quiz_questions` (`id`, `quiz_id`, `pertanyaan`, `tipe`, `opsi_a`, `
 (6, 4, 'aku', 'pilihan', 'qwdqwdqwdqwd', 'dqwdqwd', 'dqwdqwdwq', 'qwdqwd', 'a', 1),
 (7, 4, 'qdqwdqwdwq', 'pilihan', 'dqwdqwdqwd', 'dqwdqwdqw', 'qwdqwdqw', 'dqwdwqdwq', 'a', 1),
 (8, 4, 'qdqwdqdqwd', 'pilihan', 'qwdqwdqdqw', 'dqdqwd', 'dqwdqd', 'qdqdq', 'a', 1),
-(9, 4, 'qwdqdq', 'pilihan', 'dqwdqdqdq', 'qdqdq', 'dqwdqd', 'dqdqdq', 'a', 1);
+(9, 4, 'qwdqdq', 'pilihan', 'dqwdqdqdq', 'qdqdq', 'dqwdqd', 'dqdqdq', 'a', 1),
+(11, 7, 'cscscsc', 'pilihan', 'sdcsd', 'cscccd', 'scsc', 'cscsc', 'a', 1),
+(12, 7, 'qwdqdqdwq', 'pilihan', 'qwdqdqdqd', 'qdqdqwd', 'wqdqdq', 'dqdqd', 'a', 1),
+(13, 7, 'zwdqdqd', 'pilihan', 'qwdqdqdqd', 'qdqwdqw', 'qwdqwdqdqwd', 'qdwdqd', 'a', 1),
+(14, 8, 'qdqwdq', 'pilihan', 'qwdqd', 'qdqdqdqd', 'dqd', 'qdqdqd', 'a', 1),
+(15, 8, 'wdqwqdqdqdqd', 'pilihan', 'dqqdqwdwq', 'qdqd', 'dqdq', 'dqdqdq', 'a', 1);
 
 -- --------------------------------------------------------
 
@@ -381,7 +407,10 @@ CREATE TABLE `quiz_siswa` (
 --
 
 INSERT INTO `quiz_siswa` (`id`, `quiz_id`, `siswa_id`, `start_time`, `end_time`, `status`, `score`) VALUES
-(2, 3, 12345678, '2025-07-24 12:39:33', '2025-07-24 12:39:46', 'completed', '100.00');
+(2, 3, 12345678, '2025-07-24 12:39:33', '2025-07-24 12:39:46', 'completed', '100.00'),
+(3, 7, 12345678, '2025-07-26 14:04:28', '2025-07-26 14:36:52', 'completed', '0.00'),
+(4, 8, 1234567898, '2025-07-29 08:30:57', '2025-07-29 08:31:06', 'completed', '50.00'),
+(5, 3, 1234567899, '2025-07-29 11:34:22', '2025-07-29 12:04:23', 'completed', '20.00');
 
 -- --------------------------------------------------------
 
@@ -407,7 +436,9 @@ CREATE TABLE `siswa` (
 
 INSERT INTO `siswa` (`nis`, `nama`, `password`, `email`, `image`, `is_active`, `date_created`, `id_kelas`, `user_type`) VALUES
 (12345678, 'addust', '$2y$10$3RDMCm2W9spWQ1tNeUcJiuavrUDd5J.r1voeLKTlQfGBznK9xuRtW', 'pahrulmaji@gmail.com', 'default.jpg', 1, '2025-07-15', 1, 'siswa'),
-(123456789, 'addusttt', '$2y$10$nJ7o8eOTw5OF6KRGWXiDC.BwYbd0R6qVAnn7Kcdvozbr2J6SFVtdy', 'test1q22sss2@gmail.com', 'default.jpg', 1, '2025-07-17', 1, 'siswa');
+(123456789, 'addusttt', '$2y$10$nJ7o8eOTw5OF6KRGWXiDC.BwYbd0R6qVAnn7Kcdvozbr2J6SFVtdy', 'test1q22sss2@gmail.com', 'default.jpg', 1, '2025-07-17', 1, 'siswa'),
+(1234567898, 'frbro', '$2y$10$1rAUcKRmfEjfouLgRSpGD./ckC7rRoMIisHbbt4ip0zLIWWq2AZ.K', 'testwfwefewf@gmail.com', 'default.jpg', 1, '2025-07-29', 4, 'siswa'),
+(1234567899, 'siswa terbaik', '$2y$10$3FuVyqH6BcloMPqfSolTK.TcFID2rA2zW/UzaL.GnKaCQZUlLLB9a', 'jagajaga100110@gmail.com', 'default.jpg', 1, '2025-07-26', 1, 'siswa');
 
 -- --------------------------------------------------------
 
@@ -443,29 +474,102 @@ CREATE TABLE `tbl_jawaban_siswa` (
 --
 
 INSERT INTO `tbl_jawaban_siswa` (`id_jawaban`, `nis`, `id_ujian`, `id_soal`, `bank_soal_id`, `jawaban`, `jawaban_essay`, `ragu_ragu`, `is_selesai`, `jumlah_benar`, `jumlah_salah`, `score`, `tanggal_submit`, `waktu_jawab`, `waktu_mulai_ujian`, `waktu_submit`, `sumber`, `nilai_essay`, `catatan_essay`, `nilai_akhir`) VALUES
-(1, 12345678, 1, NULL, 5, NULL, 'qdqwdqwdwqd', 0, 1, 4, 0, 100, NULL, '2025-07-17 09:16:55', NULL, '2025-07-17 16:17:31', 'bank_soal', 100, 'wccs', 100),
-(2, 12345678, 1, NULL, 4, 'A', NULL, 0, 1, 4, 0, 100, NULL, '2025-07-17 09:16:58', NULL, '2025-07-17 16:17:31', 'bank_soal', NULL, NULL, 100),
-(3, 12345678, 1, NULL, 3, NULL, 'qdqwdwqdqdqwdq', 0, 1, 4, 0, 100, NULL, '2025-07-17 09:17:29', NULL, '2025-07-17 16:17:31', 'bank_soal', 100, '', 100),
-(4, 12345678, 1, NULL, 2, 'A', NULL, 0, 1, 4, 0, 100, NULL, '2025-07-17 09:17:16', NULL, '2025-07-17 16:17:31', 'bank_soal', NULL, NULL, 100),
-(5, 12345678, 1, 1, NULL, 'A', NULL, 0, 1, 4, 0, 100, NULL, '2025-07-17 09:17:19', NULL, '2025-07-17 16:17:31', 'tbl_soal', NULL, NULL, 100),
-(6, 12345678, 1, 2, NULL, 'A', NULL, 0, 1, 4, 0, 100, NULL, '2025-07-17 09:17:21', NULL, '2025-07-17 16:17:31', 'tbl_soal', NULL, NULL, 100),
-(7, 123456789, 1, NULL, 5, NULL, 'aku', 0, 1, 2, 2, 50, NULL, '2025-07-17 09:19:58', NULL, '2025-07-17 16:20:38', 'bank_soal', 100, 'qdwdqwd', 65),
-(8, 123456789, 1, NULL, 4, 'A', NULL, 0, 1, 2, 2, 50, NULL, '2025-07-17 09:19:59', NULL, '2025-07-17 16:20:38', 'bank_soal', NULL, NULL, 65),
-(9, 123456789, 1, NULL, 3, NULL, 'aaaa', 0, 1, 2, 2, 50, NULL, '2025-07-17 09:20:04', NULL, '2025-07-17 16:20:38', 'bank_soal', 100, 'wdqdqw', 65),
-(10, 123456789, 1, NULL, 2, 'A', NULL, 0, 1, 2, 2, 50, NULL, '2025-07-17 09:20:24', NULL, '2025-07-17 16:20:38', 'bank_soal', NULL, NULL, 65),
-(11, 123456789, 1, 1, NULL, 'B', NULL, 0, 1, 2, 2, 50, NULL, '2025-07-17 09:20:11', NULL, '2025-07-17 16:20:38', 'tbl_soal', NULL, NULL, 65),
-(12, 123456789, 1, 2, NULL, 'B', NULL, 0, 1, 2, 2, 50, NULL, '2025-07-17 09:20:36', NULL, '2025-07-17 16:20:38', 'tbl_soal', NULL, NULL, 65),
-(13, 12345678, 2, NULL, 2, 'A', NULL, 0, 0, 0, 0, 0, NULL, '2025-07-19 23:33:43', NULL, NULL, 'bank_soal', NULL, NULL, 100),
-(14, 12345678, 2, NULL, 3, NULL, 'edqwdwqd', 0, 0, 0, 0, 0, NULL, '2025-07-19 23:33:47', NULL, NULL, 'bank_soal', 100, 'dwwd', 100),
-(15, 12345678, 2, NULL, 4, 'A', NULL, 0, 0, 0, 0, 0, NULL, '2025-07-19 23:33:49', NULL, NULL, 'bank_soal', NULL, NULL, 100),
-(16, 12345678, 2, NULL, 5, NULL, 'qwddqwdqdqw', 0, 0, 0, 0, 0, NULL, '2025-07-19 23:33:53', NULL, NULL, 'bank_soal', 100, 'asxsaxsaxsax', 100),
-(17, 12345678, 2, 3, NULL, 'A', NULL, 0, 0, 0, 0, 0, NULL, '2025-07-19 23:33:55', NULL, NULL, 'tbl_soal', NULL, NULL, 100),
-(18, 12345678, 2, 4, NULL, 'A', NULL, 0, 0, 0, 0, 0, NULL, '2025-07-19 23:33:58', NULL, NULL, 'tbl_soal', NULL, NULL, 100),
-(19, 12345678, 2, 5, NULL, 'A', NULL, 0, 0, 0, 0, 0, NULL, '2025-07-19 23:34:00', NULL, NULL, 'tbl_soal', NULL, NULL, 100),
-(31, 12345678, 4, NULL, 4, 'A', NULL, 0, 1, 1, 0, 100, NULL, '2025-07-24 03:10:41', NULL, '2025-07-24 10:10:48', 'bank_soal', NULL, NULL, 100),
-(32, 12345678, 4, NULL, 5, NULL, 'rgrege', 0, 1, 1, 0, 100, NULL, '2025-07-24 03:10:45', NULL, '2025-07-24 10:10:48', 'bank_soal', 100, 's', 100),
-(33, 123456789, 4, NULL, 4, 'A', NULL, 0, 1, 0, 0, 0, NULL, '2025-07-24 03:20:05', NULL, '2025-07-24 10:20:11', 'bank_soal', NULL, NULL, 100),
-(34, 123456789, 4, NULL, 5, NULL, 'qwdqwdwqdq', 0, 1, 0, 0, 0, NULL, '2025-07-24 03:20:09', NULL, '2025-07-24 10:20:11', 'bank_soal', 100, '', 100);
+(118, 12345678, 10, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 16:59:19', '2025-07-26 18:59:19', '2025-07-26 19:02:41', 'bank_soal', NULL, NULL, 100),
+(119, 12345678, 10, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 16:59:19', '2025-07-26 18:59:19', '2025-07-26 19:02:41', 'bank_soal', NULL, NULL, 100),
+(120, 12345678, 10, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 16:59:19', '2025-07-26 18:59:19', '2025-07-26 19:02:41', 'bank_soal', NULL, NULL, 100),
+(121, 12345678, 10, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 16:59:19', '2025-07-26 18:59:19', '2025-07-26 19:02:41', 'bank_soal', NULL, NULL, 100),
+(122, 12345678, 10, NULL, 8, 'A', NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 11:59:21', NULL, '2025-07-26 19:02:41', 'bank_soal', NULL, NULL, 100),
+(123, 12345678, 10, NULL, 5, NULL, 'fewfwefwfwfwfw', 0, 1, 1, 1, 25, NULL, '2025-07-26 11:59:31', NULL, '2025-07-26 19:02:41', 'bank_soal', 100, '', 100),
+(124, 12345678, 11, NULL, NULL, NULL, NULL, 0, 1, 2, 2, 25, NULL, '2025-07-26 17:03:11', '2025-07-26 19:03:11', '2025-07-26 19:07:04', 'tbl_soal', NULL, NULL, 25),
+(125, 12345678, 11, NULL, NULL, NULL, NULL, 0, 1, 2, 2, 25, NULL, '2025-07-26 17:03:11', '2025-07-26 19:03:11', '2025-07-26 19:07:04', 'tbl_soal', NULL, NULL, 25),
+(126, 12345678, 11, NULL, NULL, NULL, NULL, 0, 1, 2, 2, 25, NULL, '2025-07-26 17:03:11', '2025-07-26 19:03:11', '2025-07-26 19:07:04', 'tbl_soal', NULL, NULL, 25),
+(127, 12345678, 11, NULL, NULL, NULL, NULL, 0, 1, 2, 2, 25, NULL, '2025-07-26 17:03:11', '2025-07-26 19:03:11', '2025-07-26 19:07:04', 'tbl_soal', NULL, NULL, 25),
+(128, 12345678, 11, 14, NULL, 'A', NULL, 0, 1, 2, 2, 25, NULL, '2025-07-26 12:03:13', NULL, '2025-07-26 19:07:04', 'tbl_soal', NULL, NULL, 25),
+(129, 12345678, 11, 15, NULL, 'A', NULL, 0, 1, 2, 2, 25, NULL, '2025-07-26 12:03:16', NULL, '2025-07-26 19:07:04', 'tbl_soal', NULL, NULL, 25),
+(130, 12345678, 13, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:09:47', '2025-07-26 19:09:47', '2025-07-26 19:13:47', 'bank_soal', NULL, NULL, 100),
+(131, 12345678, 13, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:09:47', '2025-07-26 19:09:47', '2025-07-26 19:13:47', 'bank_soal', NULL, NULL, 100),
+(132, 12345678, 13, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:09:47', '2025-07-26 19:09:47', '2025-07-26 19:13:47', 'tbl_soal', NULL, NULL, 100),
+(133, 12345678, 13, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:09:47', '2025-07-26 19:09:47', '2025-07-26 19:13:47', 'tbl_soal', NULL, NULL, 100),
+(134, 12345678, 13, NULL, 5, NULL, 'cscdscsc', 0, 1, 1, 1, 25, NULL, '2025-07-26 12:09:53', NULL, '2025-07-26 19:13:47', 'bank_soal', 100, 'qwdqw', 100),
+(135, 12345678, 13, 18, NULL, 'A', NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 12:09:55', NULL, '2025-07-26 19:13:47', 'tbl_soal', NULL, NULL, 100),
+(136, 123456789, 10, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:22:44', '2025-07-26 19:22:44', '2025-07-26 19:24:49', 'bank_soal', NULL, NULL, 100),
+(137, 123456789, 10, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:22:44', '2025-07-26 19:22:44', '2025-07-26 19:24:49', 'bank_soal', NULL, NULL, 100),
+(138, 123456789, 10, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:22:44', '2025-07-26 19:22:44', '2025-07-26 19:24:49', 'bank_soal', NULL, NULL, 100),
+(139, 123456789, 10, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:22:44', '2025-07-26 19:22:44', '2025-07-26 19:24:49', 'bank_soal', NULL, NULL, 100),
+(140, 123456789, 10, NULL, 8, 'A', NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 12:22:45', NULL, '2025-07-26 19:24:49', 'bank_soal', NULL, NULL, 100),
+(141, 123456789, 10, NULL, 5, NULL, 'dqdqwdqwdqwd', 0, 1, 1, 1, 25, NULL, '2025-07-26 12:22:54', NULL, '2025-07-26 19:24:49', 'bank_soal', 100, '', 100),
+(142, 123456789, 11, NULL, NULL, NULL, NULL, 0, 1, 2, 2, 25, NULL, '2025-07-26 17:25:02', '2025-07-26 19:25:02', '2025-07-26 19:25:37', 'tbl_soal', NULL, NULL, 25),
+(143, 123456789, 11, NULL, NULL, NULL, NULL, 0, 1, 2, 2, 25, NULL, '2025-07-26 17:25:02', '2025-07-26 19:25:02', '2025-07-26 19:25:37', 'tbl_soal', NULL, NULL, 25),
+(144, 123456789, 11, NULL, NULL, NULL, NULL, 0, 1, 2, 2, 25, NULL, '2025-07-26 17:25:02', '2025-07-26 19:25:02', '2025-07-26 19:25:37', 'tbl_soal', NULL, NULL, 25),
+(145, 123456789, 11, NULL, NULL, NULL, NULL, 0, 1, 2, 2, 25, NULL, '2025-07-26 17:25:02', '2025-07-26 19:25:02', '2025-07-26 19:25:37', 'tbl_soal', NULL, NULL, 25),
+(146, 123456789, 11, 14, NULL, 'A', NULL, 0, 1, 2, 2, 25, NULL, '2025-07-26 12:25:09', NULL, '2025-07-26 19:25:37', 'tbl_soal', NULL, NULL, 25),
+(147, 123456789, 11, 15, NULL, 'A', NULL, 0, 1, 2, 2, 25, NULL, '2025-07-26 12:25:14', NULL, '2025-07-26 19:25:37', 'tbl_soal', NULL, NULL, 25),
+(148, 123456789, 13, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:31:20', '2025-07-26 19:31:20', '2025-07-26 19:36:18', 'bank_soal', NULL, NULL, 75),
+(149, 123456789, 13, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:31:20', '2025-07-26 19:31:20', '2025-07-26 19:36:18', 'bank_soal', NULL, NULL, 75),
+(150, 123456789, 13, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:31:20', '2025-07-26 19:31:20', '2025-07-26 19:36:18', 'tbl_soal', NULL, NULL, 75),
+(151, 123456789, 13, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:31:20', '2025-07-26 19:31:20', '2025-07-26 19:36:18', 'tbl_soal', NULL, NULL, 75),
+(152, 123456789, 13, NULL, 5, NULL, 'qwdqwdqwd', 0, 1, 1, 1, 25, NULL, '2025-07-26 12:31:25', NULL, '2025-07-26 19:36:18', 'bank_soal', 50, 'x', 75),
+(153, 123456789, 13, 18, NULL, 'A', NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 12:31:27', NULL, '2025-07-26 19:36:18', 'tbl_soal', NULL, NULL, 75),
+(154, 1234567899, 10, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:38:51', '2025-07-26 19:38:51', '2025-07-26 19:39:28', 'bank_soal', NULL, NULL, 100),
+(155, 1234567899, 10, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:38:51', '2025-07-26 19:38:51', '2025-07-26 19:39:28', 'bank_soal', NULL, NULL, 100),
+(156, 1234567899, 10, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:38:51', '2025-07-26 19:38:51', '2025-07-26 19:39:28', 'bank_soal', NULL, NULL, 100),
+(157, 1234567899, 10, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 17:38:51', '2025-07-26 19:38:51', '2025-07-26 19:39:28', 'bank_soal', NULL, NULL, 100),
+(158, 1234567899, 10, NULL, 8, 'A', NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 12:39:12', NULL, '2025-07-26 19:39:28', 'bank_soal', NULL, NULL, 100),
+(159, 1234567899, 10, NULL, 5, NULL, 'qwdqwd', 0, 1, 1, 1, 25, NULL, '2025-07-26 12:39:27', NULL, '2025-07-26 19:39:28', 'bank_soal', 100, 'dqwd', 100),
+(160, 1234567899, 11, NULL, NULL, NULL, NULL, 0, 1, 3, 1, 37.5, NULL, '2025-07-26 18:11:09', '2025-07-26 20:11:09', '2025-07-26 20:11:18', 'tbl_soal', NULL, NULL, 37.5),
+(161, 1234567899, 11, NULL, NULL, NULL, NULL, 0, 1, 3, 1, 37.5, NULL, '2025-07-26 18:11:09', '2025-07-26 20:11:09', '2025-07-26 20:11:18', 'tbl_soal', NULL, NULL, 37.5),
+(162, 1234567899, 11, NULL, NULL, NULL, NULL, 0, 1, 3, 1, 37.5, NULL, '2025-07-26 18:11:09', '2025-07-26 20:11:09', '2025-07-26 20:11:18', 'tbl_soal', NULL, NULL, 37.5),
+(163, 1234567899, 11, NULL, NULL, NULL, NULL, 0, 1, 3, 1, 37.5, NULL, '2025-07-26 18:11:09', '2025-07-26 20:11:09', '2025-07-26 20:11:18', 'tbl_soal', NULL, NULL, 37.5),
+(164, 1234567899, 11, 14, NULL, 'A', NULL, 0, 1, 3, 1, 37.5, NULL, '2025-07-26 13:11:11', NULL, '2025-07-26 20:11:18', 'tbl_soal', NULL, NULL, 37.5),
+(165, 1234567899, 11, 15, NULL, 'A', NULL, 0, 1, 3, 1, 37.5, NULL, '2025-07-26 13:11:13', NULL, '2025-07-26 20:11:18', 'tbl_soal', NULL, NULL, 37.5),
+(166, 1234567899, 11, 16, NULL, 'A', NULL, 0, 1, 3, 1, 37.5, NULL, '2025-07-26 13:11:16', NULL, '2025-07-26 20:11:18', 'tbl_soal', NULL, NULL, 37.5),
+(167, 1234567899, 13, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 18:11:31', '2025-07-26 20:11:31', '2025-07-26 20:14:34', 'bank_soal', NULL, NULL, 50),
+(168, 1234567899, 13, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 18:11:31', '2025-07-26 20:11:31', '2025-07-26 20:14:34', 'bank_soal', NULL, NULL, 50),
+(169, 1234567899, 13, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 18:11:31', '2025-07-26 20:11:31', '2025-07-26 20:14:34', 'tbl_soal', NULL, NULL, 50),
+(170, 1234567899, 13, NULL, NULL, NULL, NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 18:11:31', '2025-07-26 20:11:31', '2025-07-26 20:14:34', 'tbl_soal', NULL, NULL, 50),
+(171, 1234567899, 13, NULL, 5, NULL, 'dqwddq', 0, 1, 1, 1, 25, NULL, '2025-07-26 13:11:33', NULL, '2025-07-26 20:14:34', 'bank_soal', 0, 'qwdqw', 50),
+(172, 1234567899, 13, 18, NULL, 'A', NULL, 0, 1, 1, 1, 25, NULL, '2025-07-26 13:11:36', NULL, '2025-07-26 20:14:34', 'tbl_soal', NULL, NULL, 50),
+(173, 12345678, 15, NULL, NULL, NULL, NULL, 0, 1, 2, 1, 33.3333, NULL, '2025-07-27 11:14:01', '2025-07-27 13:14:01', '2025-07-27 13:14:17', 'bank_soal', NULL, NULL, 58.3333),
+(174, 12345678, 15, NULL, NULL, NULL, NULL, 0, 1, 2, 1, 33.3333, NULL, '2025-07-27 11:14:01', '2025-07-27 13:14:01', '2025-07-27 13:14:17', 'bank_soal', NULL, NULL, 58.3333),
+(175, 12345678, 15, NULL, NULL, NULL, NULL, 0, 1, 2, 1, 33.3333, NULL, '2025-07-27 11:14:01', '2025-07-27 13:14:01', '2025-07-27 13:14:17', 'bank_soal', NULL, NULL, 58.3333),
+(176, 12345678, 15, NULL, NULL, NULL, NULL, 0, 1, 2, 1, 33.3333, NULL, '2025-07-27 11:14:01', '2025-07-27 13:14:01', '2025-07-27 13:14:17', 'bank_soal', NULL, NULL, 58.3333),
+(177, 12345678, 15, NULL, NULL, NULL, NULL, 0, 1, 2, 1, 33.3333, NULL, '2025-07-27 11:14:01', '2025-07-27 13:14:01', '2025-07-27 13:14:17', 'tbl_soal', NULL, NULL, 58.3333),
+(178, 12345678, 15, NULL, 3, NULL, 'efefwewfewf', 0, 1, 2, 1, 33.3333, NULL, '2025-07-27 06:14:05', NULL, '2025-07-27 13:14:17', 'bank_soal', 0, 'qwdwqd', 58.3333),
+(179, 12345678, 15, NULL, 4, 'A', NULL, 0, 1, 2, 1, 33.3333, NULL, '2025-07-27 06:14:06', NULL, '2025-07-27 13:14:17', 'bank_soal', NULL, NULL, 58.3333),
+(180, 12345678, 15, NULL, 5, NULL, 'qdwdqwdq', 0, 1, 2, 1, 33.3333, NULL, '2025-07-27 06:14:09', NULL, '2025-07-27 13:14:17', 'bank_soal', 100, 'fwefw', 58.3333),
+(181, 12345678, 15, NULL, 12, 'A', NULL, 0, 1, 2, 1, 33.3333, NULL, '2025-07-27 06:14:11', NULL, '2025-07-27 13:14:17', 'bank_soal', NULL, NULL, 58.3333),
+(182, 12345678, 15, 21, NULL, 'C', NULL, 0, 1, 2, 1, 33.3333, NULL, '2025-07-27 06:14:15', NULL, '2025-07-27 13:14:17', 'tbl_soal', NULL, NULL, 58.3333),
+(183, 12345678, 14, NULL, NULL, NULL, NULL, 0, 1, 3, 0, 50, NULL, '2025-07-27 11:15:59', '2025-07-27 13:15:59', '2025-07-27 13:16:26', 'bank_soal', NULL, NULL, 100),
+(184, 12345678, 14, NULL, NULL, NULL, NULL, 0, 1, 3, 0, 50, NULL, '2025-07-27 11:15:59', '2025-07-27 13:15:59', '2025-07-27 13:16:26', 'bank_soal', NULL, NULL, 100),
+(185, 12345678, 14, NULL, NULL, NULL, NULL, 0, 1, 3, 0, 50, NULL, '2025-07-27 11:15:59', '2025-07-27 13:15:59', '2025-07-27 13:16:26', 'bank_soal', NULL, NULL, 100),
+(186, 12345678, 14, NULL, NULL, NULL, NULL, 0, 1, 3, 0, 50, NULL, '2025-07-27 11:15:59', '2025-07-27 13:15:59', '2025-07-27 13:16:26', 'bank_soal', NULL, NULL, 100),
+(187, 12345678, 14, NULL, NULL, NULL, NULL, 0, 1, 3, 0, 50, NULL, '2025-07-27 11:15:59', '2025-07-27 13:15:59', '2025-07-27 13:16:26', 'tbl_soal', NULL, NULL, 100),
+(188, 12345678, 14, NULL, 9, 'A', NULL, 0, 1, 3, 0, 50, NULL, '2025-07-27 06:16:14', NULL, '2025-07-27 13:16:26', 'bank_soal', NULL, NULL, 100),
+(189, 12345678, 14, NULL, 10, NULL, 'qdqwdqw', 0, 1, 3, 0, 50, NULL, '2025-07-27 06:16:18', NULL, '2025-07-27 13:16:26', 'bank_soal', 100, 'qwd', 100),
+(190, 12345678, 14, NULL, 11, NULL, 'dqqwdqd', 0, 1, 3, 0, 50, NULL, '2025-07-27 06:16:20', NULL, '2025-07-27 13:16:26', 'bank_soal', 100, '', 100),
+(191, 12345678, 14, NULL, 13, 'A', NULL, 0, 1, 3, 0, 50, NULL, '2025-07-27 06:16:21', NULL, '2025-07-27 13:16:26', 'bank_soal', NULL, NULL, 100),
+(192, 12345678, 14, 20, NULL, 'A', NULL, 0, 1, 3, 0, 50, NULL, '2025-07-27 06:16:23', NULL, '2025-07-27 13:16:26', 'tbl_soal', NULL, NULL, 100),
+(193, 123456789, 15, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-27 11:18:03', '2025-07-27 13:18:03', '2025-07-27 13:22:33', 'bank_soal', NULL, NULL, 0),
+(194, 123456789, 15, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-27 11:18:03', '2025-07-27 13:18:03', '2025-07-27 13:22:33', 'bank_soal', NULL, NULL, 0),
+(195, 123456789, 15, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-27 11:18:03', '2025-07-27 13:18:03', '2025-07-27 13:22:33', 'bank_soal', NULL, NULL, 0),
+(196, 123456789, 15, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-27 11:18:03', '2025-07-27 13:18:03', '2025-07-27 13:22:33', 'bank_soal', NULL, NULL, 0),
+(197, 123456789, 15, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-27 11:18:03', '2025-07-27 13:18:03', '2025-07-27 13:22:33', 'tbl_soal', NULL, NULL, 0),
+(198, 123456789, 14, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-27 11:22:47', '2025-07-27 13:22:47', '2025-07-27 13:26:49', 'bank_soal', NULL, NULL, 0),
+(199, 123456789, 14, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-27 11:22:47', '2025-07-27 13:22:47', '2025-07-27 13:26:49', 'bank_soal', NULL, NULL, 0),
+(200, 123456789, 14, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-27 11:22:47', '2025-07-27 13:22:47', '2025-07-27 13:26:49', 'bank_soal', NULL, NULL, 0),
+(201, 123456789, 14, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-27 11:22:47', '2025-07-27 13:22:47', '2025-07-27 13:26:49', 'bank_soal', NULL, NULL, 0),
+(202, 123456789, 14, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-27 11:22:47', '2025-07-27 13:22:47', '2025-07-27 13:26:49', 'tbl_soal', NULL, NULL, 0),
+(203, 123456789, 14, NULL, 10, NULL, 'dqwwdqd', 0, 1, 0, 3, 0, NULL, '2025-07-27 06:22:53', NULL, '2025-07-27 13:26:49', 'bank_soal', 0, '0', 0),
+(204, 1234567898, 16, NULL, NULL, NULL, NULL, 0, 1, 0, 5, 0, NULL, '2025-07-29 06:30:42', '2025-07-29 08:30:42', '2025-07-29 08:30:45', 'bank_soal', NULL, NULL, 0),
+(205, 1234567898, 16, NULL, NULL, NULL, NULL, 0, 1, 0, 5, 0, NULL, '2025-07-29 06:30:42', '2025-07-29 08:30:42', '2025-07-29 08:30:45', 'bank_soal', NULL, NULL, 0),
+(206, 1234567898, 16, NULL, NULL, NULL, NULL, 0, 1, 0, 5, 0, NULL, '2025-07-29 06:30:42', '2025-07-29 08:30:42', '2025-07-29 08:30:45', 'bank_soal', NULL, NULL, 0),
+(207, 1234567898, 16, NULL, NULL, NULL, NULL, 0, 1, 0, 5, 0, NULL, '2025-07-29 06:30:42', '2025-07-29 08:30:42', '2025-07-29 08:30:45', 'bank_soal', NULL, NULL, 0),
+(208, 1234567898, 16, NULL, NULL, NULL, NULL, 0, 1, 0, 5, 0, NULL, '2025-07-29 06:30:42', '2025-07-29 08:30:42', '2025-07-29 08:30:45', 'tbl_soal', NULL, NULL, 0),
+(209, 1234567899, 15, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-29 10:32:21', '2025-07-29 12:32:21', '2025-07-29 12:36:08', 'bank_soal', NULL, NULL, 0),
+(210, 1234567899, 15, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-29 10:32:21', '2025-07-29 12:32:21', '2025-07-29 12:36:08', 'bank_soal', NULL, NULL, 0),
+(211, 1234567899, 15, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-29 10:32:21', '2025-07-29 12:32:21', '2025-07-29 12:36:08', 'bank_soal', NULL, NULL, 0),
+(212, 1234567899, 15, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-29 10:32:21', '2025-07-29 12:32:21', '2025-07-29 12:36:08', 'bank_soal', NULL, NULL, 0),
+(213, 1234567899, 15, NULL, NULL, NULL, NULL, 0, 1, 0, 3, 0, NULL, '2025-07-29 10:32:21', '2025-07-29 12:32:21', '2025-07-29 12:36:08', 'tbl_soal', NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -490,11 +594,15 @@ CREATE TABLE `tbl_soal` (
 --
 
 INSERT INTO `tbl_soal` (`id_soal`, `id_ujian`, `pertanyaan`, `pilihan_a`, `pilihan_b`, `pilihan_c`, `pilihan_d`, `kunci_jawaban`, `tipe_soal`) VALUES
-(1, 1, 'qwdqwdqdwqd', 'wqdqdqdqd', 'wqdqwdqd', 'qdqdqdq', 'dqdqdwqd', 'A', 'pilihan'),
-(2, 1, 'wqdqdqwdqd', 'dqwqwdwqdqw', 'dqwdqw', 'dqwdqwdqw', 'dwqdw', 'A', 'pilihan'),
-(3, 2, 'qdqdqwqwqwdqd', 'dqdqwdqw', 'qdqdq', 'qwdqw', 'qwdqwdqw', 'A', 'pilihan'),
-(4, 2, 'qwddqd', 'qwdqdq', 'dqdqdq', 'ddq', 'dqdqdwqdw', 'A', 'pilihan'),
-(5, 2, 'qwdwqdqdq', 'dqdqd', 'qdqdqd', 'qdqdqd', 'dqdqdqdqd', 'A', 'pilihan');
+(14, 11, 'fwefwe', 'fewfewf', 'fwfw', 'fewfwf', 'ewf', 'A', 'pilihan'),
+(15, 11, 'ewfwfwfew', 'fewfwf', 'wfw', 'wfwfw', 'fwffw', 'A', 'pilihan'),
+(16, 11, 'ewfewfw', 'fwfwf', 'wfwf', 'wfwf', 'wfwf', 'A', 'pilihan'),
+(17, 11, 'fewfwf', 'wefew', 'fwfwf', 'fewfew', 'fewfew', 'A', 'pilihan'),
+(18, 13, 'qwdqd', 'qdwqd', 'qwdq', 'qdq', 'qqd', 'A', 'pilihan'),
+(19, 13, 'wdqqd', 'qdqd', 'qdqd', 'qddqq', 'dqwqd', 'A', 'pilihan'),
+(20, 14, 'wdqdqwd', 'qwdqw', 'dqwdq', 'dwqdq', 'dqq', 'A', 'pilihan'),
+(21, 15, 'wefwf', 'wfwf', 'wfwfw', 'fwf', 'wfw', 'A', 'pilihan'),
+(22, 16, 'wfwef', 'wefewfew', 'fewf', 'fwfewfw', 'fwf', 'A', 'pilihan');
 
 -- --------------------------------------------------------
 
@@ -521,9 +629,12 @@ CREATE TABLE `tbl_ujian` (
 --
 
 INSERT INTO `tbl_ujian` (`id_ujian`, `nip_guru`, `nama_ujian`, `tanggal_mulai`, `tanggal_selesai`, `durasi`, `status`, `id_pertemuan`, `soal_source`, `bobot_pg`, `bobot_essay`) VALUES
-(1, 21101140, 'UTS', '2025-07-17', '2025-07-17', 30, 'aktif', 1, 'manual', 70, 30),
-(2, 21101140, 'UTS', '2025-07-20', '2025-07-31', 30, 'aktif', 5, 'manual', 70, 30),
-(4, 21101140, 'UAS', '2025-07-24', '2025-07-31', 30, 'aktif', 7, 'manual', 50, 50);
+(10, 21101140, 'UTS', '2025-07-26', '2025-07-31', 2, 'aktif', 1, 'manual', 50, 50),
+(11, 21101140, 'UAS', '2025-07-26', '2025-07-31', 2, 'aktif', 2, 'manual', 50, 50),
+(13, 21101140, 'Harian', '2025-07-26', '2025-07-31', 2, 'aktif', 5, 'manual', 50, 50),
+(14, 21101140, 'UTSs', '2025-07-27', '2025-07-31', 2, 'aktif', 7, 'manual', 50, 50),
+(15, 21101140, 'ADM', '2025-07-27', '2025-07-31', 2, 'aktif', 8, 'manual', 50, 50),
+(16, 21101140, 'UTS', '2025-07-29', '2025-07-31', 2, 'aktif', 10, 'manual', 50, 50);
 
 -- --------------------------------------------------------
 
@@ -550,7 +661,8 @@ CREATE TABLE `tugas_siswa` (
 --
 
 INSERT INTO `tugas_siswa` (`id`, `siswa_id`, `id_pertemuan`, `file_path`, `original_filename`, `file_type`, `file_size`, `catatan`, `nilai`, `dikirim_pada`, `diupdate_pada`) VALUES
-(9, 12345678, 1, 'assets/materi_tugas/e708dc3cdfb0b2d1ed4a25bf376d5cdb.jpg', 'WIN_20231030_13_35_02_Pro (JPG)', 'image/jpeg', 96, 'dadadad', '100.00', '2025-07-16 07:38:18', '2025-07-17 09:57:01');
+(9, 12345678, 1, 'assets/materi_tugas/e708dc3cdfb0b2d1ed4a25bf376d5cdb.jpg', 'WIN_20231030_13_35_02_Pro (JPG)', 'image/jpeg', 96, 'dadadad', '100.00', '2025-07-16 07:38:18', '2025-07-17 09:57:01'),
+(10, 1234567898, 10, 'assets/materi_tugas/11edc41ad71ed5307ea3ba0e6bc3e554.jpg', 'WIN_20231030_13_35_02_Pro (JPG)', 'image/jpeg', 96, NULL, NULL, '2025-07-29 08:31:30', NULL);
 
 -- --------------------------------------------------------
 
@@ -571,20 +683,33 @@ CREATE TABLE `ujian_soal` (
 --
 
 INSERT INTO `ujian_soal` (`id`, `ujian_id`, `soal_id`, `bank_soal_id`, `sumber`) VALUES
-(1, 1, NULL, 5, 'bank_soal'),
-(2, 1, NULL, 4, 'bank_soal'),
-(4, 1, NULL, 2, 'bank_soal'),
-(5, 1, 1, NULL, 'tbl_soal'),
-(6, 1, 2, NULL, 'tbl_soal'),
-(7, 2, NULL, 5, 'bank_soal'),
-(8, 2, NULL, 4, 'bank_soal'),
-(9, 2, NULL, 3, 'bank_soal'),
-(10, 2, NULL, 2, 'bank_soal'),
-(11, 2, 3, NULL, 'tbl_soal'),
-(12, 2, 4, NULL, 'tbl_soal'),
-(13, 2, 5, NULL, 'tbl_soal'),
-(19, 4, NULL, 5, 'bank_soal'),
-(20, 4, NULL, 4, 'bank_soal');
+(41, 10, NULL, 8, 'bank_soal'),
+(42, 10, NULL, 5, 'bank_soal'),
+(43, 10, NULL, 4, 'bank_soal'),
+(44, 10, NULL, 3, 'bank_soal'),
+(45, 11, 14, NULL, 'tbl_soal'),
+(46, 11, 15, NULL, 'tbl_soal'),
+(47, 11, 16, NULL, 'tbl_soal'),
+(48, 11, 17, NULL, 'tbl_soal'),
+(50, 13, NULL, 5, 'bank_soal'),
+(51, 13, NULL, 3, 'bank_soal'),
+(52, 13, 18, NULL, 'tbl_soal'),
+(53, 13, 19, NULL, 'tbl_soal'),
+(54, 14, NULL, 13, 'bank_soal'),
+(55, 14, NULL, 11, 'bank_soal'),
+(56, 14, NULL, 10, 'bank_soal'),
+(57, 14, NULL, 9, 'bank_soal'),
+(58, 14, 20, NULL, 'tbl_soal'),
+(59, 15, NULL, 12, 'bank_soal'),
+(60, 15, NULL, 5, 'bank_soal'),
+(61, 15, NULL, 4, 'bank_soal'),
+(62, 15, NULL, 3, 'bank_soal'),
+(63, 15, 21, NULL, 'tbl_soal'),
+(64, 16, NULL, 12, 'bank_soal'),
+(65, 16, NULL, 8, 'bank_soal'),
+(66, 16, NULL, 4, 'bank_soal'),
+(67, 16, NULL, 2, 'bank_soal'),
+(68, 16, 22, NULL, 'tbl_soal');
 
 --
 -- Indexes for dumped tables
@@ -743,97 +868,97 @@ ALTER TABLE `ujian_soal`
 -- AUTO_INCREMENT for table `bank_soal`
 --
 ALTER TABLE `bank_soal`
-  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `forum_diskusi`
 --
 ALTER TABLE `forum_diskusi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `guru_mapel`
 --
 ALTER TABLE `guru_mapel`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `jawaban_siswa`
 --
 ALTER TABLE `jawaban_siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `mata_pelajaran`
 --
 ALTER TABLE `mata_pelajaran`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `materi`
 --
 ALTER TABLE `materi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `pertemuan`
 --
 ALTER TABLE `pertemuan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `quiz`
 --
 ALTER TABLE `quiz`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `quiz_questions`
 --
 ALTER TABLE `quiz_questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `quiz_siswa`
 --
 ALTER TABLE `quiz_siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_jawaban_siswa`
 --
 ALTER TABLE `tbl_jawaban_siswa`
-  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=214;
 
 --
 -- AUTO_INCREMENT for table `tbl_soal`
 --
 ALTER TABLE `tbl_soal`
-  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `tbl_ujian`
 --
 ALTER TABLE `tbl_ujian`
-  MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `tugas_siswa`
 --
 ALTER TABLE `tugas_siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `ujian_soal`
 --
 ALTER TABLE `ujian_soal`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- Constraints for dumped tables

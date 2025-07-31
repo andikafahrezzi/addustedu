@@ -14,7 +14,7 @@
                     <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
                             value="<?= $this->security->get_csrf_hash(); ?>" />
                     <div class="form-group">
-                        <label for="nama_kelas">Nama Kelas (Kode)</label>
+                        <label for="nama_kelas">Kode Kelas</label>
                         <input type="text" class="form-control" name="nama_kelas" id="nama_kelas" required>
                     </div>
 
@@ -28,7 +28,7 @@
                         <input type="text" class="form-control" name="jurusan" id="jurusan">
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Simpan ⭢</button>
+                    <button type="submit" class="btn btn-success">Simpan ⭢</button>
                     <a href="<?= base_url('admin/kelas') ?>" class="btn btn-secondary">Kembali</a>
                 </form>
             </div>

@@ -21,7 +21,7 @@
                         <input type="text" class="form-control" name="nama_mapel" id="nama_mapel" value="<?= $mapel_edit->nama_mapel ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="deskripsi">Deskripsi Mapel</label>
+                        <label for="deskripsi">Deskripsi </label>
                         <input type="text" class="form-control" name="deskripsi" id="deskripsi" value="<?= $mapel_edit->deskripsi ?>" required>
                     </div>
 
