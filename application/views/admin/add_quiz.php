@@ -51,8 +51,8 @@
 </div>
 <div class="container mt-4">
     <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0 text-white">
                 <i class="fas fa-plus-circle mr-2"></i>
                 Buat Quiz Baru
             </h4>
@@ -139,7 +139,7 @@
                 <hr>
                 
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary btn-lg px-4">
+                    <button type="submit" class="btn btn-success btn-lg px-4">
                         <i class="fas fa-save mr-2"></i> Simpan Quiz
                     </button>
                     <a href="<?= site_url('admin') ?>" class="btn btn-secondary btn-lg px-4 ml-2">

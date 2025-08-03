@@ -42,7 +42,7 @@
                     <input type="date" name="tanggal" class="form-control" value="<?= $pertemuan->tanggal ?>" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-success">Simpan</button>
                 <a href="<?= base_url('admin/data_pertemuan') ?>" class="btn btn-secondary">Kembali</a>
             </form>
         </div>

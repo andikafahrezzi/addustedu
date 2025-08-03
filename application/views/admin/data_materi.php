@@ -47,11 +47,12 @@
                                                         <?php echo $u->nama_mapel ?>
                                                     </td>
                                                     <td>
-                                                        <?= substr($u->deskripsi, 0, 30); ?>
-                                                        .&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.
+                                                        <?= substr($u->deskripsi, 0, 10); ?>
+                                                        ...
                                                     </td>
                                                     <td>
-                                                        <?php echo $u->linkform ?>
+                                                        <?= substr($u->linkform, 0, 10); ?>
+                                                        ...
                                                     </td>
                                                     <td>
                                                         <?php echo $u->nama_kelas ?>

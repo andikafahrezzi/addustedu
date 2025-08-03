@@ -52,8 +52,8 @@
 </div>
 <div class="container mt-4">
     <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0 text-white">
                 <i class="fas fa-plus-circle mr-2"></i>
                 Buat Bank Soal
             </h4>
@@ -184,7 +184,7 @@
                     </select>
                 </div>
                 
-                <button type="submit" class="btn btn-primary">Simpan Soal</button>
+                <button type="submit" class="btn btn-success">Simpan Soal</button>
                 <a href="<?= site_url('admin/bank_soal') ?>" class="btn btn-secondary">Batal</a>
             </form>
         </div>

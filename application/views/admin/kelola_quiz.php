@@ -51,11 +51,11 @@
 </div>
 <div class="container mt-4">
     <div class="card shadow mb-4">
-        <div class="card-header bg-primary text-white">
-            <h4>
+        <div class="card-header bg-success text-white">
+            <h4 class="text-white">
                 <i class="fas fa-edit mr-2"></i>
                 Kelola Quiz: <?= $quiz->judul ?>
-                <small class="float-right">
+                <small class="float-right ml-1">
                     Materi: <?= $quiz->materi->nama_mapel ?> - <?= $quiz->materi->nama_kelas ?>
                 </small>
             </h4>
@@ -126,7 +126,7 @@
                         </div>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-success">
                         <i class="fas fa-save mr-1"></i> Simpan Soal
                     </button>
                 </form>

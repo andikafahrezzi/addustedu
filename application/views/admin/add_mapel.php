@@ -25,7 +25,7 @@
                         <input type="text" class="form-control" name="deskripsi" id="deskripsi" required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Simpan ⭢</button>
+                    <button type="submit" class="btn btn-success">Simpan ⭢</button>
                     <a href="<?= base_url('admin/data_mapel') ?>" class="btn btn-secondary">Kembali</a>
                 </form>
             </div>
