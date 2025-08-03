@@ -79,6 +79,7 @@
                                         </select>
                                     </div>
                                     <button type="submit" class="btn btn-success">Tambah materi</button>
+                                    <a href="<?= base_url('guru/data_materi') ?>" class="btn btn-secondary">Kembali</a>
                                 </form>
                             </div>
                         </div>
@@ -92,15 +93,6 @@
 
 
                 <!-- begin:: Footer -->
-                <div class="kt-footer kt-grid__item kt-grid kt-grid--desktop kt-grid--ver-desktop">
-                    <div class="kt-footer__copyright">
-                        2025&nbsp;&copy;&nbsp;<a href="https://Andikafahrezi.github.io/" target="_blank"
-                            class="kt-link">Andika Fahrezi</a>
-                    </div>
-                    <div class="kt-footer__menu">
-                        Made with &nbsp; <span class="" style="color: red"> &#10084;</span> &nbsp; by Dika
-                    </div>
-                </div>
 
                 <!-- end:: Footer -->
             </div>

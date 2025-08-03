@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-md-6">
-            <h1 class="h3 mb-0 text-gray-800"><?= $title ?></h1>
+            <h1 class="h3 mb-0 text-success"><?= $title ?></h1>
         </div>
     </div>
 
@@ -117,7 +117,7 @@
                     </select>
                 </div>
                 
-                <button type="submit" class="btn btn-primary">Simpan Soal</button>
+                <button type="submit" class="btn btn-success">Simpan Soal</button>
                 <a href="<?= site_url('guru/bank_soal') ?>" class="btn btn-secondary">Batal</a>
             </form>
         </div>

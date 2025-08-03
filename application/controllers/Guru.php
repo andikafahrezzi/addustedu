@@ -49,7 +49,7 @@ class Guru extends CI_Controller
         $data['kelas'] = $this->db->get('kelas')->result();
         $this->load->view('guru/navug');
         $this->load->view('guru/add_materi', $data);
-        $this->load->view('guru/footg');
+        // $this->load->view('guru/footg');
     } else {
         $nip      = $this->session->userdata('nip');
         $mapel    = $this->input->post('nama_mapel');

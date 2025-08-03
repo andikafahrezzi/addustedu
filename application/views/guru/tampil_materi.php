@@ -33,8 +33,6 @@
         <!-- Forum Diskusi -->
         <div class="discussion-forum mt-4">
             <h3><i class="fas fa-comments"></i> Forum Diskusi</h3>
-            <?php var_dump($materi); ?> <!-- Pastikan tidak NULL -->
-            <?php var_dump($forum); ?> <!-- Pastikan tidak NULL -->
             <!-- Form Komentar Utama -->
             <form class="comment-form mb-4" method="POST" action="<?= base_url('guru/tambah_komentar') ?>">
                 <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">

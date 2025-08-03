@@ -2,7 +2,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
                 <div class="card shadow-sm p-4">
-                    <h4 class="mb-4 text-center">Ubah Profil</h4>
+                    <h4 class="mb-4 text-center text-success">Ubah Profil</h4>
 <?php if ($this->session->flashdata('error')) : ?>
     <div class="alert alert-danger"><?= $this->session->flashdata('error'); ?></div>
 <?php endif; ?>
@@ -40,7 +40,7 @@
 </div>
 
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary bubbly-button">Simpan Perubahan</button>
+                            <button type="submit" class="btn btn-success bubbly-button">Simpan Perubahan</button>
                         </div>
                     </form>
                 </div>

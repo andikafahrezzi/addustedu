@@ -20,7 +20,7 @@
 <section class="about_area p_60">
     <div class="container">
         <div class="main_title">
-            <h2 data-aos="fade-up" data-aos-duration="1600" style="font-size: 33px !important;">Tentang addustedu - Web Edukasi Open Source</h2>
+            <h2 data-aos="fade-up" data-aos-duration="1600" style="font-size: 33px !important;">Tentang addustedu - Web Pembelajaran Elektronik</h2>
             <p data-aos="fade-up" data-aos-duration="1800">addustedu adalah Web Edukasi Open-Source yang dibuat oleh <a href="https://web.facebook.com/andikafahrezi">Andika Fahrezi.</a> Website
                 pembelajaran dimana para siswa dapat belajar dimana saja dan kapan saja.
                 Guru dapat mengupload video dirinya sendiri sedang mengajar, sehingga tanpa takut adanya jam
@@ -91,11 +91,11 @@
             </div>
             <div class="col-lg-6">
                 <div class="video_area" id="video">
-                    <img class="img-fluid" src="<?= base_url('assets/') ?>img/video-1.jpg" alt="" />
-                    <a class="popup-youtube" href="https://www.youtube.com/watch?v=FZmbSq2W1hY">
-                        <img src="<?= base_url('assets/') ?>img/icon/video-icon-1.png" alt="" />
-                    </a>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/XCM54pKkQSE?si=PJgFu-kVwfUl42a4" allowfullscreen></iframe>
                 </div>
+                </div>
+
             </div>
         </div>
         <div class="about_details mt-5" data-aos="fade-up" data-aos-duration="1600">

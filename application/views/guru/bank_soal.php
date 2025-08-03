@@ -1,16 +1,16 @@
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Bank Soal</h1>
-        <a href="<?= site_url('guru/add_bank_soal') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <h1 class="h3 mb-0 text-success">Bank Soal</h1>
+        <a href="<?= site_url('guru/add_bank_soal') ?>" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Soal
         </a>
     </div>
 
     <?php if (!empty($mapel_diajarkan)): ?>
-    <div class="mb-3">
-        <label for="filterMapel"><strong>Filter Mata Pelajaran:</strong></label>
+    <div class="mb-3 text-success">
+        <label for="filterMapel text-success"><strong>Filter Mata Pelajaran:</strong></label>
         <select class="form-control" id="filterMapel" onchange="filterSoal()">
-            <option value="semua">Semua Mapel</option>
+            <option value="semua text-success">Semua Mapel</option>
             <?php foreach ($mapel_diajarkan as $mapel): ?>
                 <option value="<?= $mapel->nama_mapel ?>"><?= $mapel->nama_mapel ?></option>
             <?php endforeach; ?>
@@ -20,7 +20,7 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Daftar Soal</h6>
+            <h6 class="m-0 font-weight-bold text-success">Daftar Soal</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">

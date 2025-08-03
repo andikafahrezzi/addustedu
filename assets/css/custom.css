@@ -599,7 +599,7 @@ button:focus {
 	margin-top: 20px;
 	-webkit-appearance: none;
 	appearance: none;
-	background-color: #4dbf1c;
+	background: linear-gradient(135deg, #00c9ff, #92fe9d);
 	color: #fff;
 	border-radius: 40px;
 	border: none;

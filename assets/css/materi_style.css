@@ -233,7 +233,9 @@ body {
     border-radius: 0 0 var(--border-radius) var(--border-radius);
     border-top: 1px solid rgba(0,0,0,0.1);
 }
-
+.btn-profile{
+  background-color: var(--gradient);
+}
 .form-control {
     width: 100%;
     padding: 10px;

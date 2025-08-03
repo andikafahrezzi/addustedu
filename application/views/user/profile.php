@@ -33,7 +33,7 @@
 </div>
 
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary bubbly-button">Simpan Perubahan</button>
+                            <button type="submit" class="btn bubbly-button">Simpan Perubahan</button>
                         </div>
                     </form>
                 </div>
