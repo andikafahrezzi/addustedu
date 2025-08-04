@@ -83,6 +83,14 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
 </footer>
 <!--================ End footer Area  =================-->
 
+<?php if ($this->session->flashdata('login_error')): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <?= $this->session->flashdata('login_error'); ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php endif; ?>
 
 <!-- Start Login Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -107,19 +115,19 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                             <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
                         value="<?= $this->security->get_csrf_hash(); ?>" />
                                 <div class="form-group">
-                                    <label class="label-font" for="
-                                        exampleFormControlInput1">
-                                        Nomer Induk Siswa</label>
-                                    <input type="text" value="<?= set_value('nis'); ?>" class="form-control" name="nis" autocomplete="off" id="nis" placeholder="Masukan Nis mu disini ..">
-                                    <small class="text-danger"></small>
+                                    <label class="label-font" for="nis">Nomer Induk Siswa</label>
+                                    <input type="text" value="<?= $this->session->flashdata('old_nis') ?>" class="form-control" name="nis" autocomplete="off" id="nis" placeholder="Masukan Nis mu disini ..">
+<small class="text-danger"><?= $this->session->flashdata('nis_error'); ?></small>
+
                                 </div>
+
                                 <div class="form-group">
-                                    <label class="label-font" for="
-                                        exampleFormControlInput1">
-                                        Password</label>
+                                    <label class="label-font" for="password">Password</label>
                                     <input type="password" name="password" class="form-control" id="password" placeholder="Masukan password mu disini ..">
-                                    <small class="text-danger"></small>
+<small class="text-danger"><?= $this->session->flashdata('password_error'); ?></small>
+
                                 </div>
+
                                 <div class="form-check mt-2">
                                     <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
                                     <label class="form-check-label" for="defaultCheck1">
@@ -141,6 +149,15 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
         </div>
     </div>
 </div>
+<?php if ($this->session->flashdata('false-login')): ?>
+<script>
+    $(document).ready(function () {
+        $('#exampleModalCenter').modal('show');
+    });
+</script>
+<?php endif; ?>
+
+
 <!-- End Login Modal -->
 
 

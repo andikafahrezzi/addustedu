@@ -3,13 +3,11 @@ TODO
     - cari tau bagaimana cara destroy session 
     - menambahkan fungsi delete materi, quiz dan bank soal, tugas pada siswa, dan admin
     - nama tidak boleh ada angka(validasi)
-    - guru harus memiliki fitur lihat hasil quiz dan ujian siswa
+    - TAMBAHKAN KEAMANAN XSS dll untuk keaman lebih lanjut di setiap form input
 
 - ADMIN
     - cek navbar admin setiap komponen untuk clean code
-    - tambahkan pilihan untuk input dan post pertemuan setiap upload materi ( admin)
     - belum ada data ujian pada admin yang memungkinkan admin bisa melihat atau mengelola ujian
-    - edit bank soal masih null
 
 - GURU
     - tampilan mobile pada guru masih ngaco
@@ -26,11 +24,9 @@ PR
 - beda user tetapi waktu tidak mulai dari 100
 - setiap function hapus, samakan seperti yang lainnya(ada modal hapus)
 - kedepannya jika ada form harus mengguna csrf
-- pada quiz, jawaban essay masih belum masuk kedalam database, jadi terhitung salah
-- add_pertemuan masih menggunakan navigasi tambah guru
+- pada quiz, jawaban essay masih belum masuk kedalam database, jadi terhitung salah 
+    ( hapus pilihan essay, gunakan PG only)
 - comment di slicing coba cari comment_replies
-- menyatukan data pertemuan dan materi, jadi jika pertemuan blm dibuat tetapi ada materi sudah dmuat
-    akan menampilkan notif, blm dimuat pertemuan
 - berikan notifikasi jika data pertemuan sudah digunakan
 - penilaian essay masih blm di jumlahkan dengan total nilai pilihan ganda
 
@@ -38,26 +34,4 @@ next can be a problem
 - change id at database siswa to nis
 - login and register siswa with nis, no longer use email
 - score yang dikirim langsung hasilnya melalui submit, tidak ada perhitungan diluar itu
-- sekarang pembagian tidak melalui tabel materi secara langsung tapi di normalisasi menggunkan tabel pertemuan
-
-Severity: Notice
-
-Message: Trying to access array offset on value of type null
-
-Filename: materi/belajar.php
-
-Line Number: 183
-
-Backtrace:
-
-File: C:\xampp\htdocs\addustedu\application\views\materi\belajar.php
-Line: 183
-Function: _error_handler
-
-File: C:\xampp\htdocs\addustedu\application\controllers\Materi.php
-Line: 73
-Function: view
-
-File: C:\xampp\htdocs\addustedu\index.php
-Line: 323
-Function: require_once
+- sekarang pembagian materi(belajar) tidak melalui tabel materi secara langsung tapi di normalisasi menggunkan tabel pertemuan

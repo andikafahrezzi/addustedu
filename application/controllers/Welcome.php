@@ -16,24 +16,30 @@ class Welcome extends CI_Controller {
     }
 
     // Login Siswa
-    public function validateLogin() {
-        $this->form_validation->set_rules('nis', 'NIS', 'trim|required|numeric|min_length[5]', [
-            'required' => 'Harap isi bidang NIS!',
-            'numeric' => 'NIS harus berupa angka!',
-            'min_length' => 'NIS minimal 5 angka!'
-        ]);
-        $this->form_validation->set_rules('password', 'Password', 'trim|required', [
-            'required' => 'Harap isi bidang password!',
-        ]);
-        
-        if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('false-login', true);
-            $this->session->set_flashdata('validateLoginFalse', $this->form_validation->error_array());
-            redirect('welcome');
-        } else {
-            $this->siswa_login_process();
-        }
+public function validateLogin() {
+    $this->form_validation->set_rules('nis', 'NIS', 'trim|required|numeric|min_length[5]', [
+        'required' => 'Harap isi bidang NIS!',
+        'numeric' => 'NIS harus berupa angka!',
+        'min_length' => 'NIS minimal 5 angka!'
+    ]);
+    $this->form_validation->set_rules('password', 'Password', 'trim|required', [
+        'required' => 'Harap isi bidang password!',
+    ]);
+
+    if ($this->form_validation->run() == false) {
+        // Simpan error ke flashdata masing-masing
+        $errors = $this->form_validation->error_array();
+
+        $this->session->set_flashdata('false-login', true);
+        $this->session->set_flashdata('nis_error', $errors['nis'] ?? '');
+        $this->session->set_flashdata('password_error', $errors['password'] ?? '');
+        $this->session->set_flashdata('old_nis', set_value('nis'));
+        redirect('welcome');
+    } else {
+        $this->siswa_login_process();
     }
+}
+
 
     private function siswa_login_process() {
         $nis = $this->input->post('nis');
@@ -120,9 +126,9 @@ class Welcome extends CI_Controller {
 
     // Logout untuk semua user
     public function logout() {
-        $this->session->unset_userdata(['nis', 'nip', 'nama', 'nama_guru', 'user_type', 'logged_in']);
+        $this->session->unset_userdata(['nis', 'nip', 'nama', 'nama_guru', 'email', 'user_type', 'logged_in']);
         $this->session->sess_destroy();
-        redirect('welcome');
+        redirect('welcome/admin');
     }
 
     public function admin()
