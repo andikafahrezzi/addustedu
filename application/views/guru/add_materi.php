@@ -8,6 +8,24 @@
                         <div class="row">
                             <div class="col-md-12 bg-white p-4 container"
                                 style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px">
+                                <?php if ($this->session->flashdata('error')): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <?= $this->session->flashdata('error'); ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Tutup">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php endif; ?>
+
+<?php if ($this->session->flashdata('success')): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <?= $this->session->flashdata('success'); ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Tutup">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php endif; ?>
+
                                 <form method="post" enctype="multipart/form-data"
                                     action="<?=base_url('guru/add_materi')?>">
                                         <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
@@ -43,6 +61,7 @@
                                             <input type="number" name="pertemuan" id="pertemuan" class="form-control" min="1" required>
                                         </div>
                                     <div class="form-group">
+                                        <label>Upload Video Materi Disini</label>
                                         <div class="input-group">
                                             <div class="custom-file">
                                                 <input required type="file" name="video" class="custom-file-input"

@@ -52,14 +52,19 @@ class Guru extends CI_Controller
         // $this->load->view('guru/footg');
     } else {
         $nip      = $this->session->userdata('nip');
-        $mapel    = $this->input->post('nama_mapel');
-        $kelas    = $this->input->post('kelas');
+        $mapel    = $this->input->post('id_mapel');     // ✅ ini array
+        $kelas    = $this->input->post('id_kelas');     // ✅ sesuai name form
+
         $pertemuan= $this->input->post('pertemuan');
 
-        if ($this->M_materi->is_pertemuan_terpakai($mapel, $kelas, $pertemuan, $nip)) {
-            $this->session->set_flashdata('error', 'Pertemuan ke-' . $pertemuan . ' untuk kelas dan mapel ini sudah ada.');
-            redirect('guru/add_materi');
+        foreach ($this->input->post('id_mapel') as $id_mapel) {
+            if ($this->M_materi->is_pertemuan_terpakai($id_mapel, $kelas, $pertemuan, $nip)) {
+                $this->session->set_flashdata('error', '❌ Pertemuan ke-' . $pertemuan . ' untuk kelas ini dan mapel yang dipilih sudah digunakan.');
+                redirect('guru/add_materi');
+                return; // penting agar tidak lanjut insert
+            }
         }
+
 
         // Upload video
         $this->load->library('upload');
@@ -99,31 +104,31 @@ class Guru extends CI_Controller
         // Simpan ke database
         // Data untuk tabel 'materi' (sudah dinormalisasi)
         $id_mapel_array = $this->input->post('id_mapel');
-foreach ($id_mapel_array as $id_mapel) {
-    // Data untuk tabel 'materi'
-    $data_materi = [
-        'id_guru'     => $nip,
-        'id_mapel'    => $id_mapel,
-        'id_kelas'    => $this->input->post('id_kelas'),
-        'deskripsi'   => $this->input->post('deskripsi'),
-        'linkform'   => $this->input->post('linkform'),
-        'video'  => $video_materi,
-        'modul' => $modul
-    ];
+    foreach ($id_mapel_array as $id_mapel) {
+        // Data untuk tabel 'materi'
+        $data_materi = [
+            'id_guru'     => $nip,
+            'id_mapel'    => $id_mapel,
+            'id_kelas'    => $this->input->post('id_kelas'),
+            'deskripsi'   => $this->input->post('deskripsi'),
+            'linkform'   => $this->input->post('linkform'),
+            'video'  => $video_materi,
+            'modul' => $modul
+        ];
 
-    $this->db->insert('materi', $data_materi);
-    $id_materi = $this->db->insert_id();
+        $this->db->insert('materi', $data_materi);
+        $id_materi = $this->db->insert_id();
 
-    // Insert ke tabel 'pertemuan' untuk setiap materi
-    $data_pertemuan = [
-        'id_materi'    => $id_materi,
-        'id_kelas'     => $this->input->post('id_kelas'),
-        'pertemuan_ke' => $this->input->post('pertemuan'),
-        'tanggal'      => date('Y-m-d')
-    ];
+        // Insert ke tabel 'pertemuan' untuk setiap materi
+        $data_pertemuan = [
+            'id_materi'    => $id_materi,
+            'id_kelas'     => $this->input->post('id_kelas'),
+            'pertemuan_ke' => $this->input->post('pertemuan'),
+            'tanggal'      => date('Y-m-d')
+        ];
 
-    $this->db->insert('pertemuan', $data_pertemuan);
-}
+        $this->db->insert('pertemuan', $data_pertemuan);
+    }
 
         $this->session->set_flashdata('success', 'Materi dan Pertemuan berhasil ditambahkan!');
         redirect('guru/data_materi');
@@ -370,11 +375,25 @@ public function update_materi($id)
     $this->m_materi->update_data(['id' => $id], $data_materi, 'materi');
 
     // ---------------- Update ke tabel pertemuan ----------------
+    $cek_pertemuan = $this->db->get_where('pertemuan', ['id_materi' => $id])->row();
+
+if ($cek_pertemuan) {
+    // ✅ Jika sudah ada, update
     $this->db->where('id_materi', $id);
     $this->db->update('pertemuan', [
         'pertemuan_ke' => $pertemuan_ke,
         'id_kelas'     => $id_kelas
     ]);
+} else {
+    // 🆕 Jika belum ada, insert baru
+    $this->db->insert('pertemuan', [
+        'id_materi'    => $id,
+        'id_kelas'     => $id_kelas,
+        'pertemuan_ke' => $pertemuan_ke,
+        'tanggal'      => date('Y-m-d')  // atau ambil dari input kalau mau custom
+    ]);
+}
+
 
     $this->session->set_flashdata('success-edit', 'Materi berhasil diperbarui.');
     redirect('guru/data_materi');
