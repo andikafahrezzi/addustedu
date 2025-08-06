@@ -111,7 +111,7 @@ $ujian_list = $ujian_data[$nip][$id_mapel] ?? [];
                         <?php endif; ?>
                     </p>
 
-                    <!-- ✅ Tombol dinamis -->
+                    <!-- Tombol dinamis -->
                     <?php if ($sudah_selesai): ?>
                         <button class="btn btn-sm btn-success" disabled>
                             <i class="lnr lnr-checkmark-circle"></i> Sudah Dikerjakan
@@ -128,8 +128,16 @@ $ujian_list = $ujian_data[$nip][$id_mapel] ?? [];
                             Waktu Habis
                         </button>
                     <?php else: ?>
+                        <?php
+                        // Cek apakah siswa sudah memulai tapi belum selesai
+                        $jawaban_siswa = $this->db->get_where('tbl_jawaban_siswa', [
+                            'nis' => $this->session->userdata('nis'),
+                            'id_ujian' => $ujian['id_ujian'],
+                            'is_selesai' => 0
+                            ])->row();
+                        ?>
                         <a href="<?= base_url('ujian/mulai/' . $ujian['id_ujian']) ?>" class="btn btn-sm btn-danger">
-                            Mulai Ujian <i class="lnr lnr-pencil"></i>
+                            <?= $jawaban_siswa ? 'Lanjutkan Ujian' : 'Mulai Ujian' ?> <i class="lnr lnr-pencil"></i>
                         </a>
                     <?php endif; ?>
                 </div>
