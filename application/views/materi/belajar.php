@@ -24,123 +24,6 @@
         </div>
     </div>
 
-    <!-- Main Content Area -->
-    <div class="learning-main">
-        <!-- Video Player Section -->
-        <div class="video-player">
-            <video id="myvideo" controls>
-                <source src="<?= base_url('assets/materi_video/' . $materi->video) ?>" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-
-        <!-- Course Description -->
-        <div class="course-description">
-            <div class="instructor-info">
-                <div class="instructor-avatar">
-                    <?= substr($materi->nama_guru, 0, 1) ?>
-                </div>
-                <div>
-                    <h4><?= $materi->nama_guru ?></h4>
-                    <p>Pengajar</p>
-                </div>
-            </div>
-            <h3><?= $materi->nama_mapel ?></h3>
-            <div class="course-content">
-                <?= nl2br($materi->deskripsi) ?>
-            </div>
-        </div>
-
-        <!-- Discussion Forum -->
-        <!-- Bagian Forum Diskusi -->
-<!-- Forum Diskusi -->
-<div class="discussion-forum">
-    <h3><i class="fa-regular fa fa-comments"></i> Forum Diskusi</h3>
-    
-    <!-- Form Komentar Utama -->
-    <form class="comment-form" method="POST" action="<?= base_url('siswa/tambah_komentar') ?>">
-        <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" 
-        value="<?= $this->security->get_csrf_hash() ?>">
-        <input type="hidden" name="id_pertemuan" value="<?= $id_pertemuan ?>">
-    
-    <textarea name="komentar" placeholder="Tulis komentar atau pertanyaan..." required></textarea>
-    <button type="submit"><i class="fa fa-paper-plane"></i> Kirim</button>
-    </form>
-
-    
-    <!-- Daftar Komentar -->
-    <div id="komentar-list">
-        <?php if (!empty($forum)): ?>
-            <?php foreach ($forum as $komentar): ?>
-                <?php $this->load->view('materi/partials/comment_replies', [
-                    'komentar' => $komentar,
-                    'materi' => $materi,
-                    'current_nis' => $current_nis,
-                    'level' => 0
-                ]); ?>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <div class="alert alert-info">Belum ada komentar untuk materi ini.</div>
-        <?php endif; ?>
-    </div>
-</div>
-
-<!-- Modal Konfirmasi Hapus -->
-
-<script>
-$(document).ready(function() {
-    // Toggle form reply
-    $(document).on('click', '.btn-reply', function() {
-        var id = $(this).data('id');
-        $('.reply-form').hide();
-        $('#reply-form-' + id).show();
-    });
-    
-    // Toggle form edit
-    $(document).on('click', '.btn-edit', function() {
-        var id = $(this).data('id');
-        $('.edit-form').hide();
-        $('#edit-form-' + id).show();
-    });
-    
-    // Batal reply/edit
-    $(document).on('click', '.btn-cancel-reply, .btn-cancel-edit', function() {
-        $(this).closest('.reply-form, .edit-form').hide();
-    });
-    
-    // Konfirmasi hapus
-    $(document).on('click', '.btn-hapus', function() {
-        var id = $(this).data('id');
-        $('#btn-delete-confirm').attr('href', '<?= base_url('siswa/hapus_komentar/') ?>' + id);
-        $('#confirmDeleteModal').modal('show');
-    });
-});
-</script>
-<!-- Modal Konfirmasi Hapus -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Konfirmasi Hapus</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Apakah Anda yakin ingin menghapus komentar ini?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <a href="#" id="btn-delete-confirm" class="btn btn-danger">Hapus</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-    </div>
-
-    <!-- Sidebar Resources -->
     <div class="learning-sidebar">
         <div class="resources-card">
             <h3><span class="lnr lnr-book"></span> Materi Pembelajaran</h3>
@@ -258,31 +141,30 @@ $(document).ready(function() {
                     <?php if ($tugas_saya): ?>
                         <!-- Pastikan tidak NULL -->
                        <div class="card mb-4">
-  <div class="card-body">
-    <div class="row">
-      <div class="col-md-6">
-        <h6><?= $tugas_saya->original_filename ?></h6>
-        <small>Ukuran: <?= round($tugas_saya->file_size / 1024, 2) ?> KB</small><br>
-        <small>Dikirim: <?= date('d M Y H:i', strtotime($tugas_saya->dikirim_pada)) ?></small><br>
-        <small>Nilai: <?= number_format($tugas_saya->nilai) ?></small>
-      </div>
-      <div class="col-md-4 text-md-right text-left mt-3 mt-md-0">
-        <a href="<?= base_url($tugas_saya->file_path) ?>"
-           class="btn btn-sm btn-success mr-2"
-           download="<?= $tugas_saya->original_filename ?>.<?= pathinfo($tugas_saya->file_path, PATHINFO_EXTENSION) ?>">
-          <i class="fas fa-download"></i> Unduh
-        </a>
-        <a href="<?= base_url('siswa/delete_tugas/' . $tugas_saya->id) ?>"
-            onclick="return confirm('Apakah kamu yakin ingin menghapus tugas ini?')"
-            class="btn btn-sm btn-danger">
-            <i class="fas fa-trash"></i> Hapus
-            </a>
+                        <div class="card-body">
+                            <div class="row">
+                            <div class="col-md-6">
+                                <h6><?= $tugas_saya->original_filename ?></h6>
+                                <small>Ukuran: <?= round($tugas_saya->file_size / 1024, 2) ?> KB</small><br>
+                                <small>Dikirim: <?= date('d M Y H:i', strtotime($tugas_saya->dikirim_pada)) ?></small><br>
+                                <small>Nilai: <?= number_format($tugas_saya->nilai) ?></small>
+                            </div>
+                            <div class="col-md-4 text-md-right text-left mt-3 mt-md-0">
+                                <a href="<?= base_url($tugas_saya->file_path) ?>"
+                                class="btn btn-sm btn-success mr-2"
+                                download="<?= $tugas_saya->original_filename ?>.<?= pathinfo($tugas_saya->file_path, PATHINFO_EXTENSION) ?>">
+                                <i class="fas fa-download"></i> Unduh
+                                </a>
+                                <a href="<?= base_url('siswa/delete_tugas/' . $tugas_saya->id) ?>"
+                                    onclick="return confirm('Apakah kamu yakin ingin menghapus tugas ini?')"
+                                    class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i> Hapus
+                                    </a>
 
-      </div>
-    </div>
-  </div>
-</div>
-
+                            </div>
+                            </div>
+                        </div>
+                        </div>
                     <?php else: ?>
                         <p>Belum ada tugas terkirim</p>
                     <?php endif; ?>
@@ -290,6 +172,124 @@ $(document).ready(function() {
             </div>
         </div>
     </div>
+    <!-- Main Content Area -->
+    <div class="learning-main">
+        <!-- Video Player Section -->
+        <div class="video-player">
+            <video id="myvideo" controls>
+                <source src="<?= base_url('assets/materi_video/' . $materi->video) ?>" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Course Description -->
+        <div class="course-description">
+            <div class="instructor-info">
+                <div class="instructor-avatar">
+                    <?= substr($materi->nama_guru, 0, 1) ?>
+                </div>
+                <div>
+                    <h4><?= $materi->nama_guru ?></h4>
+                    <p>Pengajar</p>
+                </div>
+            </div>
+            <h3><?= $materi->nama_mapel ?></h3>
+            <div class="course-content">
+                <?= nl2br($materi->deskripsi) ?>
+            </div>
+        </div>
+
+        <!-- Discussion Forum -->
+        <!-- Bagian Forum Diskusi -->
+<!-- Forum Diskusi -->
+<div class="discussion-forum">
+    <h3><i class="fa-regular fa fa-comments"></i> Forum Diskusi</h3>
+    
+    <!-- Form Komentar Utama -->
+    <form class="comment-form" method="POST" action="<?= base_url('siswa/tambah_komentar') ?>">
+        <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" 
+        value="<?= $this->security->get_csrf_hash() ?>">
+        <input type="hidden" name="id_pertemuan" value="<?= $id_pertemuan ?>">
+    
+    <textarea name="komentar" placeholder="Tulis komentar atau pertanyaan..." required></textarea>
+    <button type="submit"><i class="fa fa-paper-plane"></i> Kirim</button>
+    </form>
+
+    
+    <!-- Daftar Komentar -->
+    <div id="komentar-list" class="nested-comments">
+        <?php if (!empty($forum)): ?>
+            <?php foreach ($forum as $komentar): ?>
+                <?php $this->load->view('materi/partials/comment_replies', [
+                    'komentar' => $komentar,
+                    'materi' => $materi,
+                    'current_nis' => $current_nis,
+                    'level' => 0
+                ]); ?>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="alert alert-info">Belum ada komentar untuk materi ini.</div>
+        <?php endif; ?>
+    </div>
+</div>
+
+<!-- Modal Konfirmasi Hapus -->
+
+<script>
+$(document).ready(function() {
+    // Toggle form reply
+    $(document).on('click', '.btn-reply', function() {
+        var id = $(this).data('id');
+        $('.reply-form').hide();
+        $('#reply-form-' + id).show();
+    });
+    
+    // Toggle form edit
+    $(document).on('click', '.btn-edit', function() {
+        var id = $(this).data('id');
+        $('.edit-form').hide();
+        $('#edit-form-' + id).show();
+    });
+    
+    // Batal reply/edit
+    $(document).on('click', '.btn-cancel-reply, .btn-cancel-edit', function() {
+        $(this).closest('.reply-form, .edit-form').hide();
+    });
+    
+    // Konfirmasi hapus
+    $(document).on('click', '.btn-hapus', function() {
+        var id = $(this).data('id');
+        $('#btn-delete-confirm').attr('href', '<?= base_url('siswa/hapus_komentar/') ?>' + id);
+        $('#confirmDeleteModal').modal('show');
+    });
+});
+</script>
+<!-- Modal Konfirmasi Hapus -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Konfirmasi Hapus</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin menghapus komentar ini?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <a href="#" id="btn-delete-confirm" class="btn btn-danger">Hapus</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    </div>
+
+    <!-- Sidebar Resources -->
+    
 </div>
 <script>
 $(document).ready(function() {
