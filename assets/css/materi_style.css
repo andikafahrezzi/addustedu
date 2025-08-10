@@ -57,7 +57,19 @@ body{font-family: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
 .comment-author{display: flex;
     align-items: center;
     gap: 10px;}
-.user-avatar{display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:bold}
+.user-avatar {
+    background-color: rgba(255, 255, 255, 0.904);
+    width: 50px;
+    color: #2fe4d2;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
 .comment-date{font-size: 0.85rem;
     color: #6c757d;}
 /* Comment Content */
@@ -657,7 +669,7 @@ small{font-size: 0.75rem;
 
 .resource-icon {
   font-size: 1.5rem;
-  color: #00c9ff;
+  color: #f6f8f9;
 }
 
 .resource-content h4 {

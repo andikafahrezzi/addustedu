@@ -153,12 +153,12 @@
                                 <a href="<?= base_url($tugas_saya->file_path) ?>"
                                 class="btn btn-sm btn-success mr-2"
                                 download="<?= $tugas_saya->original_filename ?>.<?= pathinfo($tugas_saya->file_path, PATHINFO_EXTENSION) ?>">
-                                <i class="fas fa-download"></i> Unduh
+                                <i class="fa fa-download"></i> Unduh
                                 </a>
                                 <a href="<?= base_url('siswa/delete_tugas/' . $tugas_saya->id) ?>"
                                     onclick="return confirm('Apakah kamu yakin ingin menghapus tugas ini?')"
                                     class="btn btn-sm btn-danger">
-                                    <i class="fas fa-trash"></i> Hapus
+                                    <i class="fa fa-trash"></i> Hapus
                                     </a>
 
                             </div>
@@ -204,7 +204,11 @@
 <!-- Forum Diskusi -->
 <div class="discussion-forum">
     <h3><i class="fa-regular fa fa-comments"></i> Forum Diskusi</h3>
-    
+    <?php if ($this->session->flashdata('error')): ?>
+    <div class="alert alert-danger">
+        <?= $this->session->flashdata('error') ?>
+    </div>
+<?php endif; ?>
     <!-- Form Komentar Utama -->
     <form class="comment-form" method="POST" action="<?= base_url('siswa/tambah_komentar') ?>">
         <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" 

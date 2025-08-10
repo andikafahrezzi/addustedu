@@ -380,20 +380,87 @@ public function tambah_komentar() {
         $user_name = $user['nama_guru'];
     }
 
+    
+    // Validasi panjang komentar
+    if (strlen($this->input->post('komentar')) > 1000) {
+        $this->session->set_flashdata('error', 'Komentar terlalu panjang (maksimal 1000 karakter)');
+        redirect($user_type.'/belajar/'.$this->input->post('id_pertemuan'));
+    }
     // Validasi form
     $this->form_validation->set_rules('komentar', 'Komentar', 'required');
     $this->form_validation->set_rules('id_pertemuan', 'ID Pertemuan', 'required|numeric');
     $this->form_validation->set_rules('parent_id', 'Parent ID', 'numeric');
 
     if ($this->form_validation->run()) {
+        $komentar_input = html_entity_decode($this->input->post('komentar'), ENT_QUOTES, 'UTF-8');
+        
+        // Deteksi pattern URL lebih ketat
+        if (preg_match('/\b((https?|ftp|file):\/\/|www\.|\.[a-z]{2,4}\/?)|\b(bit\.ly|goo\.gl|tinyurl\.com)\b/i', $komentar_input)) {
+            $this->session->set_flashdata('error', 'Komentar tidak boleh mengandung URL/link');
+            redirect($user_type.'/belajar/'.$this->input->post('id_pertemuan'));
+            return;
+        }
+        
+        // Gabungan semua kata spam
+        $spam_words = [
+            // HTML/PHP tags
+            '<?php', '<?=', '<?', '?>', '&lt;?php', '&lt;?=', '&lt;?', '?&gt;',
+            '&#60;?php', '&#60;?=', '&#60;?', '?&#62;',
+            
+            // JavaScript/fungsi berbahaya
+            'alert(', 'script>', 'javascript:', 'onload=', 'eval(', 'system(', 'shell_exec(',
+            
+            // SQL keywords
+            'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'TRUNCATE', 
+            'UNION', '1=1', 'OR 1=1', ';--', '/*', '*/', 'EXEC', 'EXECUTE', 'SHUTDOWN', 'XP_',
+            
+            // Kata spam umum
+            'klik disini'
+        ];
+
+        // Deteksi kata spam
+        foreach ($spam_words as $word) {
+            if (stripos($komentar_input, $word) !== false) {
+                $this->session->set_flashdata('error', 'Komentar mengandung konten terlarang: "'.htmlspecialchars($word).'"');
+                redirect($user_type.'/belajar/'.$this->input->post('id_pertemuan'));
+                return;
+            }
+        }
+
+        // Deteksi pattern berbahaya dengan regex
+        $dangerous_patterns = [
+            '/<\?(?:php|=|)/i',                      // Tag PHP
+            '/&\#?[0-9a-z]+;\?(?:php|=|)/i',         // HTML encoded PHP
+            '/\b(eval|system|shell_exec)\s*\(/i',    // Fungsi berbahaya
+            '/\b(OR|AND)\s+\d+=\d+/i',               // SQL injection
+            '/\bUNION\s+SELECT\b/i',                 // SQL union attack
+            '/;--|\/\*|\*\//'                        // SQL comments
+        ];
+
+        foreach ($dangerous_patterns as $pattern) {
+            if (preg_match($pattern, $komentar_input)) {
+                $this->session->set_flashdata('error', 'Kode berbahaya terdeteksi');
+                redirect($user_type.'/belajar/'.$this->input->post('id_pertemuan'));
+                return;
+            }
+        }
+
+        // Filter akhir
+        $komentar_clean = htmlspecialchars($komentar_input, ENT_QUOTES, 'UTF-8');
+        $komentar_clean = strip_tags($komentar_clean, '<b><i><u><br><p>');
+        
+        // Pastikan tidak ada karakter escape yang lolos
+        $komentar_clean = $this->db->escape_str($komentar_clean);
+
         $data = [
             'user_type' => $user_type,
             'user_id' => $user_id,
             'id_pertemuan' => $this->input->post('id_pertemuan'),
-            'komentar' => $this->input->post('komentar'),
+            'komentar' => $komentar_clean,
             'parent_id' => $this->input->post('parent_id') ?: NULL,
             'created_at' => date('Y-m-d H:i:s')
         ];
+
         $id_pertemuan = $this->input->post('id_pertemuan');
         $komentar = $this->input->post('komentar');
         $guru = $this->Forum_model->getGuruByMateri($id_pertemuan);
@@ -429,7 +496,7 @@ public function tambah_komentar() {
         } else {
             redirect('guru/belajar/' . $id_pertemuan);
         }
-        }
+}
 public function edit_komentar() {
     $nis = $this->session->userdata('nis');
     if (!$nis) redirect('siswa/login');
@@ -451,8 +518,69 @@ if (!$this->Forum_model->can_edit_comment($comment_id, $user_type, $user_id)) {
     $this->form_validation->set_rules('komentar', 'Komentar', 'required');
 
     if ($this->form_validation->run()) {
+        $komentar_input = html_entity_decode($this->input->post('komentar'), ENT_QUOTES, 'UTF-8');
+        
+        // Deteksi pattern URL
+        if (preg_match('/\b((https?|ftp|file):\/\/|www\.|\.[a-z]{2,4}\/?)|\b(bit\.ly|goo\.gl|tinyurl\.com)\b/i', $komentar_input)) {
+            $this->session->set_flashdata('error', 'Komentar tidak boleh mengandung URL/link');
+            redirect($_SERVER['HTTP_REFERER']);
+            return;
+        }
+        
+        // Gabungan semua kata spam
+        $spam_words = [
+            // HTML/PHP tags
+            '<?php', '<?=', '<?', '?>', '&lt;?php', '&lt;?=', '&lt;?', '?&gt;',
+            '&#60;?php', '&#60;?=', '&#60;?', '?&#62;',
+            
+            // JavaScript/fungsi berbahaya
+            'alert(', 'script>', 'javascript:', 'onload=', 'eval(', 'system(', 'shell_exec(',
+            
+            // SQL keywords
+            'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'TRUNCATE', 
+            'UNION', '1=1', 'OR 1=1', ';--', '/*', '*/', 'EXEC', 'EXECUTE', 'SHUTDOWN', 'XP_',
+            
+            // Kata spam umum
+            'klik disini'
+        ];
+
+        // Deteksi kata spam
+        foreach ($spam_words as $word) {
+            if (stripos($komentar_input, $word) !== false) {
+                $this->session->set_flashdata('error', 'Komentar mengandung konten terlarang: "'.htmlspecialchars($word).'"');
+                redirect($_SERVER['HTTP_REFERER']);
+                return;
+            }
+        }
+
+        // Deteksi pattern berbahaya dengan regex
+        $dangerous_patterns = [
+            '/<\?(?:php|=|)/i',                      // Tag PHP
+            '/&\#?[0-9a-z]+;\?(?:php|=|)/i',         // HTML encoded PHP
+            '/\b(eval|system|shell_exec)\s*\(/i',    // Fungsi berbahaya
+            '/\b(OR|AND)\s+\d+=\d+/i',               // SQL injection
+            '/\bUNION\s+SELECT\b/i',                 // SQL union attack
+            '/;--|\/\*|\*\//'                        // SQL comments
+        ];
+
+        foreach ($dangerous_patterns as $pattern) {
+            if (preg_match($pattern, $komentar_input)) {
+                $this->session->set_flashdata('error', 'Kode berbahaya terdeteksi');
+                redirect($_SERVER['HTTP_REFERER']);
+                return;
+            }
+        }
+
+        // Filter akhir
+        $komentar_clean = htmlspecialchars($komentar_input, ENT_QUOTES, 'UTF-8');
+        $komentar_clean = strip_tags($komentar_clean, '<b><i><u><br><p>');
+        
+        // Pastikan tidak ada karakter escape yang lolos
+        $komentar_clean = $this->db->escape_str($komentar_clean);
+        // ============== END TAMBAHAN ==============
+
         $data = [
-            'komentar' => $this->input->post('komentar'),
+            'komentar' => $komentar_clean, // Gunakan yang sudah difilter
             'updated_at' => date('Y-m-d H:i:s')
         ];
 
