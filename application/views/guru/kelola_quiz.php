@@ -25,7 +25,6 @@
                                 <label>Tipe Soal</label>
                                 <select name="tipe" class="form-control" id="tipeSoal" required>
                                     <option value="pilihan">Pilihan Ganda</option>
-                                    <option value="essay">Essay</option>
                                 </select>
                             </div>
                         </div>
@@ -97,7 +96,7 @@
                                 <small class="text-muted">(<?= strtoupper($soal->tipe) ?> - <?= $soal->poin ?> poin)</small>
                             </h6>
                             <div>
-                                <a href="<?= site_url('admin/hapus_soal/'.$soal->id.'/'.$quiz->id) ?>" 
+                                <a href="<?= site_url('guru/hapus_soal/'.$soal->id) ?>" 
                                    class="btn btn-sm btn-danger" 
                                    onclick="return confirm('Hapus soal ini?')">
                                     <i class="fas fa-trash"></i>

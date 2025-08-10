@@ -95,34 +95,34 @@ public function validateLogin() {
         }
     }
 
-    private function guru_login_process() {
-        $nip = $this->input->post('nip');
-        $password = $this->input->post('password');
+private function guru_login_process() {
+    $nip = $this->input->post('nip');
+    $password = $this->input->post('password');
 
-        $user = $this->db->get_where('guru', ['nip' => $nip])->row_array();
+    $user = $this->db->get_where('guru', ['nip' => $nip])->row_array();
 
-        if ($user) {
-            if (password_verify($password, $user['password'])) {
-                // Bersihkan session lama
-                $this->session->unset_userdata(['nis', 'nama', 'user_type', 'logged_in']);
-                
-                $data = [
-                    'nip' => $user['nip'],
-                    'nama_guru' => $user['nama_guru'],
-                    'user_type' => 'guru',
-                    'logged_in' => true
-                ];
-                $this->session->set_userdata($data);
-                redirect(base_url('guru'));
-            } else {
-                $this->session->set_flashdata('fail-pass', 'Password salah!');
-                redirect(base_url('welcome/guru'));
-            }
+    if ($user) {
+        if (password_verify($password, $user['password'])) {
+            // Bersihkan session lama secara lengkap
+            $this->session->unset_userdata(['nip', 'nis', 'nama', 'nama_guru', 'user_type', 'logged_in']);
+            
+            $data = [
+                'nip' => $user['nip'],
+                'nama_guru' => $user['nama_guru'],
+                'user_type' => 'guru',
+                'logged_in' => true
+            ];
+            $this->session->set_userdata($data);
+            redirect(base_url('guru'));
         } else {
-            $this->session->set_flashdata('fail-login', 'NIP tidak terdaftar!');
+            $this->session->set_flashdata('fail-pass', 'Password salah!');
             redirect(base_url('welcome/guru'));
         }
+    } else {
+        $this->session->set_flashdata('fail-login', 'NIP tidak terdaftar!');
+        redirect(base_url('welcome/guru'));
     }
+}
 
     // Logout untuk semua user
     public function logout() {
@@ -245,10 +245,14 @@ public function validateLogin() {
         $this->session->set_flashdata('success-logout', 'Berhasil!');
         redirect(base_url('welcome'));
     }
-    public function logoutg()
-    {
-        $this->session->unset_userdata('nip');
-        $this->session->set_flashdata('success-logout', 'Berhasil!');
-        redirect(base_url('welcome/guru'));
-    }
+public function logoutg()
+{
+    $this->session->unset_userdata(['nip', 'user_type', 'logged_in', 'nama_guru', 'nis', 'nama']);
+    // Atau lebih baik destroy session:
+    $this->session->sess_destroy();
+
+    $this->session->set_flashdata('success-logout', 'Berhasil!');
+    redirect(base_url('welcome/guru'));
+}
+
 }

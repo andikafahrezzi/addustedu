@@ -496,6 +496,31 @@ public function data_quiz()
         $this->load->view('guru/add_quiz', $data);
         $this->load->view('guru/footg');
     }
+    public function hapus_soal($id_soal)
+{
+    $nip = $this->session->userdata('nip'); // NIP guru dari session
+    $this->load->model('Quiz_model');
+
+    // Cek kepemilikan soal
+    $soal = $this->Quiz_model->get_soal_by_id_and_guru($id_soal, $nip);
+    if (!$soal) {
+        $this->session->set_flashdata('error', 'Soal tidak ditemukan atau Anda tidak memiliki akses.');
+        redirect('guru/data_quiz'); // halaman fallback
+        return;
+    }
+
+    // Hapus soal (model akan juga menghapus jawaban terkait)
+    $deleted = $this->Quiz_model->hapus_soalquiz($id_soal);
+    if ($deleted) {
+        $this->session->set_flashdata('success', 'Soal berhasil dihapus.');
+    } else {
+        $this->session->set_flashdata('error', 'Gagal menghapus soal.');
+    }
+
+    // Redirect kembali ke kelola quiz menggunakan quiz_id (alias di select)
+    redirect('guru/kelola_quiz/'.$soal->quiz_id);
+}
+
 
 
     // Store new quiz
@@ -554,41 +579,52 @@ public function data_quiz()
         $this->load->view('guru/update_quiz', $data);
         $this->load->view('guru/footg');
     }
-
     // Update quiz
-    public function update($id) {
-        $nip = $this->session->userdata('nip');
-        
-        // First verify ownership
-        $quiz = $this->Quiz_model->get_quiz_by_guru($id, $nip);
-        if (empty($quiz)) {
-            show_404();
-        }
-        
-        // Validate form input
-        $this->form_validation->set_rules('judul', 'Judul', 'required');
-        $this->form_validation->set_rules('waktu_pengerjaan', 'Waktu Pengerjaan', 'required|numeric');
-        
-        if ($this->form_validation->run() == FALSE) {
-            $this->edit($id);
-        } else {
-            $data = [
-                'judul' => $this->input->post('judul'),
-                'deskripsi' => $this->input->post('deskripsi'),
-                'waktu_pengerjaan' => $this->input->post('waktu_pengerjaan'),
-                'attempts' => $this->input->post('attempts'),
-                'shuffle_questions' => $this->input->post('shuffle_questions') ? 1 : 0
-            ];
-            
-            if ($this->Quiz_model->update_quiz($id, $nip, $data)) {
-                $this->session->set_flashdata('success', 'Quiz berhasil diperbarui');
-            } else {
-                $this->session->set_flashdata('error', 'Gagal memperbarui quiz');
-            }
-            
-            redirect('guru/data_quiz');
-        }
+public function update($id) {
+    $nip = $this->session->userdata('nip');
+
+    // Pastikan ini request POST, kalau bukan redirect ke edit
+    if ($this->input->method() !== 'post') {
+        redirect('guru/edit_quiz/'.$id);
+        return;
     }
+
+    // Verifikasi kepemilikan quiz oleh guru
+    $quiz = $this->Quiz_model->get_quiz_by_guru($id, $nip);
+    if (empty($quiz)) {
+        show_404();
+    }
+
+    // Validasi form lengkap
+    $this->form_validation->set_rules('judul', 'Judul', 'required');
+    $this->form_validation->set_rules('waktu_pengerjaan', 'Waktu Pengerjaan', 'required|numeric');
+    $this->form_validation->set_rules('attempts', 'Percobaan Maksimal', 'required|numeric');
+
+    if ($this->form_validation->run() == FALSE) {
+        // Tampilkan ulang form edit dengan error
+        return $this->edit_quiz($id);
+    } 
+
+    // Ambil data dari input POST
+    $data = [
+        'judul' => $this->input->post('judul'),
+        'deskripsi' => $this->input->post('deskripsi'),
+        'waktu_pengerjaan' => $this->input->post('waktu_pengerjaan'),
+        'attempts' => $this->input->post('attempts'),
+        'shuffle_questions' => $this->input->post('shuffle_questions') ? 1 : 0,
+    ];
+
+    // Update data di model
+    if ($this->Quiz_model->update_quiz($id, $nip, $data)) {
+        $this->session->set_flashdata('success', 'Quiz berhasil diperbarui');
+    } else {
+        $this->session->set_flashdata('error', 'Gagal memperbarui quiz');
+    }
+
+    // Redirect kembali ke daftar quiz
+    redirect('guru/data_quiz');
+}
+
     public function kelola_quiz($quiz_id)
 {
     $this->load->model('Quiz_model');
@@ -1055,30 +1091,34 @@ public function simpan_ujian()
 }
 
     // Menampilkan daftar ujian yang dibuat oleh guru
-    public function tampilkan_ujian()
-    {
-        $nip = $this->session->userdata('nip');
-        $ujian_raw = $this->Ujian_model->get_ujian_by_gurus($nip);
+public function tampilkan_ujian()
+{
+    $nip = $this->session->userdata('nip');
+    echo "NIP dari session: " . $nip . "<br>"; // Debug session
+    
+    $ujian_raw = $this->Ujian_model->get_ujian_by_gurus($nip);
 
-        $data['ujian_terstruktur'] = [];
+    $ujian_raw = $this->Ujian_model->get_ujian_by_gurus($nip);
 
+    $data['ujian_terstruktur'] = [];
+
+    if (!empty($ujian_raw)) {
         foreach ($ujian_raw as $u) {
-            // Pastikan ambil nama_kelas dan tingkat juga di query
-            $tingkat = $u['tingkat'];
-            $mapel = $u['nama_mapel'];
-            $kelas = $u['nama_kelas']; // Tambahkan join kelas di model
-            $pertemuan = $u['pertemuan_ke'];
-
+            // Pastikan field ini ada di hasil query
+            $tingkat = isset($u['tingkat']) ? $u['tingkat'] : 'Unknown';
+            $mapel = isset($u['nama_mapel']) ? $u['nama_mapel'] : 'Unknown';
+            $kelas = isset($u['nama_kelas']) ? $u['nama_kelas'] : 'Unknown';
+            
             $data['ujian_terstruktur'][$tingkat][$mapel][$kelas][] = $u;
         }
-
-        
-
-        // Tampilkan data ujian
-        $this->load->view('guru/navug'); 
-        $this->load->view('guru/data_ujian', $data);
-        $this->load->view('guru/footg');
+    } else {
+        $data['error'] = "Tidak ada data ujian ditemukan";
     }
+
+    $this->load->view('guru/navug'); 
+    $this->load->view('guru/data_ujian', $data);
+    $this->load->view('guru/footg');
+}
 
     // Menampilkan soal berdasarkan ujian
     public function tampilkan_soal($ujian_id)

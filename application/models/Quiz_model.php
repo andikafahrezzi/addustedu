@@ -228,9 +228,12 @@ public function get_quizzes_by_guru($nip) {
     $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas', 'left');
     $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel', 'left');
 
-    $this->db->where('materi.id_guru', $nip);
+    // Join ke guru_mapel untuk memastikan guru mengajar mapel quiz ini
+    $this->db->join('guru_mapel', 'guru_mapel.id_mapel = materi.id_mapel');
 
-    //  Urutan: mapel -> kelas -> pertemuan_ke
+    $this->db->where('guru_mapel.id_guru', $nip);
+
+    // Urutan: mapel -> kelas -> pertemuan_ke
     $this->db->order_by('mata_pelajaran.nama_mapel', 'ASC');
     $this->db->order_by('kelas.tingkat', 'ASC');
     $this->db->order_by('kelas.nama_kelas', 'ASC');
@@ -240,16 +243,35 @@ public function get_quizzes_by_guru($nip) {
 }
 
 
+
 // Get single quiz with ownership check
-public function get_quiz_by_guru($quiz_id, $nip) {
-    $this->db->select('quiz.*, materi.deskripsi as judul_materi');
+public function get_quiz_by_guru($id_quiz, $nip) {
+    $this->db->select('
+        quiz.*, 
+        pertemuan.pertemuan_ke, 
+        materi.deskripsi AS judul_materi, 
+        kelas.nama_kelas, 
+        mata_pelajaran.nama_mapel
+    ');
     $this->db->from('quiz');
-    $this->db->join('pertemuan', 'pertemuan.id = quiz.id_pertemuan');
-    $this->db->join('materi', 'materi.id = pertemuan.id_materi','left');
-    $this->db->where('quiz.id', $quiz_id);
-    $this->db->where('materi.id_guru', $nip);
-    return $this->db->get()->row();
+    $this->db->join('pertemuan', 'pertemuan.id = quiz.id_pertemuan', 'left');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi', 'left');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas', 'left');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel', 'left');
+
+    // Asumsikan kamu cek kepemilikan lewat guru_mapel atau materi.id_guru
+    $this->db->join('guru_mapel', 'guru_mapel.id_mapel = materi.id_mapel', 'left');
+
+    $this->db->where('quiz.id', $id_quiz);
+    $this->db->group_start();
+        $this->db->where('materi.id_guru', $nip);
+        $this->db->or_where('guru_mapel.id_guru', $nip);
+    $this->db->group_end();
+
+    $query = $this->db->get();
+    return $query->row();
 }
+
 
 public function get_pesertaquiz($quiz_id, $nip) {
     $this->db->select('quiz_siswa.*, siswa.nama as nama_siswa, kelas.nama_kelas, materi.deskripsi as judul_materi');
@@ -279,7 +301,7 @@ public function delete_quiz_siswa($id) {
 
 // Update quiz with ownership check
 public function update_quiz($quiz_id, $nip, $data) {
-    // Langkah 1: Verifikasi quiz dimiliki oleh guru tersebut
+    // Verifikasi kepemilikan
     $this->db->select('quiz.id');
     $this->db->from('quiz');
     $this->db->join('pertemuan', 'pertemuan.id = quiz.id_pertemuan');
@@ -289,13 +311,14 @@ public function update_quiz($quiz_id, $nip, $data) {
     $quiz = $this->db->get()->row();
 
     if ($quiz) {
-        // Langkah 2: Update quiz jika milik guru
         $this->db->where('id', $quiz_id);
         return $this->db->update('quiz', $data);
     } else {
-        return false; // Gagal update karena bukan milik guru
+        return false;
     }
 }
+
+
 
 
 
@@ -337,16 +360,79 @@ public function get_materi_options($nip) {
     $this->db->join('materi', 'materi.id = pertemuan.id_materi');
     $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
     $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
-    $this->db->where('materi.id_guru', $nip);
-    
-    // 🔽 Urutkan berdasarkan mapel → tingkat → nama_kelas → pertemuan_ke
+
+    // Join guru_mapel untuk cek relasi guru ke mapel
+    $this->db->join('guru_mapel', 'guru_mapel.id_mapel = materi.id_mapel');
+
+    // Filter berdasarkan guru di tabel guru_mapel
+    $this->db->where('guru_mapel.id_guru', $nip);
+
+    // Urutkan hasil agar rapi
     $this->db->order_by('mata_pelajaran.nama_mapel', 'ASC');
     $this->db->order_by('kelas.tingkat', 'ASC');
     $this->db->order_by('kelas.nama_kelas', 'ASC');
     $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
-    
+
+    // Pastikan hanya distinct pertemuan yang muncul (optional)
+    $this->db->group_by('pertemuan.id');
+
     return $this->db->get()->result();
 }
 
+public function get_ujian_by_gurus($nip)
+{
+    $this->db->select('
+        tu.*, 
+        mp.nama_mapel,
+        k.nama_kelas,
+        k.tingkat,
+        p.pertemuan_ke
+    ');
+    $this->db->from('tbl_ujian tu');
+    $this->db->join('pertemuan p', 'p.id = tu.id_pertemuan');
+    $this->db->join('materi m', 'm.id = p.id_materi');
+    $this->db->join('kelas k', 'k.id = m.id_kelas');
+    $this->db->join('mata_pelajaran mp', 'mp.id = m.id_mapel');
+    $this->db->where('m.id_guru', $nip);
+    $this->db->order_by('tu.tanggal_mulai', 'DESC');
+    return $this->db->get()->result_array();
+}
+    public function get_soal_by_id_and_guru($id_soal, $nip)
+    {
+        $this->db->select('qq.*, q.id AS quiz_id, q.id_pertemuan, p.id_materi, m.id_guru');
+        $this->db->from('quiz_questions qq');
+        $this->db->join('quiz q', 'q.id = qq.quiz_id');
+        $this->db->join('pertemuan p', 'p.id = q.id_pertemuan', 'left');
+        $this->db->join('materi m', 'm.id = p.id_materi', 'left');
+        $this->db->where('qq.id', $id_soal);
+        $this->db->where('m.id_guru', $nip); // pastikan materi.id_guru = nip guru
+        return $this->db->get()->row();
+    }
+
+    // Hapus soal quiz (beserta jawaban terkait jika ada) dengan transaction
+    public function hapus_soalquiz($id_soal)
+    {
+        // Mulai transaction
+        $this->db->trans_start();
+
+        // Hapus jawaban quiz yang merujuk pada quiz_questions (jika tabel jawaban menyimpan question_id)
+        // Tabel jawaban quiz di DB kamu ada `jawaban_siswa` (lihat script SQL)
+        $this->db->where('question_id', $id_soal);
+        $this->db->delete('jawaban_siswa');
+
+        // Juga hapus di tabel jawaban ujian pribadi jika ada referensi id_soal
+        // (di DB ada tbl_jawaban_siswa yang menggunakan id_soal)
+        $this->db->where('id_soal', $id_soal);
+        $this->db->delete('tbl_jawaban_siswa');
+
+        // Hapus soal itu sendiri
+        $this->db->where('id', $id_soal);
+        $this->db->delete('quiz_questions');
+
+        // Selesai transaction (commit/rollback otomatis)
+        $this->db->trans_complete();
+
+        return $this->db->trans_status(); // true jika sukses
+    }
 
 }

@@ -16,10 +16,11 @@ public function tampil_materi_guru($nip)
 {
     $this->db->select('materi.*, mata_pelajaran.nama_mapel, kelas.nama_kelas, pertemuan.pertemuan_ke, pertemuan.id AS id_pertemuan');
     $this->db->from('materi');
+    $this->db->join('guru_mapel', 'materi.id_mapel = guru_mapel.id_mapel'); // join ke relasi guru_mapel
     $this->db->join('mata_pelajaran', 'materi.id_mapel = mata_pelajaran.id');
     $this->db->join('kelas', 'materi.id_kelas = kelas.id');
     $this->db->join('pertemuan', 'pertemuan.id_materi = materi.id', 'left');
-    $this->db->where('materi.id_guru', $nip);
+    $this->db->where('guru_mapel.id_guru', $nip);  // filter berdasarkan nip di tabel relasi
     $this->db->order_by('mata_pelajaran.nama_mapel, kelas.nama_kelas, pertemuan.pertemuan_ke', 'ASC');
     return $this->db->get()->result();
 }
