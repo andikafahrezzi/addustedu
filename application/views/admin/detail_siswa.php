@@ -39,6 +39,10 @@
                                         <td> <?= $detail->nama ?></td>
                                     </tr>
                                     <tr style="border-bottom: 0.5px solid #6c757d;">
+                                        <td><span class="font-weight-bold">Kode Kelas :</span></td>
+                                        <td> <?= $detail->nama_kelas ?></td>
+                                    </tr>
+                                    <tr style="border-bottom: 0.5px solid #6c757d;">
                                         <td><span class="font-weight-bold">Alamat Email :</span></td>
                                         <td> <?= $detail->email ?></td>
                                     </tr>

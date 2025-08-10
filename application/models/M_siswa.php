@@ -7,11 +7,15 @@ class M_siswa extends CI_Model
         return $this->db->get('siswa');
     }
 
-    public function detail_siswa($id = null)
-    {
-        $query = $this->db->get_where('siswa', array('nis' => $id))->row();
-        return $query;
-    }
+public function detail_siswa($id = null)
+{
+    $this->db->select('siswa.*, kelas.nama_kelas');
+    $this->db->from('siswa');
+    $this->db->join('kelas', 'kelas.id = siswa.id_kelas', 'left'); 
+    $this->db->where('siswa.nis', $id);
+    return $this->db->get()->row();
+}
+
 
     public function kelas_siswa ($kelas = null)
     {
