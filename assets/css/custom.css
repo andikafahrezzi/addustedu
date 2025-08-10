@@ -918,3 +918,61 @@ button:focus {
         line-height: 1.2;
     }
 }
+
+/* Container Accordion */
+.about_area .accordion .card {
+    border: none;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+/* Header Styling */
+.about_area .accordion .card-header {
+    background: linear-gradient(135deg, #00c9ff, #92fe9d);
+    padding: 0;
+}
+
+.about_area .accordion .card-header .btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    font-weight: 600;
+    padding: 15px 20px;
+    text-decoration: none;
+    width: 100%;
+    font-size: 1.1rem;
+}
+
+.about_area .accordion .card-header .btn:hover {
+    background: rgba(255,255,255,0.1);
+    text-decoration: none;
+}
+
+/* Icon animation */
+.about_area .accordion .card-header .lnr {
+    transition: transform 0.3s ease;
+}
+.about_area .accordion .card-header .collapsed .lnr.lnr-chevron-down {
+    transform: rotate(0deg);
+}
+.about_area .accordion .card-header .lnr.lnr-chevron-down {
+    transform: rotate(180deg);
+}
+
+/* Body Styling */
+.about_area .accordion .card-body {
+    background: #fff;
+    padding: 15px 20px;
+    color: #333;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    border-top: 1px solid #eee;
+}
+
+/* Transition Collapse */
+.collapse {
+    transition: height 0.35s ease;
+}

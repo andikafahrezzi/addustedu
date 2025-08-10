@@ -1,4 +1,5 @@
 <!--================Home Banner Area =================-->
+
 <section class="banner_area">
     <div class="banner_inner d-flex align-items-center">
         <div class="overlay about bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background="">
@@ -36,7 +37,6 @@
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                 Visi
                                 <i class="lnr lnr-chevron-down"></i>
-                                <i class="lnr lnr-chevron-up"></i>
                             </button>
                         </div>
                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
@@ -50,7 +50,6 @@
                             <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                 Misi
                                 <i class="lnr lnr-chevron-down"></i>
-                                <i class="lnr lnr-chevron-up"></i>
                             </button>
                         </div>
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
@@ -64,7 +63,6 @@
                             <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                 Tujuan
                                 <i class="lnr lnr-chevron-down"></i>
-                                <i class="lnr lnr-chevron-up"></i>
                             </button>
                         </div>
                         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
@@ -78,7 +76,6 @@
                             <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapsefour" aria-expanded="false" aria-controls="collapsefour">
                                 Manfaat
                                 <i class="lnr lnr-chevron-down"></i>
-                                <i class="lnr lnr-chevron-up"></i>
                             </button>
                         </div>
                         <div id="collapsefour" class="collapse" aria-labelledby="headingfour" data-parent="#accordionExample">

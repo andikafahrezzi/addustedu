@@ -132,7 +132,7 @@
 						Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free.
 					</p>
 					<a href="https://github.com/andikafahrezzi/addustedu">
-						<button data-aos="fade-up" data-aos-duration="2200" class="btn-gradient">Download addustedu <span class="lnr lnr-arrow-right"></span></button>
+						<button data-aos="fade-up" data-aos-duration="2200" class="btn-gradient">Lihat Repository <span class="lnr lnr-arrow-right"></span></button>
 					</a>
 				</div>
 			</div>
