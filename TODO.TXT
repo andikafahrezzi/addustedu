@@ -35,3 +35,12 @@ next can be a problem
 - login and register siswa with nis, no longer use email
 - score yang dikirim langsung hasilnya melalui submit, tidak ada perhitungan diluar itu
 - sekarang pembagian materi(belajar) tidak melalui tabel materi secara langsung tapi di normalisasi menggunkan tabel pertemuan
+
+update after hosting gratis menggunakan infinite free dengan php diatas 8.1++
+- saat di deploy, dan phpnya beda versi harus di beri dinamik properto ("#[\AllowDynamicProperties]")
+    agar tidak error
+- pada model materi, id_materi harus null karena bawaan php yang baru (kita yang lama) ("id_materi=null")
+- pesan error sata menambahkan guru (lupa konfirmasi password)
+- pikirkan untuk mengubah batas maksimal upload, file materi. saat ini masih 2mb
+- nilai tugas error, harus diganti dengan ("<small>Nilai: <?= number_format((float) ($tugas_saya->nilai ?? 0)) ?></small>
+    ")
