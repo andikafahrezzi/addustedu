@@ -120,7 +120,7 @@
     <div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
         <div class="kt-header-mobile__logo">
             <a href="<?=base_url('guru')?>">
-                <img alt="Logo" src="<?=base_url('assets')?>/img/logo.png" width="90px;" />
+                <img alt="Logo" src="<?=base_url('assets')?>/img/logou.png" width="90px;" />
             </a>
         </div>
        <div class="kt-header-mobile__toolbar">
@@ -192,7 +192,7 @@
                                 data-ktmenu-submenu-toggle="click"><a href="javascript:;"
                                     class="kt-menu__link kt-menu__toggle"><i
                                         class="kt-menu__link-icon flaticon2-list-1"></i><span
-                                        class="kt-menu__link-text">Tambah</span><i
+                                        class="kt-menu__link-text">Quiz</span><i
                                         class="kt-menu__ver-arrow la la-angle-right"></i></a>
                                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                                     <ul class="kt-menu__subnav">
@@ -211,7 +211,7 @@
                                 data-ktmenu-submenu-toggle="click"><a href="javascript:;"
                                     class="kt-menu__link kt-menu__toggle"><i
                                         class="kt-menu__link-icon flaticon2-delivery-package"></i><span
-                                        class="kt-menu__link-text">Tambah</span><i
+                                        class="kt-menu__link-text">Tugas</span><i
                                         class="kt-menu__ver-arrow la la-angle-right"></i></a>
                                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                                     <ul class="kt-menu__subnav">
@@ -230,7 +230,7 @@
                                 data-ktmenu-submenu-toggle="click"><a href="javascript:;"
                                     class="kt-menu__link kt-menu__toggle"><i
                                         class="kt-menu__link-icon flaticon2-hourglass-1"></i><span
-                                        class="kt-menu__link-text">Tambah</span><i
+                                        class="kt-menu__link-text">Ujian</span><i
                                         class="kt-menu__ver-arrow la la-angle-right"></i></a>
                                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                                     <ul class="kt-menu__subnav">
@@ -249,7 +249,7 @@
                                 data-ktmenu-submenu-toggle="click"><a href="javascript:;"
                                     class="kt-menu__link kt-menu__toggle"><i
                                         class="kt-menu__link-icon la la-university" style="font-size: 25px;"></i><span
-                                        class="kt-menu__link-text">Tambah</span><i
+                                        class="kt-menu__link-text">Vabk SOalh</span><i
                                         class="kt-menu__ver-arrow la la-angle-right"></i></a>
                                 <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                                     <ul class="kt-menu__subnav">

@@ -44,3 +44,4 @@ update after hosting gratis menggunakan infinite free dengan php diatas 8.1++
 - pikirkan untuk mengubah batas maksimal upload, file materi. saat ini masih 2mb
 - nilai tugas error, harus diganti dengan ("<small>Nilai: <?= number_format((float) ($tugas_saya->nilai ?? 0)) ?></small>
     ")
+- tambahkan mata untuk melihat password di login guru (diadmin sudah, tinggal lihat saja)
