@@ -45,3 +45,22 @@ update after hosting gratis menggunakan infinite free dengan php diatas 8.1++
 - nilai tugas error, harus diganti dengan ("<small>Nilai: <?= number_format((float) ($tugas_saya->nilai ?? 0)) ?></small>
     ")
 - tambahkan mata untuk melihat password di login guru (diadmin sudah, tinggal lihat saja)
+
+ALTER TABLE bank_soal AUTO_INCREMENT = 1;
+ALTER TABLE forum_diskusi AUTO_INCREMENT = 1;
+ALTER TABLE guru AUTO_INCREMENT = 1;
+ALTER TABLE guru_mapel AUTO_INCREMENT = 1;
+ALTER TABLE jawaban_siswa AUTO_INCREMENT = 1;
+ALTER TABLE kelas AUTO_INCREMENT = 1;
+ALTER TABLE mata_pelajaran AUTO_INCREMENT = 1;
+ALTER TABLE materi AUTO_INCREMENT = 1;
+ALTER TABLE pertemuan AUTO_INCREMENT = 1;
+ALTER TABLE quiz AUTO_INCREMENT = 1;
+ALTER TABLE quiz_questions AUTO_INCREMENT = 1;
+ALTER TABLE quiz_siswa AUTO_INCREMENT = 1;
+ALTER TABLE siswa AUTO_INCREMENT = 1;
+ALTER TABLE tbl_jawaban_siswaujian AUTO_INCREMENT = 1;
+ALTER TABLE tbl_soal AUTO_INCREMENT = 1;
+ALTER TABLE tbl_ujian AUTO_INCREMENT = 1;
+ALTER TABLE ujian_soal AUTO_INCREMENT = 1;
+ALTER TABLE tugas_siswa AUTO_INCREMENT = 1;

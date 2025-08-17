@@ -23,12 +23,29 @@
     <!-- Main Content Area -->
     <div class="learning-main">
         <!-- Video Player Section -->
-        <div class="video-player">
-            <video id="myvideo" controls>
-                <source src="<?= base_url('assets/materi_video/' . $materi->video) ?>" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
+<!-- REPLACE ONLY the video container in your existing code -->
+<div class="learning-main">
+    <!-- New Video Wrapper -->
+    <!-- REPLACE JUST THE VIDEO SECTION in your existing code -->
+<div class="learning-main">
+    <!-- Video Fix Container -->
+    <div class="video-final-fix" style="width:100%;height:0;padding-bottom:56.25%;position:relative;">
+        <?php if (!empty($materi->video)): ?>
+            <iframe 
+                src="<?= htmlspecialchars($materi->video) ?>" 
+                style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+                title="Video Pembelajaran"
+                allowfullscreen
+            ></iframe>
+        <?php else: ?>
+            <div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;color:white;">
+                <i class="fas fa-video-slash" style="font-size:2rem;"></i>
+                <p>Video tidak tersedia</p>
+            </div>
+        <?php endif; ?>
+    </div>
+    
+    
 
         <!-- Forum Diskusi -->
         <div class="discussion-forum mt-4">

@@ -61,15 +61,8 @@
                                             <input type="number" name="pertemuan" id="pertemuan" class="form-control" min="1" required>
                                         </div>
                                     <div class="form-group">
-                                        <label>Upload Video Materi Disini</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input required type="file" name="video" class="custom-file-input"
-                                                    id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                                                <label class="custom-file-label" for="inputGroupFile01">Upload Video
-                                                    Materi Disini</label>
-                                            </div>
-                                        </div>
+                                        <label for="exampleFormControlTextarea1">Embed Link</label>
+                                        <textarea class="form-control" required name="videourl" id="examplevideorul"> </textarea>
                                     </div>
                                     <div class="form-group">
                                         <label>Upload File Materi (PDF, Word, JPG)</label>

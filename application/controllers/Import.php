@@ -28,19 +28,19 @@ class Import extends CI_Controller {
         $sheet = $spreadsheet->getActiveSheet();
 
         // Set header
-        $sheet->setCellValue('A1', 'NIS');
-        $sheet->setCellValue('B1', 'Nama');
-        $sheet->setCellValue('C1', 'Password');
-        $sheet->setCellValue('D1', 'Email');
-        $sheet->setCellValue('E1', 'Image');
-        $sheet->setCellValue('F1', 'Is_active');
+        $sheet->setCellValue('A1', 'nis');
+        $sheet->setCellValue('B1', 'nama');
+        $sheet->setCellValue('C1', 'password');
+        $sheet->setCellValue('D1', 'email');
+        $sheet->setCellValue('E1', 'image');
+        $sheet->setCellValue('F1', 'is_active');
         $sheet->setCellValue('G1', 'id_kelas');
-        $sheet->setCellValue('H1', 'User_type');
+        $sheet->setCellValue('H1', 'user_type');
 
         // Set contoh data
-        $sheet->setCellValue('A2', '654321');
-        $sheet->setCellValue('B2', 'Lorem');
-        $sheet->setCellValue('C2', '654321');
+        $sheet->setCellValue('A2', '1234567899');
+        $sheet->setCellValue('B2', 'John Doe');
+        $sheet->setCellValue('C2', '1234567899');
         $sheet->setCellValue('D2', 'lorem@example.com');
         $sheet->setCellValue('E2', 'default.jpg');
         $sheet->setCellValue('F2', '1');
@@ -112,9 +112,9 @@ class Import extends CI_Controller {
             $rows = $sheet->toArray();
 
             // Validasi header
-            $header = $rows[0];
-            $expected_header = ['NIS', 'Nama', 'Password', 'Email', 'Image', 'Is_active', 'Kelas', 'User_type'];
-            
+            $header = array_map('strtolower', array_map('trim', $rows[0]));
+            $expected_header = ['nis','nama','password','email','image','is_active','id_kelas','user_type'];
+
             if ($header !== $expected_header) {
                 unlink($file_path);
                 $this->session->set_flashdata('error', 'Format header tidak sesuai. Silahkan download template yang disediakan.');
@@ -142,7 +142,7 @@ class Import extends CI_Controller {
                     'image' => $row[4],
                     'is_active' => $row[5],
                     'date_created' => date('Y-m-d H:i:s'),
-                    'kelas' => $row[6],
+                    'id_kelas' => $row[6],
                     'user_type' => $row[7],
                 ];
             }

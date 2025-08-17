@@ -28,7 +28,6 @@
 <form method="POST" action="<?= base_url('guru/materi_edit/' . $materi->id) ?>" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?= $materi->id ?>">
     <input type="hidden" name="id_guru" value="<?= $materi->id_guru ?>">
-    <input type="hidden" name="video_lama" value="<?= $materi->video ?>">
     <input type="hidden" name="modul_lama" value="<?= $materi->modul ?>">
     <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>" />
 
@@ -72,12 +71,11 @@
     </div>
 
     <div class="form-group">
-        <div class="input-group">
-            <div class="custom-file">
-                <input type="file" name="video" class="custom-file-input" id="inputGroupFile01">
-                <label class="custom-file-label" for="inputGroupFile01"><?= $materi->video ?> Upload Video Materi</label>
-            </div>
-        </div>
+        <label for="linkform">Link / Embed Video</label>
+        <textarea class="form-control" name="videourl" id="videourl"><?= trim($materi->video) ?></textarea>
+        <small class="form-text text-muted">
+        Masukkan link atau kode embed video (misal: https://www.youtube.com/embed/xxxx).
+        </small>
     </div>
 
     <div class="form-group">
