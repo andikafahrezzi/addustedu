@@ -50,15 +50,10 @@
                                                     <!-- Benar: -->
                                             <div class="form-group col-md-12">
                                                 <label for="">Upload Video Materi</label>
-                                                <div class="input-group">
-                                                    <div class="custom-file">
-                                                        <input required type="file" name="video" required class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                                                        <label class="custom-file-label" for="inputGroupFile01">Upload
-                                                            Video
-                                                            Materi Disini</label>
-                                                    </div>
+                                                <div class="form-group col-md-12">
+                                                    <label for="exampleFormControlTextarea1">Embed Link Video Pembelajaran</label>
+                                                    <textarea class="form-control" required name="videourl" id="exampleLvideourl"></textarea>
                                                 </div>
-                                            </div>
                                             <div class="form-group col-md-12">
                                         <label>Upload File Materi (PDF, Word, JPG)</label>
                                         <div class="input-group">
@@ -75,7 +70,7 @@
                                             <div class="form-group col-md-12">
                                                 <label for="exampleFormControlTextarea1">Link Google Form</label>
                                                 <textarea class="form-control" required name="linkform" id="exampleLinkForm"> </textarea>
-                                                </div>
+                                            </div>
                                             <div class="form-group col-md-12">
                                                 <label for="inputState">Kelas</label>
                                                 <select name="id_kelas" class="form-control selectric">

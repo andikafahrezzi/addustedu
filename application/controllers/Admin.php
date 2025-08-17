@@ -357,28 +357,31 @@ public function update_guru($nip)
     // ✅ Ambil input baru dari form
     $deskripsi = $this->input->post('deskripsi');
     $linkform = $this->input->post('linkform');
+    $video = $this->input->post('videourl');
 
     // ✅ Default pakai data lama
-    $video = $existing_data['video'];
     $modul = $existing_data['modul'];
 
     // ✅ Upload video jika diubah
-    if (!empty($_FILES['video']['name'])) {
-        $config_video['upload_path']   = './assets/materi_video/';
-        $config_video['allowed_types'] = 'mp4|avi|mov|wmv|mkv|webm';
-        $config_video['max_size']      = 102400;
+     $video_input = $this->input->post('videourl', true);
+    $video_embed = '';
 
-        $this->load->library('upload', $config_video);
-        $this->upload->initialize($config_video);
+    if (!empty($video_input)) {
+        // Step 1: Validate URL
+        if (!$this->_validate_video_url($video_input)) {
+            $this->session->set_flashdata('error', 'URL video tidak valid. Hanya YouTube/Vimeo/Google Drive yang didukung');
+            redirect('guru/update_materi/' . $id);
+            return;
+        }
 
-        if ($this->upload->do_upload('video')) {
-            $video = $this->upload->data('file_name');
-        } else {
-            $this->session->set_flashdata('error', 'Gagal upload video: ' . $this->upload->display_errors());
-            redirect('admin/update_materi/' . $id);
+        // Step 2: Convert to embed URL
+        $video_embed = $this->_convert_video_to_embed($video_input);
+        if ($video_embed === false) {
+            $this->session->set_flashdata('error', 'Gagal mengkonversi URL video');
+            redirect('guru/update_materi/' . $id);
+            return;
         }
     }
-
     // ✅ Upload modul jika diubah
     if (!empty($_FILES['modul']['name'])) {
         $config_modul['upload_path']   = './assets/materi_modul/';
@@ -399,7 +402,7 @@ public function update_guru($nip)
     $data = [
         'deskripsi' => $deskripsi,
         'linkform'  => $linkform,
-        'video'     => $video,
+        'video'     => $video_embed,
         'modul'     => $modul
     ];
 
@@ -419,7 +422,70 @@ public function update_guru($nip)
     redirect('admin/data_materi');
 }
 
+/**
+ * Validates video URL (reusable for add_materi)
+ */
+private function _validate_video_url($url) {
+    if (empty($url)) return true;
 
+    $allowed_domains = [
+        'youtube.com',
+        'youtu.be',
+        'vimeo.com',
+        'drive.google.com'
+    ];
+
+    // Basic URL structure check
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        return false;
+    }
+
+    // Extract domain
+    $parsed = parse_url($url);
+    $host = $parsed['host'] ?? '';
+
+    // Check against whitelist
+    foreach ($allowed_domains as $domain) {
+        if (strpos($host, $domain) !== false) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Converts video URL to embed format (reusable for add_materi)
+ */
+private function _convert_video_to_embed($url) {
+    $parsed = parse_url($url);
+    $host = $parsed['host'] ?? '';
+
+    // YouTube
+    if (strpos($host, 'youtube.com') !== false || strpos($host, 'youtu.be') !== false) {
+        if (strpos($host, 'youtu.be') !== false) {
+            $video_id = substr($parsed['path'], 1);
+        } else {
+            parse_str($parsed['query'] ?? '', $query);
+            $video_id = $query['v'] ?? '';
+        }
+        return $video_id ? 'https://www.youtube.com/embed/'.$video_id.'?rel=0' : false;
+    }
+
+    // Vimeo
+    if (strpos($host, 'vimeo.com') !== false) {
+        $video_id = substr($parsed['path'], 1);
+        return is_numeric($video_id) ? 'https://player.vimeo.com/video/'.$video_id : false;
+    }
+
+    // Google Drive
+    if (strpos($host, 'drive.google.com') !== false) {
+        preg_match('/\/file\/d\/([^\/]+)/', $url, $matches);
+        return isset($matches[1]) ? 'https://drive.google.com/file/d/'.$matches[1].'/preview' : false;
+    }
+
+    return false;
+}
 public function delete_guru($nip)
 {
     // Cek apakah guru punya materi
@@ -565,19 +631,24 @@ public function add_materi()
         $this->load->library('upload');
 
         // Upload video
-        $video_materi = '';
-        if (!empty($_FILES['video']['name'])) {
-            $config_video['upload_path'] = './assets/materi_video/';
-            $config_video['allowed_types'] = 'mp4|avi|mov|wmv|mkv|webm';
-            $config_video['max_size'] = 100000;
+        $video_input = $this->input->post('videourl', true);
+        $video_embed = '';
 
-            $this->upload->initialize($config_video);
-            if ($this->upload->do_upload('video')) {
-                $upload_data = $this->upload->data();
-                $video_materi = $upload_data['file_name'];
-            } else {
-                $this->session->set_flashdata('error', 'Gagal upload video: ' . $this->upload->display_errors());
-                redirect('admin/add_materi');
+        if (!empty($video_input)) {
+            // 1. Konversi ke embed URL
+            $video_embed = $this->convert_to_embed($video_input);
+
+            if (empty($video_embed)) {
+                $this->session->set_flashdata('error', 'Gagal mengkonversi URL video. Pastikan link benar.');
+                redirect('guru/add_materi');
+                return;
+            }
+
+            // 2. Validasi embed URL
+            if (!$this->is_valid_embed_url($video_embed)) {
+                $this->session->set_flashdata('error', 'Format embed video tidak valid');
+                redirect('guru/add_materi');
+                return;
             }
         }
 
@@ -602,7 +673,7 @@ public function add_materi()
             'id_guru'   => $this->input->post('id_guru', true),
             'id_mapel'  => $this->input->post('id_mapel', true),
             'id_kelas'  => $this->input->post('id_kelas', true),
-            'video'     => $video_materi,
+            'video'     => $video_embed,
             'modul'     => $modul,
             'deskripsi' => htmlspecialchars($this->input->post('deskripsi', true)),
             'linkform'  => htmlspecialchars($this->input->post('linkform', true))
@@ -619,7 +690,125 @@ public function add_materi()
         redirect(base_url('admin/data_materi'));
     }
 }
+/**
+ * Validates video URL format and domain with HTTPS check
+ */
+// Fungsi tambahan untuk validasi embed URL
+private function is_valid_embed_url($url) {
+    $patterns = [
+        'youtube' => '/^https:\/\/www\.youtube\.com\/embed\/[a-zA-Z0-9_-]+(\?.*)?$/',
+        'vimeo'   => '/^https:\/\/player\.vimeo\.com\/video\/[0-9]+(\?.*)?$/',
+        'drive'   => '/^https:\/\/drive\.google\.com\/file\/d\/[a-zA-Z0-9_-]+\/preview(\?.*)?$/'
+    ];
 
+    foreach ($patterns as $pattern) {
+        if (preg_match($pattern, $url)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+private function is_valid_video_url($url) {
+    if (empty($url)) return true;
+    
+    $allowed_domains = [
+        'youtube.com',
+        'youtu.be',
+        'vimeo.com',
+        'drive.google.com'
+    ];
+
+    // 1. Basic URL validation
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        return false;
+    }
+    
+    // 2. Force HTTPS and clean URL
+    $url = $this->clean_video_url($url);
+
+    // 3. Parse and validate components
+    $parsed = parse_url($url);
+    if (!isset($parsed['host'])) {
+        return false;
+    }
+
+    // 4. Check against allowed domains
+    foreach ($allowed_domains as $domain) {
+        if (strpos($parsed['host'], $domain) !== false) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+private function clean_video_url($url) {
+    // Remove tracking parameters and unnecessary query strings
+    $url = preg_replace('/([&?])(si|feature|ab_channel)=[^&]+/', '', $url);
+    $url = preg_replace('/&+$/', '', $url); // Remove trailing &
+    
+    // Force HTTPS
+    if (strpos($url, 'https://') !== 0) {
+        $url = 'https://' . str_replace(['http://', 'https://'], '', $url);
+    }
+    
+    return $url;
+}
+
+private function convert_to_embed($url) {
+    $url = $this->clean_video_url($url);
+    $parsed = parse_url($url);
+    $host = $parsed['host'] ?? '';
+
+    // --------------------
+    // YouTube
+    // --------------------
+    if (strpos($host, 'youtube.com') !== false || strpos($host, 'youtu.be') !== false) {
+        $video_id = '';
+
+        // Short link youtu.be
+        if (strpos($host, 'youtu.be') !== false) {
+            $video_id = substr($parsed['path'], 1);       // ambil path setelah /
+            $video_id = preg_replace('/\?.*/', '', $video_id); // hapus query string
+        }
+        // Standard YouTube link
+        else {
+            parse_str($parsed['query'] ?? '', $query);
+            $video_id = $query['v'] ?? '';
+
+            // Handle /watch/VIDEO_ID style (jarang)
+            if (empty($video_id) && isset($parsed['path'])) {
+                preg_match('/\/watch\/([a-zA-Z0-9_-]+)/', $parsed['path'], $matches);
+                $video_id = $matches[1] ?? '';
+            }
+        }
+
+        // Bersihkan video ID dari karakter aneh
+        $video_id = preg_replace('/[^a-zA-Z0-9_-]/', '', $video_id);
+
+        return $video_id ? 'https://www.youtube.com/embed/' . $video_id . '?rel=0&modestbranding=1' : '';
+    }
+
+    // --------------------
+    // Vimeo
+    // --------------------
+    if (strpos($host, 'vimeo.com') !== false) {
+        $video_id = substr($parsed['path'], 1);
+        $video_id = preg_replace('/[^0-9]/', '', $video_id);
+        return $video_id ? 'https://player.vimeo.com/video/' . $video_id : '';
+    }
+
+    // --------------------
+    // Google Drive
+    // --------------------
+    if (strpos($host, 'drive.google.com') !== false) {
+        preg_match('/\/file\/d\/([^\/]+)/', $url, $matches);
+        return isset($matches[1]) ? 'https://drive.google.com/file/d/' . $matches[1] . '/preview' : '';
+    }
+
+    return '';
+}
     public function hapus_forum($materi_id) {
         $this->load->model('Forum_model');
         

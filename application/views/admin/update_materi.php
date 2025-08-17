@@ -44,15 +44,13 @@
         </div>
 
         <!-- Video -->
-        <div class="form-group">
-            <label>Upload Video Materi</label>
-            <div class="input-group">
-                <div class="custom-file">
-                    <input type="file" name="video" class="custom-file-input">
-                    <label class="custom-file-label"><?= $user->video ?> (Upload untuk ganti)</label>
-                </div>
-            </div>
-        </div>
+    <div class="form-group">
+        <label for="linkform">Link / Embed Video</label>
+        <textarea class="form-control" name="videourl" id="videourl"><?= trim($user->video) ?></textarea>
+        <small class="form-text text-muted">
+        Masukkan link atau kode embed video (misal: https://www.youtube.com/embed/xxxx).
+        </small>
+    </div>
 
         <!-- Modul -->
         <div class="form-group">
