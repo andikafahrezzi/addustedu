@@ -1,0 +1,23 @@
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d;
+    z-index: 5;
+}
+
+.toggle-password:hover {
+    color: #495057;
+}
+
+/* Jika menggunakan form-control */
+.form-control {
+    padding-right: 40px; /* Beri ruang untuk icon */
+}

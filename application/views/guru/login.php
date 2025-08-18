@@ -32,6 +32,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
     <link rel="stylesheet" href="<?= base_url('assets/') ?>stisla-assets/css/style.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>stisla-assets/css/custom.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>stisla-assets/css/components.css">
+    <link rel="stylesheet" href="<?=base_url('assets/')?>css/test.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.4/dist/sweetalert2.all.min.js"></script>
 
 </head>
@@ -52,7 +53,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                         value="<?= $this->security->get_csrf_hash(); ?>" />
                             <div class="form-group">
                                 <label for="nip">Nomer Induk Pegawai</label>
-                                <input id="nip" type="text" class="form-control" name="nip" tabindex="1" required autofocus>
+                                <input id="nip" type="text" class="form-control" placeholder="Masukan NIP mu disini" name="nip" tabindex="1" required autofocus>
                                 <div class="invalid-feedback">
                                     Harap isi bidang email
                                 </div>
@@ -61,7 +62,20 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                 <div class="d-block">
                                     <label for="password" class="control-label">Password</label>
                                 </div>
-                                <input id="password" type="password" class="form-control" name="password" tabindex="2" required>
+                                <div class="password-wrapper">
+                                    <input 
+                                        type="password" 
+                                        id="password" 
+                                        name="password" 
+                                        class="form-control" 
+                                        placeholder="Masukkan password"
+                                        tabindex="2"
+                                        required
+                                    >
+                                    <span class="toggle-password">
+                                        <i class="fas fa-eye-slash"></i>
+                                    </span>
+                                </div>
                                 <div class="invalid-feedback">
                                     Harap isi bidang password
                                 </div>
@@ -200,6 +214,17 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
     <!-- End Sweetalert -->
 
     <!-- General JS Scripts -->
+     <script>
+        // JavaScript bisa ditaruh di footer atau file terpisah
+        document.querySelector('.toggle-password').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+            icon.classList.toggle('fa-eye-slash');
+            icon.classList.toggle('fa-eye');
+        });
+    </script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
     </script>

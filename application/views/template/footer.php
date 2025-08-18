@@ -117,13 +117,24 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                 <div class="form-group">
                                     <label class="label-font" for="nis">Nomer Induk Siswa</label>
                                     <input type="text" value="<?= $this->session->flashdata('old_nis') ?>" class="form-control" name="nis" autocomplete="off" id="nis" placeholder="Masukan Nis mu disini ..">
-<small class="text-danger"><?= $this->session->flashdata('nis_error'); ?></small>
-
+                                    <small class="text-danger"><?= $this->session->flashdata('nis_error'); ?></small>
                                 </div>
-
                                 <div class="form-group">
                                     <label class="label-font" for="password">Password</label>
-                                    <input type="password" name="password" class="form-control" id="password" placeholder="Masukan password mu disini ..">
+                                    <div class="password-wrapper">
+                                    <input 
+                                        type="password" 
+                                        id="password" 
+                                        name="password" 
+                                        class="form-control" 
+                                        placeholder="Masukkan Password mu disini.."
+                                        tabindex="2"
+                                        required
+                                    >
+                                    <span class="toggle-password">
+                                        <i class="lnr lnr-eye"></i>
+                                    </span>
+                                </div>
 <small class="text-danger"><?= $this->session->flashdata('password_error'); ?></small>
 
                                 </div>
@@ -292,7 +303,17 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
 		}
 	});
 </script>
-
+     <script>
+        // JavaScript bisa ditaruh di footer atau file terpisah
+        document.querySelector('.toggle-password').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+            icon.classList.toggle('lnr lnr-eye');
+            icon.classList.toggle('lnr lnr-eye');
+        });
+    </script>
 <script>
     var animateButton = function(e) {
         e.preventDefault;
