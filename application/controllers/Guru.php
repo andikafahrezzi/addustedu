@@ -292,10 +292,10 @@ private function convert_to_embed($url) {
     $data['user'] = $this->db->get_where('guru', ['nip' => $nip])->row_array();
     $data['materi_grouped'] = [];
 
-foreach ($this->M_materi->tampil_materi_guru($nip) as $row) {
-    $key = $row->nama_mapel . ' - ' . $row->nama_kelas;
-    $data['materi_grouped'][$key][] = $row;
-}
+    foreach ($this->M_materi->tampil_materi_guru($nip) as $row) {
+        $key = $row->nama_mapel . ' - ' . $row->nama_kelas;
+        $data['materi_grouped'][$key][] = $row;
+    }
 
     // Ambil materi yang hanya dibuat oleh guru ini
     $data['materi'] = $this->m_materi->tampil_materi_guru($nip);

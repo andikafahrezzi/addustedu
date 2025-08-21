@@ -169,6 +169,25 @@
                                     </div>
                                 </div>
                             </li>
+                                                        <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true"
+                                data-ktmenu-submenu-toggle="click"><a href="javascript:;"
+                                    class="kt-menu__link kt-menu__toggle"><i
+                                        class="kt-menu__link-icon flaticon-event-calendar-symbol"></i><span
+                                        class="kt-menu__link-text">RPS</span><i
+                                        class="kt-menu__ver-arrow la la-angle-right"></i></a>
+                                <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+                                    <ul class="kt-menu__subnav">
+                                        <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span
+                                                class="kt-menu__link"><span
+                                                    class="kt-menu__link-text">RPS</span></span>
+                                        </li>
+                                        <li class="kt-menu__item " aria-haspopup="true"><a
+                                                href="<?=base_url('rps/data_rps')?>" class="kt-menu__link "><i
+                                                    class="kt-menu__link-icon la la-commenting"></i><span
+                                                    class="kt-menu__link-text">Data Rps</span></a></li>
+                                    </ul>
+                                </div>
+                            </li>   
                             <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true"
                                 data-ktmenu-submenu-toggle="click"><a href="javascript:;"
                                     class="kt-menu__link kt-menu__toggle"><i
