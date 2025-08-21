@@ -85,6 +85,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-calendar"></i>
                                 <span>Akademik</span></a>
                             <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="<?= base_url('admin/data_rps_admin') ?>">Data RPS Guru</a></li>
                                 <li><a class="nav-link" href="<?= base_url('admin/kelas') ?>">Data Kelas</a></li>
                                 <li><a class="nav-link" href="<?= base_url('admin/data_mapel') ?>">Data Mata Pelajaran</a>
                                     </li>

@@ -1361,4 +1361,49 @@ public function hapus_mapel($id)
     redirect('admin/data_mapel');
 }
 
+    // role admin
+    public function data_rps_admin()
+    {
+        $this->load->model('Rps_model');
+        // Ambil semua RPS
+        $rps_all = $this->Rps_model->tampil_semua_rps();
+
+        // Grouping per guru
+        $data['rps_grouped'] = [];
+        foreach ($rps_all as $row) {
+            $key = $row->nama_guru . ' - ' . $row->nama_mapel . ' - ' . $row->nama_kelas;
+            $data['rps_grouped'][$key][] = $row;
+        }
+        $this->load->view('admin/partials/nava');
+        $this->load->view('admin/data_rps', $data);
+        $this->load->view('admin/partials/foota');
+    }
+
+    public function delete_rps_by_admin($id)
+    {
+        $this->load->model('Rps_model');
+
+        // Ambil data file RPS dulu
+        $rps = $this->Rps_model->get_rps_by_id($id);
+        if (!$rps) {
+            $this->session->set_flashdata('error', 'RPS tidak ditemukan.');
+            redirect('admin/data_rps_admin');
+        }
+
+        // Hapus file fisik
+        $file_path = './assets/rps_uploads/' . $rps->file_rps;
+        if (file_exists($file_path)) {
+            unlink($file_path);
+        }
+
+        // Hapus data di database
+        if ($this->Rps_model->delete_rps_by_admin($id)) {
+            $this->session->set_flashdata('success', 'RPS berhasil dihapus.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus RPS.');
+        }
+
+        redirect('admin/data_rps_admin');
+    }
+
 }

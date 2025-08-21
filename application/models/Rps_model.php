@@ -9,7 +9,7 @@ class Rps_model extends CI_Model {
         $this->db->where('gm.id_guru', $id_guru);
         return $this->db->get()->result();
     }
-    
+
     public function tampil_rps_guru($id_guru)
     {
         $this->db->select('rps.*, guru_mapel.id AS guru_mapel_id, mata_pelajaran.nama_mapel, kelas.nama_kelas');
@@ -70,4 +70,29 @@ class Rps_model extends CI_Model {
         $this->db->where('id_rps', $id_rps);
         return $this->db->delete('rps');
     }
+
+    //role admin
+    public function tampil_semua_rps()
+    {
+        $this->db->select('rps.*, guru_mapel.id AS guru_mapel_id, guru.nama_guru, mata_pelajaran.nama_mapel, kelas.nama_kelas');
+        $this->db->from('rps');
+        $this->db->join('guru_mapel', 'rps.guru_mapel_id = guru_mapel.id');
+        $this->db->join('guru', 'guru_mapel.id_guru = guru.nip');
+        $this->db->join('mata_pelajaran', 'guru_mapel.id_mapel = mata_pelajaran.id');
+        $this->db->join('kelas', 'rps.kelas_id = kelas.id');
+        $this->db->order_by('guru.nama_guru, mata_pelajaran.nama_mapel, kelas.nama_kelas, rps.semester', 'ASC');
+        return $this->db->get()->result();
+    }
+     // Ambil data RPS berdasarkan ID
+    public function get_rps_by_id($id)
+    {
+        return $this->db->get_where('rps', ['id_rps' => $id])->row();
+    }
+
+    // Hapus data RPS
+    public function delete_rps_by_admin($id)
+    {
+        return $this->db->delete('rps', ['id_rps' => $id]);
+    }
+
 }
