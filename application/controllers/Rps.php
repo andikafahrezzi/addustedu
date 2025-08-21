@@ -116,9 +116,22 @@ public function data_rps()
     }
 
     // Hapus RPS
-    public function delete_rps($id_rps) {
-        $this->Rps_model->delete_rps($id_rps);
+    public function delete_rps($id)
+    {
+        $rps = $this->Rps_model->get_rps_by_id($id);
+        if (!$rps) {
+            $this->session->set_flashdata('error', 'RPS tidak ditemukan.');
+            redirect('rps/data_rps');
+        }
+
+        // Hapus file fisik
+        $file_path = './assets/rps_uploads/' . $rps->file_rps;
+        if (file_exists($file_path)) unlink($file_path);
+
+        // Hapus data di database
+        $this->Rps_model->delete_rps($id);
         $this->session->set_flashdata('success', 'RPS berhasil dihapus.');
         redirect('rps/data_rps');
     }
+
 }
