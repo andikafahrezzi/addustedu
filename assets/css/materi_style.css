@@ -344,14 +344,26 @@ to{opacity: 1; transform: translateY(0);}
 .learning-hero h2{margin-top: 1rem;
     font-size: 1.8rem;}
 /* Video Player Styles */
-/* Container utama */
-.learning-main {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-/* Add these new styles without modifying existing ones */
+.video-player{background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 2rem;}
+.video-player video{width: 100%;
+    display: block;}
+.video-controls{background: rgba(0,0,0,0.8);
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;}
+.video-controls button{background: white;
+    border: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;}
+.video-controls input[type="range"]{flex-grow: 1;}
 /* Course Description */
 .course-description{background: linear-gradient(135deg, #00c9ff, #92fe9d);
     border-radius: 8px;
@@ -573,8 +585,6 @@ small{font-size: 0.75rem;
 }
 
 /* Common Card Style */
-.learning-main { border: 1px solid red; }
-.video-embed-wrapper { border: 1px solid blue; }
 .learning-main,
 .learning-sidebar {
   background: #fff;
