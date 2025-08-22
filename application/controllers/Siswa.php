@@ -181,7 +181,7 @@ public function quiz_result($quiz_siswa_id)
     $this->load->view('materi/quiz_result', $data);
 }
     public function upload_tugas($id_pertemuan) {
-        $config['upload_path'] = './assets/materi_tugas/';
+        $config['upload_path'] = './assets/tugas_uploads/';
         $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx';
         $config['max_size'] = 5120; // 5MB
         $config['encrypt_name'] = true;
