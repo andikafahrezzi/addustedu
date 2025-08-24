@@ -1294,8 +1294,7 @@ public function simpan_ujian()
     // Menampilkan daftar ujian yang dibuat oleh guru
 public function tampilkan_ujian()
 {
-    $nip = $this->session->userdata('nip');
-    echo "NIP dari session: " . $nip . "<br>"; // Debug session
+    $nip = $this->session->userdata('nip');// Debug session
     
     $ujian_raw = $this->Ujian_model->get_ujian_by_gurus($nip);
 
