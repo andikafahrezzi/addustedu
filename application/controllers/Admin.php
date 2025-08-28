@@ -342,7 +342,7 @@ public function update_guru($nip)
 }
 
 
-    public function materi_edit()
+public function materi_edit()
 {
     $this->load->model('m_materi');
     $id = $this->input->post('id');
@@ -354,35 +354,33 @@ public function update_guru($nip)
         redirect('admin/data_materi');
     }
 
-    // ✅ Ambil input baru dari form
-    $deskripsi = $this->input->post('deskripsi');
-    $linkform = $this->input->post('linkform');
-    $video = $this->input->post('videourl');
+    // Ambil input baru
+    $deskripsi   = $this->input->post('deskripsi', true);
+    $linkform    = $this->input->post('linkform', true);
+    $video_input = $this->input->post('videourl', true);
 
-    // ✅ Default pakai data lama
-    $modul = $existing_data['modul'];
+    // Default: pakai data lama
+    $video_embed = $existing_data['video'];
+    $modul       = $existing_data['modul'];
 
-    // ✅ Upload video jika diubah
-     $video_input = $this->input->post('videourl', true);
-    $video_embed = '';
-
-    if (!empty($video_input)) {
-        // Step 1: Validate URL
+    // ✅ Handle video baru (jika berbeda dengan lama)
+    if (!empty($video_input) && $video_input !== $existing_data['video']) {
         if (!$this->_validate_video_url($video_input)) {
             $this->session->set_flashdata('error', 'URL video tidak valid. Hanya YouTube/Vimeo/Google Drive yang didukung');
-            redirect('guru/update_materi/' . $id);
+            redirect('admin/update_materi/' . $id);
             return;
         }
 
-        // Step 2: Convert to embed URL
-        $video_embed = $this->_convert_video_to_embed($video_input);
-        if ($video_embed === false) {
-            $this->session->set_flashdata('error', 'Gagal mengkonversi URL video');
-            redirect('guru/update_materi/' . $id);
+        $converted = $this->_convert_video_to_embed($video_input);
+        if ($converted === false) {
+            $this->session->set_flashdata('error', 'Gagal mengkonversi URL video.');
+            redirect('admin/update_materi/' . $id);
             return;
         }
+        $video_embed = $converted;
     }
-    // ✅ Upload modul jika diubah
+
+    // ✅ Upload modul baru (jika ada file baru)
     if (!empty($_FILES['modul']['name'])) {
         $config_modul['upload_path']   = './assets/materi_modul/';
         $config_modul['allowed_types'] = 'pdf|doc|docx|jpg|jpeg|png';
@@ -393,8 +391,9 @@ public function update_guru($nip)
         if ($this->upload->do_upload('modul')) {
             $modul = $this->upload->data('file_name');
         } else {
-            $this->session->set_flashdata('error', 'Gagal upload file materi: ' . $this->upload->display_errors());
+            $this->session->set_flashdata('error', 'Gagal upload file materi: ' . strip_tags($this->upload->display_errors()));
             redirect('admin/update_materi/' . $id);
+            return;
         }
     }
 
@@ -406,21 +405,26 @@ public function update_guru($nip)
         'modul'     => $modul
     ];
 
-    // ✅ Cek apakah ada perubahan data
-    $difference = array_diff_assoc($data, $existing_data);
-    unset($difference['id_guru'], $difference['id_mapel'], $difference['id_kelas']); // abaikan relasi
+    // ✅ Cek apakah ada perubahan dibanding data lama
+    $changes = [];
+    foreach ($data as $key => $value) {
+        if ($value != $existing_data[$key]) {
+            $changes[$key] = $value;
+        }
+    }
 
-    if (empty($difference)) {
+    if (empty($changes)) {
         $this->session->set_flashdata('warning', '❌ Tidak ada perubahan, data tidak diperbarui.');
         redirect('admin/update_materi/' . $id);
     }
 
-    // ✅ Update database
-    $this->m_materi->update_data(['id' => $id], $data, 'materi');
+    // ✅ Update database hanya dengan field yang berubah
+    $this->m_materi->update_data(['id' => $id], $changes, 'materi');
 
     $this->session->set_flashdata('success-edit', '✅ Materi berhasil diperbarui.');
     redirect('admin/data_materi');
 }
+
 
 /**
  * Validates video URL (reusable for add_materi)
@@ -640,14 +644,14 @@ public function add_materi()
 
             if (empty($video_embed)) {
                 $this->session->set_flashdata('error', 'Gagal mengkonversi URL video. Pastikan link benar.');
-                redirect('guru/add_materi');
+                redirect('admin/add_materi');
                 return;
             }
 
             // 2. Validasi embed URL
             if (!$this->is_valid_embed_url($video_embed)) {
                 $this->session->set_flashdata('error', 'Format embed video tidak valid');
-                redirect('guru/add_materi');
+                redirect('admin/add_materi');
                 return;
             }
         }
@@ -1324,13 +1328,17 @@ public function update_mapel($id)
 {
     $this->load->model('M_materi');
     $lama = $this->M_materi->get_mapel_by_id($id);
-    $baru = $this->input->post('nama_mapel','deskripsi', true);
 
-    if ($lama->nama_mapel != $baru) {
+    $nama_baru = $this->input->post('nama_mapel', true);
+    $deskripsi_baru = $this->input->post('deskripsi', true);
+
+    if ($lama->nama_mapel != $nama_baru) {
         $this->form_validation->set_rules('nama_mapel', 'Nama Mapel', 'required|is_unique[mata_pelajaran.nama_mapel]');
     } else {
         $this->form_validation->set_rules('nama_mapel', 'Nama Mapel', 'required');
     }
+
+    $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required');
 
     if ($this->form_validation->run() == false) {
         $data['mapel_edit'] = $lama;
@@ -1338,7 +1346,10 @@ public function update_mapel($id)
         $this->load->view('admin/update_mapel', $data);
         $this->load->view('admin/partials/foota');
     } else {
-        $data = ['nama_mapel' => $baru];
+        $data = [
+            'nama_mapel' => $nama_baru,
+            'deskripsi'  => $deskripsi_baru
+        ];
         $this->M_materi->update_mapel($id, $data);
         $this->session->set_flashdata('success', 'Mata pelajaran berhasil diperbarui.');
         redirect('admin/data_mapel');

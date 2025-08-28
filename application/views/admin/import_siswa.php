@@ -12,17 +12,18 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="bg-white p-4" style="border-radius:3px; box-shadow: rgba(0, 0, 0, 0.03) 0px 4px 8px 0px;">
-                    <?php if($this->session->flashdata('success')): ?>
+                    <?php if ($this->session->flashdata('success')): ?>
                         <div class="alert alert-success">
-                            <?php echo $this->session->flashdata('success'); ?>
+                            <?= $this->session->flashdata('success'); ?>
                         </div>
                     <?php endif; ?>
 
-                    <?php if($this->session->flashdata('error')): ?>
+                    <?php if ($this->session->flashdata('error')): ?>
                         <div class="alert alert-danger">
-                            <?php echo $this->session->flashdata('error'); ?>
+                            <?= $this->session->flashdata('error'); ?>
                         </div>
                     <?php endif; ?>
+
 
                     <form action="<?php echo site_url('import/upload'); ?>" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
