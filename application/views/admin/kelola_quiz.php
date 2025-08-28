@@ -151,7 +151,7 @@
                                 <small class="text-muted">(<?= strtoupper($soal->tipe) ?> (<?= $soal->jawaban?>) - <?= $soal->poin ?> poin)</small>
                             </h6>
                             <div>
-                                <a href="<?= site_url('admin/hapus_soal/'.$soal->id.'/'.$quiz->id) ?>" 
+                                <a href="<?= site_url('admin/hapus_soal_quiz/'.$soal->id.'/'.$quiz->id) ?>" 
                                    class="btn btn-sm btn-danger" 
                                    onclick="return confirm('Hapus soal ini?')">
                                     <i class="fas fa-trash"></i>

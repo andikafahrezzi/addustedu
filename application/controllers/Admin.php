@@ -895,9 +895,7 @@ public function kelola_quiz($quiz_id)
     if(empty($data['quiz'])) {
         show_404();
     }
-    
-    
-    
+
     $this->load->view('admin/kelola_quiz', $data);
     $this->load->view('admin/partials/foota');
 }
@@ -938,6 +936,19 @@ public function data_quiz()
         $this->load->view('admin/partials/foota');
 
     }
+        public function hapus_soal_quiz($id_soal, $id_quiz)
+{
+    $this->load->model('Quiz_model');
+
+    if ($this->Quiz_model->hapus_soalquiz($id_soal)) {
+        $this->session->set_flashdata('success', '✅ Soal berhasil dihapus.');
+    } else {
+        $this->session->set_flashdata('error', '❌ Gagal menghapus soal.');
+    }
+
+    // Balik ke detail quiz admin
+    redirect('admin/kelola_quiz/' . $id_quiz);
+}
     public function delete_quiz($id) {
         // Validasi ID
         if(empty($id) || !is_numeric($id)) {
