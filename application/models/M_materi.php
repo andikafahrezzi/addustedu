@@ -289,6 +289,14 @@ public function get_all() {
     $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
     return $this->db->get()->result();
 }
+public function get_by_mapel($id_mapel)
+{
+    $this->db->select('materi.*, mata_pelajaran.nama_mapel');
+    $this->db->from('materi');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->where('materi.id_mapel', $id_mapel);
+    return $this->db->get()->result();
+}
 
 public function get_all_kelas() {
     return $this->db->get('kelas')->result();

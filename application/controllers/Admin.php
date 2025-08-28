@@ -1145,7 +1145,26 @@ public function add_pertemuan()
 }
 public function edit($id_pertemuan) {
         $data['pertemuan'] = $this->M_pertemuan->get_by_id($id_pertemuan);
-        $data['materi'] = $this->M_materi->get_all();
+        $pertemuan = $this->db->select('pertemuan.*, materi.id_mapel')
+                          ->from('pertemuan')
+                          ->join('materi', 'materi.id = pertemuan.id_materi')
+                          ->where('pertemuan.id', $id_pertemuan)
+                          ->get()->row();
+
+        if (!$pertemuan) {
+            $this->session->set_flashdata('error', 'Data pertemuan tidak ditemukan');
+            redirect('admin/data_pertemuan');
+        }
+
+        // ambil materi hanya sesuai mapel dari pertemuan ini
+        $this->load->model('M_materi');
+        $materi_list = $this->M_materi->get_by_mapel($pertemuan->id_mapel);
+
+        $data = [
+            'pertemuan'   => $pertemuan,
+            'materi_list' => $materi_list
+        ];
+
         $data['kelas'] = $this->M_materi->get_all_kelas();
 
         $this->load->view('admin/partials/nava');

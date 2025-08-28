@@ -12,10 +12,10 @@
                 value="<?= $this->security->get_csrf_hash(); ?>" />
                 <div class="form-group">
                     <label for="id_materi">Materi</label>
-                    <select name="id_materi" class="form-control" required>
-                        <?php foreach ($materi as $m): ?>
-                            <option value="<?= $m->id ?>" <?= $pertemuan->id_materi == $m->id ? 'selected' : '' ?>>
-                                <?= $m->deskripsi ?>
+                    <select name="id_materi" id="id_materi" class="form-control">
+                        <?php foreach ($materi_list as $m): ?>
+                            <option value="<?= $m->id ?>" <?= ($m->id == $pertemuan->id_materi ? 'selected' : '') ?>>
+                                <?= $m->nama_mapel ?> - <?= $m->deskripsi ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
