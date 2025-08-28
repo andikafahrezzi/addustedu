@@ -833,12 +833,19 @@ private function convert_to_embed($url) {
     }
     public function data_fordis() {
         $this->load->model('M_materi');
-        $data['materi_terjadwal'] = $this->M_materi->get_materi_terjadwal_grouped();
+        $data['forums'] = $this->M_materi->get_pertemuan_with_forum();
         $this->load->view('admin/partials/nava');
         $this->load->view('admin/data_fordis', $data);
         $this->load->view('admin/partials/foota');
     }
+    public function delete_forum($id_pertemuan)
+    {
+        $this->db->where('id_pertemuan', $id_pertemuan);
+        $this->db->delete('forum_diskusi');
 
+        $this->session->set_flashdata('success', '✅ Semua komentar pada pertemuan ini berhasil dihapus.');
+        redirect('admin/data_fordis');
+    }
     public function add_quiz()
 {
     $this->load->model('Quiz_model');

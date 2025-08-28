@@ -332,5 +332,33 @@ public function delete_mapel($id)
 {
     return $this->db->delete('mata_pelajaran', ['id' => $id]);
 }
+public function get_pertemuan_with_forum()
+{
+    $this->db->select('
+        pertemuan.id AS id_pertemuan,
+        pertemuan.pertemuan_ke,
+        pertemuan.tanggal,
+        guru.nama_guru,
+        mata_pelajaran.nama_mapel,
+        kelas.nama_kelas,
+        materi.deskripsi,
+        COUNT(forum_diskusi.id) as total_komentar
+    ');
+    $this->db->from('forum_diskusi');
+    $this->db->join('pertemuan', 'pertemuan.id = forum_diskusi.id_pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('guru', 'guru.nip = materi.id_guru');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+    $this->db->group_by('pertemuan.id');
+    $this->db->order_by('guru.nama_guru', 'ASC');
+    $this->db->order_by('mata_pelajaran.nama_mapel', 'ASC');
+    $this->db->order_by('kelas.nama_kelas', 'ASC');
+    $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
+
+    return $this->db->get()->result();
+}
+
+
 
 }

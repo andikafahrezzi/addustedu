@@ -9,57 +9,47 @@
         </div>
 
         <div class="section-body">
-            <?php if (!empty($materi_terjadwal)): ?>
-                <?php foreach ($materi_terjadwal as $nama_guru => $tingkat_data): ?>
-                    <div class="mt-4">
-                        <h4>👨‍🏫 Guru: <?= $nama_guru ?></h4>
-
-                        <?php foreach ($tingkat_data as $tingkat => $kelas_data): ?>
-                            <h5 class="mt-3">🏫 Tingkat: <?= $tingkat ?></h5>
-
-                            <?php foreach ($kelas_data as $nama_kelas => $list_materi): ?>
-                                <h6 class="mt-2">📚 Kelas: <?= $nama_kelas ?></h6>
-
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr class="text-center bg-light">
-                                                <th>ID</th>
-                                                <th>Mata Pelajaran</th>
-                                                <th>Pertemuan Ke</th>
-                                                <th>Deskripsi</th>
-                                                <th>Tanggal</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($list_materi as $m): ?>
-                                                <tr>
-                                                    <td class="text-center"><strong>#<?= $m->id ?></strong></td>
-                                                    <td class="text-center"><?= $m->nama_mapel ?></td>
-                                                    <td class="text-center"><?= $m->pertemuan_ke ?></td>
-                                                    <td><?= $m->deskripsi ?></td>
-                                                    <td class="text-center"><?= date('d-m-Y', strtotime($m->tanggal)) ?></td>
-                                                    <td class="text-center">
-                                                        <a href="<?= base_url('admin/hapus_materi/'.$m->id) ?>"
-                                                           class="btn btn-sm btn-outline-danger"
-                                                           onclick="return confirm('Yakin ingin menghapus materi ini?')">
-                                                           <i class="fas fa-trash-alt"></i> Hapus
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php endforeach; ?>
-                    </div>
-                    <hr>
+<?php if (!empty($forums)): ?>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr class="text-center bg-light">
+                    <th>No</th>
+                    <th>Guru</th>
+                    <th>Mapel</th>
+                    <th>Kelas</th>
+                    <th>Pertemuan Ke</th>
+                    <th>Deskripsi Materi</th>
+                    <th>Total Komentar</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $no=1; foreach ($forums as $f): ?>
+                <tr>
+                    <td class="text-center"><?= $no++ ?></td>
+                    <td><?= $f->nama_guru ?></td>
+                    <td><?= $f->nama_mapel ?></td>
+                    <td><?= $f->nama_kelas ?></td>
+                    <td class="text-center"><?= $f->pertemuan_ke ?></td>
+                    <td><?= $f->deskripsi ?></td>
+                    <td class="text-center"><?= $f->total_komentar ?></td>
+                    <td class="text-center">
+                        <a href="<?= base_url('admin/delete_forum/'.$f->id_pertemuan) ?>"
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Yakin ingin menghapus semua komentar di pertemuan ini?')">
+                            <i class="fas fa-trash"></i> Hapus Forum
+                        </a>
+                    </td>
+                </tr>
                 <?php endforeach; ?>
-            <?php else: ?>
-                <p class="text-muted">Belum ada materi yang dijadwalkan.</p>
-            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+<?php else: ?>
+    <p class="text-muted">Belum ada pertemuan yang memiliki forum diskusi.</p>
+<?php endif; ?>
+
         </div>
     </section>
 </div>
