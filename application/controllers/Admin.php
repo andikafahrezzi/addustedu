@@ -1103,6 +1103,19 @@ public function data_quiz()
         $this->load->view('admin/detail_ujian', $data);
         $this->load->view('admin/partials/foota');
     }
+    public function delete_ujian($id_ujian)
+{
+    $this->load->model('Ujian_model');
+
+    if ($this->Ujian_model->hapus_ujian($id_ujian)) {
+        $this->session->set_flashdata('success', '✅ Ujian beserta soal & jawaban siswa berhasil dihapus.');
+    } else {
+        $this->session->set_flashdata('error', '❌ Gagal menghapus ujian.');
+    }
+
+    redirect('admin/data_ujian');
+}
+
     public function data_pertemuan()
 {
     $data['pertemuan_grouped'] = $this->M_materi->get_pertemuan_grouped();
