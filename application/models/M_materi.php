@@ -235,31 +235,37 @@ public function get_materi_terjadwal_grouped()
     $this->db->where($where);
     return $this->db->get();
 }
-    public function get_pertemuan_grouped()
+public function get_pertemuan_grouped()
 {
-    $this->db->select('pertemuan.*,pertemuan.id AS id_pertemuan, guru.nama_guru, guru.nip, mata_pelajaran.nama_mapel, materi.deskripsi, kelas.nama_kelas, kelas.tingkat');
+    $this->db->select('pertemuan.*, pertemuan.id AS id_pertemuan, 
+                       guru.nama_guru, guru.nip, 
+                       mata_pelajaran.nama_mapel, 
+                       materi.deskripsi, 
+                       kelas.nama_kelas, kelas.tingkat');
     $this->db->from('pertemuan');
     $this->db->join('materi', 'materi.id = pertemuan.id_materi');
     $this->db->join('guru', 'guru.nip = materi.id_guru');
     $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
     $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
 
-    // Ubah urutan sorting sesuai keinginan
+    // Urutan
     $this->db->order_by('guru.nama_guru', 'ASC');
+    $this->db->order_by('mata_pelajaran.nama_mapel', 'ASC');
     $this->db->order_by('kelas.tingkat', 'ASC');
     $this->db->order_by('kelas.nama_kelas', 'ASC');
     $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
 
     $query = $this->db->get()->result();
 
-    // Kelompokkan data: guru → tingkat → kelas → pertemuan
+    // Kelompokkan data: guru → mapel → tingkat → kelas → pertemuan
     $result = [];
     foreach ($query as $row) {
-        $result[$row->nama_guru][$row->tingkat][$row->nama_kelas][] = $row;
+        $result[$row->nama_guru][$row->nama_mapel][$row->tingkat][$row->nama_kelas][] = $row;
     }
 
     return $result;
 }
+
 
     public function update_matery($id, $data)
 {
