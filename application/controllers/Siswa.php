@@ -415,7 +415,7 @@ public function tambah_komentar() {
             'UNION', '1=1', 'OR 1=1', ';--', '/*', '*/', 'EXEC', 'EXECUTE', 'SHUTDOWN', 'XP_',
             
             // Kata spam umum
-            'klik disini'
+            'klik disini', 'ngentot', 'kontol' ,'memek' ,'pler', 'peler', 'plerr'
         ];
 
         // Deteksi kata spam
@@ -541,7 +541,7 @@ if (!$this->Forum_model->can_edit_comment($comment_id, $user_type, $user_id)) {
             'UNION', '1=1', 'OR 1=1', ';--', '/*', '*/', 'EXEC', 'EXECUTE', 'SHUTDOWN', 'XP_',
             
             // Kata spam umum
-            'klik disini'
+            'klik disini', 'ngentot', 'kontol' ,'memek' ,'pler', 'peler', 'plerr'
         ];
 
         // Deteksi kata spam

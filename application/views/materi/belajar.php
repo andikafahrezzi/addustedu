@@ -102,10 +102,10 @@
                     <span class="lnr lnr lnr-link"></span>
                 </div>
                 <div class="resource-content">
-                    <h4>Tugas</h4>
+                    <h4>Link Tugas</h4>
                     <?php if (!empty($materi->linkform)): ?>
                         <a href="<?= htmlspecialchars($materi->linkform) ?>" target="_blank">
-                            <span class="lnr lnr-exit"></span> Buka Google Form
+                            <span class="lnr lnr-exit"></span> Buka Link
                         </a>
                     <?php else: ?>
                         <span class="resource-unavailable">Tidak tersedia</span>
