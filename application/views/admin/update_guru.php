@@ -24,69 +24,61 @@
                                 dibawah </p>
                             <hr>
                         </div>
-                        <?php foreach ($user as $u) { ?>
-                            <div class="card-body">
-                                <form method="POST" action="<?= base_url('admin/guru_edit') ?>">
-                                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
-                                value="<?= $this->security->get_csrf_hash(); ?>" />
-
-                                    <div class="form-group">
-                                        <label for="nip">Nomor Induk Pegawai</label>
-                                        <input readonly id="nip" type="text" class="form-control" value="<?= $u->nip ?>" name="nip">
-                                        <?= form_error('nip', '<small class="text-danger">', '</small>'); ?>
-                                        <div class="invalid-feedback">
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="email">Email</label>
-                                        <input id="email" type="email" value="<?= $u->email ?>" class="form-control" name="email">
-                                        <?= form_error('email', '<small class="text-danger">', '</small>'); ?>
-                                        <div class="invalid-feedback">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group" id="detail">
-                                        <label for="nama">Nama Lengkap</label>
-                                        <input id="nama" type="text" value="<?= $u->nama_guru ?>" class="form-control" name="nama">
-                                        <?= form_error('nama', '<small class="text-danger">', '</small>'); ?>
-                                        <div class="invalid-feedback">
-                                        </div>
-                                    </div>
-                                    <div class="form-group" id="detail">
-                                    <label for="exampleInputEmail1" class="font-weight-bold" style="font-size: 20px;">Password Baru</label>
-                                    <input type="password" name="nPassword" class="form-control" placeholder="Password Baru">
-                                    <label for="exampleInputEmail1" class="font-weight-bold" style="font-size: 20px;">Re-type Password Baru</label>
-                                    <input type="password" name="nRPassword" class="form-control" placeholder="Ulangi Password Baru">
-                                        <?= form_error('nama', '<small class="text-danger">', '</small>'); ?>
-                                        <div class="invalid-feedback">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Mata Pelajaran yang Diajar</label><br>
-                                        <?php foreach ($mapel as $m): ?>
-                                            <?php 
-                                                $isChecked = in_array($m->id, $mapel_selected) ? 'checked' : ''; 
-                                            ?>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" name="mapel[]" id="mapel<?= $m->id ?>" value="<?= $m->id ?>" <?= $isChecked ?>>
-                                                <label class="form-check-label" for="mapel<?= $m->id ?>"><?= $m->nama_mapel ?></label>
-                                            </div>
-                                        <?php endforeach; ?>
-                                        <?= form_error('mapel[]', '<small class="text-danger">', '</small>'); ?>
-                                    </div>
-
-
-
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-success btn-lg btn-block">
-                                            Update data ⭢
-                                        </button>
-                                    </div>
-                                </form>
-                            <?php } ?>
+                        <?php if ($this->session->flashdata('error-edit')): ?>
+                            <div class="alert alert-danger">
+                                <?= $this->session->flashdata('error-edit'); ?>
                             </div>
+                        <?php endif; ?>
+
+                        <?php if ($this->session->flashdata('success-edit')): ?>
+                            <div class="alert alert-success">
+                                <?= $this->session->flashdata('success-edit'); ?>
+                            </div>
+                        <?php endif; ?>
+                        <form method="POST" action="<?= base_url('admin/guru_edit') ?>">
+                        <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                            value="<?= $this->security->get_csrf_hash(); ?>" />
+
+                        <div class="form-group">
+                            <label for="nip">Nomor Unik Pendidik dan Tenaga Kependidikan</label>
+                            <input readonly id="nip" type="text" class="form-control" value="<?= $user->nip ?>" name="nip">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input id="email" type="email" value="<?= $user->email ?>" class="form-control" name="email">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nama">Nama Lengkap</label>
+                            <input id="nama" type="text" value="<?= $user->nama_guru ?>" class="form-control" name="nama">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password Baru</label>
+                        <input type="password" name="nPassword" class="form-control" placeholder="Password Baru">
+                            <label>Re-type Password Baru</label>
+                        <input type="password" name="nRPassword" class="form-control" placeholder="Ulangi Password Baru">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Mata Pelajaran yang Diajar</label><br>
+                            <?php foreach ($mapel as $m): ?>
+                                <?php $isChecked = in_array($m->id, $mapel_selected) ? 'checked' : ''; ?>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="mapel[]" id="mapel<?= $m->id ?>" 
+                                        value="<?= $m->id ?>" <?= $isChecked ?>>
+                                    <label class="form-check-label" for="mapel<?= $m->id ?>"><?= $m->nama_mapel ?></label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success btn-lg btn-block">
+                                Update data ⭢
+                            </button>
+                        </div>
+                    </form>
                     </div>
                 </section>
             </div>

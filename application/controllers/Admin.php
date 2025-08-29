@@ -252,10 +252,20 @@ public function delete_siswa($id)
 
 public function update_guru($nip)
 {
+    if (!$this->session->userdata('logged_in') || $this->session->userdata('user_type') != 'admin') {
+        redirect('welcome');
+    }
+
     $this->load->model('m_guru');
 
-    $where = ['nip' => $nip];
-    $data['user'] = $this->m_guru->update_guru($where, 'guru')->result();
+    $guru = $this->m_guru->get_guru_by_nip($nip);
+    if (!$guru) {
+        $this->session->set_flashdata('error', 'Data guru tidak ditemukan');
+        redirect('admin/data_guru');
+    }
+    $data['user'] = $guru;
+
+    $data['user'] = $guru;
 
     // Ambil semua mapel
     $data['mapel'] = $this->db->get('mata_pelajaran')->result();
@@ -267,7 +277,6 @@ public function update_guru($nip)
         ->get()
         ->result();
 
-    // Ubah jadi array id_mapel
     $data['mapel_selected'] = array_map(function($row) {
         return $row->id_mapel;
     }, $mapel_selected);
@@ -277,50 +286,73 @@ public function update_guru($nip)
     $this->load->view('admin/partials/foota');
 }
 
-
-
-    public function guru_edit()
+public function guru_edit()
 {
-    $this->load->model('m_guru');
+    if (!$this->session->userdata('logged_in') || $this->session->userdata('user_type') != 'admin') {
+        redirect('welcome');
+    }
+
+    $this->load->model('M_guru');
+    $this->load->library('form_validation');
+
+    // Validasi
+    $this->form_validation->set_rules('nip', 'NIP', 'required|numeric');
+    $this->form_validation->set_rules('nama', 'Nama Guru', 'required|min_length[3]|max_length[100]');
+    $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+    $this->form_validation->set_rules('nPassword', 'Password Baru', 'min_length[6]');
+    $this->form_validation->set_rules('nRPassword', 'Ulangi Password', 'matches[nPassword]');
+
+    if ($this->form_validation->run() == FALSE) {
+        $this->session->set_flashdata('error-edit', validation_errors());
+        redirect('admin/update_guru/'.$this->input->post('nip')); 
+        return;
+    }
 
     $nip = $this->input->post('nip');
     $nama = $this->input->post('nama');
     $email = $this->input->post('email');
     $new_password = $this->input->post('nPassword');
     $repeat_password = $this->input->post('nRPassword');
-    $mapel = $this->input->post('mapel'); // ambil array mapel dari form
+    $mapel = $this->input->post('mapel'); // <-- array dari checkbox
 
-    // Validasi dasar (jika mau kamu bisa pakai form_validation juga)
-    if (!$nip || !$nama || !$email) {
-        $this->session->set_flashdata('error-edit', 'Data tidak lengkap.');
+    // Validasi guru
+    $guru_exists = $this->M_guru->get_guru_by_nip($nip);
+    if (!$guru_exists) {
+        $this->session->set_flashdata('error-edit', 'Data guru tidak ditemukan');
         redirect('admin/data_guru');
         return;
     }
 
+    // Data update
     $data = [
-        'nip' => $nip,
-        'nama_guru' => $nama,
-        'email' => $email,
+        'nama_guru' => htmlspecialchars($nama, ENT_QUOTES, 'UTF-8'),
+        'email'     => htmlspecialchars($email, ENT_QUOTES, 'UTF-8'),
     ];
 
-    if (!empty($new_password) && $new_password === $repeat_password) {
+    // Kalau ada password baru
+    if (!empty($new_password)) {
+        if ($new_password !== $repeat_password) {
+            $this->session->set_flashdata('error-edit', 'Password dan ulangi password tidak sama');
+            redirect('admin/update_guru/'.$nip); // ✅ balik ke form update guru
+            return;
+        }
         $data['password'] = password_hash($new_password, PASSWORD_DEFAULT);
     }
 
     $where = ['nip' => $nip];
 
-    // Update data guru di tabel guru
-    $this->m_guru->update_data($where, $data, 'guru');
+    // Update data guru
+    $this->M_guru->update_data($where, $data, 'guru');
 
-    // Sinkronisasi mapel di tabel guru_mapel
+    // Sinkronisasi mapel
     $this->db->where('id_guru', $nip);
-    $this->db->delete('guru_mapel'); // hapus data mapel lama
+    $this->db->delete('guru_mapel');
 
     if (!empty($mapel)) {
         foreach ($mapel as $id_mapel) {
             $this->db->insert('guru_mapel', [
-                'id_guru' => $nip,
-                'id_mapel' => $id_mapel
+                'id_guru'  => $nip,
+                'id_mapel' => (int)$id_mapel
             ]);
         }
     }

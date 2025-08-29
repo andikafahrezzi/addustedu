@@ -29,6 +29,11 @@ public function detail_guru($nip = null)
         $this->db->where($where);
         $this->db->delete($table);
     }
+    // Di file application/models/M_guru.php
+public function get_guru_by_nip($nip) {
+    return $this->db->get_where('guru', ['nip' => $nip])->row(); 
+    // pakai row() biar 1 objek, bukan array
+}
 
     public function update_guru($where, $table)
     {
