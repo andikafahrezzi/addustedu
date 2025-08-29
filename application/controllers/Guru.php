@@ -1608,21 +1608,34 @@ public function edit_bank_soal($id_soal)
 
 
     
-    public function hapus_bank_soal($id_soal) {
-        // Cek kepemilikan soal
-        $soal = $this->Bank_soal_model->get_detail_soal($id_soal);
-        
-        if (!$soal || 
-            $soal->created_by != $this->guru_data->nip || 
-            $soal->user_type != 'guru' ||
-            $soal->id_mapel != $this->guru_data->id_mapel) {
-            show_error('Anda tidak memiliki akses untuk menghapus soal ini', 403);
-        }
-        
-        $this->Bank_soal_model->hapus_soal($id_soal);
-        $this->session->set_flashdata('success', 'Soal berhasil dihapus');
-        redirect('guru/bank_soal');
+  public function hapus_bank_soal($id_soal)
+{
+    $nip = $this->session->userdata('nip');
+
+    // Ambil detail soal
+    $soal = $this->Bank_soal_model->get_detail_soals($id_soal);
+
+    // Ambil daftar mapel yang diajarkan guru ini
+    $mapel_diajarkan = $this->Bank_soal_model->get_mapel_by_nip($nip);
+    $id_mapel_guru   = array_column($mapel_diajarkan, 'id');
+
+    // Validasi kepemilikan soal
+    if (
+        !$soal ||
+        $soal->created_by != $nip ||
+        strtolower($soal->user_type) != 'guru' ||
+        !in_array($soal->id_mapel, $id_mapel_guru)
+    ) {
+        show_error('Anda tidak memiliki akses untuk menghapus soal ini', 403);
     }
+
+    // Jika valid, hapus
+    $this->Bank_soal_model->hapus_soals($id_soal);
+    $this->session->set_flashdata('success', 'Soal berhasil dihapus');
+    redirect('guru/bank_soal');
+}
+
+
 
     public function buat_ujian() {
         // Ambil mapel yang diajarkan guru

@@ -88,6 +88,21 @@ public function get_mapel_by_nip($nip)
     return $this->db->get()->result();
 }
 
+
+public function get_detail_soals($id_soal)
+{
+    return $this->db->where('id_soal', $id_soal)
+                    ->get('bank_soal')
+                    ->row();
+}
+
+public function hapus_soals($id_soal)
+{
+    return $this->db->where('id_soal', $id_soal)
+                    ->delete('bank_soal');
+}
+
+
     public function get_mapel_ids_by_guru($nip) {
     $this->db->select('id_mapel');
     $this->db->from('guru');
