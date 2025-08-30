@@ -44,22 +44,22 @@
                         </div>
                     </div>
                 </div>
-        <div class="form-group">
-            <label for="materi_id">Mata Pelajaran</label>
-            <select name="id_pertemuan" class="form-control" required>
-                <option value="">Pilih Materi</option>
-                <?php foreach ($materi_list as $materi): ?>
-                    <option value="<?= $materi->id_pertemuan ?>"
-                        <?= $materi->id_pertemuan == $ujian->id_pertemuan ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($materi->nama_mapel) ?>
-                        - <?= htmlspecialchars($materi->tingkat . ' ' . $materi->nama_kelas) ?>
-                        - <?= htmlspecialchars($materi->deskripsi) ?>
-                        (Pertemuan <?= $materi->pertemuan_ke ?>)
-                    </option>
-                <?php endforeach; ?>
-
-            </select>
-        </div>
+                <div class="form-group">
+                    <label for="materi_id">Mata Pelajaran</label>
+                    <input type="text" class="form-control" 
+                        value="<?php 
+                            foreach ($materi_list as $materi) {
+                                if ($materi->id_pertemuan == $ujian->id_pertemuan) {
+                                    echo htmlspecialchars($materi->nama_mapel) . ' - ' .
+                                            htmlspecialchars($materi->tingkat . ' ' . $materi->nama_kelas) . ' - ' .
+                                            htmlspecialchars($materi->deskripsi) . 
+                                            ' (Pertemuan ' . $materi->pertemuan_ke . ')';
+                                }
+                            } 
+                        ?>" 
+                        readonly>
+                    <input type="hidden" name="id_pertemuan" value="<?= $ujian->id_pertemuan ?>">
+                </div>
         <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
     </form>
 </div>
