@@ -1158,6 +1158,30 @@ public function data_quiz()
 
     redirect('admin/data_ujian');
 }
+public function data_peserta($id_ujian)
+{
+    $this->load->model('Ujian_model');
+    $data['peserta']  = $this->Ujian_model->get_peserta_ujians($id_ujian);
+    $data['id_ujian'] = $id_ujian;
+    $this->load->view('admin/partials/nava');
+    $this->load->view('admin/data_peserta', $data);
+    $this->load->view('admin/partials/foota');
+}
+
+public function hapus_jawaban_siswa($id_ujian, $nis)
+{
+    $this->load->model('Ujian_model');
+    $hapus = $this->Ujian_model->hapus_jawaban_siswa($id_ujian, $nis);
+
+    if ($hapus) {
+        $this->session->set_flashdata('success', 'Jawaban siswa berhasil dihapus.');
+    } else {
+        $this->session->set_flashdata('error', 'Gagal menghapus jawaban siswa.');
+    }
+
+    redirect('admin/data_peserta/'.$id_ujian);
+}
+
 
     public function data_pertemuan()
 {

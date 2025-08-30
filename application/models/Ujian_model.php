@@ -578,5 +578,23 @@ public function update_nilai_akhir($id_jawaban)
     $this->db->where('nis', $nis);
     $this->db->update('tbl_jawaban_siswa', ['nilai_akhir' => $total_nilai]);
 }
+ public function get_peserta_ujians($id_ujian)
+    {
+        $this->db->select('s.nis, s.nama, MAX(j.id_jawaban) as terakhir');
+        $this->db->from('tbl_jawaban_siswa j');
+        $this->db->join('siswa s', 's.nis = j.nis');
+        $this->db->where('j.id_ujian', $id_ujian);
+        $this->db->group_by('s.nis, s.nama');
+        $this->db->order_by('s.nama', 'ASC');
+        return $this->db->get()->result();
+    }
+
+    // Hapus semua jawaban siswa untuk 1 ujian
+    public function hapus_jawaban_siswa($id_ujian, $nis)
+    {
+        $this->db->where('id_ujian', $id_ujian);
+        $this->db->where('nis', $nis);
+        return $this->db->delete('tbl_jawaban_siswa');
+    }
 
 }

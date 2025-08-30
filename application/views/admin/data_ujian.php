@@ -56,8 +56,8 @@
                                                     </td>
 
                                                     <td class="text-center">
+                                                        <a href="<?php echo site_url('admin/data_peserta/' . $u->id_ujian); ?>" class="btn btn-success">Peserta Ujian ⭢</a>
                                                         <a href="<?php echo site_url('admin/detail_ujian/' . $u->id_ujian); ?>" class="btn btn-success">Detail ⭢</a>
-
                                                         <button onclick="confirmDeleteQuiz('<?= $u->id_ujian; ?>')" class="btn btn-sm btn-danger" title="Hapus">
                                                                                         <i class="fas fa-trash"></i>
                                                                                     </button>

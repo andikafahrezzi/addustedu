@@ -29,7 +29,7 @@
                             <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
                             value="<?= $this->security->get_csrf_hash(); ?>" />
                                 <div id="" class="form-group">
-                                    <label for="nip">Nomor Induk Pegawai</label>
+                                    <label for="nip">Nomor Unik Pendidik dan Tenaga Kependidikan</label>
                                     <input id="nip" type="text" class="form-control" name="nip">
                                     <?= form_error('nip', '<small class="text-danger">', '</small>'); ?>
                                     <div class="invalid-feedback">
