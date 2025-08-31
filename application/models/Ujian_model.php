@@ -588,6 +588,19 @@ public function update_nilai_akhir($id_jawaban)
         $this->db->order_by('s.nama', 'ASC');
         return $this->db->get()->result();
     }
+    public function get_ujian_by_ids($id_ujian)
+{
+    $this->db->select('tbl_ujian.*, guru.nama_guru, mata_pelajaran.nama_mapel, kelas.nama_kelas');
+    $this->db->from('tbl_ujian');
+    $this->db->join('guru', 'guru.nip = tbl_ujian.nip_guru');
+    $this->db->join('pertemuan', 'pertemuan.id = tbl_ujian.id_pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+    $this->db->where('tbl_ujian.id_ujian', $id_ujian);
+    return $this->db->get()->row(); // row karena hanya satu
+}
+
 
     // Hapus semua jawaban siswa untuk 1 ujian
     public function hapus_jawaban_siswa($id_ujian, $nis)

@@ -1162,6 +1162,7 @@ public function data_peserta($id_ujian)
 {
     $this->load->model('Ujian_model');
     $data['peserta']  = $this->Ujian_model->get_peserta_ujians($id_ujian);
+    $data['ujian'] = $this->Ujian_model->get_ujian_by_ids($id_ujian);
     $data['id_ujian'] = $id_ujian;
     $this->load->view('admin/partials/nava');
     $this->load->view('admin/data_peserta', $data);

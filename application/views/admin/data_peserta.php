@@ -3,7 +3,7 @@
     <section class="section">
         <div class="card" style="width:100%;">
             <div class="card-body">
-                <h2 class="card-title" style="color: black;">Daftar Peserta Ujian ID: <?= $id_ujian ?></h2>
+                <h2 class="card-title" style="color: black;">Daftar Peserta Ujian: <?= $ujian->nama_ujian ?></h2>
                 <hr>
                 <p class="card-text">Berikut adalah daftar siswa yang telah mengerjakan ujian. 
                    Admin dapat menghapus jawaban siswa tertentu agar siswa dapat mengulang kembali ujian.</p>
