@@ -149,7 +149,7 @@ class Import extends CI_Controller {
                 'email'        => $row[3],
                 'image'        => $row[4],
                 'is_active'    => $row[5],
-                'date_created' => date('Y-m-d H:i:s'),
+                'date_created' => date('Y-m-d'),
                 'id_kelas'     => $row[6],
                 'user_type'    => $row[7],
             ];
