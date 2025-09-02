@@ -145,52 +145,109 @@ class Admin extends CI_Controller
     }
     
 
-    public function user_edit()
+public function user_edit()
 {
     $this->load->model('m_siswa');
+    $nis_lama = $this->input->post('nis_lama'); // untuk where
+    $nis_baru = $this->input->post('nis');     // untuk data update
 
-    $nis = $this->input->post('nis');
-    $nama = $this->input->post('nama');
-    $email = $this->input->post('email');
-    $gambar = $_FILES['image']['name'];
+    // Form validation
+    $this->form_validation->set_rules(
+        'nama',
+        'Nama',
+        'required|trim|min_length[4]|callback_valid_nama',
+        [
+            'required' => 'Harap isi kolom Nama.',
+            'min_length' => 'Nama terlalu pendek.',
+        ]
+    );
 
-    // Ambil data password baru
+    $this->form_validation->set_rules(
+        'nPassword',
+        'Password Baru',
+        'trim|min_length[8]|matches[nRPassword]',
+        [
+            'matches' => 'Password baru dan konfirmasi tidak sama!',
+            'min_length' => 'Password terlalu pendek',
+        ]
+    );
+
+    $this->form_validation->set_rules(
+        'nRPassword',
+        'Konfirmasi Password',
+        'trim|matches[nPassword]',
+        [
+            'matches' => 'Password baru dan konfirmasi tidak sama!',
+        ]
+    );
+
+    if ($this->form_validation->run() == false) {
+        $data['user'] = $this->db->get_where('siswa', ['nis' => $nis_lama])->result();
+        $data['errors'] = validation_errors();
+        $this->load->view('admin/partials/nava');
+        $this->load->view('admin/update_siswa', $data);
+        $this->load->view('admin/partials/foota');
+        return;
+    }
+
+    // Ambil input
+    $nama  = htmlspecialchars($this->input->post('nama', true));
+    $email = htmlspecialchars($this->input->post('email', true));
     $new_password = $this->input->post('nPassword');
     $repeat_password = $this->input->post('nRPassword');
+    $gambar = $_FILES['image']['name'];
 
-    $nis_lama = $this->input->post('nis_lama'); // untuk where
-    $nis_baru = $this->input->post('nis'); // untuk data update
-    $where = array('nis' => $nis_lama);
+    $where = ['nis' => $nis_lama];
 
-$data = array(
-    'nis' => $nis_baru,
-    'nama' => $nama,
-    'email' => $email,
-);
+    // Data untuk update
+    $data = [
+        'nis'   => $nis_baru,
+        'nama'  => $nama,
+        'email' => $email,
+    ];
 
     // Update password jika diisi dan cocok
     if (!empty($new_password) && $new_password === $repeat_password) {
         $data['password'] = password_hash($new_password, PASSWORD_DEFAULT);
     }
 
-    // Proses upload foto
-    $config['allowed_types'] = 'jpg|png|gif|jfif';
-    $config['max_size'] = '4096';
-    $config['upload_path'] = './assets/profile_picture';
+    // Upload foto jika ada
+    if (!empty($gambar)) {
+        $config['upload_path']   = './assets/profile_picture';
+        $config['allowed_types'] = 'jpg|png|gif|jfif';
+        $config['max_size']      = 4096;
 
-    $this->load->library('upload', $config);
-    if ($this->upload->do_upload('image')) {
-        $gambarBaru = $this->upload->data('file_name');
-        $data['image'] = $gambarBaru;
+        $this->load->library('upload', $config);
+
+        if ($this->upload->do_upload('image')) {
+            $gambarBaru = $this->upload->data('file_name');
+            $data['image'] = $gambarBaru;
+        } else {
+            $data['upload_error'] = $this->upload->display_errors();
+            $data['user'] = $this->db->get_where('siswa', ['nis' => $nis_lama])->result();
+            $this->load->view('admin/partials/nava');
+            $this->load->view('admin/user_edit', $data);
+            $this->load->view('admin/partials/foota');
+            return;
+        }
     }
 
     $this->m_siswa->update_data($where, $data, 'siswa');
-
-    $this->load->view('admin/partials/nava');
     $this->session->set_flashdata('success-edit', 'Berhasil memperbarui data siswa');
     redirect('admin/data_siswa');
 }
 
+/**
+ * Callback validasi nama (hanya huruf dan spasi)
+ */
+public function valid_nama($str)
+{
+    if (!preg_match("/^[a-zA-Z\s]+$/", $str)) {
+        $this->form_validation->set_message('valid_nama', 'Nama hanya boleh berisi huruf dan spasi.');
+        return false;
+    }
+    return true;
+}
 
 public function delete_siswa($id)
 {
@@ -297,11 +354,18 @@ public function guru_edit()
 
     // Validasi
     $this->form_validation->set_rules('nip', 'NIP', 'required|numeric');
-    $this->form_validation->set_rules('nama', 'Nama Guru', 'required|min_length[3]|max_length[100]');
     $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
     $this->form_validation->set_rules('nPassword', 'Password Baru', 'min_length[6]');
     $this->form_validation->set_rules('nRPassword', 'Ulangi Password', 'matches[nPassword]');
-
+    $this->form_validation->set_rules(
+    'nama',
+    'Nama Guru',
+    'required|trim|min_length[4]|callback_valid_nama',
+    [
+        'required' => 'Harap isi kolom Nama.',
+        'min_length' => 'Nama terlalu pendek.',
+    ]
+    );
     if ($this->form_validation->run() == FALSE) {
         $this->session->set_flashdata('error-edit', validation_errors());
         redirect('admin/update_guru/'.$this->input->post('nip')); 
@@ -549,6 +613,12 @@ public function delete_guru($nip)
     $this->form_validation->set_rules('nip', 'Nip', 'required|trim|min_length[4]', [
         'required' => 'Harap isi kolom NIP.',
         'min_length' => 'NIP terlalu pendek.',
+    ]);
+    
+    $this->form_validation->set_rules('nip', 'NIP', 'required|trim|min_length[4]|is_unique[guru.nip]', [
+    'required' => 'Harap isi kolom NIP.',
+    'min_length' => 'NIP terlalu pendek.',
+    'is_unique' => 'NIP ini sudah terdaftar!'
     ]);
 
     $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[guru.email]', [

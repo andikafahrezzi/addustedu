@@ -17,9 +17,9 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>Admin Dashboard - addustedu</title>
+    <title>Admin Dashboard - ctkarya</title>
     <!-- General CSS Files -->
-    <link rel="icon" href="<?= base_url('assets/') ?>img/logoh.png" type="image/png">
+    <link rel="icon" href="<?= base_url('assets/') ?>img/logow.jpeg" type="image/jpeg">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Poppins:500,600,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -56,7 +56,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                                                                                 ?></div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <div class="dropdown-title">Admin - addustedu</div>
+                            <div class="dropdown-title">Admin - ctkarya</div>
                             <a href="<?= base_url('welcome/logout') ?>" class="dropdown-item has-icon text-danger">
                                 <i class="fas fa-sign-out-alt"></i> Logout
                             </a>
@@ -69,11 +69,11 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                     <div class="sidebar-brand text-danger">
                         <div>
                             <a href="<?= base_url('admin') ?>" style="font-size: 30px;font-weight:900;font-family: 'Poppins', sans-serif;" class="text-success text-center"><i style="font-size: 30px;" class="fas fa-graduation-cap"></i> |
-                                Addustedu <sup>3</sup></a>
+                                ctkarya <sup>3</sup></a>
                         </div>
                     </div>
                     <div class="sidebar-brand sidebar-brand-sm">
-                        <a href="<?= base_url('admin') ?>">AE <sup>3</sup></a>
+                        <a href="<?= base_url('admin') ?>">CTK <sup>3</sup></a>
                     </div>
                     <ul class="sidebar-menu">
                         <li class="menu-header ">Dashboard</li>

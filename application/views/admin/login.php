@@ -18,8 +18,8 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
 
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>addustedu - Admin Login</title>
-    <link rel="icon" href="<?=base_url('assets/')?>img/logoh.png" type="image/png">
+    <title>ctkkarya - Admin Login</title>
+    <link rel="icon" href="<?=base_url('assets/')?>img/logow.jpeg" type="image/jpeg">
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -44,10 +44,10 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
             <div class="d-flex flex-wrap align-items-stretch">
                 <div class="col-lg-4 col-md-6 col-12 order-lg-1 min-vh-100 order-2 bg-white">
                     <div class="p-4 m-3">
-                        <a href="<?=base_url('welcome')?>"> <img src="<?=base_url('assets/')?>/img/logou.png" alt="logo"
+                        <a href="<?=base_url('welcome')?>"> <img src="<?=base_url('assets/')?>/img/logot.png" alt="logo"
                                 width="150" class=" mb-5 mt-2"></a>
                         <h4 class="text-dark font-weight-normal">Selamat datang di <span
-                                class="font-weight-bold">addustedu</span>
+                                class="font-weight-bold">ctkarya</span>
                         </h4>
                         <p class="text-muted">Sebelum masuk ke halaman admin, anda harus login terlebih dahulu sebagai
                             admin. silahkan isi data dibawah untuk melanjutkan.</p>

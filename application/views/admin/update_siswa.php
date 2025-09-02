@@ -13,7 +13,17 @@
                                     ingin melanjutkan ⭢</a>
                             </div>
                         </div>
+                    </div>                    <?php if(isset($errors) && $errors != ''): ?>
+                    <div class="alert alert-danger">
+                        <?= $errors; ?>
                     </div>
+                    <?php endif; ?>
+
+                    <?php if(isset($upload_error) && $upload_error != ''): ?>
+                        <div class="alert alert-danger">
+                            <?= $upload_error; ?>
+                        </div>
+                    <?php endif; ?>
                     <form action="<?= base_url('admin/user_edit') ?>" enctype="multipart/form-data" method="post">
                     <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
                     value="<?= $this->security->get_csrf_hash(); ?>" />
