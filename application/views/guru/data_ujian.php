@@ -68,7 +68,7 @@
         </button>
       </div>
       <div class="modal-body">
-        Apakah Anda yakin ingin menghapus quiz ini?
+        Apakah Anda yakin ingin menghapus quiz ini? <br> <span class="text-danger">aksi ini tidak bisa dibackup</span>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -79,7 +79,7 @@
 </div>
 
 <script>
-    function confirmDeleteQuiz(id) {
+    function confirmDeleteUjian(id) {
         $('#deleteUjianLink').attr('href', '<?= site_url('guru/hapus_ujian/' . $u['id_ujian']) ?>');
         $('#deleteUjianModal').modal('show');
     }
