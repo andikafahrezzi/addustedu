@@ -444,24 +444,27 @@ public function update_materi($id)
     $video_embed = '';
 
     if (!empty($video_input)) {
-        // Step 1: Validate URL
-        if (!$this->_validate_video_url($video_input)) {
-            $this->session->set_flashdata('error', 'URL video tidak valid. Hanya YouTube/Vimeo/Google Drive yang didukung');
-            redirect('guru/update_materi/' . $id);
-            return;
-        }
 
-        // Step 2: Convert to embed URL
-        $video_embed = $this->_convert_video_to_embed($video_input);
-        if ($video_embed === false) {
-            $this->session->set_flashdata('error', 'Gagal mengkonversi URL video');
-            redirect('guru/update_materi/' . $id);
-            return;
+        // Jika sudah embed, langsung terima
+        if (preg_match('#^https?://(www\.)?(youtube\.com/embed/|player\.vimeo\.com/video/|drive\.google\.com/file/d/)#', $video_input)) {
+            $video_embed = $video_input;
+        } else {
+            // Step 1: Validate URL
+            if (!$this->_validate_video_url($video_input)) {
+                $this->session->set_flashdata('error', 'URL video tidak valid. Hanya YouTube/Vimeo/Google Drive yang didukung');
+                redirect('guru/update_materi/' . $id);
+                return;
+            }
+
+            // Step 2: Convert to embed URL
+            $video_embed = $this->_convert_video_to_embed($video_input);
+            if ($video_embed === false) {
+                $this->session->set_flashdata('error', 'Gagal mengkonversi URL video');
+                redirect('guru/update_materi/' . $id);
+                return;
+            }
         }
     }
-
-
-
 
     // ---------------- Upload Modul ----------------
     $modul = $this->input->post('modul_lama');
@@ -587,34 +590,38 @@ public function delete_materi($id)
     $this->load->model('M_materi');
     $this->load->helper('file');
 
+    // Ambil data materi
     $materi = $this->db->get_where('materi', ['id' => $id])->row();
-
     if (!$materi) {
         $this->session->set_flashdata('error', 'Data materi tidak ditemukan.');
         redirect('guru/data_materi');
         return;
     }
 
-    // Hapus file video jika ada
+    // ---------------- Cek relasi dengan pertemuan ----------------
+    $cek_pertemuan = $this->db->get_where('pertemuan', ['id_materi' => $id])->num_rows();
+    if ($cek_pertemuan > 0) {
+        $this->session->set_flashdata('error', 'Materi masih digunakan di pertemuan, tidak bisa dihapus.');
+        redirect('guru/data_materi');
+        return;
+    }
+
+    // ---------------- Hapus file ----------------
     if ($materi->video && file_exists('./assets/materi_video/' . $materi->video)) {
         unlink('./assets/materi_video/' . $materi->video);
     }
 
-    // Hapus file modul jika ada
     if ($materi->modul && file_exists('./assets/materi_modul/' . $materi->modul)) {
         unlink('./assets/materi_modul/' . $materi->modul);
     }
 
-    // 🔁 Hapus dulu data dari tabel 'pertemuan' yang mengacu ke materi ini
-    $this->db->where('id_materi', $id);
-    $this->db->delete('pertemuan');
-
-    // Baru kemudian hapus data materi
+    // ---------------- Hapus materi ----------------
     $this->M_materi->delete_data(['id' => $id], 'materi');
 
     $this->session->set_flashdata('success', 'Data materi berhasil dihapus.');
     redirect('guru/data_materi');
 }
+
 
 
 
