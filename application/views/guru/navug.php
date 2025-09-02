@@ -5,10 +5,10 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>addustedu - Teacher Page</title>
+    <title>ctkarya - Teacher Page</title>
     <meta name="description" content="Latest updates and statistic charts">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="<?= base_url('assets/') ?>img/logoh.png" type="image/png">
+    <link rel="icon" href="<?= base_url('assets/') ?>img/logow.jpeg" type="image/jpeg">
 
     <!--begin::Fonts -->
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
@@ -101,7 +101,7 @@
     <!--begin::Layout Skins(used by all pages) -->
 
     <!--end::Layout Skins -->
-    <link rel="shortcut icon" href="<?=base_url('assets')?>/img/logoh.png" />
+    <link rel="shortcut icon" href="<?=base_url('assets')?>/img/logow.jpeg" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.10.4/dist/sweetalert2.all.min.js"></script>
     <script src="<?= base_url('assets/') ?>js/jquery-3.3.1.min.js"></script>
 
@@ -120,7 +120,7 @@
     <div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
         <div class="kt-header-mobile__logo">
             <a href="<?=base_url('guru')?>">
-                <img alt="Logo" src="<?=base_url('assets')?>/img/logou.png" width="90px;" />
+                <img alt="Logo" src="<?=base_url('assets')?>/img/logot.png" width="90px;" />
             </a>
         </div>
        <div class="kt-header-mobile__toolbar">
@@ -146,7 +146,7 @@
                 <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
                     <div class="kt-aside__brand-logo">
                         <a href="<?=base_url('guru')?>">
-                            <img alt="Logo" width="35px;" src="<?=base_url('assets')?>/img/logou.png" id="logo-ads" />
+                            <img alt="Logo" width="35px;" src="<?=base_url('assets')?>/img/logot.png" id="logo-ads" />
                         </a>
                     </div>
                 </div>

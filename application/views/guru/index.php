@@ -77,7 +77,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                             </h1>
                                             <div class="kt-widget19__shadow"></div>
                                             <div class="kt-widget19__labels">
-                                                <a href="#" class="btn btn-label-light-o2 btn-bold btn-sm ">addustedu</a>
+                                                <a href="#" class="btn btn-label-light-o2 btn-bold btn-sm ">Cipta Tunas Karya</a>
                                             </div>
                                         </div>
                                     </div>
@@ -98,11 +98,11 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                                                 </div>
                                             </div>
                                             <div class="kt-widget19__text">
-                                                Selamat datang di halaman guru addustedu, anda dapat menambah materi .
+                                                Selamat datang di halaman guru ctkarya, anda dapat menambah materi .
                                                 Dalam materi anda dapat memasukan video, dan deskripsi nya. Seemoga anda
-                                                dapat menikmati addustedu!, kontak Administrator jika terjadi masalah
+                                                dapat menikmati ctkarya!, kontak Administrator jika terjadi masalah
                                                 apapun yang terkait upload materi. Terima kasih telah menggunakan
-                                                addustedu!
+                                                ctkarya!
                                                 <br>
                                                 Selamat Bekerja :)
                                             </div>
