@@ -485,12 +485,12 @@ public function tambah_komentar() {
             $this->email->to($detail->email_guru);
             $this->email->subject($subject);
             $this->email->message($message);
-            $this->email->send();
+            $send = $this->email->send();
 
-        if (!$this->email->send()) {
-            $this->session->set_flashdata('error', 'Komentar terkirim, tapi email gagal dikirim.');
-            log_message('error', print_r($this->email->print_debugger(), true)); // log error ke log CI
-        }
+            if (!$send) {
+                $this->session->set_flashdata('error', 'Komentar terkirim, tapi email gagal dikirim.');
+                log_message('error', print_r($this->email->print_debugger(), true)); // log error ke log CI
+            }
 
         if ($this->Forum_model->tambah_komentar($data)) {
             $this->session->set_flashdata('success', 'Komentar berhasil ditambahkan');
