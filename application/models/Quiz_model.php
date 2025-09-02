@@ -106,15 +106,15 @@ public function submit_answer($data)
 
 public function complete_quiz($quiz_siswa_id, $score)
 {
-    $this->db->where('id', $quiz_siswa_id)
-             ->update('quiz_siswa', [
-                 'end_time' => date('Y-m-d H:i:s'),
-                 'status' => 'completed',
-                 'score' => $score
-             ]);
-    $this->db->where('id', $quiz_siswa_id);
-    return $this->db->set('quiz_siswa', $data);
+    // Update quiz_siswa langsung
+    return $this->db->where('id', $quiz_siswa_id)
+                    ->update('quiz_siswa', [
+                        'end_time' => date('Y-m-d H:i:s'),
+                        'status'   => 'completed',
+                        'score'    => $score
+                    ]);
 }
+
 public function get_quiz_siswa($quiz_siswa_id)
 {
     return $this->db->get_where('quiz_siswa', ['id' => $quiz_siswa_id])->row();
