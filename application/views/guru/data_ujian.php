@@ -44,8 +44,7 @@
                                             <a href="<?= site_url('guru/daftar_nilai_essay/' . $u['id_ujian']) ?>" class="btn btn-sm btn-info mb-1">Essay</a>
                                             <a href="<?= site_url('guru/tampilkan_soal/' . $u['id_ujian']) ?>" class="btn btn-sm btn-info mb-1">Soal</a>
                                             <a href="<?= site_url('guru/edit_ujian/' . $u['id_ujian']) ?>" class="btn btn-sm btn-warning mb-1">Edit</a>
-                                            <a href="<?= site_url('guru/hapus_ujian/' . $u['id_ujian']) ?>" class="btn btn-sm btn-danger mb-1" onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
-                                        </td>
+                                            <button onclick="confirmDeleteUjian('<?= $u['id_ujian']; ?>')" class="btn btn-sm btn-danger" title="Hapus"><i class="fas fa-trash"></i></button>                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -56,3 +55,32 @@
         <?php endforeach; ?>
     <?php endforeach; ?>
 </div>
+
+
+<!-- Modal Konfirmasi Hapus Quiz -->
+<div class="modal fade" id="deleteUjianModal" tabindex="-1" role="dialog" aria-labelledby="deleteUjianModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteUjianModalLabel">Konfirmasi Hapus Ujian</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Apakah Anda yakin ingin menghapus quiz ini?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <a id="deleteUjianLink" href="#" class="btn btn-danger">Hapus</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    function confirmDeleteQuiz(id) {
+        $('#deleteUjianLink').attr('href', '<?= site_url('guru/hapus_ujian/' . $u['id_ujian']) ?>');
+        $('#deleteUjianModal').modal('show');
+    }
+</script>
