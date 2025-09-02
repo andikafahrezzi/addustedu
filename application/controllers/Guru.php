@@ -922,17 +922,31 @@ private function tambah_soal($quiz_id)
         
         redirect($_SERVER['HTTP_REFERER']);
     }
-    public function delete_quiz($id)
-    {
-        $this->load->model('Quiz_model');
-        
-        // Pastikan $id adalah integer, bukan array
-        $id = (int) $id;
-    
-        $this->Quiz_model->delete_quiz($id);
-        $this->session->set_flashdata('success', 'Quiz berhasil dihapus.');
-        redirect('guru/data_quiz'); // sesuaikan dengan route kamu
+public function delete_quiz($id)
+{
+    $this->load->model('Quiz_model');
+
+    $id = (int) $id;
+
+    // ---------------- Cek jumlah jawaban siswa (lebih efisien) ----------------
+    $this->db->where('quiz_siswa_id', $id);
+    $jumlah_jawaban = $this->db->count_all_results('jawaban_siswa');
+
+    if ($jumlah_jawaban > 0) {
+        $this->session->set_flashdata(
+            'error',
+            "Quiz tidak bisa dihapus. Saat ini sudah ada $jumlah_jawaban siswa yang menjawab."
+        );
+        redirect('guru/data_quiz');
+        return;
     }
+
+    // ---------------- Hapus quiz jika aman ----------------
+    $this->Quiz_model->delete_quiz($id);
+    $this->session->set_flashdata('success', 'Quiz berhasil dihapus.');
+    redirect('guru/data_quiz');
+}
+
     
 
     public function data_pesertaquiz($quiz_id) {
