@@ -6,7 +6,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="<?= base_url('assets/') ?>img/logoh.png" type="image/png">
+    <link rel="icon" href="<?= base_url('assets/') ?>img/logow.jpeg" type="image/jpeg">
     <!-- Title -->
     <title>Selamat datang - <?php
                             $data['user'] = $this->db->get_where('siswa', ['nis' =>
@@ -53,7 +53,7 @@
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container">
                     <!-- Brand and toggle get grouped for better mobile display -->
-                    <a class="navbar-brand logo_h" href="<?= base_url('user') ?>"><img src="<?= base_url('assets/') ?>img/logou.png" alt="logo" id="logo-ads"></a>
+                    <a class="navbar-brand logo_h" href="<?= base_url('user') ?>"><img src="<?= base_url('assets/') ?>img/logot.png" alt="logo" id="logo-ads"></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>

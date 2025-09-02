@@ -3,10 +3,10 @@
         <div class="row" style="color: black; font-family: 'poppins';">
             <div class="col-md-12 mt-1">
                 <h1 class="display-4" data-aos="fade-down" data-aos-duration="1400">
-                    Selamat Datang di addustedu <span style="font-size: 40px;">👋🏻</span>
+                    Selamat Datang di Cipta Tunas Karya<span style="font-size: 40px;">👋🏻</span>
                 </h1>
                 <p>Hello <?= $user['nama'] ?>, Ini merupakan halaman utama addustedu! Silahkan pilih kelas dan pelajari materi yang tersedia.</p>
-                <h6 data-aos="fade-down" data-aos-duration="1800"><i class="fas fa fa-trophy"></i> Kelas <?= $user['nama_kelas'] ?> - addustedu Students</h6>
+                <h6 data-aos="fade-down" data-aos-duration="1800"><i class="fas fa fa-trophy"></i> Kelas <?= $user['nama_kelas'] ?> - Cipta Tunas Karya Students</h6>
             </div>
         </div>
     </div>

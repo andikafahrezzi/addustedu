@@ -5,7 +5,7 @@
                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                 Copyright &copy;<script>
                     document.write(new Date().getFullYear());
-                </script> All rights reserved <br> addustedu is develop with <span class="text-danger"> &#10084;</span> by <a href="https://github.com/Andikafahrezi">andikafahrezzi</a> with MIT License
+                </script> All rights reserved <br> develop with <span class="text-dark"> &#10084;</span> by <a href="https://github.com/Andikafahrezi">andikafahrezzi</a> with MIT License
                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
             </p>
             <div class="col-lg-4 col-md-4 footer-social">
