@@ -13,14 +13,14 @@
                 </div>
                 <div class="user-info">
                     <h3><?= $user['nama'] ?></h3>
-                    <p>addustedu Student</p>
+                    <p>Cipta Tunas Karya Student</p>
                 </div>
             </div>
             
             <h2><?= $materi->nama_mapel ?> - Kelas <?= $materi->nama_kelas ?></h2>
         </div>
         <div class="learning-hero-image">
-            <img src="<?= base_url('assets/img/logou.png') ?>" alt="Learning Illustration">
+            <img src="<?= base_url('assets/img/logot.png') ?>" alt="Learning Illustration">
         </div>
     </div>
 
