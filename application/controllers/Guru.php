@@ -461,7 +461,7 @@ public function update_materi($id)
     }
 
 
-        $this->load->library('upload', $config);
+
 
     // ---------------- Upload Modul ----------------
     $modul = $this->input->post('modul_lama');
@@ -470,6 +470,8 @@ public function update_materi($id)
         $config['allowed_types'] = 'pdf|doc|docx|jpg|jpeg|png';
         $config['max_size']      = 5120;
 
+        $this->load->library('upload', $config);
+        
         $this->upload->initialize($config);
         if ($this->upload->do_upload('modul')) {
             $modul = $this->upload->data('file_name');
@@ -1765,28 +1767,28 @@ public function tambah_komentar() {
 
         if ($this->form_validation->run()) {
             $comment_id = $this->input->post('comment_id');
-            $nip = $this->session->userdata('nip');
-            
-            // Verifikasi kepemilikan komentar
-            $comment = $this->db->get_where('forum_diskusi', [
-                'id' => $comment_id,
-                'user_id' => $nip
-            ])->row();
+            $nip        = $this->session->userdata('nip');
+
+            // Ambil komentar berdasarkan ID
+            $comment = $this->db->get_where('forum_diskusi', ['id' => $comment_id])->row();
 
             if ($comment) {
+                // Langsung edit komentar tanpa cek user_id (guru bisa edit semua)
                 $this->Forum_model->edit_komentar($comment_id, [
-                    'komentar' => $this->input->post('komentar'),
+                    'komentar'   => $this->input->post('komentar'),
                     'updated_at' => date('Y-m-d H:i:s')
                 ]);
                 $this->session->set_flashdata('success', 'Komentar berhasil diupdate');
             } else {
-                $this->session->set_flashdata('error', 'Anda tidak memiliki izin mengedit komentar ini');
+                $this->session->set_flashdata('error', 'Komentar tidak ditemukan');
             }
         } else {
             $this->session->set_flashdata('error', validation_errors());
         }
+
         redirect($_SERVER['HTTP_REFERER']);
     }
+
 
     public function hapus_komentar($comment_id) {
     $user_type = $this->session->userdata('user_type');
