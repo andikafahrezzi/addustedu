@@ -461,7 +461,7 @@ public function update_materi($id)
     }
 
 
-        $this->load->library('upload', $config);
+
 
     // ---------------- Upload Modul ----------------
     $modul = $this->input->post('modul_lama');
@@ -470,6 +470,8 @@ public function update_materi($id)
         $config['allowed_types'] = 'pdf|doc|docx|jpg|jpeg|png';
         $config['max_size']      = 5120;
 
+        $this->load->library('upload', $config);
+        
         $this->upload->initialize($config);
         if ($this->upload->do_upload('modul')) {
             $modul = $this->upload->data('file_name');
