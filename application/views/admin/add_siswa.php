@@ -48,16 +48,18 @@
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                           </div>
-                         <div class="form-check">
-                             <input class="form-check-input checkbox" type="checkbox" id="defaultCheck1" onchange="document.getElementById('btnsubmit').disabled = !this.checked;">
-                             <label class=" form-check-label" for="defaultCheck1">
-                                 Saya setuju dan ingin melanjutkan
-                             </label>
-                         </div>
-                         <p class="terms">Dengan mendaftar anda menyetujui <i>privasi dan persyaratan ketentuan
-                                 hukum kami </i>
-                             baca selengkapnya <a href="#"> disini</a></p>
+                           
+<div class="form-check" style="display: flex; align-items: center; gap: 8px; padding-left: 1rem;">
+    <input class="form-check-input checkbox" type="checkbox" id="defaultCheck1"
+        onchange="document.getElementById('btnsubmit').disabled = !this.checked;">
+    <label class="form-check-label" for="defaultCheck1" style="margin:0;">
+        Saya setuju dan ingin melanjutkan
+    </label>
+</div>
+<p class="terms" style="margin-top: 4px; font-size: 0.9rem; padding-left: 1rem;">
+    Dengan mendaftar anda menyetujui <i>privasi dan persyaratan ketentuan hukum kami</i>, baca selengkapnya <a href="#">disini</a>.
+</p>
+
                          <button type="submit" name="submit" id="btnsubmit" disabled class="btn btn-block btn-modal btn-submit">Daftar
                              Sekarang!</button>
                      </form>
