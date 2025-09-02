@@ -462,18 +462,31 @@ public function tambah_komentar() {
         ];
 
         $id_pertemuan = $this->input->post('id_pertemuan');
-        $komentar = $this->input->post('komentar');
-        $guru = $this->Forum_model->getGuruByMateri($id_pertemuan);
-        if (!$guru || empty($guru->email)) {
+        $komentar     = $this->input->post('komentar');
+
+        $detail = $this->Forum_model->getDetailPertemuan($id_pertemuan);
+
+        if (!$detail || empty($detail->email_guru)) {
             $this->session->set_flashdata('error', 'Email guru tidak ditemukan.');
             redirect('materi/belajar/' . $id_pertemuan);
         }
-    
-        $this->email->from('noreply@addustedu', 'E-Learning');
-        $this->email->to($guru->email);
-        $this->email->subject('Komentar Baru di Forum Diskusi');
-        $this->email->message("Ada komentar baru dari siswa di forum materi: <b>{$id_pertemuan}</b><br><br>Komentar:<br>{$komentar}");
-    
+
+            // susun isi email
+            $subject = "Komentar Baru di Forum Diskusi - {$detail->nama_mapel}";
+            $message = "
+                Ada komentar baru dari siswa di forum <br>
+                Mata Pelajaran: <b>{$detail->nama_mapel}</b><br>
+                Kelas: <b>{$detail->nama_kelas}</b><br>
+                Pertemuan ke-<b>{$detail->pertemuan_ke}</b><br><br>
+                Komentar:<br>{$komentar}
+            ";
+
+            $this->email->from('noreply@ctkarya.learning', 'E-Learning');
+            $this->email->to($detail->email_guru);
+            $this->email->subject($subject);
+            $this->email->message($message);
+            $this->email->send();
+
         if (!$this->email->send()) {
             $this->session->set_flashdata('error', 'Komentar terkirim, tapi email gagal dikirim.');
             log_message('error', print_r($this->email->print_debugger(), true)); // log error ke log CI

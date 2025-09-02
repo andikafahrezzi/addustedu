@@ -157,6 +157,27 @@ public function edit_komentar($id, $data) {
     $this->db->where('id', $id);
     return $this->db->update('forum_diskusi', $data);
 }
+public function getDetailPertemuan($id_pertemuan)
+{
+    $this->db->select('
+        p.pertemuan_ke,
+        m.deskripsi,
+        k.nama_kelas,
+        mp.nama_mapel,
+        g.email as email_guru
+    ');
+    $this->db->from('pertemuan p');
+    $this->db->join('materi m', 'p.id_materi = m.id');
+    $this->db->join('kelas k', 'p.id_kelas = k.id');
+    $this->db->join('mata_pelajaran mp', 'm.id_mapel = mp.id');
+    $this->db->join('guru g', 'm.id_guru = g.nip'); 
+    $this->db->where('p.id', $id_pertemuan);
+
+    $query = $this->db->get();
+    return $query->row();
+}
+
+
 
 public function hapus_komentar($id) {
     $this->db->where('id', $id);
