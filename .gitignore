@@ -8,6 +8,11 @@ vendor/
 application/cache/*
 !application/cache/index.html
 
+assets/materi_modul/*
+assets/profile_picture/*
+assets/rps_uploads/*
+assets/tugas_uploads/*
+
 application/logs/*
 !application/logs/index.html
 
