@@ -6,7 +6,7 @@
         </div>
         <div class="container">
             <div class="banner_content text-center">
-                <h2 data-aos="fade-up" data-aos-duration="1600">Tentang addustedu</h2>
+                <h2 data-aos="fade-up" data-aos-duration="1600">Tentang Cipta Tunas Karya</h2>
                 <div data-aos="fade-up" data-aos-duration="1800" class="page_link">
                     <a href="<?= base_url('welcome') ?>">Beranda</a>
                     <a href="">Tentang</a>
@@ -21,8 +21,8 @@
 <section class="about_area p_60">
     <div class="container">
         <div class="main_title">
-            <h2 data-aos="fade-up" data-aos-duration="1600" style="font-size: 33px !important;">Tentang addustedu - Web Pembelajaran Elektronik</h2>
-            <p data-aos="fade-up" data-aos-duration="1800">addustedu adalah Web Edukasi Open-Source yang dibuat oleh <a href="https://web.facebook.com/andikafahrezi">Andika Fahrezi.</a> Website
+            <h2 data-aos="fade-up" data-aos-duration="1600" style="font-size: 33px !important;">Tentang Cipta Tunas Karya - Web Pembelajaran Elektronik</h2>
+            <p data-aos="fade-up" data-aos-duration="1800">Cipta Tunas Karya adalah Web Edukasi Open-Source yang dibuat oleh <a href="https://web.facebook.com/andikafahrezi">Andika Fahrezi.</a> Website
                 pembelajaran dimana para siswa dapat belajar dimana saja dan kapan saja.
                 Guru dapat mengupload video dirinya sendiri sedang mengajar, sehingga tanpa takut adanya jam
                 kosong atau pun keadaan yang tidak terduga apapun karena addustedu dapat diakses dimana saja dan

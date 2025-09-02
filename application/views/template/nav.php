@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta content="addustedu dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja." name="Description" />
     <meta content="addustedu, E-learning, Open Source, Andika Fahrezi, github, programmer indonesia" name="keywords" />
-    <link rel="icon" href="<?= base_url('assets/') ?>img/logoh.png" type="image/png">
+    <link rel="icon" href="<?= base_url('assets/') ?>img/logow.jpeg" type="image/jpeg">
     <title>addustedu - Belajarr Dimana Saja & Kapan Saja !</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/bootstrap.css">
@@ -56,7 +56,7 @@
                     </ul>
                 </div>
                 <div class="float-right">
-                    <a class="dn_btn" href="mailto:apps.addustedu@gmail.com">apps.addustedu@gmail.com</a>
+                    <a class="dn_btn" href="mailto:ciptatunaskarya0@gmail.com">ciptatunaskarya0@gmail.com</a>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container">
                     <!-- Brand and toggle get grouped for better mobile display -->
-                    <a class="navbar-brand logo_h" href="<?= base_url('welcome') ?>"><img src="<?= base_url('assets/') ?>img/logou.png" alt="logo" id="logo-ads"></a>
+                    <a class="navbar-brand logo_h" href="<?= base_url('welcome') ?>"><img src="<?= base_url('assets/') ?>img/logot.png" alt="logo" id="logo-ads"></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
