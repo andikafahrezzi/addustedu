@@ -162,6 +162,25 @@ public function hapus_soals($id_soal)
         return $this->db->where('id_soal', $id_soal)
                        ->delete('bank_soal');
     }
+    public function hapus_soal_fix($id_soal)
+{
+    // 1. Cek apakah soal sudah dipakai di ujian_soal
+    $dipakaiUjian = $this->db->where('bank_soal_id', $id_soal)
+                             ->count_all_results('ujian_soal');
+
+    // 2. Cek apakah soal sudah pernah dijawab siswa
+    $sudahDijawab = $this->db->where('bank_soal_id', $id_soal)
+                             ->count_all_results('tbl_jawaban_siswa');
+
+    if ($dipakaiUjian > 0 || $sudahDijawab > 0) {
+        return false; // tidak boleh hapus
+    }
+
+    // 3. Hapus kalau aman
+    return $this->db->where('id_soal', $id_soal)
+                    ->delete('bank_soal');
+}
+
 public function get_mapel_by_nips($nip)
 {
     $this->db->select('mata_pelajaran.id, mata_pelajaran.nama_mapel');

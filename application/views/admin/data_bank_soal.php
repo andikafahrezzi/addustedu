@@ -11,6 +11,17 @@
                                 Bank Soal⭢</a>
                         </div>
                     </div>
+                                        <?php if($this->session->flashdata('error-delete')): ?>
+    <div class="alert alert-danger">
+        <?= $this->session->flashdata('error-delete'); ?>
+    </div>
+<?php endif; ?>
+<?php if($this->session->flashdata('success-delete')): ?>
+    <div class="alert alert-success">
+        <?= $this->session->flashdata('success-delete'); ?>
+    </div>
+<?php endif; ?>
+
                     <div class="row">
                         <div class="col-md-12">
                             <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px">
@@ -101,7 +112,7 @@
     <script>
 function hapusSoal(id) {
     if (confirm('Apakah Anda yakin ingin menghapus soal ini?')) {
-        window.location.href = "<?= site_url('admin/hapus_soal/') ?>" + id;
+        window.location.href = "<?= site_url('admin/hapus_soal_fix/') ?>" + id;
     }
 }
 </script>

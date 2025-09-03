@@ -1191,6 +1191,22 @@ public function delete_quiz($id)
         $this->session->set_flashdata('success', 'Soal berhasil dihapus');
         redirect('admin/bank_soal');
     }
+    public function hapus_soal_fix($id_soal)
+{
+    $hapus = $this->Bank_soal_model->hapus_soal_fix($id_soal);
+
+    if ($hapus) {
+        $this->session->set_flashdata('success-delete', 'Soal berhasil dihapus');
+    } else {
+        $this->session->set_flashdata(
+            'error-delete',
+            'Soal tidak bisa dihapus karena sudah dipakai di ujian atau sudah dijawab siswa.'
+        );
+    }
+
+    redirect('admin/bank_soal');
+}
+
     public function data_ujian()
     {
         $this->load->model('Ujian_model');
