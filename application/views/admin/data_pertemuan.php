@@ -32,7 +32,6 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="text-center bg-light">
-                                        <th width="5%">No</th>
                                         <th>Pertemuan Ke</th>
                                         <th>Deskripsi Materi</th>
                                         <th>Tanggal</th>
@@ -42,13 +41,12 @@
                                 <tbody>
                                     <?php $no = 1; foreach ($list_pertemuan as $p): ?>
                                         <tr>
-                                            <td class="text-center"><?= $no++ ?></td>
                                             <td class="text-center"><?= $p->pertemuan_ke ?></td>
                                             <td><?= $p->deskripsi ?></td>
                                             <td><?= date('d-m-Y', strtotime($p->tanggal)) ?></td>
                                             <td class="text-center">
                                                 <a href="<?= base_url('admin/edit/'.$p->id_pertemuan) ?>" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-                                                <a href="<?= base_url('admin/delete_pertemuan/'.$p->id_pertemuan) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus pertemuan ini?')"><i class="fas fa-trash"></i></a>
+                                                <a class="btn btn-sm btn-danger" onclick="confirmDeleteUjian('<?= $p->id_pertemuan ?>')"><i class="fas fa-trash"></i></a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -70,3 +68,31 @@
         </div>
     </section>
 </div>
+
+<!-- Modal Konfirmasi Hapus Quiz -->
+<div class="modal fade" id="deleteUjianModal" tabindex="-1" role="dialog" aria-labelledby="deleteUjianModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteUjianModalLabel">Konfirmasi Hapus Pertemuan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Apakah Anda yakin ingin menghapus pertemuan ini? <br> <span class="text-danger">aksi ini tidak bisa dibackup</span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <a id="deleteUjianLink" href="#" class="btn btn-danger">Hapus</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    function confirmDeleteUjian(id) {
+        $('#deleteUjianLink').attr('href', '<?= site_url('admin/delete_pertemuan/'.$p->id_pertemuan) ?>');
+        $('#deleteUjianModal').modal('show');
+    }
+</script>
