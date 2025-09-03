@@ -247,11 +247,11 @@
                             <td><?= date('d M Y H:i', strtotime($hasil->tanggal_submit)) ?></td>
                         </tr>
                         <tr>
-                            <th>Jumlah Benar</th>
+                            <th>Jumlah Benar PG:</th>
                             <td><?= $hasil->jumlah_benar ?></td>
                         </tr>
                         <tr>
-                            <th>Jumlah Salah</th>
+                            <th>Jumlah Salah PG:</th>
                             <td><?= $hasil->jumlah_salah ?></td>
                         </tr>
                         <tr>
