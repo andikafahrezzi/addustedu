@@ -5,7 +5,13 @@
             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Soal
         </a>
     </div>
-
+                <?php if ($this->session->flashdata('success')) : ?>
+                <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+                <?php endif; ?>
+                
+                <?php if ($this->session->flashdata('error')) : ?>
+                    <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
+                <?php endif; ?>
     <?php if (!empty($mapel_diajarkan)): ?>
     <div class="mb-3 text-success">
         <label for="filterMapel text-success"><strong>Filter Mata Pelajaran:</strong></label>

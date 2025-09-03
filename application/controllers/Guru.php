@@ -1631,7 +1631,7 @@ public function edit_bank_soal($id_soal)
 
 
     
-  public function hapus_bank_soal($id_soal)
+public function hapus_bank_soal($id_soal)
 {
     $nip = $this->session->userdata('nip');
 
@@ -1652,11 +1652,17 @@ public function edit_bank_soal($id_soal)
         show_error('Anda tidak memiliki akses untuk menghapus soal ini', 403);
     }
 
-    // Jika valid, hapus
-    $this->Bank_soal_model->hapus_soals($id_soal);
-    $this->session->set_flashdata('success', 'Soal berhasil dihapus');
+    // 🔎 Cek apakah soal dipakai
+    if ($this->Bank_soal_model->soal_dipakai($id_soal)) {
+        $this->session->set_flashdata('error', 'Soal tidak dapat dihapus karena masih dipakai di ujian atau jawaban siswa.');
+    } else {
+        $this->Bank_soal_model->hapus_soals($id_soal);
+        $this->session->set_flashdata('success', 'Soal berhasil dihapus.');
+    }
+
     redirect('guru/bank_soal');
 }
+
 
 
 

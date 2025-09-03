@@ -95,6 +95,18 @@ public function get_detail_soals($id_soal)
                     ->get('bank_soal')
                     ->row();
 }
+public function soal_dipakai($id_soal)
+{
+    // Cek di ujian_soal
+    $cek_ujian = $this->db->where('bank_soal_id', $id_soal)
+                          ->count_all_results('ujian_soal');
+
+    // Cek di jawaban_siswa
+    $cek_jawaban = $this->db->where('bank_soal_id', $id_soal)
+                            ->count_all_results('tbl_jawaban_siswa');
+
+    return ($cek_ujian > 0 || $cek_jawaban > 0);
+}
 
 public function hapus_soals($id_soal)
 {
