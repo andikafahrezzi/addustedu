@@ -25,7 +25,14 @@ public function tampil_materi_guru($nip)
     return $this->db->get()->result();
 }
 
-
+public function get_by_mapel($id_mapel)
+{
+    $this->db->select('materi.*, mata_pelajaran.nama_mapel');
+    $this->db->from('materi');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->where('materi.id_mapel', $id_mapel);
+    return $this->db->get()->result();
+}
     
     public function get_detail_guru($nip) {
     // Ambil info dasar guru
