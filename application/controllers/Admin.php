@@ -335,16 +335,71 @@ public function delete_siswa($id)
     // manajemen guru
 
     public function data_guru()
-    {
-        $this->load->model('m_guru');
-        $data['user'] = $this->db->get_where('admin', ['email' =>
-            $this->session->userdata('email')])->row_array();
+{
+    $this->load->model('m_guru');
+    $this->load->library('pagination');
 
-        $data['user'] = $this->m_guru->tampil_data()->result();
-        $this->load->view('admin/partials/nava');
-        $this->load->view('admin/data_guru', $data);
-        $this->load->view('admin/partials/foota');
+    // admin login
+    $data['admin'] = $this->db->get_where('admin', [
+        'email' => $this->session->userdata('email')
+    ])->row_array();
+
+    // Handle search parameters
+    $filters = [];
+    
+    if ($this->input->get('submit')) {
+        $filters = [
+            'keyword' => $this->input->get('keyword')
+        ];
+        $this->session->set_userdata('filters_guru', $filters);
     }
+    elseif ($this->input->get('keyword') !== null) {
+        $filters = [
+            'keyword' => $this->input->get('keyword')
+        ];
+    }
+    else {
+        $filters = $this->session->userdata('filters_guru') ?? [];
+    }
+
+    // pagination config
+    $config['base_url']   = site_url('admin/data_guru');
+    $config['total_rows'] = $this->m_guru->count_all($filters); // Gunakan method yang diperbaiki
+    $config['per_page']   = 10;
+    $config['uri_segment'] = 3;
+    $config['reuse_query_string'] = TRUE;
+    
+    // Konfigurasi styling pagination
+    $config['full_tag_open']   = '<nav><ul class="pagination justify-content-center">';
+    $config['full_tag_close']  = '</ul></nav>';
+    $config['first_link']      = 'First';
+    $config['last_link']       = 'Last';
+    $config['next_link']       = '&raquo';
+    $config['prev_link']       = '&laquo';
+    $config['cur_tag_open']    = '<li class="page-item active"><span class="page-link">';
+    $config['cur_tag_close']   = '</span></li>';
+    $config['num_tag_open']    = '<li class="page-item"><span class="page-link">';
+    $config['num_tag_close']   = '</span></li>';
+
+    $this->pagination->initialize($config);
+
+    $page = $this->uri->segment(3, 0);
+
+    // ambil data guru dengan pagination
+    $data['guru'] = $this->m_guru->get_paginated($config['per_page'], $page, $filters);
+    $data['pagination'] = $this->pagination->create_links();
+    $data['filters'] = $filters;
+
+    $this->load->view('admin/partials/nava', $data);
+    $this->load->view('admin/data_guru', $data);
+    $this->load->view('admin/partials/foota');
+}
+
+public function reset_search_guru()
+{
+    $this->session->unset_userdata('filters_guru');
+    redirect('admin/data_guru');
+}
 
     public function detail_guru($nip)
     {

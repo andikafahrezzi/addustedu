@@ -1,117 +1,76 @@
-<!--
-@Project: addustedu
-@Programmer: Syauqi Zaidan Khairan Khalaf
-@Website: https://linktr.ee/syauqi
-@Email : syaokay@gmail.com
-
-@About-addustedu :
-Web Edukasi Open Source yang dibuat oleh Syauqi Zaidan Khairan Khalaf.
-addustedu adalah Web edukasi yang dilengkapi video, materi dan sistem ujian
-yang tersedia secara gratis. addustedu dibuat ditujukan agar para siswa dan
-guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
--->
-
-
-            <!-- Main Content -->
-            <div class="main-content">
-                <section class="section">
-                    <div class="card" style="width:100%;">
-                        <div class="card-body">
-                            <h2 class="card-title" style="color: black;">Management Data Guru addustedu</h2>
-                            <hr>
-                            <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction. </p>
-                            <a href="<?= base_url('admin/add_guru') ?>" class="btn btn-success">Tambah
-                                Data Guru ⭢</a>
-                        </div>
-                    </div>
-                    <?php if($this->session->flashdata('error-delete')): ?>
-    <div class="alert alert-danger">
-        <?= $this->session->flashdata('error-delete'); ?>
-    </div>
-<?php endif; ?>
-<?php if($this->session->flashdata('success-delete')): ?>
-    <div class="alert alert-success">
-        <?= $this->session->flashdata('success-delete'); ?>
-    </div>
-<?php endif; ?>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px">
-                                <div class="table-responsive">
-                                    <table id="example" class="table align-items-center table-flush">
-                                        <thead class="thead-light">
-                                            <tr class="text-center">
-                                                <th scope="col">NIP</th>
-                                                <th scope="col">Nama Guru</th>
-                                                <th scope="col">Email</th>
-                                                <th scope="col">Nama Mapel</th>
-                                                <th scope="col">Detail</th>
-                                                <th scope="col">Option</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-
-                                            foreach ($user as $u) {
-                                            ?>
-                                                <tr class="text-center">
-
-                                                    <th scope="row">
-                                                        <?php echo $u->nip ?>
-                                                    </th>
-
-                                                    <td>
-                                                        <?php echo $u->nama_guru ?>
-                                                    </td>
-
-                                                    <td>
-                                                        <?php echo $u->email ?>
-                                                    </td>
-
-
-                                                    <td>
-                                                        <?php echo $u->mapel_diajar ?? '-' ?>
-
-                                                    </td>
-
-                                                    <td class="text-center">
-                                                        <a href="<?php echo site_url('admin/detail_guru/' . $u->nip); ?>" class="btn btn-success">Detail ⭢</a>
-                                                    </td>
-
-                                                    <td class="text-center">
-                                                        <a href="<?php echo site_url('admin/update_guru/' . $u->nip); ?>" class="btn btn-info">Update ⭢</a>
-
-                                                        <a href="<?php echo site_url('admin/delete_guru/' . $u->nip); ?>" class="btn btn-danger remove">Delete ✖</a>
-                                                    </td>
-
-                                                </tr>
-                                            <?php
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                    <p class="small font-weight-bold">Pendaftaran guru hanya dapat dilakukan admin dan tidak bisa dilakukan sendiri</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+<!-- Main Content -->
+<div class="main-content">
+    <section class="section">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title" style="color: black;">Management Data Guru</h2>
+                <hr>
+                <p class="card-text">Kelola data guru dan mata pelajaran yang diajar.</p>
+                <a href="<?= base_url('admin/add_guru') ?>" class="btn btn-success">Tambah Data Guru ⭢</a>
             </div>
         </div>
-    </div>
-    <!-- End Main Content -->
 
-   
+        <?php if ($this->session->flashdata('success')): ?>
+            <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+        <?php endif; ?>
+        <?php if ($this->session->flashdata('error')): ?>
+            <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
+        <?php endif; ?>
 
-   
-    <!-- End Footer -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px;">
+                    <div class="table-responsive">
+                        <!-- SEARCH FORM -->
+                        <div class="mb-3">
+                            <form action="<?= site_url('admin/data_guru'); ?>" method="get" class="form-inline">
+                                <input type="text" name="keyword" class="form-control mr-2"
+                                       placeholder="Cari NIP, Nama, atau Email..."
+                                       value="<?= isset($filters['keyword']) ? html_escape($filters['keyword']) : ''; ?>">
+                                
+                                <button type="submit" name="submit" value="1" class="btn btn-primary">Cari</button>
+                                <a href="<?= site_url('admin/reset_search_guru'); ?>" class="btn btn-secondary ml-2">Reset</a>
+                            </form>
+                        </div>
 
-    <!-- General JS Scripts -->
-   
-    <script>
-        $(document).ready(function() {
-            $('#example').DataTable();
-        });
-    </script>
-    <!-- Template JS File -->
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr class="text-center">
+                                    <th>NIP</th>
+                                    <th>Nama Guru</th>
+                                    <th>Email</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th>Option</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($guru)): ?>
+                                    <?php foreach ($guru as $g): ?>
+                                        <tr class="text-center">
+                                            <td><?= $g->nip ?></td>
+                                            <td><?= $g->nama_guru ?></td>
+                                            <td><?= $g->email ?></td>
+                                            <td><?= !empty($g->mapel_diajar) ? $g->mapel_diajar : 'Belum ada mapel' ?></td>
+                                            <td>
+                                                <a href="<?= site_url('admin/update_guru/' . $g->nip); ?>" class="btn btn-info">Update</a>
+                                                <a href="<?= site_url('admin/delete_guru/' . $g->nip); ?>" class="btn btn-danger remove">Delete</a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr><td colspan="5" class="text-center">Data tidak ditemukan</td></tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+
+                        <!-- PAGINATION -->
+                        <div class="mt-3">
+                            <?= $pagination ?? '' ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- End Main Content -->
