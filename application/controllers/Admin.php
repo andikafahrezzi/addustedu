@@ -800,18 +800,80 @@ public function get_mapel_by_guru($nip)
 
     //manajemen materi
 
-    public function data_materi()
-    {
-        $this->load->model('m_materi');
+public function data_materi()
+{
+    $this->load->model('m_materi');
+    $this->load->library('pagination');
 
-        $data['user'] = $this->db->get_where('admin', ['email' =>
-            $this->session->userdata('email')])->row_array();
+    // admin login
+    $data['admin'] = $this->db->get_where('admin', [
+        'email' => $this->session->userdata('email')
+    ])->row_array();
 
-        $data['user'] = $this->m_materi->tampil_data()->result();
-        $this->load->view('admin/partials/nava');
-        $this->load->view('admin/data_materi', $data);
-        $this->load->view('admin/partials/foota');
+    // Handle search parameters
+    $filters = [];
+    
+    if ($this->input->get('submit')) {
+        $filters = [
+            'keyword' => $this->input->get('keyword'),
+            'mapel'   => $this->input->get('mapel'),
+            'kelas'   => $this->input->get('kelas')
+        ];
+        $this->session->set_userdata('filters_materi', $filters);
     }
+    elseif ($this->input->get('keyword') !== null || $this->input->get('mapel') !== null || $this->input->get('kelas') !== null) {
+        $filters = [
+            'keyword' => $this->input->get('keyword'),
+            'mapel'   => $this->input->get('mapel'),
+            'kelas'   => $this->input->get('kelas')
+        ];
+    }
+    else {
+        $filters = $this->session->userdata('filters_materi') ?? [];
+    }
+
+    // pagination config
+    $config['base_url']   = site_url('admin/data_materi');
+    $config['total_rows'] = $this->m_materi->count_all($filters);
+    $config['per_page']   = 10;
+    $config['uri_segment'] = 3;
+    $config['reuse_query_string'] = TRUE;
+    
+    // Konfigurasi styling pagination
+    $config['full_tag_open']   = '<nav><ul class="pagination justify-content-center">';
+    $config['full_tag_close']  = '</ul></nav>';
+    $config['first_link']      = 'First';
+    $config['last_link']       = 'Last';
+    $config['next_link']       = '&raquo';
+    $config['prev_link']       = '&laquo';
+    $config['cur_tag_open']    = '<li class="page-item active"><span class="page-link">';
+    $config['cur_tag_close']   = '</span></li>';
+    $config['num_tag_open']    = '<li class="page-item"><span class="page-link">';
+    $config['num_tag_close']   = '</span></li>';
+
+    $this->pagination->initialize($config);
+
+    $page = $this->uri->segment(3, 0);
+
+    // ambil data materi dengan pagination
+    $data['materi'] = $this->m_materi->get_paginated($config['per_page'], $page, $filters);
+    $data['pagination'] = $this->pagination->create_links();
+
+    // filters dan dropdown
+    $data['filters'] = $filters;
+    $data['mapel_list'] = $this->m_materi->get_mapel_list();
+    $data['kelas_list'] = $this->m_materi->get_kelas_list();
+
+    $this->load->view('admin/partials/nava', $data);
+    $this->load->view('admin/data_materi', $data);
+    $this->load->view('admin/partials/foota');
+}
+
+public function reset_search_materi()
+{
+    $this->session->unset_userdata('filters_materi');
+    redirect('admin/data_materi');
+}
 
     public function delete_materi($id)
     {
