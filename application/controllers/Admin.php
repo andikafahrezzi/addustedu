@@ -50,19 +50,69 @@ class Admin extends CI_Controller
     }
 
     // Management Siswa
+public function data_siswa()
+{
+    $this->load->model('m_siswa');
+    $this->load->library('pagination');
 
-    public function data_siswa()
-    {
-        $this->load->model('m_siswa');
+    // admin login
+    $data['admin'] = $this->db->get_where('admin', [
+        'email' => $this->session->userdata('email')
+    ])->row_array();
 
-        $data['user'] = $this->db->get_where('admin', ['email' =>
-            $this->session->userdata('email')])->row_array();
-
-        $data['user'] = $this->m_siswa->tampil_data()->result();
-        $this->load->view('admin/partials/nava');
-        $this->load->view('admin/data_siswa', $data);
-        $this->load->view('admin/partials/foota');
+    // Handle search parameters - FIXED VERSION
+    $filters = [];
+    
+    // Jika ada parameter GET dari form search
+    if ($this->input->get('submit')) {
+        $filters = [
+            'keyword' => $this->input->get('keyword'),
+            'kelas'   => $this->input->get('kelas'),
+        ];
+        $this->session->set_userdata('filters_siswa', $filters);
     }
+    // Jika ada parameter GET langsung (bisa dari pagination)
+    elseif ($this->input->get('keyword') !== null || $this->input->get('kelas') !== null) {
+        $filters = [
+            'keyword' => $this->input->get('keyword'),
+            'kelas'   => $this->input->get('kelas'),
+        ];
+    }
+    // Jika tidak ada parameter GET, coba ambil dari session
+    else {
+        $filters = $this->session->userdata('filters_siswa') ?? [];
+    }
+
+    // pagination config - KONFIGURASI YANG BENAR
+    $config['base_url']   = site_url('admin/data_siswa');
+    $config['total_rows'] = $this->m_siswa->count_all($filters);
+    $config['per_page']   = 10;
+    $config['uri_segment'] = 3;
+    $config['reuse_query_string'] = TRUE; // YANG PALING PENTING
+    
+    $this->pagination->initialize($config);
+
+    $page = $this->uri->segment(3, 0);
+
+    // ambil data siswa
+    $data['siswa'] = $this->m_siswa->get_paginated($config['per_page'], $page, $filters);
+    $data['pagination'] = $this->pagination->create_links();
+
+    // filters dan kelas
+    $data['filters'] = $filters;
+    $data['kelas_list'] = $this->db->get('kelas')->result();
+
+    $this->load->view('admin/partials/nava', $data);
+    $this->load->view('admin/data_siswa', $data);
+    $this->load->view('admin/partials/foota');
+}
+
+public function reset_search()
+{
+    $this->session->unset_userdata('filters_siswa');
+    redirect('admin/data_siswa');
+}
+
 
     public function detail_siswa($id)
     {

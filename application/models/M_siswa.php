@@ -6,6 +6,48 @@ class M_siswa extends CI_Model
     {
         return $this->db->get('siswa');
     }
+    public function get_paginated($limit, $start, $filters = [])
+    {
+        $this->db->select('siswa.*, kelas.nama_kelas');
+        $this->db->from('siswa');
+        $this->db->join('kelas', 'kelas.id = siswa.id_kelas', 'left');
+
+        // filter keyword (nama / nis)
+        if (!empty($filters['keyword'])) {
+            $this->db->group_start();
+            $this->db->like('siswa.nama', $filters['keyword']);
+            $this->db->or_like('siswa.nis', $filters['keyword']);
+            $this->db->group_end();
+        }
+
+        // filter kelas
+        if (!empty($filters['kelas'])) {
+            $this->db->where('siswa.id_kelas', $filters['kelas']);
+        }
+
+        $this->db->limit($limit, $start);
+        return $this->db->get()->result();
+    }
+
+    public function count_all($filters = [])
+    {
+        $this->db->from('siswa');
+        $this->db->join('kelas', 'kelas.id = siswa.id_kelas', 'left');
+
+        if (!empty($filters['keyword'])) {
+            $this->db->group_start();
+            $this->db->like('siswa.nama', $filters['keyword']);
+            $this->db->or_like('siswa.nis', $filters['keyword']);
+            $this->db->group_end();
+        }
+
+        if (!empty($filters['kelas'])) {
+            $this->db->where('siswa.id_kelas', $filters['kelas']);
+        }
+
+        return $this->db->count_all_results();
+    }
+
 
 public function detail_siswa($id = null)
 {
