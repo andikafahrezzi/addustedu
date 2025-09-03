@@ -170,6 +170,39 @@ public function hitung_nilai_terakhir($id)
     
     return $query->row()->total_nilai ?? 0; // Return 0 jika tidak ada jawaban
 }
+public function delete_quizs($id)
+{
+    $this->db->trans_start();
+
+    // 1. Ambil semua quiz_siswa yang terkait
+    $this->db->select('id');
+    $this->db->where('quiz_id', $id);
+    $quizSiswa = $this->db->get('quiz_siswa')->result();
+
+    // 2. Hapus jawaban_siswa dulu
+    if (!empty($quizSiswa)) {
+        $ids = array_column($quizSiswa, 'id');
+        $this->db->where_in('quiz_siswa_id', $ids);
+        $this->db->delete('jawaban_siswa');
+    }
+
+    // 3. Hapus quiz_siswa
+    $this->db->where('quiz_id', $id);
+    $this->db->delete('quiz_siswa');
+
+    // 4. Hapus soal quiz
+    $this->db->where('quiz_id', $id);
+    $this->db->delete('quiz_questions');
+
+    // 5. Hapus quiz
+    $this->db->where('id', $id);
+    $this->db->delete('quiz');
+
+    $this->db->trans_complete();
+
+    return $this->db->trans_status();
+}
+
 public function tampil_quiz()
 {
     $this->db->select('quiz.*, 

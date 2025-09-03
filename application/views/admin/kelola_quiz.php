@@ -79,7 +79,6 @@
                                 <label>Tipe Soal</label>
                                 <select name="tipe" class="form-control" id="tipeSoal" required>
                                     <option value="pilihan">Pilihan Ganda</option>
-                                    <option value="essay">Essay</option>
                                 </select>
                             </div>
                         </div>

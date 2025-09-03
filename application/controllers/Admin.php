@@ -1051,24 +1051,22 @@ public function data_quiz()
     // Balik ke detail quiz admin
     redirect('admin/kelola_quiz/' . $id_quiz);
 }
-    public function delete_quiz($id) {
-        // Validasi ID
-        if(empty($id) || !is_numeric($id)) {
-            $this->session->set_flashdata('error', 'ID Quiz tidak valid');
-            redirect('admin/data_quiz');
-        }
-        
-        $result = $this->Quiz_model->delete_quiz($id);
-        
-        if($result) {
-            $this->session->set_flashdata('success', 'Quiz dan semua data terkait berhasil dihapus');
-        } else {
-            $error = $this->db->error();
-            $this->session->set_flashdata('error', 'Gagal menghapus quiz: '.$error['message']);
-        }
-        
-        redirect('admin/data_quiz');
+public function delete_quiz($id)
+{
+    $result = $this->Quiz_model->delete_quizs($id);
+
+    if ($result) {
+        $this->session->set_flashdata('success', 'Quiz dan semua data terkait berhasil dihapus.');
+    } else {
+        $error = $this->db->error();
+        $this->session->set_flashdata('error', 'Gagal menghapus quiz: ' . $error['message']);
     }
+
+    redirect('admin/data_quiz'); // pastikan bukan ke detail
+}
+
+
+
     
     // BANK SOAL - ADMIN
     public function bank_soal() {
