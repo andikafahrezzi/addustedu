@@ -1570,19 +1570,90 @@ public function reset_search_bank_soal()
     redirect('admin/bank_soal');
 }
 
-    public function data_ujian()
-    {
-        $this->load->model('Ujian_model');
+public function data_ujian()
+{
+    $this->load->model('Ujian_model');
+    $this->load->library('pagination');
 
-        $data['user'] = $this->db->get_where('admin', ['email' =>
-            $this->session->userdata('email')])->row_array();
-
-        $data['user'] = $this->Ujian_model->tampil_ujian()->result();
-        $this->load->view('admin/partials/nava');
-        $this->load->view('admin/data_ujian', $data);
-        $this->load->view('admin/partials/foota');
-
+    // Handle search parameters
+    $filters = [];
+    
+    if ($this->input->get('submit')) {
+        $filters = [
+            'keyword' => $this->input->get('keyword'),
+            'guru' => $this->input->get('guru'),
+            'mapel' => $this->input->get('mapel'),
+            'kelas' => $this->input->get('kelas'),
+            'status' => $this->input->get('status')
+        ];
+        $this->session->set_userdata('filters_ujian', $filters);
     }
+    elseif ($this->input->get('keyword') !== null || $this->input->get('guru') !== null || 
+            $this->input->get('mapel') !== null || $this->input->get('kelas') !== null || 
+            $this->input->get('status') !== null) {
+        $filters = [
+            'keyword' => $this->input->get('keyword'),
+            'guru' => $this->input->get('guru'),
+            'mapel' => $this->input->get('mapel'),
+            'kelas' => $this->input->get('kelas'),
+            'status' => $this->input->get('status')
+        ];
+    }
+    else {
+        $filters = $this->session->userdata('filters_ujian') ?? [];
+    }
+
+    // pagination config
+    $config['base_url'] = site_url('admin/data_ujian');
+    $config['total_rows'] = $this->Ujian_model->count_all_ujian($filters);
+    $config['per_page'] = 10;
+    $config['uri_segment'] = 3;
+    $config['reuse_query_string'] = TRUE;
+    
+    // Konfigurasi styling pagination
+    $config['full_tag_open'] = '<nav><ul class="pagination justify-content-center">';
+    $config['full_tag_close'] = '</ul></nav>';
+    $config['first_link'] = 'First';
+    $config['last_link'] = 'Last';
+    $config['next_link'] = '&raquo';
+    $config['prev_link'] = '&laquo';
+    $config['cur_tag_open'] = '<li class="page-item active"><span class="page-link">';
+    $config['cur_tag_close'] = '</span></li>';
+    $config['num_tag_open'] = '<li class="page-item"><span class="page-link">';
+    $config['num_tag_close'] = '</span></li>';
+
+    $this->pagination->initialize($config);
+
+    $page = $this->uri->segment(3, 0);
+
+    // ambil data ujian dengan pagination
+    $data['ujian'] = $this->Ujian_model->get_paginated_ujian($config['per_page'], $page, $filters);
+    $data['pagination'] = $this->pagination->create_links();
+
+    // filters dan dropdown
+    $data['filters'] = $filters;
+    $data['guru_list'] = $this->Ujian_model->get_guru_list();
+    $data['mapel_list'] = $this->Ujian_model->get_mapel_list();
+    $data['kelas_list'] = $this->Ujian_model->get_kelas_list();
+    
+    // Options status
+    $data['status_options'] = [
+        '' => '-- Semua Status --',
+        'aktif' => 'Aktif',
+        'nonaktif' => 'Nonaktif'
+    ];
+
+    $this->load->view('admin/partials/nava', $data);
+    $this->load->view('admin/data_ujian', $data);
+    $this->load->view('admin/partials/foota');
+}
+
+public function reset_search_ujian()
+{
+    $this->session->unset_userdata('filters_ujian');
+    redirect('admin/data_ujian');
+}
+
     public function detail_ujian($id_ujian)
     {
         $this->load->model('Ujian_model');

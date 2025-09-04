@@ -417,6 +417,120 @@ public function hitung_skor($id_ujian, $nis) {
         $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
         return $this->db->get();
     }
+public function get_paginated_ujian($limit, $start, $filters = [])
+{
+    $this->db->select('tbl_ujian.*, guru.nama_guru, mata_pelajaran.nama_mapel, kelas.nama_kelas');
+    $this->db->from('tbl_ujian');
+    $this->db->join('guru', 'guru.nip = tbl_ujian.nip_guru');
+    $this->db->join('pertemuan', 'pertemuan.id = tbl_ujian.id_pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+    
+    // Filter keyword
+    if (!empty($filters['keyword'])) {
+        $this->db->group_start();
+        $this->db->like('tbl_ujian.nama_ujian', $filters['keyword']);
+        $this->db->or_like('guru.nama_guru', $filters['keyword']);
+        $this->db->or_like('mata_pelajaran.nama_mapel', $filters['keyword']);
+        $this->db->or_like('kelas.nama_kelas', $filters['keyword']);
+        $this->db->group_end();
+    }
+    
+    // Filter guru
+    if (!empty($filters['guru'])) {
+        $this->db->where('guru.nip', $filters['guru']);
+    }
+    
+    // Filter mapel
+    if (!empty($filters['mapel'])) {
+        $this->db->where('mata_pelajaran.id', $filters['mapel']);
+    }
+    
+    // Filter kelas
+    if (!empty($filters['kelas'])) {
+        $this->db->where('kelas.id', $filters['kelas']);
+    }
+    
+    // Filter status
+    if (!empty($filters['status'])) {
+        $this->db->where('tbl_ujian.status', $filters['status']);
+    }
+    
+    $this->db->order_by('tbl_ujian.id_ujian', 'DESC');
+    $this->db->limit($limit, $start);
+    return $this->db->get()->result();
+}
+
+public function count_all_ujian($filters = [])
+{
+    $this->db->select('COUNT(tbl_ujian.id_ujian) as total');
+    $this->db->from('tbl_ujian');
+    $this->db->join('guru', 'guru.nip = tbl_ujian.nip_guru');
+    $this->db->join('pertemuan', 'pertemuan.id = tbl_ujian.id_pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+    
+    // Filter keyword
+    if (!empty($filters['keyword'])) {
+        $this->db->group_start();
+        $this->db->like('tbl_ujian.nama_ujian', $filters['keyword']);
+        $this->db->or_like('guru.nama_guru', $filters['keyword']);
+        $this->db->or_like('mata_pelajaran.nama_mapel', $filters['keyword']);
+        $this->db->or_like('kelas.nama_kelas', $filters['keyword']);
+        $this->db->group_end();
+    }
+    
+    // Filter guru
+    if (!empty($filters['guru'])) {
+        $this->db->where('guru.nip', $filters['guru']);
+    }
+    
+    // Filter mapel
+    if (!empty($filters['mapel'])) {
+        $this->db->where('mata_pelajaran.id', $filters['mapel']);
+    }
+    
+    // Filter kelas
+    if (!empty($filters['kelas'])) {
+        $this->db->where('kelas.id', $filters['kelas']);
+    }
+    
+    // Filter status
+    if (!empty($filters['status'])) {
+        $this->db->where('tbl_ujian.status', $filters['status']);
+    }
+
+    $query = $this->db->get();
+    return $query->row()->total;
+}
+
+// Method untuk dropdown filter
+public function get_guru_list()
+{
+    $this->db->select('nip, nama_guru');
+    $this->db->from('guru');
+    $this->db->order_by('nama_guru', 'asc');
+    return $this->db->get()->result();
+}
+
+public function get_mapel_list()
+{
+    $this->db->select('id, nama_mapel');
+    $this->db->from('mata_pelajaran');
+    $this->db->order_by('nama_mapel', 'asc');
+    return $this->db->get()->result();
+}
+
+public function get_kelas_list()
+{
+    $this->db->select('id, nama_kelas');
+    $this->db->from('kelas');
+    $this->db->order_by('nama_kelas', 'asc');
+    return $this->db->get()->result();
+}
+
     public function detail_ujian($id_ujian = null)
     {
         $this->db->from('tbl_ujian');
