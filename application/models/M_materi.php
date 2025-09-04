@@ -452,7 +452,123 @@ public function get_pertemuan_with_forum()
 
     return $this->db->get()->result();
 }
+public function get_pertemuan_with_forum_paginated($limit, $start, $filters = [])
+{
+    $this->db->select('
+        pertemuan.id AS id_pertemuan,
+        pertemuan.pertemuan_ke,
+        pertemuan.tanggal,
+        guru.nama_guru,
+        mata_pelajaran.nama_mapel,
+        kelas.nama_kelas,
+        materi.deskripsi,
+        COUNT(forum_diskusi.id) as total_komentar
+    ');
+    $this->db->from('forum_diskusi');
+    $this->db->join('pertemuan', 'pertemuan.id = forum_diskusi.id_pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('guru', 'guru.nip = materi.id_guru');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+    
+    // Filter keyword
+    if (!empty($filters['keyword'])) {
+        $this->db->group_start();
+        $this->db->like('guru.nama_guru', $filters['keyword']);
+        $this->db->or_like('mata_pelajaran.nama_mapel', $filters['keyword']);
+        $this->db->or_like('kelas.nama_kelas', $filters['keyword']);
+        $this->db->or_like('materi.deskripsi', $filters['keyword']);
+        $this->db->group_end();
+    }
+    
+    // Filter guru
+    if (!empty($filters['guru'])) {
+        $this->db->where('guru.nip', $filters['guru']);
+    }
+    
+    // Filter mapel
+    if (!empty($filters['mapel'])) {
+        $this->db->where('mata_pelajaran.id', $filters['mapel']);
+    }
+    
+    // Filter kelas
+    if (!empty($filters['kelas'])) {
+        $this->db->where('kelas.id', $filters['kelas']);
+    }
+    
+    $this->db->group_by('pertemuan.id');
+    $this->db->order_by('guru.nama_guru', 'ASC');
+    $this->db->order_by('mata_pelajaran.nama_mapel', 'ASC');
+    $this->db->order_by('kelas.nama_kelas', 'ASC');
+    $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
+    $this->db->limit($limit, $start);
 
+    return $this->db->get()->result();
+}
+
+public function count_pertemuan_with_forum($filters = [])
+{
+    $this->db->select('COUNT(DISTINCT pertemuan.id) as total');
+    $this->db->from('forum_diskusi');
+    $this->db->join('pertemuan', 'pertemuan.id = forum_diskusi.id_pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('guru', 'guru.nip = materi.id_guru');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+    
+    // Filter keyword
+    if (!empty($filters['keyword'])) {
+        $this->db->group_start();
+        $this->db->like('guru.nama_guru', $filters['keyword']);
+        $this->db->or_like('mata_pelajaran.nama_mapel', $filters['keyword']);
+        $this->db->or_like('kelas.nama_kelas', $filters['keyword']);
+        $this->db->or_like('materi.deskripsi', $filters['keyword']);
+        $this->db->group_end();
+    }
+    
+    // Filter guru
+    if (!empty($filters['guru'])) {
+        $this->db->where('guru.nip', $filters['guru']);
+    }
+    
+    // Filter mapel
+    if (!empty($filters['mapel'])) {
+        $this->db->where('mata_pelajaran.id', $filters['mapel']);
+    }
+    
+    // Filter kelas
+    if (!empty($filters['kelas'])) {
+        $this->db->where('kelas.id', $filters['kelas']);
+    }
+
+    $query = $this->db->get();
+    return $query->row()->total;
+}
+
+// Method untuk dropdown filter
+public function get_guru_list()
+{
+    $this->db->select('nip, nama_guru');
+    $this->db->from('guru');
+    $this->db->order_by('nama_guru', 'asc');
+    return $this->db->get()->result();
+}
+
+public function get_mapel_lista()
+{
+    $this->db->select('id, nama_mapel');
+    $this->db->from('mata_pelajaran');
+    $this->db->order_by('nama_mapel', 'asc');
+    return $this->db->get()->result();
+}
+
+public function get_kelas_lista()
+{
+    $this->db->select('id, nama_kelas');
+    $this->db->from('kelas');
+    $this->db->order_by('nama_kelas', 'asc');
+    return $this->db->get()->result();
+}
 
 
 }

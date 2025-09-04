@@ -1100,13 +1100,78 @@ private function convert_to_embed($url) {
         }
         redirect('admin/data_fordis');
     }
-    public function data_fordis() {
-        $this->load->model('M_materi');
-        $data['forums'] = $this->M_materi->get_pertemuan_with_forum();
-        $this->load->view('admin/partials/nava');
-        $this->load->view('admin/data_fordis', $data);
-        $this->load->view('admin/partials/foota');
+public function data_fordis() {
+    $this->load->model('M_materi');
+    $this->load->library('pagination');
+
+    // Handle search parameters
+    $filters = [];
+    
+    if ($this->input->get('submit')) {
+        $filters = [
+            'keyword' => $this->input->get('keyword'),
+            'guru' => $this->input->get('guru'),
+            'mapel' => $this->input->get('mapel'),
+            'kelas' => $this->input->get('kelas')
+        ];
+        $this->session->set_userdata('filters_fordis', $filters);
     }
+    elseif ($this->input->get('keyword') !== null || $this->input->get('guru') !== null || 
+            $this->input->get('mapel') !== null || $this->input->get('kelas') !== null) {
+        $filters = [
+            'keyword' => $this->input->get('keyword'),
+            'guru' => $this->input->get('guru'),
+            'mapel' => $this->input->get('mapel'),
+            'kelas' => $this->input->get('kelas')
+        ];
+    }
+    else {
+        $filters = $this->session->userdata('filters_fordis') ?? [];
+    }
+
+    // pagination config
+    $config['base_url'] = site_url('admin/data_fordis');
+    $config['total_rows'] = $this->M_materi->count_pertemuan_with_forum($filters);
+    $config['per_page'] = 10;
+    $config['uri_segment'] = 3;
+    $config['reuse_query_string'] = TRUE;
+    
+    // Konfigurasi styling pagination
+    $config['full_tag_open'] = '<nav><ul class="pagination justify-content-center">';
+    $config['full_tag_close'] = '</ul></nav>';
+    $config['first_link'] = 'First';
+    $config['last_link'] = 'Last';
+    $config['next_link'] = '&raquo';
+    $config['prev_link'] = '&laquo';
+    $config['cur_tag_open'] = '<li class="page-item active"><span class="page-link">';
+    $config['cur_tag_close'] = '</span></li>';
+    $config['num_tag_open'] = '<li class="page-item"><span class="page-link">';
+    $config['num_tag_close'] = '</span></li>';
+
+    $this->pagination->initialize($config);
+
+    $page = $this->uri->segment(3, 0);
+
+    // ambil data fordis dengan pagination
+    $data['forums'] = $this->M_materi->get_pertemuan_with_forum_paginated($config['per_page'], $page, $filters);
+    $data['pagination'] = $this->pagination->create_links();
+
+    // filters dan dropdown
+    $data['filters'] = $filters;
+    $data['guru_list'] = $this->M_materi->get_guru_list();
+    $data['mapel_list'] = $this->M_materi->get_mapel_lista();
+    $data['kelas_list'] = $this->M_materi->get_kelas_lista();
+
+    $this->load->view('admin/partials/nava', $data);
+    $this->load->view('admin/data_fordis', $data);
+    $this->load->view('admin/partials/foota');
+}
+
+public function reset_search_fordis()
+{
+    $this->session->unset_userdata('filters_fordis');
+    redirect('admin/data_fordis');
+}
     public function delete_forum($id_pertemuan)
     {
         $this->db->where('id_pertemuan', $id_pertemuan);

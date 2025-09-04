@@ -39,7 +39,7 @@
                                                     </th>
 
                                                     <td>
-                                                        <?php echo $u->nip_guru ?>
+                                                        <?php echo $u->nama_guru ?>
                                                     </td>
 
                                                     <td>

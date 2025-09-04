@@ -9,6 +9,49 @@
         </div>
 
         <div class="section-body">
+                    <!-- SEARCH FORM -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <form action="<?= site_url('admin/data_fordis'); ?>" method="get" class="form-inline">
+                                    <input type="text" name="keyword" class="form-control mr-2 mb-2"
+                                        placeholder="Cari guru, mapel, kelas, atau deskripsi..."
+                                        value="<?= isset($filters['keyword']) ? html_escape($filters['keyword']) : ''; ?>">
+                                    
+                                    <select name="guru" class="form-control mr-2 mb-2">
+                                        <option value="">-- Semua Guru --</option>
+                                        <?php foreach ($guru_list as $guru): ?>
+                                            <option value="<?= $guru->nip; ?>"
+                                                <?= (isset($filters['guru']) && $filters['guru'] == $guru->nip) ? 'selected' : ''; ?>>
+                                                <?= $guru->nama_guru; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    
+                                    <select name="mapel" class="form-control mr-2 mb-2">
+                                        <option value="">-- Semua Mapel --</option>
+                                        <?php foreach ($mapel_list as $mapel): ?>
+                                            <option value="<?= $mapel->id; ?>"
+                                                <?= (isset($filters['mapel']) && $filters['mapel'] == $mapel->id) ? 'selected' : ''; ?>>
+                                                <?= $mapel->nama_mapel; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    
+                                    <select name="kelas" class="form-control mr-2 mb-2">
+                                        <option value="">-- Semua Kelas --</option>
+                                        <?php foreach ($kelas_list as $kelas): ?>
+                                            <option value="<?= $kelas->id; ?>"
+                                                <?= (isset($filters['kelas']) && $filters['kelas'] == $kelas->id) ? 'selected' : ''; ?>>
+                                                <?= $kelas->nama_kelas; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    
+                                    <button type="submit" name="submit" value="1" class="btn btn-primary mb-2">Cari</button>
+                                    <a href="<?= site_url('admin/reset_search_fordis'); ?>" class="btn btn-secondary ml-2 mb-2">Reset</a>
+                                </form>
+                            </div>
+                        </div>
 <?php if (!empty($forums)): ?>
     <div class="table-responsive">
         <table class="table table-bordered">
@@ -45,6 +88,9 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <div class="mt-3">
+                            <?= $pagination ?? '' ?>
+        </div>
     </div>
 <?php else: ?>
     <p class="text-muted">Belum ada pertemuan yang memiliki forum diskusi.</p>
