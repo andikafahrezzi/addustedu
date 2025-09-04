@@ -6,7 +6,7 @@
                 <h2 class="card-title" style="color: black;">Manajemen Data Mata Pelajaran</h2>
                 <hr>
                 <p class="card-text">
-                    Halaman ini digunakan untuk mengelola data mata pelajaran di sistem e-learning ADDUSTEDU.
+                    Halaman ini digunakan untuk mengelola data mata pelajaran di sistem e-learning Ctkarya.
                 </p>
                 <a href="<?= base_url('admin/add_mapel') ?>" class="btn btn-success">Tambah Mapel ⭢</a>
             </div>

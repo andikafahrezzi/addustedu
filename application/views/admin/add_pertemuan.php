@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>Admin Dashboard - addustedu</title>
+    <title>Admin Dashboard - Ctkarya</title>
 
     <!-- General CSS Files -->
     <link rel="icon" href="<?= base_url('assets/') ?>img/logoh.png" type="image/png">
@@ -105,7 +105,7 @@
                     </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <div class="dropdown-title">Admin - addustedu</div>
+                    <div class="dropdown-title">Admin - Ctkarya</div>
                     <a href="<?= base_url('welcome/logout') ?>" class="dropdown-item has-icon text-danger">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
@@ -117,7 +117,7 @@
     <!-- Logo dan Shortcut -->
     <div class="addust-logo text-center">
         <a href="<?= base_url('admin') ?>">
-            <i class="fas fa-graduation-cap mr-1" style="font-size: 30px;"></i> Addustedu <sup>3</sup>
+            <i class="fas fa-graduation-cap mr-1" style="font-size: 30px;"></i> Ctkarya <sup>3</sup>
         </a>
         <div class="shortcut-button mt-2">
             <a href="<?= base_url('admin/data_pertemuan') ?>" class="btn btn-outline-success btn-sm">

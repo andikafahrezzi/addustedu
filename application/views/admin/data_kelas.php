@@ -24,7 +24,7 @@ function singkat_jurusan($jurusan) {
             <div class="card-body">
                 <h2 class="card-title" style="color: black;">Manajemen Data Kelas</h2>
                 <hr>
-                <p class="card-text">Di bawah ini adalah daftar kelas yang sudah terdaftar dalam sistem Addustedu.</p>
+                <p class="card-text">Di bawah ini adalah daftar kelas yang sudah terdaftar dalam sistem Ctkarya.</p>
                 <a href="<?= base_url('admin/add_kelas') ?>" class="btn btn-success">Tambah Data Kelas ⭢</a>
             </div>
         </div>

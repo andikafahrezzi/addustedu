@@ -169,7 +169,7 @@ if ($data['user']) {
         $this->email->initialize($config);
 
         $data = array(
-            'name' => 'syauqi',
+            'name' => 'dika',
             'link' => ' ' . base_url() . 'welcome/verify?email=' . $this->input->post('email') . '& token' . urlencode($token) . '"',
         );
 

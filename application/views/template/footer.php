@@ -1,11 +1,6 @@
 <!--
-@Project: addustedu
-@Programmer: Syauqi Zaidan Khairan Khalaf
-@Website: https://linktr.ee/syauqi
-@Email : syaokay@gmail.com
-
 @About-addustedu :
-Web Edukasi Open Source yang dibuat oleh Syauqi Zaidan Khairan Khalaf.
+Web Edukasi Open Source yang dibuat oleh Andika Fahrezi
 addustedu adalah Web edukasi yang dilengkapi video, materi dan sistem ujian
 yang tersedia secara gratis. addustedu dibuat ditujukan agar para siswa dan
 guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
@@ -20,10 +15,10 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                 <div class="single-footer-widget tp_widgets">
                     <h6 class="footer_title">Tentang Kami</h6>
                     <ul class="list">
-                        <li><a href="<?= base_url('welcome/tentang') ?>">Tentang addustedu</a></li>
-                        <li><a href="<?= base_url('welcome/materi') ?>">Materi addustedu</a></li>
-                        <li><a href="<?= base_url('welcome/kontak') ?>">Kontak addustedu</a></li>
-                        <li><a href="http://smkn1ciamis.id/">Website Resmi Sekolah</a></li>
+                        <li><a href="<?= base_url('welcome/tentang') ?>">Tentang Cipta Tunas Karya</a></li>
+                        <li><a href="<?= base_url('welcome/materi') ?>">Materi Cipta Tunas Karya</a></li>
+                        <li><a href="<?= base_url('welcome/kontak') ?>">Kontak Cipta Tunas Karya</a></li>
+                        <li><a href="http://CiptaTunasKarya.id/">Website Resmi Sekolah</a></li>
                     </ul>
                 </div>
             </div>
@@ -57,9 +52,9 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 col-sm-6">
-                <h4 class="footer_title">Tentang addustedu</h4>
+                <h4 class="footer_title">Tentang Cipta Tunas Karya</h4>
                 <p>
-                    Web Edukasi Open Source yang dibuat oleh Andika Fahrezi. addustedu adalah Web edukasi yang dilengkapi video, materi dan sistem ujian yang tersedia secara gratis. addustedu dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
+                    Web Edukasi Open Source yang dibuat oleh Andika Fahrezi. Cipta Tunas Karya adalah Web edukasi yang dilengkapi video, materi dan sistem ujian yang tersedia secara gratis. addustedu dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                 </p>
             </div>
         </div>

@@ -5,7 +5,7 @@
             <div class="card-body">
                 <h2 class="card-title" style="color: black;">Tambah Data Kelas</h2>
                 <hr>
-                <p class="card-text">Lengkapi form berikut untuk menambahkan kelas baru ke sistem Addustedu.</p>
+                <p class="card-text">Lengkapi form berikut untuk menambahkan kelas baru ke sistem Ctkarya.</p>
                 <?php if (validation_errors()): ?>
                     <div class="alert alert-danger">Nama Kelas Sudah Ada, Nama Kelas Tidak Boleh Sama</div>
                 <?php endif; ?>

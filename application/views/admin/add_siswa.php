@@ -2,7 +2,7 @@
              <div class="row bg-registration p-3">
                  <div class="col-md-12 text-center">
                      <p class="registration-title font-weight-bold display-4 mt-4" style="font-size: 50px;">
-                         Pendaftaran addustedu</p>
+                         Pendaftaran Ctkarya</p>
                      <p style="line-height:-30px;margin-top:-20px;">Silahkan isi data data yang diperlukan dibawah ini </p>
                      <hr>
                  </div>
