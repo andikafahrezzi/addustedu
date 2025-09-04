@@ -65,6 +65,11 @@
 <?php endforeach; ?>
 </tbody>
             </table>
+            <div class="row mt-3">
+    <div class="col-md-12">
+        <?= $pagination ?? '' ?>
+    </div>
+</div>
             </div>
         </div>
     </div>
