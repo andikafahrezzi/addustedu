@@ -49,12 +49,10 @@
                                 <table class="table align-items-center table-flush">
                                     <thead class="thead-light">
                                         <tr class="text-center">
-                                            <th>ID</th>
+                                            <th>Nis</th>
                                             <th>Nama Siswa</th>
                                             <th>Email</th>
                                             <th>Kelas</th>
-                                            <th>Gambar</th>
-                                            <th>Akun Aktif *</th>
                                             <th>Detail</th>
                                             <th>Option</th>
                                         </tr>
@@ -67,8 +65,6 @@
                                                     <td><?= $u->nama ?></td>
                                                     <td><?= $u->email ?></td>
                                                     <td><?= $u->nama_kelas ?></td>
-                                                    <td><img height="20px" src="<?= base_url('assets/profile_picture/' . $u->image); ?>"></td>
-                                                    <td><?= $u->is_active ?></td>
                                                     <td><a href="<?= site_url('admin/detail_siswa/' . $u->nis); ?>" class="btn btn-success">Detail</a></td>
                                                     <td>
                                                         <a href="<?= site_url('admin/update_siswa/' . $u->nis); ?>" class="btn btn-info">Update</a>
