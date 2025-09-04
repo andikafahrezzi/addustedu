@@ -219,6 +219,116 @@ public function tampil_quiz()
     $this->db->order_by('quiz.created_at', 'DESC');
     return $this->db->get();
 }
+public function get_paginated_quiz($limit, $start, $filters = [])
+{
+    $this->db->select('quiz.*, 
+                      mata_pelajaran.nama_mapel, 
+                      kelas.nama_kelas, 
+                      guru.nama_guru,
+                      pertemuan.pertemuan_ke');
+    $this->db->from('quiz');
+    $this->db->join('pertemuan', 'pertemuan.id = quiz.id_pertemuan', 'left');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi', 'left');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel', 'left');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas', 'left');
+    $this->db->join('guru', 'guru.nip = materi.id_guru', 'left');
+    
+    // Filter keyword
+    if (!empty($filters['keyword'])) {
+        $this->db->group_start();
+        $this->db->like('quiz.judul', $filters['keyword']);
+        $this->db->or_like('quiz.deskripsi', $filters['keyword']);
+        $this->db->or_like('mata_pelajaran.nama_mapel', $filters['keyword']);
+        $this->db->or_like('kelas.nama_kelas', $filters['keyword']);
+        $this->db->or_like('guru.nama_guru', $filters['keyword']);
+        $this->db->group_end();
+    }
+    
+    // Filter guru
+    if (!empty($filters['guru'])) {
+        $this->db->where('guru.nip', $filters['guru']);
+    }
+    
+    // Filter mapel
+    if (!empty($filters['mapel'])) {
+        $this->db->where('mata_pelajaran.id', $filters['mapel']);
+    }
+    
+    // Filter kelas
+    if (!empty($filters['kelas'])) {
+        $this->db->where('kelas.id', $filters['kelas']);
+    }
+    
+    $this->db->order_by('quiz.created_at', 'DESC');
+    $this->db->limit($limit, $start);
+    return $this->db->get()->result();
+}
+
+public function count_all_quiz($filters = [])
+{
+    $this->db->select('COUNT(quiz.id) as total');
+    $this->db->from('quiz');
+    $this->db->join('pertemuan', 'pertemuan.id = quiz.id_pertemuan', 'left');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi', 'left');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel', 'left');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas', 'left');
+    $this->db->join('guru', 'guru.nip = materi.id_guru', 'left');
+    
+    // Filter keyword
+    if (!empty($filters['keyword'])) {
+        $this->db->group_start();
+        $this->db->like('quiz.judul', $filters['keyword']);
+        $this->db->or_like('quiz.deskripsi', $filters['keyword']);
+        $this->db->or_like('mata_pelajaran.nama_mapel', $filters['keyword']);
+        $this->db->or_like('kelas.nama_kelas', $filters['keyword']);
+        $this->db->or_like('guru.nama_guru', $filters['keyword']);
+        $this->db->group_end();
+    }
+    
+    // Filter guru
+    if (!empty($filters['guru'])) {
+        $this->db->where('guru.nip', $filters['guru']);
+    }
+    
+    // Filter mapel
+    if (!empty($filters['mapel'])) {
+        $this->db->where('mata_pelajaran.id', $filters['mapel']);
+    }
+    
+    // Filter kelas
+    if (!empty($filters['kelas'])) {
+        $this->db->where('kelas.id', $filters['kelas']);
+    }
+
+    $query = $this->db->get();
+    return $query->row()->total;
+}
+
+// Method untuk dropdown filter
+public function get_guru_list()
+{
+    $this->db->select('nip, nama_guru');
+    $this->db->from('guru');
+    $this->db->order_by('nama_guru', 'asc');
+    return $this->db->get()->result();
+}
+
+public function get_mapel_list()
+{
+    $this->db->select('id, nama_mapel');
+    $this->db->from('mata_pelajaran');
+    $this->db->order_by('nama_mapel', 'asc');
+    return $this->db->get()->result();
+}
+
+public function get_kelas_list()
+{
+    $this->db->select('id, nama_kelas');
+    $this->db->from('kelas');
+    $this->db->order_by('nama_kelas', 'asc');
+    return $this->db->get()->result();
+}
+
 public function delete_quiz($id)
 {
     // Cek validitas id

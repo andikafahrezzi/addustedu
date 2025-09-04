@@ -1257,20 +1257,73 @@ private function tambah_soal($quiz_id)
     $this->Quiz_model->tambah_soal($data);
     $this->session->set_flashdata('success', 'Soal berhasil ditambahkan!');
 }
+
 public function data_quiz()
-    {
-        $this->load->model('Quiz_model');
+{
+    $this->load->model('Quiz_model');
+    $this->load->library('pagination');
 
-        $data['user'] = $this->db->get_where('admin', ['email' =>
-            $this->session->userdata('email')])->row_array();
+    // Handle search parameters
+    $filters = [];
 
-        $data['user'] = $this->Quiz_model->tampil_quiz()->result();
-        $this->load->view('admin/partials/nava');
-        $this->load->view('admin/data_quiz', $data);
-        $this->load->view('admin/partials/foota');
-
+    if ($this->input->get('submit')) {
+        $filters = [
+            'keyword' => $this->input->get('keyword'),
+            'guru' => $this->input->get('guru'),
+            'mapel' => $this->input->get('mapel'),
+            'kelas' => $this->input->get('kelas')
+        ];
+        $this->session->set_userdata('filters_quiz', $filters);
+    } else {
+        $filters = $this->session->userdata('filters_quiz') ?? [];
     }
-        public function hapus_soal_quiz($id_soal, $id_quiz)
+
+    // pagination config
+    $config['base_url'] = site_url('admin/data_quiz');
+    $config['total_rows'] = $this->Quiz_model->count_all_quiz($filters);
+    $config['per_page'] = 10;
+    $config['uri_segment'] = 3;
+    $config['reuse_query_string'] = TRUE;
+
+    // Bootstrap 4 pagination
+    $config['full_tag_open'] = '<nav><ul class="pagination justify-content-center">';
+    $config['full_tag_close'] = '</ul></nav>';
+    $config['first_link'] = 'First';
+    $config['last_link'] = 'Last';
+    $config['next_link'] = '&raquo';
+    $config['prev_link'] = '&laquo';
+    $config['cur_tag_open'] = '<li class="page-item active"><span class="page-link">';
+    $config['cur_tag_close'] = '</span></li>';
+    $config['num_tag_open'] = '<li class="page-item"><span class="page-link">';
+    $config['num_tag_close'] = '</span></li>';
+
+    $this->pagination->initialize($config);
+
+    $page = $this->uri->segment(3, 0);
+
+    // ambil data quiz dengan pagination
+    $data['quiz'] = $this->Quiz_model->get_paginated_quiz($config['per_page'], $page, $filters);
+    $data['pagination'] = $this->pagination->create_links();
+
+    // filters dan dropdown
+    $data['filters'] = $filters;
+    $data['guru_list'] = $this->Quiz_model->get_guru_list();
+    $data['mapel_list'] = $this->Quiz_model->get_mapel_list();
+    $data['kelas_list'] = $this->Quiz_model->get_kelas_list();
+
+    $this->load->view('admin/partials/nava', $data);
+    $this->load->view('admin/data_quiz', $data);
+    $this->load->view('admin/partials/foota');
+}
+
+
+public function reset_search_quiz()
+{
+    $this->session->unset_userdata('filters_quiz');
+    redirect('admin/data_quiz');
+}
+
+    public function hapus_soal_quiz($id_soal, $id_quiz)
 {
     $this->load->model('Quiz_model');
 

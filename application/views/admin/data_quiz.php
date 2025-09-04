@@ -1,88 +1,111 @@
-
-            <!-- Main Content -->
-            <div class="main-content">
-                <section class="section">
-                    <div class="card" style="width:100%;">
-                        <div class="card-body">
-                            <h2 class="card-title" style="color: black;">Management Data Quiz Ctkarya</h2>
-                            <hr>
-                            <p class="card-text"> After I ran into Helen at a restaurant, I realized she was just office pretty drop-dead date put in in a deck for our standup today. Who's responsible for the ask for this request? who's responsible for the ask for this request? but moving the goalposts gain traction.</p>
-                            <a href="<?= base_url('admin/add_quiz') ?>" class="btn btn-success">Tambah
-                                Quiz⭢</a>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px">
-                                <div class="table-responsive">
-                                    <table id="example" class="table align-items-center table-flush">
-                                        <thead class="thead-light">
-                                            <tr class="text-center">
-                                                <th scope="col">ID</th>
-                                                <th scope="col">Nama Guru</th>
-                                                <th scope="col">Nama Mapel</th>
-                                                <th scope="col">Deskripsi</th>
-                                                <th scope="col">Lamanya Quiz</th>
-                                                <th scope="col">Kelas</th>
-                                                <th scope="col">Dibuat</th>
-                                                <th scope="col">Option</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <?php
-
-                                            foreach ($user as $u) {
-                                            ?>
-                                                <tr class="text-center">
-
-                                                    <th scope="row">
-                                                        <?php echo $u->id ?>
-                                                    </th>
-
-                                                    <td>
-                                                        <?php echo $u->nama_guru ?>
-                                                    </td>
-
-                                                    <td>
-                                                        <?php echo $u->nama_mapel ?>
-                                                    </td>
-                                                    <td>
-                                                        <?= substr($u->deskripsi, 0, 15); ?>
-                                                        .&nbsp;.&nbsp;
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $u->waktu_pengerjaan ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $u->nama_kelas ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $u->created_at ?>
-                                                    </td>
-
-                                                    <td class="text-center">
-                                                        <a href="<?php echo site_url('admin/kelola_quiz/' . $u->id); ?>" class="btn btn-info">Update Soal ⭢</a>
-
-                                                        <button onclick="confirmDeleteQuiz('<?= $u->id; ?>')" class="btn btn-sm btn-danger" title="Hapus">
-                    <i class="fas fa-trash"></i>
-                </button>
-
-                                                </tr>
-                                            <?php
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <p class="small font-weight-bold">Tidak Ada Data Quiz yg tersedia, Silahkan Tambah Quiz</p>
-                            </div>
-                        </div>
-                    </div>
+<div class="main-content">
+    <section class="section">
+        <div class="card" style="width:100%;">
+            <div class="card-body">
+                <h2 class="card-title" style="color: black;">Management Data Quiz Ctkarya</h2>
+                <hr>
+                <a href="<?= base_url('admin/add_quiz') ?>" class="btn btn-success">Tambah Quiz ⭢</a>
             </div>
         </div>
-    </div>
-    <!-- End Main Content -->
+
+        <!-- Filter Form -->
+        <form method="get" action="<?= site_url('admin/data_quiz') ?>" class="mb-3">
+            <div class="form-row">
+                <div class="col-md-3">
+                    <input type="text" name="keyword" class="form-control" placeholder="Cari keyword..."
+                        value="<?= $filters['keyword'] ?? '' ?>">
+                </div>
+                <div class="col-md-2">
+                    <select name="guru" class="form-control">
+                        <option value="">Pilih Guru</option>
+                        <?php foreach ($guru_list as $g): ?>
+                            <option value="<?= $g->nip ?>" <?= ($filters['guru'] ?? '') == $g->nip ? 'selected' : '' ?>>
+                                <?= $g->nama_guru ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="mapel" class="form-control">
+                        <option value="">Pilih Mapel</option>
+                        <?php foreach ($mapel_list as $m): ?>
+                            <option value="<?= $m->id ?>" <?= ($filters['mapel'] ?? '') == $m->id ? 'selected' : '' ?>>
+                                <?= $m->nama_mapel ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="kelas" class="form-control">
+                        <option value="">Pilih Kelas</option>
+                        <?php foreach ($kelas_list as $k): ?>
+                            <option value="<?= $k->id ?>" <?= ($filters['kelas'] ?? '') == $k->id ? 'selected' : '' ?>>
+                                <?= $k->nama_kelas ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" name="submit" value="1" class="btn btn-primary">Cari</button>
+                    <a href="<?= site_url('admin/reset_search_quiz') ?>" class="btn btn-secondary">Reset</a>
+                </div>
+            </div>
+        </form>
+
+        <!-- Table -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px">
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr class="text-center">
+                                    <th>ID</th>
+                                    <th>Nama Guru</th>
+                                    <th>Nama Mapel</th>
+                                    <th>Deskripsi</th>
+                                    <th>Lamanya Quiz</th>
+                                    <th>Kelas</th>
+                                    <th>Dibuat</th>
+                                    <th>Option</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($quiz)): ?>
+                                    <?php foreach ($quiz as $u): ?>
+                                        <tr class="text-center">
+                                            <td><?= $u->id ?></td>
+                                            <td><?= $u->nama_guru ?></td>
+                                            <td><?= $u->nama_mapel ?></td>
+                                            <td><?= substr($u->deskripsi, 0, 15) ?>...</td>
+                                            <td><?= $u->waktu_pengerjaan ?></td>
+                                            <td><?= $u->nama_kelas ?></td>
+                                            <td><?= $u->created_at ?></td>
+                                            <td>
+                                                <a href="<?= site_url('admin/kelola_quiz/' . $u->id); ?>" class="btn btn-info btn-sm">Update Soal ⭢</a>
+                                                <button onclick="confirmDeleteQuiz('<?= $u->id; ?>')" class="btn btn-sm btn-danger" title="Hapus">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="8" class="text-center">Tidak ada data quiz.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Pagination -->
+                    <div class="mt-3">
+                        <?= $pagination ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
 
 
     <!-- Start Sweetalert -->
