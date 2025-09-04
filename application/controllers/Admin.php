@@ -1236,14 +1236,92 @@ public function delete_quiz($id)
 
     
     // BANK SOAL - ADMIN
-    public function bank_soal() {
-        $data['title'] = 'Bank Soal';
-        $data['soal'] = $this->Bank_soal_model->get_all_soal()->result();
-        
-        $this->load->view('admin/partials/nava', $data);
-        $this->load->view('admin/data_bank_soal', $data);
-        $this->load->view('admin/partials/foota');
+public function bank_soal() {
+    $this->load->model('Bank_soal_model');
+    $this->load->library('pagination');
+
+    $data['title'] = 'Bank Soal';
+    
+    // Handle search parameters
+    $filters = [];
+    
+    if ($this->input->get('submit')) {
+        $filters = [
+            'keyword' => $this->input->get('keyword'),
+            'mapel' => $this->input->get('mapel'),
+            'tipe_soal' => $this->input->get('tipe_soal'),
+            'tingkat_kesulitan' => $this->input->get('tingkat_kesulitan')
+        ];
+        $this->session->set_userdata('filters_bank_soal', $filters);
     }
+    elseif ($this->input->get('keyword') !== null || $this->input->get('mapel') !== null || 
+            $this->input->get('tipe_soal') !== null || $this->input->get('tingkat_kesulitan') !== null) {
+        $filters = [
+            'keyword' => $this->input->get('keyword'),
+            'mapel' => $this->input->get('mapel'),
+            'tipe_soal' => $this->input->get('tipe_soal'),
+            'tingkat_kesulitan' => $this->input->get('tingkat_kesulitan')
+        ];
+    }
+    else {
+        $filters = $this->session->userdata('filters_bank_soal') ?? [];
+    }
+
+    // pagination config
+    $config['base_url'] = site_url('admin/bank_soal');
+    $config['total_rows'] = $this->Bank_soal_model->count_all($filters);
+    $config['per_page'] = 10;
+    $config['uri_segment'] = 3;
+    $config['reuse_query_string'] = TRUE;
+    
+    // Konfigurasi styling pagination
+    $config['full_tag_open'] = '<nav><ul class="pagination justify-content-center">';
+    $config['full_tag_close'] = '</ul></nav>';
+    $config['first_link'] = 'First';
+    $config['last_link'] = 'Last';
+    $config['next_link'] = '&raquo';
+    $config['prev_link'] = '&laquo';
+    $config['cur_tag_open'] = '<li class="page-item active"><span class="page-link">';
+    $config['cur_tag_close'] = '</span></li>';
+    $config['num_tag_open'] = '<li class="page-item"><span class="page-link">';
+    $config['num_tag_close'] = '</span></li>';
+
+    $this->pagination->initialize($config);
+
+    $page = $this->uri->segment(3, 0);
+
+    // ambil data soal dengan pagination
+    $data['soal'] = $this->Bank_soal_model->get_paginated($config['per_page'], $page, $filters);
+    $data['pagination'] = $this->pagination->create_links();
+
+    // filters dan dropdown
+    $data['filters'] = $filters;
+    $data['mapel_list'] = $this->Bank_soal_model->get_mapel_list();
+    
+    // Options untuk dropdown
+    $data['tipe_soal_options'] = [
+        '' => '-- Semua Tipe --',
+        'pilihan' => 'Pilihan Ganda',
+        'essay' => 'Essay'
+    ];
+    
+    $data['tingkat_kesulitan_options'] = [
+        '' => '-- Semua Tingkat --',
+        'mudah' => 'Mudah',
+        'sedang' => 'Sedang',
+        'sulit' => 'Sulit'
+    ];
+
+    $this->load->view('admin/partials/nava', $data);
+    $this->load->view('admin/data_bank_soal', $data);
+    $this->load->view('admin/partials/foota');
+}
+
+public function reset_search_bank_soal()
+{
+    $this->session->unset_userdata('filters_bank_soal');
+    redirect('admin/bank_soal');
+}
 
     public function add_bank_soal() {
         $data['title'] = 'Tambah Soal';

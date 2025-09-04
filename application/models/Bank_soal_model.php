@@ -3,13 +3,95 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Bank_soal_model extends CI_Model {
 
-    public function get_all_soal() {
-        $this->db->select('bank_soal.*, mata_pelajaran.nama_mapel');
-        $this->db->from('bank_soal');
-        $this->db->join('mata_pelajaran', 'bank_soal.id_mapel = mata_pelajaran.id', 'left');
-        return $this->db->get();
+public function get_paginated($limit, $start, $filters = [])
+{
+    $this->db->select('bank_soal.*, mata_pelajaran.nama_mapel');
+    $this->db->from('bank_soal');
+    $this->db->join('mata_pelajaran', 'bank_soal.id_mapel = mata_pelajaran.id', 'left');
+    
+    // Filter keyword (pertanyaan)
+    if (!empty($filters['keyword'])) {
+        $this->db->group_start();
+        $this->db->like('bank_soal.pertanyaan', $filters['keyword']);
+        $this->db->or_like('mata_pelajaran.nama_mapel', $filters['keyword']);
+        $this->db->or_like('bank_soal.tingkat_kesulitan', $filters['keyword']);
+        $this->db->or_like('bank_soal.tipe_kognitif', $filters['keyword']);
+        $this->db->group_end();
     }
-    public function get_kategori() {
+    
+    // Filter mapel
+    if (!empty($filters['mapel'])) {
+        $this->db->where('bank_soal.id_mapel', $filters['mapel']);
+    }
+    
+    // Filter tipe soal
+    if (!empty($filters['tipe_soal'])) {
+        $this->db->where('bank_soal.tipe_soal', $filters['tipe_soal']);
+    }
+    
+    // Filter tingkat kesulitan
+    if (!empty($filters['tingkat_kesulitan'])) {
+        $this->db->where('bank_soal.tingkat_kesulitan', $filters['tingkat_kesulitan']);
+    }
+    
+    $this->db->order_by('bank_soal.created_at', 'desc');
+    $this->db->limit($limit, $start);
+    return $this->db->get()->result();
+}
+
+public function count_all($filters = [])
+{
+    $this->db->select('COUNT(bank_soal.id_soal) as total');
+    $this->db->from('bank_soal');
+    $this->db->join('mata_pelajaran', 'bank_soal.id_mapel = mata_pelajaran.id', 'left');
+    
+    // Filter keyword (pertanyaan)
+    if (!empty($filters['keyword'])) {
+        $this->db->group_start();
+        $this->db->like('bank_soal.pertanyaan', $filters['keyword']);
+        $this->db->or_like('mata_pelajaran.nama_mapel', $filters['keyword']);
+        $this->db->or_like('bank_soal.tingkat_kesulitan', $filters['keyword']);
+        $this->db->or_like('bank_soal.tipe_kognitif', $filters['keyword']);
+        $this->db->group_end();
+    }
+    
+    // Filter mapel
+    if (!empty($filters['mapel'])) {
+        $this->db->where('bank_soal.id_mapel', $filters['mapel']);
+    }
+    
+    // Filter tipe soal
+    if (!empty($filters['tipe_soal'])) {
+        $this->db->where('bank_soal.tipe_soal', $filters['tipe_soal']);
+    }
+    
+    // Filter tingkat kesulitan
+    if (!empty($filters['tingkat_kesulitan'])) {
+        $this->db->where('bank_soal.tingkat_kesulitan', $filters['tingkat_kesulitan']);
+    }
+    
+    $query = $this->db->get();
+    return $query->row()->total;
+}
+
+// Method untuk dropdown filter
+public function get_mapel_list()
+{
+    $this->db->select('id, nama_mapel');
+    $this->db->from('mata_pelajaran');
+    $this->db->order_by('nama_mapel', 'asc');
+    return $this->db->get()->result();
+}
+
+// Method lama tetap dipertahankan
+public function get_all_soal() {
+    $this->db->select('bank_soal.*, mata_pelajaran.nama_mapel');
+    $this->db->from('bank_soal');
+    $this->db->join('mata_pelajaran', 'bank_soal.id_mapel = mata_pelajaran.id', 'left');
+    return $this->db->get();
+}
+
+public function get_kategori() {
     return []; // Bisa diisi kalau kamu punya kategori soal di masa depan
 }
 public function get_soal_by_mapel($id_mapel)
