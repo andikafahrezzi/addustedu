@@ -197,7 +197,7 @@ public function quiz_result($quiz_siswa_id)
             $data = [
                 'siswa_id' => $this->session->userdata('nis'),
                 'id_pertemuan' => $id_pertemuan,
-                'file_path' => 'assets/materi_tugas/' . $upload_data['file_name'],
+                'file_path' => 'assets/tugas_uploads/' . $upload_data['file_name'],
                 'original_filename' => pathinfo($upload_data['client_name'], PATHINFO_FILENAME) . ' (' . strtoupper(ltrim($upload_data['file_ext'], '.')) . ')',
                 'file_type' => $upload_data['file_type'],
                 'file_size' => $upload_data['file_size'],

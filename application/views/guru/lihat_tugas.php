@@ -21,7 +21,7 @@
                         <tr>
                             <td><?= htmlspecialchars($sub->nama_siswa) ?></td>
                             <td>
-                                <a href="<?= base_url($sub->file_path) ?>" download>
+                                <a href="<?= site_url('guru/download/'.$sub->id) ?>">
                                     <i class="fas fa-file-download"></i>
                                     <?= htmlspecialchars($sub->original_filename) ?>
                                 </a>
@@ -37,7 +37,7 @@
                             <td>
                                 <div class="btn-group" role="group">
                                     <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#nilaiModal<?= $sub->id ?>">
-                                        <i class="fas fa-edit"> Nilai </i>
+                                        <i class="fas fa-edit">Nilai</i>
                                     </button>
                                     <button class="btn btn-sm btn-danger" onclick="confirmDelete('<?= $sub->id ?>')">
                                         <i class="fas fa-trash"></i>

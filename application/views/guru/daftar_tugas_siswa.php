@@ -18,46 +18,11 @@
                                 <small><?= $p['judul_materi'] ?></small>
                             </div>
                             <div class="card-body">
-                                <?php if (!empty($p['tugas'])): ?>
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-hover">
-                                            <thead class="thead-light">
-                                                <tr>
-                                                    <th>Nama Siswa</th>
-                                                    <th>Nama File</th>
-                                                    <th>Ukuran</th>
-                                                    <th>Jenis</th>
-                                                    <th>Dikirim Pada</th>
-                                                    <th class="text-center">Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php foreach ($p['tugas'] as $t): ?>
-                                                    <tr>
-                                                        <td><?= htmlspecialchars($t->nama_siswa) ?></td>
-                                                        <td><?= htmlspecialchars($t->original_filename) ?></td>
-                                                        <td><?= round($t->file_size / 1024, 2) ?> KB</td>
-                                                        <td><?= htmlspecialchars($t->file_type) ?></td>
-                                                        <td><?= date('d M Y H:i', strtotime($t->dikirim_pada)) ?></td>
-                                                        <td class="text-center">
-                                                            <a href="<?= base_url('guru/download_tugas/' . $t->id) ?>" class="btn btn-sm btn-success mb-1">
-                                                                <i class="fas fa-download"></i> Unduh
-                                                            </a>
-                                                            <a href="<?= base_url('guru/lihat_tugas/' . $t->id_pertemuan) ?>" class="btn btn-sm btn-primary mb-1">
-                                                                <i class="fas fa-eye"></i> Lihat
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                <?php endforeach; ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                <?php else: ?>
-                                    <div class="alert alert-warning d-flex align-items-center mb-0">
-                                        <i class="fas fa-exclamation-circle fa-lg mr-2"></i>
-                                        <span>Belum ada tugas yang dikumpulkan untuk pertemuan ini.</span>
-                                    </div>
-                                <?php endif; ?>
+                                <p><strong><?= $p['jumlah_tugas'] ?></strong> siswa sudah mengumpulkan tugas.</p>
+                                <a href="<?= base_url('guru/lihat_tugas/' . $p['id_pertemuan']) ?>" 
+                                   class="btn btn-sm btn-primary">
+                                    <i class="fas fa-eye"></i> Lihat Detail
+                                </a>
                             </div>
                         </div>
                     <?php endforeach; ?>

@@ -17,14 +17,18 @@ class Tugas_model extends CI_Model {
 
 
     // Get semua tugas siswa untuk suatu tugas
-    public function get_submissions($id_pertemuan) {
-        $this->db->select('tugas_siswa.*, siswa.nama as nama_siswa');
-        $this->db->from('tugas_siswa');
-        $this->db->join('siswa', 'siswa.nis = tugas_siswa.siswa_id');
-        $this->db->where('id_pertemuan', $id_pertemuan);
-        return $this->db->get()->result();
-    }
-    
+public function get_submissions($id_pertemuan) {
+    $this->db->select('tugas_siswa.*, siswa.nama as nama_siswa');
+    $this->db->from('tugas_siswa');
+    $this->db->join('siswa', 'siswa.nis = tugas_siswa.siswa_id');
+    $this->db->where('id_pertemuan', $id_pertemuan);
+    return $this->db->get()->result();
+}
+
+public function get_submission_by_id($id) {
+    return $this->db->get_where('tugas_siswa', ['id' => $id])->row();
+}
+
     public function sudah_dinilai($id) {
         $this->db->where('id', $id);
         $this->db->where_not_in('nilai', [null, '']);
@@ -74,55 +78,61 @@ public function get_pertemuan_by_guru($guru_id) {
     return $this->db->get()->result();
 }
 public function get_pertemuan_by_gurus($guru_id) {
-    $this->db->select('
-        pertemuan.id AS id_pertemuan,
-        pertemuan.pertemuan_ke,
-        materi.deskripsi AS judul_materi,
-        kelas.nama_kelas,
-        kelas.tingkat,
-        mata_pelajaran.nama_mapel
-    ');
-    $this->db->from('pertemuan');
-    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
-    $this->db->join('kelas', 'kelas.id = materi.id_kelas');
-    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
-
-    // Join ke tabel relasi guru_mapel untuk filter guru dan mapel
-    $this->db->join('guru_mapel', 'guru_mapel.id_mapel = materi.id_mapel');
-
-    $this->db->where('guru_mapel.id_guru', $guru_id);
-
-    // Urutan rapi: tingkat ➜ mapel ➜ kelas ➜ pertemuan
-    $this->db->order_by('kelas.tingkat', 'ASC');
-    $this->db->order_by("FIELD(kelas.tingkat, 'X', 'XI', 'XII')", '', false);
-    $this->db->order_by('mata_pelajaran.nama_mapel', 'ASC');
-    $this->db->order_by('kelas.nama_kelas', 'ASC');
-    $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
-
-    return $this->db->get()->result();
-}
-
-
-public function get_tugas_per_materi($id_pertemuan, $guru_id = null) {
-    $this->db->select('tugas_siswa.*, siswa.nama as nama_siswa, materi.id_guru, kelas.tingkat, kelas.nama_kelas, mata_pelajaran.nama_mapel');
-    $this->db->from('tugas_siswa');
-    $this->db->join('siswa', 'siswa.nis = tugas_siswa.siswa_id');
-    $this->db->join('pertemuan', 'pertemuan.id = tugas_siswa.id_pertemuan');
-    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
-    $this->db->join('kelas', 'kelas.id = materi.id_kelas');
-    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
-
-    if ($guru_id !== null) {
-        // Tambahkan join ke guru_mapel untuk validasi guru mengajar mapel terkait
+        $this->db->select('
+            pertemuan.id AS id_pertemuan,
+            pertemuan.pertemuan_ke,
+            materi.deskripsi AS judul_materi,
+            kelas.nama_kelas,
+            kelas.tingkat,
+            mata_pelajaran.nama_mapel
+        ');
+        $this->db->from('pertemuan');
+        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+        $this->db->join('kelas', 'kelas.id = materi.id_kelas');
+        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
         $this->db->join('guru_mapel', 'guru_mapel.id_mapel = materi.id_mapel');
         $this->db->where('guru_mapel.id_guru', $guru_id);
+
+        // Urutan rapi
+        $this->db->order_by("FIELD(kelas.tingkat, 'X', 'XI', 'XII')", '', false);
+        $this->db->order_by('mata_pelajaran.nama_mapel', 'ASC');
+        $this->db->order_by('kelas.nama_kelas', 'ASC');
+        $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
+
+        return $this->db->get()->result();
     }
 
-    $this->db->where('tugas_siswa.id_pertemuan', $id_pertemuan);
+    public function count_tugas_per_materi($id_pertemuan, $guru_id = null) {
+        $this->db->from('tugas_siswa');
+        $this->db->join('pertemuan', 'pertemuan.id = tugas_siswa.id_pertemuan');
+        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
 
-    $this->db->order_by('dikirim_pada', 'DESC');
-    return $this->db->get()->result();
-}
+        if ($guru_id !== null) {
+            $this->db->join('guru_mapel', 'guru_mapel.id_mapel = materi.id_mapel');
+            $this->db->where('guru_mapel.id_guru', $guru_id);
+        }
+
+        $this->db->where('tugas_siswa.id_pertemuan', $id_pertemuan);
+        return $this->db->count_all_results();
+    }
+
+    public function get_tugas_per_materi($id_pertemuan, $guru_id = null) {
+        $this->db->select('tugas_siswa.*, siswa.nama as nama_siswa');
+        $this->db->from('tugas_siswa');
+        $this->db->join('siswa', 'siswa.nis = tugas_siswa.siswa_id');
+        $this->db->join('pertemuan', 'pertemuan.id = tugas_siswa.id_pertemuan');
+        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+
+        if ($guru_id !== null) {
+            $this->db->join('guru_mapel', 'guru_mapel.id_mapel = materi.id_mapel');
+            $this->db->where('guru_mapel.id_guru', $guru_id);
+        }
+
+        $this->db->where('tugas_siswa.id_pertemuan', $id_pertemuan);
+        $this->db->order_by('dikirim_pada', 'DESC');
+
+        return $this->db->get()->result();
+    }
 
 
     

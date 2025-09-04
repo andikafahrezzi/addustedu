@@ -900,6 +900,28 @@ private function tambah_soal($quiz_id)
         $this->load->view('guru/lihat_tugas', $data);
         $this->load->view('guru/footg');
     }
+    public function download($id) {
+    $this->load->helper('download');
+
+    $submission = $this->Tugas_model->get_submission_by_id($id);
+
+    if ($submission) {
+        // folder default upload (tanpa ./)
+ 
+        $file_path = FCPATH . $submission->file_path;
+        $original_filename = $submission->original_filename;
+
+        if (file_exists($file_path)) {
+            force_download($original_filename, file_get_contents($file_path));
+        } else {
+            show_error("File tidak ditemukan di server: " . $file_path);
+        }
+    } else {
+        show_error("Data tugas tidak ditemukan.");
+    }
+}
+
+
 
     // Beri nilai/catatan
     public function beri_nilai($submission_id) {
@@ -998,32 +1020,31 @@ public function delete_pesertaquiz($id) {
         redirect($_SERVER['HTTP_REFERER']);
     }
     
-public function daftar_tugas() {
-    $this->load->model('Tugas_model');
-$guru_id = $this->session->userdata('nip');
-$data['materi_list'] = [];
 
-$pertemuan_list = $this->Tugas_model->get_pertemuan_by_gurus($guru_id);
+    public function daftar_tugas() {
+        $guru_id = $this->session->userdata('nip');
+        $data['materi_list'] = [];
 
-foreach ($pertemuan_list as $row) {
-    $tugas = $this->Tugas_model->get_tugas_per_materi($row->id_pertemuan, $guru_id);
+        $pertemuan_list = $this->Tugas_model->get_pertemuan_by_gurus($guru_id);
 
-    $tingkat = $row->tingkat;
-    $mapel = $row->nama_mapel;
-    $kelas = $row->nama_kelas;
+        foreach ($pertemuan_list as $row) {
+            $count = $this->Tugas_model->count_tugas_per_materi($row->id_pertemuan, $guru_id);
 
-    $data['materi_list'][$tingkat][$mapel][$kelas][] = [
-        'pertemuan_ke' => $row->pertemuan_ke,
-        'judul_materi' => $row->judul_materi,
-        'tugas' => $tugas
-    ];
-}
+            $tingkat = $row->tingkat;
+            $mapel = $row->nama_mapel;
+            $kelas = $row->nama_kelas;
 
-
-    $this->load->view('guru/navug'); 
-    $this->load->view('guru/daftar_tugas_siswa', $data);
-    $this->load->view('guru/footg');
-}
+            $data['materi_list'][$tingkat][$mapel][$kelas][] = [
+                'id_pertemuan' => $row->id_pertemuan,
+                'pertemuan_ke' => $row->pertemuan_ke,
+                'judul_materi' => $row->judul_materi,
+                'jumlah_tugas' => $count
+            ];
+        }
+        $this->load->view('guru/navug');
+        $this->load->view('guru/daftar_tugas_siswa', $data);
+        $this->load->view('guru/footg');
+    }
 
 public function download_tugas($id)
 {
