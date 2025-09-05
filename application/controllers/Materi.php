@@ -39,47 +39,60 @@ class Materi extends CI_Controller
     //     $this->load->view('materi/'.str_replace('_', '-', $materi), $data);
     //     $this->load->view('template/footer');
     // }
-    public function belajar($id_pertemuan) {
+public function belajar($id_pertemuan) {
+    $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);
 
-        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);
-            if ($id_pertemuan === null) {
-            show_404(); // atau redirect ke halaman aman
-            }
-
-        // Ambil data
-        $data['comments'] = $this->Forum_model->get_comments($id_pertemuan);
-        $data['id_pertemuan'] = $id_pertemuan;
-        $data['current_nis'] = $this->session->userdata('nis');
-        $pertemuan = $this->db->get_where('pertemuan', ['id' => $id_pertemuan])->row_array();
-        // if (!$pertemuan) show_404();
-        if (!$pertemuan) {
-        show_404(); // atau redirect('materi');
-        }
-        $id_materi = $pertemuan['id_materi'];
-        $data['materi'] = $this->M_materi->get_materi_by_id($id_materi);
-
-        $data['user'] = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row_array();
-        $data['forum'] = $this->Forum_model->get_komentar_by_materi($id_pertemuan);
-        // $data['disqus'] = $this->disqus->get_html();
-        $data['quizzes'] = $this->Quiz_model->get_quizzes_by_materi($id_pertemuan);
-        $data['materi_id'] = $this->M_materi->get_all_materi_idd();
-        $data['tugas_saya'] = $this->Tugas_model->get_tugas_siswa(
-            $this->session->userdata('nis'), 
-            $id_pertemuan
-        );
-
-        
-        // Debug akhir sebelum load view
-        // if(empty($data['materi'])) {
-        //     show_404();
-        //     return;
-        // }
-        
-        $this->load->view('materi/navm');
-        $this->load->view('materi/belajar', $data);
-        $this->load->view('materi/footm');
-
+    if ($id_pertemuan === null) {
+        show_404();
     }
+
+    // Data user (ambil kelas siswa)
+    $data['user'] = $this->db->get_where(
+        'siswa',
+        ['nis' => $this->session->userdata('nis')]
+    )->row_array();
+
+    if (!$data['user']) {
+        redirect('welcome/');
+    }
+
+    $id_kelas_siswa = $data['user']['id_kelas'];
+
+    // Cek pertemuan sekaligus pastikan kelasnya sama
+    $this->db->select('pertemuan.*, materi.deskripsi as deskripsi_materi');
+    $this->db->from('pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->where('pertemuan.id', $id_pertemuan);
+    $this->db->where('pertemuan.id_kelas', $id_kelas_siswa); // ✅ filter kelas
+    $pertemuan = $this->db->get()->row_array();
+
+    if (!$pertemuan) {
+        // Jika pertemuan tidak ada atau bukan milik kelas siswa → tolak
+        $this->load->view('errors/cli/error_knf_404');
+        return;
+        // atau bisa pakai: show_404();
+    }
+
+    $id_materi = $pertemuan['id_materi'];
+    $data['materi'] = $this->M_materi->get_materi_by_id($id_materi);
+
+    // Ambil data terkait
+    $data['comments']   = $this->Forum_model->get_comments($id_pertemuan);
+    $data['id_pertemuan'] = $id_pertemuan;
+    $data['current_nis'] = $this->session->userdata('nis');
+    $data['forum']     = $this->Forum_model->get_komentar_by_materi($id_pertemuan);
+    $data['quizzes']   = $this->Quiz_model->get_quizzes_by_materi($id_pertemuan);
+    $data['materi_id'] = $this->M_materi->get_all_materi_idd();
+    $data['tugas_saya'] = $this->Tugas_model->get_tugas_siswa(
+        $this->session->userdata('nis'), 
+        $id_pertemuan
+    );
+
+    $this->load->view('materi/navm');
+    $this->load->view('materi/belajar', $data);
+    $this->load->view('materi/footm');
+}
+
     public function list_quiz()
 {
     // Ambil data siswa dari session
