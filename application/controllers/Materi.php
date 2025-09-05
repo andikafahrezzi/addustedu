@@ -42,8 +42,15 @@ class Materi extends CI_Controller
 public function belajar($id_pertemuan) {
     $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);
 
-    if ($id_pertemuan === null) {
-        show_404();
+    // Validasi 1: Parameter harus ada dan numeric
+    if ($id_pertemuan === null || !is_numeric($id_pertemuan)) {
+        $this->load->view('errors/cli/error_knf_404');
+        return;
+    }
+
+    // Validasi 2: User harus login sebagai siswa
+    if (!$this->session->userdata('nis')) {
+        redirect('welcome/');
     }
 
     // Data user (ambil kelas siswa)
@@ -57,36 +64,57 @@ public function belajar($id_pertemuan) {
     }
 
     $id_kelas_siswa = $data['user']['id_kelas'];
+    $nis_siswa = $data['user']['nis'];
 
-    // Cek pertemuan sekaligus pastikan kelasnya sama
-    $this->db->select('pertemuan.*, materi.deskripsi as deskripsi_materi');
+    // Validasi 3: Cek pertemuan exist dan milik kelas siswa
+    $this->db->select('pertemuan.*, materi.deskripsi as deskripsi_materi, materi.id_kelas as materi_kelas');
     $this->db->from('pertemuan');
     $this->db->join('materi', 'materi.id = pertemuan.id_materi');
     $this->db->where('pertemuan.id', $id_pertemuan);
-    $this->db->where('pertemuan.id_kelas', $id_kelas_siswa); // ✅ filter kelas
+    $this->db->where('pertemuan.id_kelas', $id_kelas_siswa); // ✅ filter kelas pertemuan
     $pertemuan = $this->db->get()->row_array();
 
     if (!$pertemuan) {
-        // Jika pertemuan tidak ada atau bukan milik kelas siswa → tolak
+        // Validasi 4: Double check - mungkin pertemuan ada tapi materi tidak sesuai
+        $this->db->select('pertemuan.*, materi.id_kelas as materi_kelas');
+        $this->db->from('pertemuan');
+        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+        $this->db->where('pertemuan.id', $id_pertemuan);
+        $temp_check = $this->db->get()->row_array();
+        
+        if ($temp_check && $temp_check['materi_kelas'] != $id_kelas_siswa) {
+            // Materi ada tapi bukan untuk kelas siswa
+            $this->load->view('errors/cli/error_knf_404');
+            return;
+        }
+        
         $this->load->view('errors/cli/error_knf_404');
         return;
-        // atau bisa pakai: show_404();
+    }
+
+    // Validasi 5: Pastikan materi juga untuk kelas yang sama (double security)
+    if ($pertemuan['materi_kelas'] != $id_kelas_siswa) {
+        $this->load->view('errors/cli/error_knf_404');
+        return;
     }
 
     $id_materi = $pertemuan['id_materi'];
     $data['materi'] = $this->M_materi->get_materi_by_id($id_materi);
 
+    // Validasi 6: Pastikan materi yang diambil valid
+    if (!$data['materi'] || $data['materi']->id_kelas != $id_kelas_siswa) {
+        $this->load->view('errors/cli/error_knf_404');
+        return;
+    }
+
     // Ambil data terkait
     $data['comments']   = $this->Forum_model->get_comments($id_pertemuan);
     $data['id_pertemuan'] = $id_pertemuan;
-    $data['current_nis'] = $this->session->userdata('nis');
+    $data['current_nis'] = $nis_siswa;
     $data['forum']     = $this->Forum_model->get_komentar_by_materi($id_pertemuan);
     $data['quizzes']   = $this->Quiz_model->get_quizzes_by_materi($id_pertemuan);
     $data['materi_id'] = $this->M_materi->get_all_materi_idd();
-    $data['tugas_saya'] = $this->Tugas_model->get_tugas_siswa(
-        $this->session->userdata('nis'), 
-        $id_pertemuan
-    );
+    $data['tugas_saya'] = $this->Tugas_model->get_tugas_siswa($nis_siswa, $id_pertemuan);
 
     $this->load->view('materi/navm');
     $this->load->view('materi/belajar', $data);
