@@ -16,6 +16,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <title>ctkkarya - Admin Login</title>
+    <meta name="robots" content="noindex, nofollow">
     <link rel="icon" href="<?=base_url('assets/')?>img/logow.jpeg" type="image/jpeg">
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
