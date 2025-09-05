@@ -1494,29 +1494,39 @@ public function bank_soal()
     $nip = $this->session->userdata('nip');
     $this->load->library('pagination');
 
-    // pagination config
-    $config['base_url'] = site_url('guru/bank_soal');
-    $config['total_rows'] = $this->db->count_all('bank_soal');
+    // Ambil filter dari GET
+    $filter_mapel = $this->input->get('mapel');
+
+    // ================== Hitung total data ==================
+    $this->db->from('bank_soal');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = bank_soal.id_mapel', 'left');
+    $this->db->join('guru', 'guru.nip = bank_soal.created_by AND bank_soal.user_type = "guru"', 'left');
+
+    if ($filter_mapel && $filter_mapel != 'semua') {
+        $this->db->like('mata_pelajaran.nama_mapel', $filter_mapel);
+    }
+
+    $config['total_rows'] = $this->db->count_all_results();
     $config['per_page'] = 10;
     $config['uri_segment'] = 3;
-    
-    // Konfigurasi styling pagination
-    $config['full_tag_open'] = '<nav><ul class="pagination justify-content-center">';
-    $config['full_tag_close'] = '</ul></nav>';
-    $config['first_link'] = 'First';
-    $config['last_link'] = 'Last';
-    $config['next_link'] = '&raquo';
-    $config['prev_link'] = '&laquo';
-    $config['cur_tag_open'] = '<li class="page-item active"><span class="page-link">';
-    $config['cur_tag_close'] = '</span></li>';
-    $config['num_tag_open'] = '<li class="page-item"><span class="page-link">';
-    $config['num_tag_close'] = '</span></li>';
+    $config['reuse_query_string'] = TRUE;
+
+    // Styling pagination Bootstrap 4
+    $config['full_tag_open']   = '<nav><ul class="pagination justify-content-center">';
+    $config['full_tag_close']  = '</ul></nav>';
+    $config['first_link']      = 'First';
+    $config['last_link']       = 'Last';
+    $config['next_link']       = '&raquo;';
+    $config['prev_link']       = '&laquo;';
+    $config['cur_tag_open']    = '<li class="page-item active"><span class="page-link">';
+    $config['cur_tag_close']   = '</span></li>';
+    $config['num_tag_open']    = '<li class="page-item"><span class="page-link">';
+    $config['num_tag_close']   = '</span></li>';
 
     $this->pagination->initialize($config);
-
     $page = $this->uri->segment(3, 0);
 
-    // Query data dengan pagination
+    // ================== Ambil data soal ==================
     $this->db->select('
         bank_soal.*,
         mata_pelajaran.nama_mapel,
@@ -1525,15 +1535,25 @@ public function bank_soal()
     $this->db->from('bank_soal');
     $this->db->join('mata_pelajaran', 'mata_pelajaran.id = bank_soal.id_mapel', 'left');
     $this->db->join('guru', 'guru.nip = bank_soal.created_by AND bank_soal.user_type = "guru"', 'left');
+
+    if ($filter_mapel && $filter_mapel != 'semua') {
+        $this->db->like('mata_pelajaran.nama_mapel', $filter_mapel);
+    }
+
     $this->db->order_by('bank_soal.id_soal', 'DESC');
     $this->db->limit($config['per_page'], $page);
-
     $data['bank_soal'] = $this->db->get()->result();
+
     $data['pagination'] = $this->pagination->create_links();
 
-    // Ambil daftar mapel yang diajarkan guru ini
+    // Ambil daftar mapel yang diajarkan guru
+    $this->load->model('Bank_soal_model');
     $data['mapel_diajarkan'] = $this->Bank_soal_model->get_mapel_by_nip($nip);
 
+    // Simpan filter yang aktif
+    $data['filter_mapel'] = $filter_mapel;
+
+    // Load view
     $this->load->view('guru/navug');
     $this->load->view('guru/bank_soal', $data);
     $this->load->view('guru/footg');

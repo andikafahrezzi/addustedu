@@ -12,17 +12,22 @@
                 <?php if ($this->session->flashdata('error')) : ?>
                     <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
                 <?php endif; ?>
-    <?php if (!empty($mapel_diajarkan)): ?>
-    <div class="mb-3 text-success">
-        <label for="filterMapel text-success"><strong>Filter Mata Pelajaran:</strong></label>
-        <select class="form-control" id="filterMapel" onchange="filterSoal()">
-            <option value="semua text-success">Semua Mapel</option>
-            <?php foreach ($mapel_diajarkan as $mapel): ?>
-                <option value="<?= $mapel->nama_mapel ?>"><?= $mapel->nama_mapel ?></option>
-            <?php endforeach; ?>
-        </select>
-    </div>
-    <?php endif; ?>
+<?php if (!empty($mapel_diajarkan)): ?>
+<div class="mb-3 text-success">
+    <label for="filterMapel"><strong>Filter Mata Pelajaran:</strong></label>
+    <select class="form-control" id="filterMapel" onchange="filterSoal()">
+        <option value="semua" <?= ($filter_mapel == 'semua' || !$filter_mapel) ? 'selected' : '' ?>>Semua Mapel</option>
+        <?php foreach ($mapel_diajarkan as $mapel): ?>
+            <option value="<?= $mapel->nama_mapel ?>" <?= ($filter_mapel == $mapel->nama_mapel) ? 'selected' : '' ?>>
+                <?= $mapel->nama_mapel ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
+<?php endif; ?>
+
+
+
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -114,5 +119,12 @@ function filterSoal() {
             row.style.display = 'none';
         }
     });
+}
+</script>
+<script>
+function filterSoal() {
+    var mapel = document.getElementById("filterMapel").value;
+    var url = "<?= site_url('guru/bank_soal'); ?>?mapel=" + mapel;
+    window.location.href = url;
 }
 </script>
