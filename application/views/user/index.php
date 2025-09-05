@@ -59,7 +59,7 @@ foreach ($pertemuan as $p) {
                                                 <h6>Pertemuan <?= $i ?></h6>
                                                 <?php if (isset($materi_pertemuan[$nip][$id_mapel][$i])): 
                                                     $ptm = $materi_pertemuan[$nip][$id_mapel][$i]; ?>
-                                                    <p><?= implode(' ', array_slice(explode(' ', $ptm['deskripsi_materi']), 0, 10)) ?>...</p>
+                                                    <p><?= substr($ptm['deskripsi_materi'], 0, 10) ?>...</p>
                                                     <a href="<?= base_url('materi/belajar/' . $ptm['id']) ?>" class="btn btn-sm btn-gradient">
                                                         Pelajari <i class="lnr lnr-arrow-right"></i>
                                                     </a>
