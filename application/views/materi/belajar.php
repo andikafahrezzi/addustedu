@@ -141,30 +141,36 @@
                     <?php if ($tugas_saya): ?>
                         <!-- Pastikan tidak NULL -->
                        <div class="card mb-4">
-                        <div class="card-body">
-                            <div class="row">
-                            <div class="col-md-6">
-                                <h6><?= $tugas_saya->original_filename ?></h6>
-                                <small>Ukuran: <?= round($tugas_saya->file_size / 1024, 2) ?> KB</small><br>
-                                <small>Dikirim: <?= date('d M Y H:i', strtotime($tugas_saya->dikirim_pada)) ?></small><br>
-                                <small>Nilai: <?= number_format($tugas_saya->nilai) ?></small>
-                            </div>
-                            <div class="col-md-4 text-md-right text-left mt-3 mt-md-0">
-                                <a href="<?= base_url($tugas_saya->file_path) ?>"
-                                class="btn btn-sm btn-success mr-2"
-                                download="<?= $tugas_saya->original_filename ?>.<?= pathinfo($tugas_saya->file_path, PATHINFO_EXTENSION) ?>">
-                                <i class="fa fa-download"></i> Unduh
-                                </a>
-                                <a href="<?= base_url('siswa/delete_tugas/' . $tugas_saya->id) ?>"
-                                    onclick="return confirm('Apakah kamu yakin ingin menghapus tugas ini?')"
-                                    class="btn btn-sm btn-danger">
-                                    <i class="fa fa-trash"></i> Hapus
-                                    </a>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <h6><?= $tugas_saya->original_filename ?></h6>
+                <small>Ukuran: <?= round($tugas_saya->file_size / 1024, 2) ?> KB</small><br>
+                <small>Dikirim: <?= date('d M Y H:i', strtotime($tugas_saya->dikirim_pada)) ?></small><br>
+                <small>Nilai: <?= number_format($tugas_saya->nilai) ?></small>
+            </div>
+        </div>
 
-                            </div>
-                            </div>
-                        </div>
-                        </div>
+        <!-- Tombol di bawah -->
+        <div class="row mt-3">
+            <div class="col-6.1">
+                <a href="<?= base_url($tugas_saya->file_path) ?>"
+                   class="btn btn-sm btn-success btn-block"
+                   download="<?= $tugas_saya->original_filename ?>.<?= pathinfo($tugas_saya->file_path, PATHINFO_EXTENSION) ?>">
+                   <i class="fa fa-download"></i> Unduh
+                </a>
+            </div>
+            <div class="col-6.1 text-right">
+                <a href="<?= base_url('siswa/delete_tugas/' . $tugas_saya->id) ?>"
+                   onclick="return confirm('Apakah kamu yakin ingin menghapus tugas ini?')"
+                   class="btn btn-sm btn-danger btn-block">
+                   <i class="fa fa-trash"></i> Hapus
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
                     <?php else: ?>
                         <p>Belum ada tugas terkirim</p>
                     <?php endif; ?>
