@@ -1,83 +1,110 @@
-<!-- Main Content -->
-<div class="main-content">
-    <section class="section">
-        <div class="card" style="width:100%;">
-            <div class="card-body">
-                <h2 class="card-title" style="color: black;">Management Materi Saya</h2>
-                <hr>
-                <p class="card-text">Berikut daftar materi pembelajaran yang telah Anda buat. Anda dapat mengelola materi-materi ini sesuai kebutuhan.</p>
-                <a href="<?= base_url('guru/add_materi') ?>" class="btn btn-success">
-                    <i class="fas fa-plus"></i> Tambah Materi Baru
-                </a>
-            </div>
-        </div>
-        <!-- Pastikan tidak NULL -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="bg-white p-4" style="border-radius:3px;box-shadow:rgba(0, 0, 0, 0.03) 0px 4px 8px 0px">
-                    <div class="table-responsive">
-                        <table id="materiTable" class="table table-striped table-hover">
-                            <thead class="thead-light">
-                                <tr class="text-center">
-                                    <th scope="col">No</th>
-                                    <th scope="col">Mata Pelajaran</th>
-                                    <th scope="col">Pertemuan</th>
-                                    <th scope="col">Deskripsi</th>
-                                    <th scope="col">Kelas</th>
-                                    <th scope="col">Videot</th>
-                                    <th scope="col">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-<?php if (!empty($materi_grouped)) : ?>
-    <?php $no = 1; ?>
-    <?php foreach ($materi_grouped as $group => $items) : ?>
-        <tr class="table-info">
-            <td colspan="7" style="font-weight: bold"><?= $group ?></td>
-        </tr>
-        <?php foreach ($items as $m) : ?>
-            <tr class="text-center">
-                <td><?= $no++; ?></td>
-                <td><?= htmlspecialchars($m->nama_mapel); ?></td>
-                <td>
-                    <?= $m->pertemuan_ke ? 'Pertemuan ke-' . $m->pertemuan_ke : '<span class="text-danger">Belum dibuat</span>' ?>
-                </td>
-                <td>
-                    <?= strlen($m->deskripsi) > 50 ? substr(htmlspecialchars($m->deskripsi), 0, 50).'...' : htmlspecialchars($m->deskripsi); ?>
-                </td>
-                <td>Kelas <?= htmlspecialchars($m->nama_kelas); ?></td>
-                <td><?= htmlspecialchars($m->video); ?></td>
-                <td class="text-center">
-                    <div class="btn-group" role="group">
-                        <?php if ($m->id_pertemuan) : ?>
-                            <a href="<?= site_url('guru/belajar/'.$m->id_pertemuan); ?>" class="btn btn-sm btn-success" title="Belajar">
-                                <i class="fas fa-comment"></i>
-                            </a>
-                        <?php endif; ?>
-                        <a href="<?= site_url('guru/update_materi/'.$m->id); ?>" class="btn btn-sm btn-warning" title="Edit">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button onclick="confirmDelete('<?= $m->id; ?>')" class="btn btn-sm btn-danger" title="Hapus">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    <?php endforeach; ?>
-<?php else : ?>
-    <tr>
-        <td colspan="7" class="text-center">Belum ada materi yang dibuat</td>
-    </tr>
-<?php endif; ?>
-</tbody>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>📚 Daftar Materi</h3>
+        <a href="<?= site_url('guru/add_materi') ?>" class="btn btn-success">+ Tambah Materi</a>
+    </div>
 
-                        </table>
-                    </div>
-                </div>
+<form method="get" action="<?= site_url('guru/data_materi') ?>" class="form-row mb-3">
+    <div class="col-md-3 mb-2">
+        <select name="mapel" class="form-control">
+            <option value="">-- Semua Mata Pelajaran --</option>
+            <?php foreach($mapel_list as $mp): ?>
+                <option value="<?= $mp['id'] ?>" <?= (isset($filter_mapel) && $filter_mapel == $mp['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($mp['nama_mapel']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div class="col-md-3 mb-2">
+        <select name="kelas" class="form-control">
+            <option value="">-- Semua Kelas --</option>
+            <?php foreach($kelas_list as $k): ?>
+                <option value="<?= $k['id'] ?>" <?= (isset($filter_kelas) && $filter_kelas == $k['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($k['nama_kelas']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div class="col-md-4 mb-2">
+        <input type="text" name="keyword" class="form-control" placeholder="Cari judul/deskripsi/mapel/kelas..." value="<?= isset($keyword) ? htmlspecialchars($keyword) : '' ?>">
+    </div>
+    <div class="col-md-2 mb-2">
+        <button type="submit" class="btn btn-primary btn-block">🔍 Cari</button>
+        <?php if (isset($filter_mapel) || isset($filter_kelas) || isset($keyword)): ?>
+            <a href="<?= site_url('guru/data_materi') ?>" class="btn btn-secondary btn-block mt-1">Reset</a>
+        <?php endif; ?>
+    </div>
+</form>
+
+    <?php if (!empty($this->session->flashdata('success'))): ?>
+        <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+    <?php endif; ?>
+    <?php if (!empty($this->session->flashdata('error'))): ?>
+        <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
+    <?php endif; ?>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Mapel</th>
+                            <th>Deskripsi</th>
+                            <th>Kelas</th>
+                            <th>Guru</th>
+                            <th width="140">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <?php if (!empty($materi)): foreach($materi as $m): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($m['nama_mapel']) ?></td>
+                                    <td>
+                                        <?= htmlspecialchars(mb_strimwidth($m['deskripsi'],0,120,'...')) ?>
+                                        <?php if (!empty($m['video'])): ?>
+                                            <br><small class="text-muted">Video: <?= htmlspecialchars($m['video']) ?></small>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td><?= htmlspecialchars($m['nama_kelas']) ?></td>
+                                    <td><?= htmlspecialchars($m['nama_guru']) ?></td>
+                                    <td>
+                                        <?php if ($m['id_guru'] == $current_guru_nip): ?>
+                                            <!-- Milik guru yang login - tampilkan edit/delete -->
+                                            <a href="<?= site_url('guru/update_materi/'.$m['id']) ?>" class="btn btn-sm btn-warning">Edit</a>
+                                            <button onclick="confirmDelete('<?= $m['id']; ?>')" class="btn btn-sm btn-danger" title="Hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        <?php else: ?>
+                                            <!-- Bukan milik guru yang login - hanya view -->
+                                            <span class="text-muted" title="Hanya bisa dilihat">Tidak Ada Aksi</span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; else: ?>
+                                <tr>
+                                    <td colspan="5" class="text-center py-4">
+                                        <div class="text-muted">
+                                            <i class="fas fa-inbox fa-3x mb-2"></i>
+                                            <br>
+                                            Tidak ada materi yang ditemukan.
+                                            <?php if (isset($filter_mapel) || isset($filter_kelas) || isset($keyword)): ?>
+                                                <br>
+                                                <small>Coba dengan filter yang berbeda atau <a href="<?= site_url('guru/data_materi') ?>">reset filter</a></small>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                </table>
             </div>
         </div>
-    </section>
+    </div>
+
+    <div class="mt-3 text-center">
+        <?= $pagination ?>
+    </div>
 </div>
 
 <!-- Delete Confirmation Modal -->
@@ -101,44 +128,8 @@
     </div>
 </div>
 
-<!-- SweetAlert Notifications -->
-<?php if ($this->session->flashdata('success')) : ?>
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil!',
-            text: '<?= $this->session->flashdata('success'); ?>',
-            showConfirmButton: false,
-            timer: 2500
-        });
-    </script>
-<?php endif; ?>
-
-<?php if ($this->session->flashdata('error')) : ?>
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Gagal!',
-            text: '<?= $this->session->flashdata('error'); ?>',
-            showConfirmButton: false,
-            timer: 2500
-        });
-    </script>
-<?php endif; ?>
-
-<!-- JavaScript -->
 <script>
-    // DataTable Initialization
-    $(document).ready(function() {
-        $('#materiTable').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Indonesian.json"
-            }
-        });
-    });
-
-    // Delete Confirmation
-    function confirmDelete(id) {
+        function confirmDelete(id) {
         $('#deleteLink').attr('href', '<?= site_url("guru/delete_materi/"); ?>' + id);
         $('#deleteModal').modal('show');
     }

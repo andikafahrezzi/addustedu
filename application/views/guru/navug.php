@@ -204,6 +204,10 @@
                                                 href="<?=base_url('guru/data_materi')?>" class="kt-menu__link "><i
                                                     class="kt-menu__link-icon la la-commenting"></i><span
                                                     class="kt-menu__link-text">Data Materi</span></a></li>
+                                        <li class="kt-menu__item " aria-haspopup="true"><a
+                                                href="<?=base_url('pertemuan/index')?>" class="kt-menu__link "><i
+                                                    class="kt-menu__link-icon la la-commenting"></i><span
+                                                    class="kt-menu__link-text">Data Pertemuan</span></a></li>
                                     </ul>
                                 </div>
                             </li>   

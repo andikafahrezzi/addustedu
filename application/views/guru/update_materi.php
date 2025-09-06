@@ -47,10 +47,6 @@
         </div>
     <?php endif; ?>
 
-    <div class="form-group">
-        <label for="pertemuan">Pertemuan Ke-</label>
-        <input type="number" name="pertemuan" id="pertemuan" class="form-control" min="1" value="<?= $materi->pertemuan_ke ?>" required>
-    </div>
 
     <div class="form-group">
         <label for="mapel">Mata Pelajaran</label>

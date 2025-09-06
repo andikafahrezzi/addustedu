@@ -56,10 +56,6 @@
 </div>
 
                                     </div>
-                                        <div class="form-group">
-                                            <label for="pertemuan">Pertemuan Ke-</label>
-                                            <input type="number" name="pertemuan" id="pertemuan" class="form-control" min="1" required>
-                                        </div>
                                     <div class="form-group">
                                         <label for="exampleFormControlTextarea1">Embed Link</label>
                                         <textarea class="form-control" required name="videourl" id="examplevideorul"> </textarea>

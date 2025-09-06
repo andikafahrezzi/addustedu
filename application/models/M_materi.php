@@ -569,6 +569,168 @@ public function get_kelas_lista()
     $this->db->order_by('nama_kelas', 'asc');
     return $this->db->get()->result();
 }
+    public function count_materi($filter_mapel = null, $filter_kelas = null, $keyword = null)
+    {
+        $this->db->from('materi m');
+        $this->db->join('mata_pelajaran mp','mp.id = m.id_mapel','left');
+        $this->db->join('kelas k','k.id = m.id_kelas','left');
 
+        if (!empty($filter_mapel)) $this->db->where('m.id_mapel', $filter_mapel);
+        if (!empty($filter_kelas)) $this->db->where('m.id_kelas', $filter_kelas);
+        if (!empty($keyword)) {
+            $this->db->group_start();
+            $this->db->like('m.judul', $keyword);
+            $this->db->or_like('m.deskripsi', $keyword);
+            $this->db->group_end();
+        }
+
+        return $this->db->count_all_results();
+    }
+
+    // ambil materi paginated (join guru, mapel, kelas)
+    public function get_materi_paginated($limit, $offset, $filter_mapel = null, $filter_kelas = null, $keyword = null)
+    {
+        $this->db->select('m.*, g.nama_guru, mp.nama_mapel, k.nama_kelas');
+        $this->db->from('materi m');
+        $this->db->join('guru g','g.nip = m.id_guru','left');
+        $this->db->join('mata_pelajaran mp','mp.id = m.id_mapel','left');
+        $this->db->join('kelas k','k.id = m.id_kelas','left');
+
+        if (!empty($filter_mapel)) $this->db->where('m.id_mapel', $filter_mapel);
+        if (!empty($filter_kelas)) $this->db->where('m.id_kelas', $filter_kelas);
+        if (!empty($keyword)) {
+            $this->db->group_start();
+            $this->db->like('m.judul', $keyword);
+            $this->db->or_like('m.deskripsi', $keyword);
+            $this->db->group_end();
+        }
+
+        $this->db->order_by('m.id', 'DESC');
+        $this->db->limit($limit, $offset);
+        return $this->db->get()->result_array();
+    }
+
+    public function get_by_id($id)
+    {
+        return $this->db->select('m.*, g.nama_guru, mp.nama_mapel, k.nama_kelas')
+                        ->from('materi m')
+                        ->join('guru g','g.nip = m.id_guru','left')
+                        ->join('mata_pelajaran mp','mp.id = m.id_mapel','left')
+                        ->join('kelas k','k.id = m.id_kelas','left')
+                        ->where('m.id', $id)
+                        ->get()
+                        ->row_array();
+    }
+
+
+    public function get_mapel_listt()
+    {
+        return $this->db->order_by('nama_mapel','asc')->get('mata_pelajaran')->result_array();
+    }
+
+    public function get_kelas_listt()
+    {
+        return $this->db->order_by('nama_kelas','asc')->get('kelas')->result_array();
+    }
+
+    // optional: materi milik guru (untuk dropdown)
+    public function get_materi_by_guru($nip)
+    {
+        return $this->db->where('id_guru', $nip)->order_by('judul','asc')->get('materi')->result_array();
+    }
+    
+    public function count_all_materi($id_guru, $mapel = null, $kelas = null, $search = null) {
+    $this->db->from('materi m');
+    $this->db->join('mata_pelajaran mp', 'mp.id = m.id_mapel');
+    $this->db->join('kelas k', 'k.id = m.id_kelas');
+    
+    // Filter mapel
+    if ($mapel) {
+        $this->db->where('m.id_mapel', $mapel);
+    }
+    
+    // Filter kelas
+    if ($kelas) {
+        $this->db->where('m.id_kelas', $kelas);
+    }
+
+    // Filter search
+    if ($search) {
+        $this->db->group_start()
+                 ->like('m.deskripsi', $search)
+                 ->or_like('mp.nama_mapel', $search)
+                 ->or_like('k.nama_kelas', $search)
+                 ->group_end();
+    }
+
+    return $this->db->count_all_results();
+}
+
+public function count_all_materis($mapel = null, $kelas = null, $search = null) {
+    $this->db->from('materi m');
+    $this->db->join('mata_pelajaran mp', 'mp.id = m.id_mapel');
+    $this->db->join('kelas k', 'k.id = m.id_kelas');
+    
+    // Filter mapel
+    if ($mapel) {
+        $this->db->where('m.id_mapel', $mapel);
+    }
+    
+    // Filter kelas
+    if ($kelas) {
+        $this->db->where('m.id_kelas', $kelas);
+    }
+
+    // Filter search
+    if ($search) {
+        $this->db->group_start()
+                 ->like('m.deskripsi', $search)
+                 ->or_like('mp.nama_mapel', $search)
+                 ->or_like('k.nama_kelas', $search)
+                 ->or_like('m.video', $search)
+                 ->group_end();
+    }
+
+    return $this->db->count_all_results();
+}
+public function get_all_materis($limit, $start, $mapel = null, $kelas = null, $search = null) {
+    $this->db->select('m.*, mp.nama_mapel, g.nama_guru, k.nama_kelas, g.nip as guru_nip');
+    $this->db->from('materi m');
+    $this->db->join('mata_pelajaran mp', 'mp.id = m.id_mapel');
+    $this->db->join('kelas k', 'k.id = m.id_kelas');
+    $this->db->join('guru g', 'g.nip = m.id_guru');
+
+    // Filter mapel
+    if ($mapel) {
+        $this->db->where('m.id_mapel', $mapel);
+    }
+    
+    // Filter kelas
+    if ($kelas) {
+        $this->db->where('m.id_kelas', $kelas);
+    }
+
+    // Filter search
+    if ($search) {
+        $this->db->group_start()
+                 ->like('m.deskripsi', $search)
+                 ->or_like('mp.nama_mapel', $search)
+                 ->or_like('k.nama_kelas', $search)
+                 ->or_like('g.nama_guru', $search)
+                 ->or_like('m.video', $search)
+                 ->group_end();
+    }
+
+    $this->db->limit($limit, $start);
+    $this->db->order_by('m.id', 'DESC');
+
+    return $this->db->get()->result_array();
+}
+    public function get_all_mapels() {
+        return $this->db->get('mata_pelajaran')->result_array();
+    }
+    public function get_all_kelass() {
+        return $this->db->get('kelas')->result_array();
+    }
 
 }
