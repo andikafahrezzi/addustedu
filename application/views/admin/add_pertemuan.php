@@ -131,8 +131,8 @@
         <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>" />
 
         <div class="form-group">
-            <label for="nip_guru">Pilih Guru</label>
-            <select name="nip_guru" id="guru_select" class="form-control" required onchange="loadMateriByGuru(this.value)">
+            <label for="id_guru">Pilih Guru</label>
+            <select name="id_guru" id="guru_select" class="form-control" required onchange="loadMateriByGuru(this.value)">
                 <option value="">-- Pilih Guru --</option>
                 <?php foreach ($guru as $g): ?>
                     <option value="<?= $g->nip ?>"><?= $g->nama_guru ?> (<?= $g->nip ?>)</option>

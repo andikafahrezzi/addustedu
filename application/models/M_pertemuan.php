@@ -41,6 +41,20 @@ public function get_all_materi()
         $this->db->where('id', $id_pertemuan);
         return $this->db->delete('pertemuan');
     }
+public function delete_ptm_admin($id)
+{
+    // Hapus turunan dulu
+    $this->db->where('id_pertemuan', $id)->delete('quiz');
+    $this->db->where('id_pertemuan', $id)->delete('forum_diskusi');
+    $this->db->where('id_pertemuan', $id)->delete('tugas_siswa');
+    $this->db->where('id_pertemuan', $id)->delete('tbl_ujian');
+
+    // Terakhir hapus pertemuan
+    $this->db->where('id', $id)->delete('pertemuan');
+}
+
+
+
 
 public function get_pertemuan_by_guru($nip) {
         $this->db->select('p.*, m.deskripsi, m.video, mp.nama_mapel, k.nama_kelas');
@@ -52,7 +66,7 @@ public function get_pertemuan_by_guru($nip) {
         $this->db->order_by('p.tanggal', 'DESC');
         return $this->db->get()->result();
     }
-
+    
     // Get materi by guru untuk dropdown
     public function get_materi_by_gurus($nip) {
         $this->db->select('m.*, mp.nama_mapel, k.nama_kelas');
@@ -295,7 +309,143 @@ public function is_pertemuan_exists($id_mapel, $id_kelas, $pertemuan_ke, $id_gur
 
     return $this->db->count_all_results() > 0;
 }
+    public function get_pertemuan_grouped()
+    {
+        $this->db->select('
+            p.id AS id,
+            p.pertemuan_ke,
+            p.tanggal,
+            p.id_materi,
+            p.id_kelas,
+            p.id_guru,
+            m.deskripsi AS deskripsi,
+            mp.nama_mapel,
+            k.nama_kelas,
+            k.tingkat,
+            g.nama_guru
+        ');
+        $this->db->from('pertemuan p');
+        $this->db->join('materi m', 'm.id = p.id_materi', 'left');
+        $this->db->join('mata_pelajaran mp', 'mp.id = m.id_mapel', 'left');
+        $this->db->join('kelas k', 'k.id = p.id_kelas', 'left');
+        $this->db->join('guru g', 'g.nip = p.id_guru', 'left');
 
+        $this->db->order_by('g.nama_guru', 'ASC');
+        $this->db->order_by('mp.nama_mapel', 'ASC');
+        $this->db->order_by('k.tingkat', 'ASC');
+        $this->db->order_by('k.nama_kelas', 'ASC');
+        $this->db->order_by('p.pertemuan_ke', 'ASC');
+
+        $rows = $this->db->get()->result();
+
+        $result = [];
+        foreach ($rows as $r) {
+            // pastikan index ada
+            $nama_guru = $r->nama_guru ?? 'Unknown';
+            $nama_mapel = $r->nama_mapel ?? 'Umum';
+            $tingkat = $r->tingkat ?? ' - ';
+            $nama_kelas = $r->nama_kelas ?? ' - ';
+            $result[$nama_guru][$nama_mapel][$tingkat][$nama_kelas][] = $r;
+        }
+
+        return $result;
+    }
+
+    // 2) ambil pertemuan by id (satu record) — return object
+    public function get_pertemuan_by_ids($id)
+    {
+        return $this->db
+            ->select('p.id, p.pertemuan_ke, p.tanggal, p.id_materi, p.id_kelas, p.id_guru, m.deskripsi, mp.nama_mapel, k.nama_kelas, k.tingkat, g.nama_guru')
+            ->from('pertemuan p')
+            ->join('materi m', 'm.id = p.id_materi', 'left')
+            ->join('mata_pelajaran mp', 'mp.id = m.id_mapel', 'left')
+            ->join('kelas k', 'k.id = p.id_kelas', 'left')
+            ->join('guru g', 'g.nip = p.id_guru', 'left')
+            ->where('p.id', $id)
+            ->get()
+            ->row();
+    }
+
+    // 3) hapus pertemuan beserta child yang terhubung (hanya child yg berhubungan langsung dengan id_pertemuan)
+    public function delete_pertemuan_cascade($id_pertemuan)
+    {
+        // safety: pastikan id numeric
+        if (!is_numeric($id_pertemuan)) {
+            return false;
+        }
+
+        $this->db->trans_start();
+
+        // --- QUIZ ---
+        if ($this->db->table_exists('quiz')) {
+            // ambil semua quiz id untuk pertemuan ini
+            $quizzes = $this->db->select('id')->get_where('quiz', ['id_pertemuan' => $id_pertemuan])->result();
+            foreach ($quizzes as $q) {
+                $quiz_id = $q->id;
+
+                // hapus jawaban_siswa yang mengacu ke quiz_siswa milik quiz ini
+                if ($this->db->table_exists('quiz_siswa') && $this->db->table_exists('jawaban_siswa')) {
+                    $qs_ids = $this->db->select('id')->get_where('quiz_siswa', ['quiz_id' => $quiz_id])->result();
+                    if (!empty($qs_ids)) {
+                        $ids = array_column($qs_ids, 'id');
+                        $this->db->where_in('quiz_siswa_id', $ids)->delete('jawaban_siswa');
+                    }
+                }
+
+                // hapus quiz_siswa
+                if ($this->db->table_exists('quiz_siswa')) {
+                    $this->db->delete('quiz_siswa', ['quiz_id' => $quiz_id]);
+                }
+
+                // hapus quiz_questions
+                if ($this->db->table_exists('quiz_questions')) {
+                    $this->db->delete('quiz_questions', ['quiz_id' => $quiz_id]);
+                }
+
+                // hapus quiz itu sendiri (per quiz)
+                $this->db->delete('quiz', ['id' => $quiz_id]);
+            }
+        }
+
+        // --- UJIAN (tbl_ujian) ---
+        if ($this->db->table_exists('tbl_ujian')) {
+            $ujian_rows = $this->db->select('id_ujian')->get_where('tbl_ujian', ['id_pertemuan' => $id_pertemuan])->result();
+            $ujian_ids = array_column($ujian_rows, 'id_ujian');
+            if (!empty($ujian_ids)) {
+                if ($this->db->table_exists('tbl_jawaban_siswa')) {
+                    $this->db->where_in('id_ujian', $ujian_ids)->delete('tbl_jawaban_siswa');
+                }
+                if ($this->db->table_exists('tbl_soal')) {
+                    $this->db->where_in('id_ujian', $ujian_ids)->delete('tbl_soal');
+                }
+                // hapus tbl_ujian
+                $this->db->where_in('id_ujian', $ujian_ids)->delete('tbl_ujian');
+            }
+        }
+
+        // --- TUGAS SISWA ---
+        if ($this->db->table_exists('tugas_siswa')) {
+            $this->db->delete('tugas_siswa', ['id_pertemuan' => $id_pertemuan]);
+        }
+
+        // --- FORUM DISKUSI + komentar ---
+        if ($this->db->table_exists('forum_diskusi')) {
+            $forum_rows = $this->db->select('id')->get_where('forum_diskusi', ['id_pertemuan' => $id_pertemuan])->result();
+            $forum_ids = array_column($forum_rows, 'id');
+            if (!empty($forum_ids) && $this->db->table_exists('komentar_forum')) {
+                $this->db->where_in('id_forum', $forum_ids)->delete('komentar_forum');
+            }
+            // hapus forum_diskusi
+            $this->db->delete('forum_diskusi', ['id_pertemuan' => $id_pertemuan]);
+        }
+
+        // --- TERAKHIR: HAPUS PERTEMUAN (gunakan kolom primary key 'id') ---
+        $this->db->delete('pertemuan', ['id' => $id_pertemuan]);
+
+        $this->db->trans_complete();
+
+        return $this->db->trans_status();
+    }
 
 
 }

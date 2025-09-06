@@ -6,10 +6,13 @@
 
         <div class="section-body">
 
-
+            <?php
+            var_dump($pertemuan);
+            ?>
             <form method="post" action="<?= base_url('admin/update_pertemuan/' . $pertemuan->id) ?>">
                 <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
                 value="<?= $this->security->get_csrf_hash(); ?>" />
+                <input type="hidden" name="id_guru" value="<?= $pertemuan->id_guru ?>">
                 <div class="form-group">
                     <label for="id_materi">Materi</label>
                     <select name="id_materi" id="id_materi" class="form-control">

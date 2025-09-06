@@ -29,6 +29,8 @@ PR
 - comment di slicing coba cari comment_replies
 - berikan notifikasi jika data pertemuan sudah digunakan
 - penilaian essay masih blm di jumlahkan dengan total nilai pilihan ganda
+- jika guru 2 menambah pertemuan dan sudah tampil di siswa, lalu guru 2 atau admin menghapus pertemuannya
+    dan jadi kosong. seharusnya card guru juga ilang karena tidak ada pertemuan yang diberikan
 
 next can be a problem
 - change id at database siswa to nis

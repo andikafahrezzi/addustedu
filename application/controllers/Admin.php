@@ -1728,6 +1728,7 @@ public function hapus_jawaban_siswa($id_ujian, $nis)
 public function add_pertemuan()
 {
     $this->form_validation->set_rules('id_materi', 'Materi', 'required');
+    $this->form_validation->set_rules('id_guru', 'Guru', 'required');
     $this->form_validation->set_rules('id_kelas', 'Kelas', 'required');
     $this->form_validation->set_rules('pertemuan_ke', 'Pertemuan Ke', 'required|integer');
     $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
@@ -1738,6 +1739,7 @@ public function add_pertemuan()
         $data = [
             'id_materi'     => $this->input->post('id_materi'),
             'id_kelas'      => $this->input->post('id_kelas'),
+            'id_guru'      => $this->input->post('id_guru'),
             'pertemuan_ke'  => $this->input->post('pertemuan_ke'),
             'tanggal'       => $this->input->post('tanggal')
         ];
@@ -1751,6 +1753,7 @@ public function add_pertemuan()
 }
 
 public function edit($id_pertemuan) {
+
         $data['pertemuan'] = $this->M_pertemuan->get_by_id($id_pertemuan);
         $pertemuan = $this->db->select('pertemuan.*, materi.id_mapel')
                           ->from('pertemuan')
@@ -1777,7 +1780,7 @@ public function edit($id_pertemuan) {
         $this->load->view('admin/partials/nava');
         $this->load->view('admin/update_pertemuan', $data);
         $this->load->view('admin/partials/foota');
-    }
+}
 
 public function update_pertemuan($id_pertemuan)
 {
@@ -1794,9 +1797,22 @@ public function update_pertemuan($id_pertemuan)
 }
 
 
-    public function delete_pertemuan($id_pertemuan) {
-        $this->M_pertemuan->delete($id_pertemuan);
-        $this->session->set_flashdata('success', 'Data pertemuan berhasil dihapus.');
+    public function delete_pertemuan($id)
+    {
+        $this->load->model('M_pertemuan');
+
+        // cek numeric dulu
+        if (!is_numeric($id)) {
+            $this->session->set_flashdata('error', 'ID pertemuan tidak valid.');
+            redirect('admin/data_pertemuan');
+        }
+
+        $ok = $this->M_pertemuan->delete_pertemuan_cascade($id);
+        if ($ok) {
+            $this->session->set_flashdata('success', 'Pertemuan dan data terkait berhasil dihapus.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menghapus pertemuan. Cek log / DB constraints.');
+        }
         redirect('admin/data_pertemuan');
     }
     public function get_materi_by_guru($nip)

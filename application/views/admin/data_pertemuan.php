@@ -45,8 +45,8 @@
                                             <td><?= $p->deskripsi ?></td>
                                             <td><?= date('d-m-Y', strtotime($p->tanggal)) ?></td>
                                             <td class="text-center">
-                                                <a href="<?= base_url('admin/edit/'.$p->id_pertemuan) ?>" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-                                                <a class="btn btn-sm btn-danger" onclick="confirmDeleteUjian('<?= $p->id_pertemuan ?>')"><i class="fas fa-trash"></i></a>
+                                                <a href="<?= base_url('admin/edit/'.$p->id) ?>" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                                                <a class="btn btn-sm btn-danger" onclick="confirmDeleteUjian('<?= $p->id ?>')"><i class="fas fa-trash"></i></a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -91,8 +91,8 @@
 </div>
 
 <script>
-    function confirmDeleteUjian(id) {
-        $('#deleteUjianLink').attr('href', '<?= site_url('admin/delete_pertemuan/'.$p->id_pertemuan) ?>');
-        $('#deleteUjianModal').modal('show');
-    }
+function confirmDeleteUjian(id) {
+    $('#deleteUjianLink').attr('href', '<?= site_url('admin/delete_pertemuan/') ?>' + id);
+    $('#deleteUjianModal').modal('show');
+}
 </script>
