@@ -331,14 +331,17 @@ public function get_materi_terjadwal_grouped()
 }
 public function get_pertemuan_grouped()
 {
-    $this->db->select('pertemuan.*, pertemuan.id AS id_pertemuan, 
-                       guru.nama_guru, guru.nip, 
-                       mata_pelajaran.nama_mapel, 
-                       materi.deskripsi, 
-                       kelas.nama_kelas, kelas.tingkat');
+    $this->db->select('
+        pertemuan.*, 
+        pertemuan.id AS id_pertemuan, 
+        guru.nama_guru, guru.nip, 
+        mata_pelajaran.nama_mapel, 
+        materi.deskripsi, 
+        kelas.nama_kelas, kelas.tingkat
+    ');
     $this->db->from('pertemuan');
     $this->db->join('materi', 'materi.id = pertemuan.id_materi');
-    $this->db->join('guru', 'guru.nip = materi.id_guru');
+    $this->db->join('guru', 'guru.nip = pertemuan.id_guru'); // 🔥 ambil dari pertemuan
     $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
     $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
 
@@ -359,6 +362,7 @@ public function get_pertemuan_grouped()
 
     return $result;
 }
+
 
 
     public function update_matery($id, $data)
