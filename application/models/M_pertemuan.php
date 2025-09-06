@@ -87,15 +87,20 @@ public function get_pertemuan_by_guru($nip) {
     }
 
     // Get pertemuan by ID
-    public function get_pertemuan_by_id($id) {
-        $this->db->select('p.*, m.id_mapel, m.id_guru,m.deskripsi, m.id_kelas as materi_kelas, mp.nama_mapel, k.nama_kelas');
-        $this->db->from('pertemuan p');
-        $this->db->join('materi m', 'm.id = p.id_materi');
-        $this->db->join('mata_pelajaran mp', 'mp.id = m.id_mapel');
-        $this->db->join('kelas k', 'k.id = m.id_kelas');
-        $this->db->where('p.id', $id);
-        return $this->db->get()->row();
-    }
+public function get_pertemuan_by_id($id)
+{
+    return $this->db
+        ->select('p.id, p.id_materi, p.id_kelas, p.pertemuan_ke, p.tanggal, p.id_guru, 
+                  m.deskripsi, mp.nama_mapel, k.nama_kelas')
+        ->from('pertemuan p')
+        ->join('materi m', 'm.id = p.id_materi')
+        ->join('mata_pelajaran mp', 'mp.id = m.id_mapel')
+        ->join('kelas k', 'k.id = p.id_kelas')
+        ->where('p.id', $id)
+        ->get()
+        ->row();
+}
+
 
     // Update pertemuan
     public function update_pertemuan($id, $data) {

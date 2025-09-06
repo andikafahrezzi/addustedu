@@ -142,7 +142,7 @@ public function simpan()
         'id_kelas'     => $id_kelas,
         'pertemuan_ke' => $pertemuan_ke,
         'tanggal'      => $tanggal,
-        'id_guru'      => $id_guru,
+        'id_guru'      => $this->session->userdata('nip'),
     ];
 
     // Simpan ke tabel pertemuan
@@ -158,6 +158,7 @@ public function get_materi_by_mapel()
 {
     $id_mapel = $this->input->post('id_mapel');
     $nip = $this->session->userdata('nip');
+    $id_guru = $this->session->userdata('nip');
     $materi = $this->M_pertemuan->get_materi_by_mapel($id_mapel, $nip);
     echo json_encode($materi);
 }
@@ -170,17 +171,20 @@ public function get_materi_by_mapel()
     
     // Validasi ownership
     if (!$data['pertemuan'] || $data['pertemuan']->id_guru != $nip) {
-        show_404();
+        $this->session->set_flashdata('error', 'Anda tidak punya akses ke pertemuan ini.');
+        redirect('pertemuan');
     }
+
     
     $this->load->view('guru/navug');
     $this->load->view('guru/edit_pertemuan', $data);
     $this->load->view('guru/footg');
 }
     // Update pertemuan
-    public function update($id)
+    public function update()
 {
     $this->load->model('M_pertemuan');
+    $id           = $this->input->post('id_pertemuan');
     $id_guru       = $this->session->userdata('nip');
     $id_materi     = $this->input->post('id_materi');
     $id_kelas      = $this->input->post('id_kelas');
@@ -206,7 +210,7 @@ public function get_materi_by_mapel()
         'id_kelas'     => $id_kelas,
         'pertemuan_ke' => $pertemuan_ke,
         'tanggal'      => $tanggal,
-        'id_guru'      => $id_guru,
+        'id_guru'      => $this->session->userdata('nip'),
     ];
 
     $this->db->where('id', $id);
