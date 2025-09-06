@@ -117,38 +117,58 @@ public function get_pertemuan_by_guru($nip) {
         $this->db->where('id', $id);
         return $this->db->delete('pertemuan');
     }
-public function get_pertemuan_paginated($nip, $limit, $start, $filters = []) {
-    $this->db->select('p.*, m.deskripsi, m.video, mp.nama_mapel, k.nama_kelas');
+public function get_pertemuan_paginated($nip, $limit, $offset, $filters = [])
+{
+    $this->db->select('p.*, m.deskripsi, 
+                       k.nama_kelas, mp.nama_mapel, g.nama_guru');
     $this->db->from('pertemuan p');
     $this->db->join('materi m', 'm.id = p.id_materi');
-    $this->db->join('mata_pelajaran mp', 'mp.id = m.id_mapel');
     $this->db->join('kelas k', 'k.id = p.id_kelas');
-    $this->db->where('m.id_guru', $nip);
+    $this->db->join('mata_pelajaran mp', 'mp.id = m.id_mapel');
+    $this->db->join('guru g', 'g.nip = m.id_guru');
     
-    // Filter mapel
+    // filter: pertemuan yang ditambahkan oleh guru login
+    $this->db->where('p.id_guru', $nip);
+
+    // filter tambahan
     if (!empty($filters['mapel'])) {
-        $this->db->where('mp.id', $filters['mapel']);
+        $this->db->where('m.id_mapel', $filters['mapel']);
     }
-    
-    // Filter kelas
     if (!empty($filters['kelas'])) {
-        $this->db->where('k.id', $filters['kelas']);
+        $this->db->where('p.id_kelas', $filters['kelas']);
     }
-    
-    // Search keyword
     if (!empty($filters['keyword'])) {
-        $this->db->group_start();
-        $this->db->like('mp.nama_mapel', $filters['keyword']);
-        $this->db->or_like('k.nama_kelas', $filters['keyword']);
-        $this->db->or_like('m.deskripsi', $filters['keyword']);
-        $this->db->group_end();
+        $this->db->like('m.judul', $filters['keyword']);
     }
-    
+
     $this->db->order_by('mp.nama_mapel', 'ASC');
-    $this->db->order_by('p.pertemuan_ke', 'ASC'); 
-    $this->db->limit($limit, $start);
+    $this->db->order_by('p.pertemuan_ke', 'ASC');
+    $this->db->limit($limit, $offset);
+
     return $this->db->get()->result();
 }
+
+public function count_pertemuan($nip, $filters = [])
+{
+    $this->db->from('pertemuan p');
+    $this->db->join('materi m', 'm.id = p.id_materi');
+
+    $this->db->where('p.id_guru', $nip); // sekarang pakai guru pertemuan
+
+    if (!empty($filters['mapel'])) {
+        $this->db->where('m.id_mapel', $filters['mapel']);
+    }
+    if (!empty($filters['kelas'])) {
+        $this->db->where('p.id_kelas', $filters['kelas']);
+    }
+    if (!empty($filters['keyword'])) {
+        $this->db->like('m.judul', $filters['keyword']);
+    }
+
+    return $this->db->count_all_results();
+}
+
+
 public function check_pertemuan_dependencies($id_pertemuan) {
     $dependencies = [];
     
@@ -182,31 +202,7 @@ public function check_pertemuan_dependencies($id_pertemuan) {
     
     return $dependencies;
 }
-public function count_pertemuan($nip, $filters = []) {
-    $this->db->from('pertemuan p');
-    $this->db->join('materi m', 'm.id = p.id_materi');
-    $this->db->join('mata_pelajaran mp', 'mp.id = m.id_mapel');
-    $this->db->join('kelas k', 'k.id = p.id_kelas');
-    $this->db->where('m.id_guru', $nip);
-    
-    if (!empty($filters['mapel'])) {
-        $this->db->where('mp.id', $filters['mapel']);
-    }
-    
-    if (!empty($filters['kelas'])) {
-        $this->db->where('k.id', $filters['kelas']);
-    }
-    
-    if (!empty($filters['keyword'])) {
-        $this->db->group_start();
-        $this->db->like('mp.nama_mapel', $filters['keyword']);
-        $this->db->or_like('k.nama_kelas', $filters['keyword']);
-        $this->db->or_like('m.deskripsi', $filters['keyword']);
-        $this->db->group_end();
-    }
-    
-    return $this->db->count_all_results();
-}
+
 
 public function get_mapel_by_guru($nip) {
     $this->db->select('DISTINCT(mp.id), mp.nama_mapel');
@@ -279,17 +275,22 @@ public function is_materi_valid($id_materi, $id_mapel, $id_kelas, $nip)
     return $q->num_rows() > 0;
 }
 
-public function is_pertemuan_exists($id_mapel, $id_kelas, $pertemuan_ke)
+public function is_pertemuan_exists($id_mapel, $id_kelas, $pertemuan_ke, $id_guru, $exclude_id = null)
 {
-    $this->db->select('p.id');
     $this->db->from('pertemuan p');
     $this->db->join('materi m', 'm.id = p.id_materi');
     $this->db->where('m.id_mapel', $id_mapel);
     $this->db->where('p.id_kelas', $id_kelas);
     $this->db->where('p.pertemuan_ke', $pertemuan_ke);
-    $q = $this->db->get();
-    return $q->num_rows() > 0;
+    $this->db->where('p.id_guru', $id_guru);
+
+    if ($exclude_id) {
+        $this->db->where('p.id !=', $exclude_id); // biar tidak bentrok dengan dirinya sendiri
+    }
+
+    return $this->db->count_all_results() > 0;
 }
+
 
 
 }

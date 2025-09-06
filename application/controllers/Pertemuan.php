@@ -114,34 +114,44 @@ public function get_materi_ajax() {
 public function simpan()
 {
     $this->load->model('M_pertemuan');
-    $nip = $this->session->userdata('nip');
+    $id_guru = $this->session->userdata('nip'); // ambil dari session
 
-    $id_mapel     = $this->input->post('id_mapel');
-    $id_kelas     = $this->input->post('id_kelas');
-    $id_materi    = $this->input->post('id_materi');
-    $pertemuan_ke = $this->input->post('pertemuan_ke');
-    $tanggal      = $this->input->post('tanggal');
+    // Ambil input dari form
+    $id_materi     = $this->input->post('id_materi');
+    $id_kelas      = $this->input->post('id_kelas');
+    $pertemuan_ke  = $this->input->post('pertemuan_ke');
+    $tanggal       = $this->input->post('tanggal');
 
+    // Ambil id_mapel dari materi
+    $materi = $this->db->get_where('materi', ['id' => $id_materi])->row();
+    $id_mapel = $materi ? $materi->id_mapel : null;
 
     // Cek duplikasi pertemuan
-    if ($this->M_pertemuan->is_pertemuan_exists($id_mapel, $id_kelas, $pertemuan_ke)) {
-        $this->session->set_flashdata('error', 'Pertemuan ke-' . $pertemuan_ke . ' untuk mapel dan kelas ini sudah ada.');
+    if ($this->M_pertemuan->is_pertemuan_exists($id_mapel, $id_kelas, $pertemuan_ke, $id_guru)) {
+        $this->session->set_flashdata(
+            'error',
+            'Pertemuan ke-' . $pertemuan_ke . ' untuk mapel dan kelas ini sudah ada.'
+        );
         redirect('pertemuan/tambah');
+        return;
     }
 
-    // Simpan data
+    // Data yang akan disimpan
     $data = [
-        'id_kelas'     => $id_kelas,
         'id_materi'    => $id_materi,
+        'id_kelas'     => $id_kelas,
         'pertemuan_ke' => $pertemuan_ke,
         'tanggal'      => $tanggal,
+        'id_guru'      => $id_guru,
     ];
 
+    // Simpan ke tabel pertemuan
     $this->db->insert('pertemuan', $data);
 
     $this->session->set_flashdata('success', 'Pertemuan berhasil disimpan.');
     redirect('pertemuan');
 }
+
 
 
 public function get_materi_by_mapel()
@@ -168,31 +178,44 @@ public function get_materi_by_mapel()
     $this->load->view('guru/footg');
 }
     // Update pertemuan
-    public function update() {
-        $id = $this->input->post('id_pertemuan');
-        $nip = $this->session->userdata('nip');
-        
-        // Validasi ownership
-        $pertemuan = $this->M_pertemuan->get_pertemuan_by_id($id);
-        if (!$pertemuan || $pertemuan->id_guru != $nip) {
-            show_404();
-        }
-        
-        $data = [
-            'id_materi' => $this->input->post('id_materi'),
-            'id_kelas' => $this->input->post('id_kelas'),
-            'pertemuan_ke' => $this->input->post('pertemuan_ke'),
-            'tanggal' => $this->input->post('tanggal')
-        ];
+    public function update($id)
+{
+    $this->load->model('M_pertemuan');
+    $id_guru       = $this->session->userdata('nip');
+    $id_materi     = $this->input->post('id_materi');
+    $id_kelas      = $this->input->post('id_kelas');
+    $pertemuan_ke  = $this->input->post('pertemuan_ke');
+    $tanggal       = $this->input->post('tanggal');
 
-        if ($this->M_pertemuan->update_pertemuan($id, $data)) {
-            $this->session->set_flashdata('success', 'Pertemuan berhasil diupdate!');
-        } else {
-            $this->session->set_flashdata('error', 'Gagal mengupdate pertemuan!');
-        }
+    // Ambil id_mapel dari materi
+    $materi = $this->db->get_where('materi', ['id' => $id_materi])->row();
+    $id_mapel = $materi ? $materi->id_mapel : null;
 
-        redirect('pertemuan');
+    // Cek apakah duplikat pertemuan (kecuali dirinya sendiri)
+    if ($this->M_pertemuan->is_pertemuan_exists($id_mapel, $id_kelas, $pertemuan_ke, $id_guru, $id)) {
+        $this->session->set_flashdata(
+            'error',
+            'Pertemuan ke-' . $pertemuan_ke . ' untuk mapel dan kelas ini sudah ada.'
+        );
+        redirect('pertemuan/edit/' . $id);
+        return;
     }
+
+    $data = [
+        'id_materi'    => $id_materi,
+        'id_kelas'     => $id_kelas,
+        'pertemuan_ke' => $pertemuan_ke,
+        'tanggal'      => $tanggal,
+        'id_guru'      => $id_guru,
+    ];
+
+    $this->db->where('id', $id);
+    $this->db->update('pertemuan', $data);
+
+    $this->session->set_flashdata('success', 'Pertemuan berhasil diperbarui.');
+    redirect('pertemuan');
+}
+
 
     // Delete pertemuan
    public function delete($id) {
