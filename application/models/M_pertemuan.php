@@ -157,7 +157,7 @@ public function get_pertemuan_paginated($nip, $limit, $offset, $filters = [])
         $this->db->where('p.id_kelas', $filters['kelas']);
     }
     if (!empty($filters['keyword'])) {
-        $this->db->like('m.judul', $filters['keyword']);
+        $this->db->like('m.deskripsi', $filters['keyword']);
     }
 
     $this->db->order_by('mp.nama_mapel', 'ASC');
@@ -181,7 +181,7 @@ public function count_pertemuan($nip, $filters = [])
         $this->db->where('p.id_kelas', $filters['kelas']);
     }
     if (!empty($filters['keyword'])) {
-        $this->db->like('m.judul', $filters['keyword']);
+        $this->db->like('m.deskripsi', $filters['keyword']);
     }
 
     return $this->db->count_all_results();
