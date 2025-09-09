@@ -5,8 +5,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta content="addustedu dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja." name="Description" />
-    <meta content="addustedu, E-learning, Open Source, Andika Fahrezi, github, programmer indonesia" name="keywords" />
+    <meta content="cipta tunas karya dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja." name="Description" />
+    <meta content="cipta tunas karya, E-learning, Open Source, Andika Fahrezi, github, programmer indonesia" name="keywords" />
     <link rel="icon" href="<?= base_url('assets/') ?>img/logow.jpeg" type="image/jpeg">
     <title>ctkarya - Belajar Dimana Saja & Kapan Saja !</title>
     <!-- Bootstrap CSS -->

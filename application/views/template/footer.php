@@ -54,7 +54,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
             <div class="col-lg-4 col-md-6 col-sm-6">
                 <h4 class="footer_title">Tentang Cipta Tunas Karya</h4>
                 <p>
-                    Web Edukasi Open Source yang dibuat oleh Andika Fahrezi. Cipta Tunas Karya adalah Web edukasi yang dilengkapi video, materi dan sistem ujian yang tersedia secara gratis. addustedu dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
+                    Web Edukasi Open Source yang dibuat oleh Andika Fahrezi. Cipta Tunas Karya adalah Web edukasi yang dilengkapi video, materi dan sistem ujian yang tersedia secara gratis. cipta tunas karya dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                 </p>
             </div>
         </div>
