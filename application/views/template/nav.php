@@ -5,10 +5,18 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta content="cipta tunas karya dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja." name="Description" />
-    <meta content="cipta tunas karya, E-learning, Open Source, Andika Fahrezi, github, programmer indonesia" name="keywords" />
+    <meta name="description" content="Cipta Tunas Karya adalah platform e-learning berbasis web untuk siswa dan guru agar dapat belajar dan mengajar kapan saja dan di mana saja." />
+    <meta content="cipta tunas karya, pembelajaran digital,pkbm , E-learning, Open Source, Andika Fahrezi, github, programmer indonesia" name="keywords" />
+    <meta property="og:title" content="Cipta Tunas Karya - E-Learning" />
+    <meta property="og:description" content="Platform e-learning berbasis web untuk siswa dan guru belajar dan mengajar kapan saja." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ciptatunaskarya.my.id/" />
+    <meta property="og:image" content="https://ciptatunaskarya.my.id/assets/img/logow.jpeg" />
+    
+    <meta name="author" content="Cipta Tunas Karya">
+
     <link rel="icon" href="<?= base_url('assets/') ?>img/logow.jpeg" type="image/jpeg">
-    <title>ctkarya - Belajar Dimana Saja & Kapan Saja !</title>
+    <title>cipta tunas karya - Platform E-Learning Terbaik untuk Guru dan Siswa !</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/bootstrap.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>vendors/linericon/style.css">
