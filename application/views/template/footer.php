@@ -1,10 +1,4 @@
-<!--
-@About-addustedu :
-Web Edukasi Open Source yang dibuat oleh Andika Fahrezi
-addustedu adalah Web edukasi yang dilengkapi video, materi dan sistem ujian
-yang tersedia secara gratis. addustedu dibuat ditujukan agar para siswa dan
-guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
--->
+
 
 
 <!--================ Start footer Area  =================-->
@@ -64,7 +58,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                 Copyright &copy;<script>
                     document.write(new Date().getFullYear());
                 </script> All rights reserved | This template is made with <span class="text-danger"> &#10084;</span> by
-                <a href="https://colorlib.com" target="_blank">Colorlib</a> <br> addustedu is made with <span class="text-danger"> &#10084;</span> by <a href="https://github.com/Andikafahrezi">andikafahrezzi</a> with MIT License
+                <a href="https://colorlib.com" target="_blank">Colorlib</a> <br> cipta tunas karya is made with <span class="text-danger"> &#10084;</span> by <a href="https://github.com/Andikafahrezi">andikafahrezzi</a> with MIT License
                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
             </p>
             <div class="col-lg-4 col-md-4 footer-social">
@@ -93,7 +87,7 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title text-dark font-weight-bold" style="color:#212529 !important;" id="exampleModalCenterTitle">
-                    addustedu - Masuk Sekarang</h2>
+                    cipta tunas karya - Masuk Sekarang</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
