@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 31, 2025 at 06:32 AM
+-- Generation Time: Sep 10, 2025 at 01:12 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `db_addustedu`
+-- Database: `db_addustedudev`
 --
 
 -- --------------------------------------------------------
@@ -176,6 +176,7 @@ CREATE TABLE `materi` (
 CREATE TABLE `pertemuan` (
   `id` int(11) NOT NULL,
   `id_materi` int(11) NOT NULL,
+  `id_guru` varchar(20) DEFAULT NULL,
   `id_kelas` int(11) NOT NULL,
   `pertemuan_ke` int(11) NOT NULL,
   `tanggal` date NOT NULL
