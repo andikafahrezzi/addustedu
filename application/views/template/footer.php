@@ -299,7 +299,7 @@
             const icon = this.querySelector('i');
             
             passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
-            icon.classList.toggle('lnr lnr-eye');
+            icon.classList.toggle('lnr lnr-eye-hidden');
             icon.classList.toggle('lnr lnr-eye');
         });
     </script>

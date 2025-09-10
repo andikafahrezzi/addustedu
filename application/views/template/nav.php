@@ -12,10 +12,26 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ciptatunaskarya.my.id/" />
     <meta property="og:image" content="https://ciptatunaskarya.my.id/assets/img/logow.jpeg" />
-    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Cipta Tunas Karya",
+        "url": "https://ciptatunaskarya.my.id/",
+        "description": "Platform e-learning berbasis web untuk siswa dan guru agar dapat belajar dan mengajar kapan saja dan di mana saja.",
+        "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://ciptatunaskarya.my.id/search?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+            }
+    }
+    </script>
     <meta name="author" content="Cipta Tunas Karya">
 
     <link rel="icon" href="<?= base_url('assets/') ?>img/logow.jpeg" type="image/jpeg">
+    <link rel="icon" href="<?= base_url('favicon.ico'); ?>" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= base_url('favicon.ico'); ?>" type="image/x-icon">
+
     <title>cipta tunas karya - Platform E-Learning Terbaik untuk Guru dan Siswa !</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/') ?>css/bootstrap.css">
