@@ -147,7 +147,7 @@
 	<div class="container">
 		<div class="main_title">
 			<h2 data-aos="fade-up" data-aos-duration="1600">Pelajaran Yang Tersedia di Cipta Tunas Karya</h2>
-			<p data-aos="fade-up" data-aos-duration="1800">Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free.</p>
+			<p data-aos="fade-up" data-aos-duration="1800">Cipta Tunas Karya menyediakan berbagai mata pelajaran yang dirancang sesuai kebutuhan siswa, mulai dari pelajaran umum hingga materi pendukung lainnya. Semua pelajaran dapat diakses secara mudah melalui platform ini, sehingga siswa bisa belajar dengan lebih terarah dan guru dapat menyampaikan materi secara sistematis.</p>
 		</div>
 		<div class="row courses_inner">
 			<div class="col-lg-9">

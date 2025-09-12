@@ -26,18 +26,18 @@
                     <div class="info_item">
                         <i class="lnr lnr-home"></i>
                         <h6>JL.KI HAJAR DEWANTORO RT03/04 KELURAHAN GONDRONG KOTA TANGERANG</h6>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                        <p>Terletak di kawasan yang mudah dijangkau, mendukung kegiatan belajar mengajar secara optimal.</p>
                     </div>
                     <div class="info_item">
                         <i class="lnr lnr-phone-handset"></i>
                         <h6><a href="#">
                                  081286229296</a></h6>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                        <p>Dapat dihubungi pada jam kerja untuk informasi lebih lanjut mengenai program dan layanan.</p>
                     </div>
                     <div class="info_item">
                         <i class="lnr lnr-envelope"></i>
                         <h6><a href="#">ciptatunaskarya0@gmail.com</a></h6>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                        <p>Saluran komunikasi resmi untuk pertanyaan, kerja sama, atau kebutuhan administrasi.</p>
                     </div>
                 </div>
             </div>
