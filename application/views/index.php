@@ -129,10 +129,10 @@
 						<span class="highlight-text">Cipta Tunas Karya</span> Dibuat Untuk Meningkatkan Kualitas Pembelajaran Di Indonesia
 					</h2>
 					<p data-aos="fade-up" data-aos-duration="2000">
-						Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free.
+						Kami percaya bahwa pendidikan berkualitas adalah kunci masa depan. Melalui teknologi ini, setiap siswa dan guru dapat terhubung lebih mudah, saling berbagi ilmu, serta mengembangkan potensi tanpa batas.
 					</p>
-					<a href="https://github.com/andikafahrezzi/addustedu">
-						<button data-aos="fade-up" data-aos-duration="2200" class="btn-gradient">Lihat Repository <span class="lnr lnr-arrow-right"></span></button>
+					<a href="<?= base_url('welcome/tentang') ?>">
+						<button data-aos="fade-up" data-aos-duration="2200" class="btn-gradient">Tentang Kami <span class="lnr lnr-arrow-right"></span></button>
 					</a>
 				</div>
 			</div>
@@ -246,7 +246,7 @@
 	<div class="container">
 		<div class="main_title">
 			<h2 data-aos="fade-up" data-aos-duration="1800">Testimonial Para Siswa Cipta Tunas Karya</h2>
-			<p data-aos="fade-up" data-aos-duration="2000">Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free.</p>
+			<p data-aos="fade-up" data-aos-duration="2000">Suara siswa adalah bukti nyata bagaimana Cipta Tunas Karya membantu mereka dalam proses belajar. Melalui pengalaman langsung, mereka merasakan kemudahan, kenyamanan, dan motivasi baru untuk terus berkembang.</p>
 		</div>
 		<section class="testimonials_area p_20">
 			<div class="container">
@@ -262,7 +262,7 @@
 								<li><a href="#"><i class="fa fa-star"></i></a></li>
 								<li><a href="#"><i class="fa fa-star"></i></a></li>
 							</ul>
-							<p>Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free. Abstract chaos snare play truth ultimate good self. God overcome sexuality pious abstract good decieve revaluation aversion good. Virtues chaos overcome society holiest truth.</p>
+							<p>Belajar jadi lebih mudah karena semua materi sudah tersedia lengkap. Saya bisa mengakses kapan saja tanpa harus menunggu penjelasan di kelas. Rasanya seperti punya ruang belajar pribadi yang selalu siap menemani.</p>
 						</div>
 					</div>
 					<div class="item">
@@ -276,13 +276,13 @@
 								<li><a href="#"><i class="fa fa-star"></i></a></li>
 								<li><a href="#"><i class="fa fa-star"></i></a></li>
 							</ul>
-							<p>Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free. Abstract chaos snare play truth ultimate good self. God overcome sexuality pious abstract good decieve revaluation aversion good. Virtues chaos overcome society holiest truth.</p>
+							<p>Dulu saya sering cepat bosan saat belajar, tapi dengan Cipta Tunas Karya jadi lebih semangat. Forum diskusi dan fitur interaktif membuat saya merasa tidak belajar sendirian, ada teman dan guru yang siap membantu.</p>
 						</div>
 					</div>
 					<div class="item">
 						<div class="testi_item">
 							<img src="<?= base_url('assets/') ?>img/testimonials/jonggun.jpeg" alt="">
-							<h4>Diki Ramdani</h4>
+							<h4>Park Jonggun</h4>
 							<ul class="list">
 								<li><a href="#"><i class="fa fa-star"></i></a></li>
 								<li><a href="#"><i class="fa fa-star"></i></a></li>
@@ -290,7 +290,7 @@
 								<li><a href="#"><i class="fa fa-star"></i></a></li>
 								<li><a href="#"><i class="fa fa-star"></i></a></li>
 							</ul>
-							<p>Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free. Abstract chaos snare play truth ultimate good self. God overcome sexuality pious abstract good decieve revaluation aversion good. Virtues chaos overcome society holiest truth.
+							<p>Setelah menggunakan Cipta Tunas Karya, nilai saya meningkat karena bisa berlatih soal lebih banyak. Tugas lebih teratur, ujian lebih siap, dan saya merasa percaya diri menghadapi pelajaran.
 							</p>
 						</div>
 					</div>
@@ -306,8 +306,7 @@
 	<div class="container">
 		<div class="impress_inner text-center">
 			<h2 data-aos="fade-up" data-aos-duration="1800">LOGIN SEBAGAI GURU DAN UPLOAD MATERI & VIDEO SEKARANG</h2>
-			<p data-aos="fade-up" data-aos-duration="2000">Merciful revaluation burying love ultimate value inexpedient ubermensch. Holiest madness victorious morality hope endless christian madness. Love dead fearful transvaluation marvelous. Oneself right ideal abstract endless faith deceptions zarathustra grandeur law ubermensch free. Abstract chaos snare play truth ultimate good self. God overcome sexuality pious abstract good decieve revaluation aversion good. Virtues chaos overcome society holiest truth.
-			</p>
+			<p data-aos="fade-up" data-aos-duration="2000">Guru dapat masuk melalui akun yang tersedia untuk mengunggah materi pembelajaran, video, maupun soal latihan yang dapat diakses oleh siswa.</p>
 			<a data-aos="fade-up" data-aos-duration="2200" class="main_btn" href="<?= base_url('welcome/guru') ?>">Login Sebagai Guru <span class="lnr lnr-arrow-right text-black"></span></a>
 		</div>
 	</div>

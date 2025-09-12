@@ -48,7 +48,7 @@
             <div class="col-lg-4 col-md-6 col-sm-6">
                 <h4 class="footer_title">Tentang Cipta Tunas Karya</h4>
                 <p>
-                    Web Edukasi Open Source yang dibuat oleh Andika Fahrezi. Cipta Tunas Karya adalah Web edukasi yang dilengkapi video, materi dan sistem ujian yang tersedia secara gratis. cipta tunas karya dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
+                    Web Edukasi Open Source yang dibuat oleh Andika Fahrezi. Cipta Tunas Karya adalah Web edukasi yang dilengkapi video, materi dan sistem ujian yang tersedia. cipta tunas karya dibuat ditujukan agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                 </p>
             </div>
         </div>
@@ -58,13 +58,13 @@
                 Copyright &copy;<script>
                     document.write(new Date().getFullYear());
                 </script> All rights reserved | This template is made with <span class="text-danger"> &#10084;</span> by
-                <a href="https://colorlib.com" target="_blank">Colorlib</a> <br> cipta tunas karya is made with <span class="text-danger"> &#10084;</span> by <a href="https://github.com/Andikafahrezi">andikafahrezzi</a> with MIT License
+                <a href="https://colorlib.com" target="_blank">Colorlib</a> <br> cipta tunas karya is made with <span class="text-danger"> &#10084;</span> by <a href="https://github.com/andikafahrezzi">andikafahrezzi</a> with MIT License
                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
             </p>
             <div class="col-lg-4 col-md-4 footer-social">
                 <a href="https://www.facebook.com/andikafahrezzi"><i class="fa fa-facebook"></i></a>
                 <a href="https://twitter.com/andikafahrezzi"><i class="fa fa-twitter"></i></a>
-                <a href="https://www.github.com/Andikafahrezi"><i class="fa fa-github"></i></a>
+                <a href="https://www.github.com/andikafahrezzi"><i class="fa fa-github"></i></a>
                 <a href="https://www.instagram.com/andikafahrezzi"><i class="fa fa-instagram"></i></a>
             </div>
         </div>
