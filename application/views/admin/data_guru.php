@@ -36,7 +36,7 @@
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr class="text-center">
-                                    <th>NIP</th>
+                                    <th>NUPTK</th>
                                     <th>Nama Guru</th>
                                     <th>Email</th>
                                     <th>Mata Pelajaran</th>
@@ -47,7 +47,7 @@
                                 <?php if (!empty($guru)): ?>
                                     <?php foreach ($guru as $g): ?>
                                         <tr class="text-center">
-                                            <td><?= $g->nip ?></td>
+                                            <td><?= $g->nuptk ?></td>
                                             <td><?= $g->nama_guru ?></td>
                                             <td><?= $g->email ?></td>
                                             <td><?= !empty($g->mapel_diajar) ? $g->mapel_diajar : 'Belum ada mapel' ?></td>

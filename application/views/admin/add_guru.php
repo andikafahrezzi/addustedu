@@ -26,12 +26,12 @@
 
                         <div class="card-body">
                             <form method="POST" action="<?= base_url('admin/add_guru') ?>">
-                            <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
-                            value="<?= $this->security->get_csrf_hash(); ?>" />
+                                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                                value="<?= $this->security->get_csrf_hash(); ?>" />
                                 <div id="" class="form-group">
-                                    <label for="nip">Nomor Unik Pendidik dan Tenaga Kependidikan</label>
-                                    <input id="nip" type="text" class="form-control" name="nip">
-                                    <?= form_error('nip', '<small class="text-danger">', '</small>'); ?>
+                                    <label for="nuptk">Nomor Unik Pendidik dan Tenaga Kependidikan</label>
+                                    <input id="nuptk" type="text" class="form-control" name="nuptk">
+                                    <?= form_error('nuptk', '<small class="text-danger">', '</small>'); ?>
                                     <div class="invalid-feedback">
                                     </div>
                                 </div>

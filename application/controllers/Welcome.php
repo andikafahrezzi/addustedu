@@ -79,10 +79,10 @@ public function validateLogin() {
 
     // Login Guru
     public function guru() {
-        $this->form_validation->set_rules('nip', 'Nip', 'trim|required|numeric|min_length[5]', [
+        $this->form_validation->set_rules('nuptk', 'Nuptk', 'trim|required|numeric|min_length[5]', [
             'required' => 'Harap isi bidang email!',
-            'numeric' => 'NIP harus berupa angka!',
-            'min_length' => 'NIP minimal 5 angka!',
+            'numeric' => 'Nuptk harus berupa angka!',
+            'min_length' => 'Nuptk minimal 5 angka!',
         ]);
         $this->form_validation->set_rules('password', 'Password', 'trim|required', [
             'required' => 'Harap isi bidang password!',
@@ -96,18 +96,20 @@ public function validateLogin() {
     }
 
 private function guru_login_process() {
-    $nip = $this->input->post('nip');
+    $nuptk    = $this->input->post('nuptk'); 
     $password = $this->input->post('password');
 
-    $user = $this->db->get_where('guru', ['nip' => $nip])->row_array();
+    // Cari guru berdasarkan NUPTK
+    $user = $this->db->get_where('guru', ['nuptk' => $nuptk])->row_array();
 
     if ($user) {
         if (password_verify($password, $user['password'])) {
             // Bersihkan session lama secara lengkap
-            $this->session->unset_userdata(['nip', 'nis', 'nama', 'nama_guru', 'user_type', 'logged_in']);
+            $this->session->unset_userdata(['nip', 'nis', 'nuptk', 'nama', 'nama_guru', 'user_type', 'logged_in']);
             
             $data = [
-                'nip' => $user['nip'],
+                'nip'       => $user['nip'],        // tetap simpan nip biar konsisten relasi ke guru_mapel
+                'nuptk'     => $user['nuptk'],      // tambahkan nuptk ke session
                 'nama_guru' => $user['nama_guru'],
                 'user_type' => 'guru',
                 'logged_in' => true
@@ -119,10 +121,11 @@ private function guru_login_process() {
             redirect(base_url('welcome/guru'));
         }
     } else {
-        $this->session->set_flashdata('fail-login', 'NIP tidak terdaftar!');
+        $this->session->set_flashdata('fail-login', 'NUPTK tidak terdaftar!'); // ✅ ubah pesan juga
         redirect(base_url('welcome/guru'));
     }
 }
+
 
     // Logout untuk semua user
     public function logout() {

@@ -457,34 +457,36 @@ public function guru_edit()
     $this->load->model('M_guru');
     $this->load->library('form_validation');
 
-    // Validasi
-    $this->form_validation->set_rules('nip', 'NIP', 'required|numeric');
+    // Validasi input
+    $this->form_validation->set_rules('nuptk', 'NUPTK', 'required|numeric');
     $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
     $this->form_validation->set_rules('nPassword', 'Password Baru', 'min_length[6]');
     $this->form_validation->set_rules('nRPassword', 'Ulangi Password', 'matches[nPassword]');
     $this->form_validation->set_rules(
-    'nama',
-    'Nama Guru',
-    'required|trim|min_length[4]|callback_valid_nama',
-    [
-        'required' => 'Harap isi kolom Nama.',
-        'min_length' => 'Nama terlalu pendek.',
-    ]
+        'nama',
+        'Nama Guru',
+        'required|trim|min_length[4]|callback_valid_nama',
+        [
+            'required'   => 'Harap isi kolom Nama.',
+            'min_length' => 'Nama terlalu pendek.',
+        ]
     );
+
     if ($this->form_validation->run() == FALSE) {
         $this->session->set_flashdata('error-edit', validation_errors());
         redirect('admin/update_guru/'.$this->input->post('nip')); 
         return;
     }
 
-    $nip = $this->input->post('nip');
-    $nama = $this->input->post('nama');
-    $email = $this->input->post('email');
-    $new_password = $this->input->post('nPassword');
-    $repeat_password = $this->input->post('nRPassword');
-    $mapel = $this->input->post('mapel'); // <-- array dari checkbox
+    $nip            = $this->input->post('nip'); // PK tetap pakai nip
+    $nuptk          = $this->input->post('nuptk');
+    $nama           = $this->input->post('nama');
+    $email          = $this->input->post('email');
+    $new_password   = $this->input->post('nPassword');
+    $repeat_password= $this->input->post('nRPassword');
+    $mapel          = $this->input->post('mapel'); // array dari checkbox
 
-    // Validasi guru
+    // Pastikan guru ada
     $guru_exists = $this->M_guru->get_guru_by_nip($nip);
     if (!$guru_exists) {
         $this->session->set_flashdata('error-edit', 'Data guru tidak ditemukan');
@@ -492,8 +494,20 @@ public function guru_edit()
         return;
     }
 
+    // Cek apakah NUPTK dipakai guru lain
+    $this->db->where('nuptk', $nuptk);
+    $this->db->where('nip !=', $nip); // exclude guru yang sedang diupdate
+    $duplicate = $this->db->get('guru')->row();
+
+    if ($duplicate) {
+        $this->session->set_flashdata('error-edit', 'NUPTK sudah digunakan guru lain.');
+        redirect('admin/update_guru/'.$nip);
+        return;
+    }
+
     // Data update
     $data = [
+        'nuptk'     => htmlspecialchars($nuptk, ENT_QUOTES, 'UTF-8'),
         'nama_guru' => htmlspecialchars($nama, ENT_QUOTES, 'UTF-8'),
         'email'     => htmlspecialchars($email, ENT_QUOTES, 'UTF-8'),
     ];
@@ -502,15 +516,14 @@ public function guru_edit()
     if (!empty($new_password)) {
         if ($new_password !== $repeat_password) {
             $this->session->set_flashdata('error-edit', 'Password dan ulangi password tidak sama');
-            redirect('admin/update_guru/'.$nip); // ✅ balik ke form update guru
+            redirect('admin/update_guru/'.$nip);
             return;
         }
         $data['password'] = password_hash($new_password, PASSWORD_DEFAULT);
     }
 
+    // Update guru
     $where = ['nip' => $nip];
-
-    // Update data guru
     $this->M_guru->update_data($where, $data, 'guru');
 
     // Sinkronisasi mapel
@@ -529,6 +542,7 @@ public function guru_edit()
     $this->session->set_flashdata('success-edit', 'Data guru berhasil diperbarui.');
     redirect('admin/data_guru');
 }
+
 
 
     public function update_materi($id)
@@ -715,15 +729,10 @@ public function delete_guru($nip)
 
     public function add_guru()
 {
-    $this->form_validation->set_rules('nip', 'Nip', 'required|trim|min_length[4]', [
-        'required' => 'Harap isi kolom NIP.',
-        'min_length' => 'NIP terlalu pendek.',
-    ]);
-    
-    $this->form_validation->set_rules('nip', 'NIP', 'required|trim|min_length[4]|is_unique[guru.nip]', [
-    'required' => 'Harap isi kolom NIP.',
-    'min_length' => 'NIP terlalu pendek.',
-    'is_unique' => 'NIP ini sudah terdaftar!'
+    $this->form_validation->set_rules('nuptk', 'Nuptk', 'required|trim|min_length[4]|is_unique[guru.nuptk]', [
+    'required' => 'Harap isi kolom nuptk.',
+    'min_length' => 'nuptk terlalu pendek.',
+    'is_unique' => 'nuptk ini sudah terdaftar!'
     ]);
 
     $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[guru.email]', [
@@ -763,11 +772,13 @@ public function delete_guru($nip)
         $this->load->view('admin/add_guru', $data);
         $this->load->view('admin/partials/foota');
     } else {
-        $nip = htmlspecialchars($this->input->post('nip', true));
         $mapel_array = $this->input->post('mapel');
+
+        $nip = $this->M_guru->generate_nip();
 
         $this->db->insert('guru', [
             'nip' => $nip,
+            'nuptk' => htmlspecialchars($this->input->post('nuptk', true)),
             'email' => htmlspecialchars($this->input->post('email', true)),
             'nama_guru' => htmlspecialchars($this->input->post('nama', true)),
             'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),

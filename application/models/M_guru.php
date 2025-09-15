@@ -4,7 +4,7 @@ class M_guru extends CI_Model
 {
 public function get_paginated($limit, $start, $filters = [])
 {
-    $this->db->select('guru.nip, guru.nama_guru, guru.email, GROUP_CONCAT(mata_pelajaran.nama_mapel SEPARATOR ", ") as mapel_diajar');
+    $this->db->select('guru.nip, guru.nama_guru, guru.nuptk, guru.email, GROUP_CONCAT(mata_pelajaran.nama_mapel SEPARATOR ", ") as mapel_diajar');
     $this->db->from('guru');
     $this->db->join('guru_mapel', 'guru_mapel.id_guru = guru.nip', 'left');
     $this->db->join('mata_pelajaran', 'guru_mapel.id_mapel = mata_pelajaran.id', 'left');
@@ -13,7 +13,7 @@ public function get_paginated($limit, $start, $filters = [])
     if (!empty($filters['keyword'])) {
         $this->db->group_start();
         $this->db->like('guru.nama_guru', $filters['keyword']);
-        $this->db->or_like('guru.nip', $filters['keyword']);
+        $this->db->or_like('guru.nuptk', $filters['keyword']);
         $this->db->or_like('guru.email', $filters['keyword']);
         $this->db->group_end();
     }
@@ -35,7 +35,7 @@ public function count_all($filters = [])
     if (!empty($filters['keyword'])) {
         $this->db->group_start();
         $this->db->like('guru.nama_guru', $filters['keyword']);
-        $this->db->or_like('guru.nip', $filters['keyword']);
+        $this->db->or_like('guru.nuptk', $filters['keyword']);
         $this->db->or_like('guru.email', $filters['keyword']);
         $this->db->group_end();
     }
@@ -56,7 +56,7 @@ public function count_all_alternative($filters = [])
     if (!empty($filters['keyword'])) {
         $this->db->group_start();
         $this->db->like('guru.nama_guru', $filters['keyword']);
-        $this->db->or_like('guru.nip', $filters['keyword']);
+        $this->db->or_like('guru.nuptk', $filters['keyword']);
         $this->db->or_like('guru.email', $filters['keyword']);
         $this->db->group_end();
     }
@@ -135,4 +135,21 @@ public function get_guru_by_nip($nip) {
                       ->get('materi')
                       ->row();
     }
+    public function generate_nip() {
+    $this->db->select('nip');
+    $this->db->from('guru');
+    $this->db->order_by('nip', 'DESC');
+    $this->db->limit(1);
+    $query = $this->db->get();
+
+    if ($query->num_rows() > 0) {
+        $last_nip = $query->row()->nip;
+        $new_number = (int)$last_nip + 1; // increment angka terakhir
+    } else {
+        $new_number = 1282023001; // angka awal kalau data guru masih kosong
+    }
+
+    return (string)$new_number;
+}
+
 }

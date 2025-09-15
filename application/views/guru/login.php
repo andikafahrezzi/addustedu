@@ -47,8 +47,8 @@ guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
                         <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
                         value="<?= $this->security->get_csrf_hash(); ?>" />
                             <div class="form-group">
-                                <label for="nip">Nomor Unik Pendidik dan Tenaga Kependidikan</label>
-                                <input id="nip" type="text" class="form-control" placeholder="Masukan NUPTK mu disini" name="nip" tabindex="1" required autofocus>
+                                <label for="nuptk">Nomor Unik Pendidik dan Tenaga Kependidikan</label>
+                                <input id="nuptk" type="text" class="form-control" placeholder="Masukan NUPTK mu disini" name="nuptk" tabindex="1" required autofocus>
                                 <div class="invalid-feedback">
                                     Harap isi NUPTK
                                 </div>

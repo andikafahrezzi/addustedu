@@ -38,12 +38,11 @@
                         <form method="POST" action="<?= base_url('admin/guru_edit') ?>">
                         <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
                             value="<?= $this->security->get_csrf_hash(); ?>" />
-
+                        <input type="hidden" name="nip" value="<?= $user->nip ?>">
                         <div class="form-group">
-                            <label for="nip">Nomor Unik Pendidik dan Tenaga Kependidikan</label>
-                            <input readonly id="nip" type="text" class="form-control" value="<?= $user->nip ?>" name="nip">
+                            <label for="nuptk">Nomor Unik Pendidik dan Tenaga Kependidikan</label>
+                            <input id="nuptk" type="text" class="form-control" value="<?= $user->nuptk ?>" name="nuptk">
                         </div>
-
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input id="email" type="email" value="<?= $user->email ?>" class="form-control" name="email">
