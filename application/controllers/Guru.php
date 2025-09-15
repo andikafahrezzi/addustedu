@@ -1058,10 +1058,12 @@ public function download_tugas($id)
 public function update_profile()
 {
     $nip = $this->input->post('nip');
+    $nuptk = $this->input->post('nuptk');
     $nama_guru = $this->input->post('nama_guru');
     $email = $this->input->post('email');
     $password = $this->input->post('password');
 
+    $this->form_validation->set_rules('nuptk', 'NUPTK', 'required|numeric|min_length[8]|max_length[20]');
     $this->form_validation->set_rules('nama_guru', 'Nama Guru', 'required');
     $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
 
@@ -1078,6 +1080,16 @@ public function update_profile()
         return;
     }
 
+    $nuptkCheck = $this->db->get_where('guru', [
+        'nuptk' => $nuptk,
+        'nip !=' => $nip
+    ])->row();
+
+    if ($nuptkCheck) {
+        $this->session->set_flashdata('error', 'NUPTK sudah digunakan oleh guru lain.');
+        redirect('guru/edit_profile');
+        return;
+    }
     // Cek email sudah dipakai guru lain
     $emailCheck = $this->db->get_where('guru', [
         'email' => $email,
@@ -1092,8 +1104,9 @@ public function update_profile()
 
     // Siapkan data update
     $updateData = [
-        'nama_guru' => $nama_guru,
-        'email' => $email
+        'nuptk'     => htmlspecialchars($nuptk, ENT_QUOTES, 'UTF-8'),
+        'nama_guru' => htmlspecialchars($nama_guru, ENT_QUOTES, 'UTF-8'),
+        'email'     => htmlspecialchars($email, ENT_QUOTES, 'UTF-8')
     ];
 
     if (!empty($password)) {
