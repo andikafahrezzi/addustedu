@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 10, 2025 at 01:15 PM
+-- Generation Time: Sep 15, 2025 at 08:46 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `db_addustedudev`
+-- Database: `db_addusteduprod`
 --
 
 -- --------------------------------------------------------
@@ -91,13 +91,33 @@ CREATE TABLE `forum_diskusi` (
 
 CREATE TABLE `guru` (
   `nip` varchar(20) NOT NULL,
+  `nuptk` varchar(25) NOT NULL,
   `email` varchar(255) NOT NULL,
   `nama_guru` varchar(128) NOT NULL,
   `password` varchar(255) NOT NULL,
   `user_type` enum('guru') NOT NULL DEFAULT 'guru',
-  `image` varchar(255) NOT NULL,
-  `id_mapel` int(11) DEFAULT NULL
+  `image` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `guru`
+--
+
+INSERT INTO `guru` (`nip`, `nuptk`, `email`, `nama_guru`, `password`, `user_type`, `image`) VALUES
+('1282023001', '1282023001', 'guru1@gmail.com', 'Ahmad Safei', '$2y$10$8iwiPrS9jYUVAhZAF.3a9.oa4EA/f5scljh/ZJqksTUkQgiKzONza', 'guru', 'default.jpg'),
+('1282023002', '1282023002', 'guru2@gmail.com', 'Ahmad Nazir', '$2y$10$.OOU9m9OZX9X3MbLFOU5ruCA4YhQc0Sh3H2NS0h4TkSnIbyPLhrdK', 'guru', 'default.jpg'),
+('1282023003', '1282023003', 'guru3@gmail.com', 'Arif Prasetyo', '$2y$10$EQsFl9fKEyxedhLi31/JpumijVbDxdbc/6Y/gFeUzNUtxecdfq/Ae', 'guru', 'default.jpg'),
+('1282023004', '1282023004', 'guru4@gmail.com', 'Agus Supandi', '$2y$10$e0MDxwA3v9Oxb23QQT3d6u0iV2URL0Jre0hznziz9AlO2sHiKogOq', 'guru', 'default.jpg'),
+('1282023005', '1282023005', 'guru5@gmail.com', 'Desi Permatasari', '$2y$10$itzA3Zc3HcZNUNUxx.LatumXtbpdVXj0fgznIThNcr1DVfBotFJJ.', 'guru', 'default.jpg'),
+('1282023006', '1282023006', 'guru6@gmail.com', 'Fahrur Roji', '$2y$10$OkEScASteYCZydjKijA2..yhw6CQIoCwrSoxysJG3K5LsURBFKUdO', 'guru', 'default.jpg'),
+('1282023007', '1282023007', 'guru7@gmail.com', 'Kurnia Sandi', '$2y$10$UfjOJqhZfBvtxLpwLDdMfe0Wp2bg4gHSjTujdssye1jPY5nME/PK.', 'guru', 'default.jpg'),
+('1282023008', '1282023008', 'guru8@gmail.com', 'Naimah', '$2y$10$be.ETcD5GsOpSn.sOJl7serSLMKNiyjLxnIfidpsK71HNzUWelqUW', 'guru', 'default.jpg'),
+('1282023009', '1282023009', 'guru9@gmail.com', 'Indah Safitri', '$2y$10$TsZpKBLYAFCSuuzVmtui2.22tVQzSgLYfI9nng7hfLz62rOU1v/Iq', 'guru', 'default.jpg'),
+('1282023010', '1282023010', 'guru10@gmail.com', 'Irwan Humaidi Nur', '$2y$10$dyPAftCxYnMlsEaFxl3hBOS4ewcnLwyfugAjVBMEC6iLO3OA.H1Om', 'guru', 'default.jpg'),
+('1282023011', '1282023011', 'guru11@gmail.comsq', 'Mochamad Mubin', '$2y$10$lLguJu.ylmMc9wSNBPOLRO5Xlvm4TDV23j/Yu.82ctTsL8jeRA54i', 'guru', 'default.jpg'),
+('1282023012', '1282023012', 'guru12@gmail.com', 'Linda Hidayah', '$2y$10$jHpMomr8IyATmN0DoJ8I.uJDWnCwdbF4o7aa2OD4wY46SodzLbpSa', 'guru', 'default.jpg'),
+('1282023013', '1282023013', 'guru13@gmail.com', 'Amsarudin', '$2y$10$Xzwy9nT.gY7tb06MO8m0AOQnQ9fF.KZ6tWmXB78LdAJuOv0QW8gsq', 'guru', 'default.jpg'),
+('1282023014', '1282023014', 'guru14@gmail.com', 'Windah Arofah', '$2y$10$W4QtGNnMsW/zjDEgKCS34uVOC54YskHhFB4aly0mvSpsIDsFhPIUi', 'guru', 'default.jpg');
 
 -- --------------------------------------------------------
 
@@ -110,6 +130,32 @@ CREATE TABLE `guru_mapel` (
   `id_guru` varchar(20) CHARACTER SET latin1 NOT NULL,
   `id_mapel` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `guru_mapel`
+--
+
+INSERT INTO `guru_mapel` (`id`, `id_guru`, `id_mapel`) VALUES
+(1, '1282023001', 1),
+(3, '1282023002', 3),
+(4, '1282023002', 15),
+(5, '1282023003', 9),
+(6, '1282023004', 4),
+(7, '1282023005', 11),
+(8, '1282023006', 6),
+(9, '1282023007', 1),
+(10, '1282023008', 2),
+(11, '1282023008', 5),
+(12, '1282023009', 15),
+(13, '1282023010', 4),
+(14, '1282023010', 10),
+(15, '1282023011', 6),
+(16, '1282023011', 13),
+(17, '1282023012', 11),
+(18, '1282023012', 13),
+(19, '1282023013', 9),
+(20, '1282023013', 14),
+(21, '1282023014', 12);
 
 -- --------------------------------------------------------
 
@@ -177,7 +223,8 @@ INSERT INTO `mata_pelajaran` (`id`, `nama_mapel`, `deskripsi`) VALUES
 (11, 'Bahasa Indonesia', 'Bahasa Indonesia'),
 (12, 'Bahasa Inggris', 'Bahasa Inggris'),
 (13, 'Seni Budaya', 'Seni Budaya'),
-(14, 'Baca Tulis Quran', 'Baca Tulis Quran');
+(14, 'Baca Tulis Quran', 'Baca Tulis Quran'),
+(15, 'Ilmu Pengetahuan Alam', 'lorems');
 
 -- --------------------------------------------------------
 
@@ -519,7 +566,7 @@ ALTER TABLE `forum_diskusi`
 ALTER TABLE `guru`
   ADD PRIMARY KEY (`nip`),
   ADD UNIQUE KEY `uq_nis` (`nip`),
-  ADD KEY `fk_guru_mapel` (`id_mapel`);
+  ADD UNIQUE KEY `nuptk` (`nuptk`);
 
 --
 -- Indexes for table `guru_mapel`
@@ -664,7 +711,7 @@ ALTER TABLE `forum_diskusi`
 -- AUTO_INCREMENT for table `guru_mapel`
 --
 ALTER TABLE `guru_mapel`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `jawaban_siswa`
@@ -682,7 +729,7 @@ ALTER TABLE `kelas`
 -- AUTO_INCREMENT for table `mata_pelajaran`
 --
 ALTER TABLE `mata_pelajaran`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `materi`
@@ -766,12 +813,6 @@ ALTER TABLE `bank_soal`
 ALTER TABLE `forum_diskusi`
   ADD CONSTRAINT `fk_forum_pertemuan` FOREIGN KEY (`id_pertemuan`) REFERENCES `pertemuan` (`id`),
   ADD CONSTRAINT `fk_parent` FOREIGN KEY (`parent_id`) REFERENCES `forum_diskusi` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `guru`
---
-ALTER TABLE `guru`
-  ADD CONSTRAINT `fk_guru_mapel` FOREIGN KEY (`id_mapel`) REFERENCES `mata_pelajaran` (`id`);
 
 --
 -- Constraints for table `guru_mapel`

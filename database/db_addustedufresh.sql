@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 10, 2025 at 01:12 PM
+-- Generation Time: Sep 15, 2025 at 08:46 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `db_addustedudev`
+-- Database: `db_addustedufresh`
 --
 
 -- --------------------------------------------------------
@@ -96,7 +96,7 @@ CREATE TABLE `guru` (
   `password` varchar(255) NOT NULL,
   `user_type` enum('guru') NOT NULL DEFAULT 'guru',
   `image` varchar(255) NOT NULL,
-  `id_mapel` int(11) DEFAULT NULL
+  `nuptk` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -401,7 +401,7 @@ ALTER TABLE `forum_diskusi`
 ALTER TABLE `guru`
   ADD PRIMARY KEY (`nip`),
   ADD UNIQUE KEY `uq_nis` (`nip`),
-  ADD KEY `fk_guru_mapel` (`id_mapel`);
+  ADD UNIQUE KEY `nuptk` (`nuptk`);
 
 --
 -- Indexes for table `guru_mapel`
@@ -648,12 +648,6 @@ ALTER TABLE `bank_soal`
 ALTER TABLE `forum_diskusi`
   ADD CONSTRAINT `fk_forum_pertemuan` FOREIGN KEY (`id_pertemuan`) REFERENCES `pertemuan` (`id`),
   ADD CONSTRAINT `fk_parent` FOREIGN KEY (`parent_id`) REFERENCES `forum_diskusi` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `guru`
---
-ALTER TABLE `guru`
-  ADD CONSTRAINT `fk_guru_mapel` FOREIGN KEY (`id_mapel`) REFERENCES `mata_pelajaran` (`id`);
 
 --
 -- Constraints for table `guru_mapel`

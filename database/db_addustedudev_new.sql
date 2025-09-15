@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 06, 2025 at 04:32 PM
+-- Generation Time: Sep 15, 2025 at 08:46 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -135,22 +135,23 @@ INSERT INTO `forum_diskusi` (`id`, `user_type`, `user_id`, `id_pertemuan`, `pare
 
 CREATE TABLE `guru` (
   `nip` varchar(20) NOT NULL,
+  `nuptk` varchar(25) NOT NULL,
   `email` varchar(255) NOT NULL,
   `nama_guru` varchar(128) NOT NULL,
   `password` varchar(255) NOT NULL,
   `user_type` enum('guru') NOT NULL DEFAULT 'guru',
-  `image` varchar(255) NOT NULL,
-  `id_mapel` int(11) DEFAULT NULL
+  `image` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `guru`
 --
 
-INSERT INTO `guru` (`nip`, `email`, `nama_guru`, `password`, `user_type`, `image`, `id_mapel`) VALUES
-('21101140', 'pahrulmaji@gmail.com', 'Guru Terbaik', '$2y$10$nP.nAiLkI0z/Hw7ZsGqaYOW5pRsOEXRmqmMkGfa4FBHTVqZWXvFZS', 'guru', 'default.jpg', NULL),
-('21101141', 'test@gmail.com', 'addust', '$2y$10$28MLmCOoNjd2sn2YT8Sj9OIffn5RuA/mvSQKXD9WzdNnN.u80EmNm', 'guru', 'default.jpg', NULL),
-('21101142', 'xxx@gmail.com', 'adwadqwq', '$2y$10$LBlsKbp2GM2v0zBn1hsiKe5YXUDw9HDMw8.V6L.jkzuwD38eS6JrO', 'guru', 'default.jpg', NULL);
+INSERT INTO `guru` (`nip`, `nuptk`, `email`, `nama_guru`, `password`, `user_type`, `image`) VALUES
+('21101140', '12345678', 'pahrulmaji@gmail.com', 'Guru Terbaik', '$2y$10$nP.nAiLkI0z/Hw7ZsGqaYOW5pRsOEXRmqmMkGfa4FBHTVqZWXvFZS', 'guru', 'default.jpg'),
+('21101141', '123456789', 'test@gmail.com', 'addust', '$2y$10$28MLmCOoNjd2sn2YT8Sj9OIffn5RuA/mvSQKXD9WzdNnN.u80EmNm', 'guru', 'default.jpg'),
+('21101142', '99999999', 'xxx@gmail.com', 'adwadqwq', '$2y$10$LBlsKbp2GM2v0zBn1hsiKe5YXUDw9HDMw8.V6L.jkzuwD38eS6JrO', 'guru', 'default.jpg'),
+('21101143', '11111111', 'test1q2ss2sss2@gmail.com', 'saus tiram', '$2y$10$itAvBhbsZcjsey.ldqUWF.Jpq5o8bom0S2Xod/rVITTlF0J6btGga', 'guru', 'default.jpg');
 
 -- --------------------------------------------------------
 
@@ -169,11 +170,14 @@ CREATE TABLE `guru_mapel` (
 --
 
 INSERT INTO `guru_mapel` (`id`, `id_guru`, `id_mapel`) VALUES
-(26, '21101140', 1),
-(27, '21101140', 2),
-(43, '21101142', 1),
-(44, '21101141', 3),
-(45, '21101141', 4);
+(51, '21101141', 3),
+(52, '21101141', 4),
+(53, '21101142', 1),
+(54, '21101143', 1),
+(55, '21101143', 2),
+(56, '21101143', 3),
+(57, '21101140', 1),
+(58, '21101140', 2);
 
 -- --------------------------------------------------------
 
@@ -407,13 +411,6 @@ CREATE TABLE `rps` (
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `rps`
---
-
-INSERT INTO `rps` (`id_rps`, `guru_mapel_id`, `kelas_id`, `file_rps`, `semester`, `created_at`, `updated_at`) VALUES
-(11, 26, 1, 'RPS_21101140_26_1_1756454682.pdf', '2025 genap', '2025-08-29 10:04:42', '2025-08-29 15:04:42');
 
 -- --------------------------------------------------------
 
@@ -667,7 +664,7 @@ ALTER TABLE `forum_diskusi`
 ALTER TABLE `guru`
   ADD PRIMARY KEY (`nip`),
   ADD UNIQUE KEY `uq_nis` (`nip`),
-  ADD KEY `fk_guru_mapel` (`id_mapel`);
+  ADD UNIQUE KEY `nuptk` (`nuptk`);
 
 --
 -- Indexes for table `guru_mapel`
@@ -812,7 +809,7 @@ ALTER TABLE `forum_diskusi`
 -- AUTO_INCREMENT for table `guru_mapel`
 --
 ALTER TABLE `guru_mapel`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `jawaban_siswa`
@@ -914,12 +911,6 @@ ALTER TABLE `bank_soal`
 ALTER TABLE `forum_diskusi`
   ADD CONSTRAINT `fk_forum_pertemuan` FOREIGN KEY (`id_pertemuan`) REFERENCES `pertemuan` (`id`),
   ADD CONSTRAINT `fk_parent` FOREIGN KEY (`parent_id`) REFERENCES `forum_diskusi` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `guru`
---
-ALTER TABLE `guru`
-  ADD CONSTRAINT `fk_guru_mapel` FOREIGN KEY (`id_mapel`) REFERENCES `mata_pelajaran` (`id`);
 
 --
 -- Constraints for table `guru_mapel`
