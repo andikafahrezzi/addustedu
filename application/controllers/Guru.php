@@ -1136,45 +1136,45 @@ public function update_profile()
             return TRUE;
         }
     }
-public function tambah_ujian()
-{
-$nip = $this->session->userdata('nip');
-$guru = $this->db->get_where('guru', ['nip' => $nip])->row();
+    public function tambah_ujian()
+    {
+        $nip = $this->session->userdata('nip');
+        $guru = $this->db->get_where('guru', ['nip' => $nip])->row();
 
-if (!$guru) {
-    $this->session->set_flashdata('error', 'Data guru tidak ditemukan. Silahkan login ulang.');
-    redirect('login');
-    return;
-}
+        if (!$guru) {
+            $this->session->set_flashdata('error', 'Data guru tidak ditemukan. Silahkan login ulang.');
+            redirect('login');
+            return;
+        }
 
-$guru_id = $guru->nip; // kolom yang ada di tabel guru
-$mapel_guru = $this->db->get_where('guru_mapel', ['id_guru' => $guru_id])->result();
-// sesuaikan kolom
-$mapel_guru = $this->db->get_where('guru_mapel', ['id_guru' => $guru_id])->result();
+        $guru_id = $guru->nip; // kolom yang ada di tabel guru
+        $mapel_guru = $this->db->get_where('guru_mapel', ['id_guru' => $guru_id])->result();
+        // sesuaikan kolom
+        $mapel_guru = $this->db->get_where('guru_mapel', ['id_guru' => $guru_id])->result();
 
 
-    // Ambil semua soal untuk setiap mapel guru
-    $bank_soal = [];
-    foreach ($mapel_guru as $mg) {
-        $soal = $this->Bank_soal_model->get_soal_by_mapel($mg->id_mapel);
-        $bank_soal = array_merge($bank_soal, $soal);
+        // Ambil semua soal untuk setiap mapel guru
+        $bank_soal = [];
+        foreach ($mapel_guru as $mg) {
+            $soal = $this->Bank_soal_model->get_soal_by_mapel($mg->id_mapel);
+            $bank_soal = array_merge($bank_soal, $soal);
+        }
+
+        // Ambil data materi (sesuaikan model)
+        $materi_list = $this->Ujian_model->get_materi_options($nip);
+
+        // Kirim ke view
+        $data = [
+            'guru' => $guru,
+            'bank_soal' => $bank_soal,
+            'materi_list' => $materi_list,
+            'title' => 'Tambah Ujian Baru'
+        ];
+
+        $this->load->view('guru/navug', $data); 
+        $this->load->view('guru/add_ujian', $data);
+        $this->load->view('guru/footg');
     }
-
-    // Ambil data materi (sesuaikan model)
-    $materi_list = $this->Ujian_model->get_materi_options($nip);
-
-    // Kirim ke view
-    $data = [
-        'guru' => $guru,
-        'bank_soal' => $bank_soal,
-        'materi_list' => $materi_list,
-        'title' => 'Tambah Ujian Baru'
-    ];
-
-    $this->load->view('guru/navug', $data); 
-    $this->load->view('guru/add_ujian', $data);
-    $this->load->view('guru/footg');
-}
 
 public function get_soal_by_pertemuan_ajax()
 {
