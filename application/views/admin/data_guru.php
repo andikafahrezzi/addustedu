@@ -53,7 +53,8 @@
                                             <td><?= !empty($g->mapel_diajar) ? $g->mapel_diajar : 'Belum ada mapel' ?></td>
                                             <td>
                                                 <a href="<?= site_url('admin/update_guru/' . $g->nip); ?>" class="btn btn-info">Update</a>
-                                                <a href="<?= site_url('admin/delete_guru/' . $g->nip); ?>" class="btn btn-danger remove">Delete</a>
+                                                <!-- Trigger modal delete -->
+                                                <button onclick="confirmDelete('<?= $g->nip; ?>')" class="btn btn-danger">Delete</button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -73,4 +74,32 @@
         </div>
     </section>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus Guru</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Apakah Anda yakin ingin menghapus data guru ini?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <a id="deleteLink" href="#" class="btn btn-danger">Hapus</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(id) {
+        $('#deleteLink').attr('href', '<?= site_url("admin/delete_guru/"); ?>' + id);
+        $('#deleteModal').modal('show');
+    }
+</script>
 <!-- End Main Content -->
