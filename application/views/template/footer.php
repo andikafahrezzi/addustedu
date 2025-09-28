@@ -175,7 +175,7 @@ button.btn {
                                     <i>privasi dan persyaratan ketentuan
                                         hukum kami </i> .
                                 </p>
-                                <<button type="submit" class="btn btn-block font-weight-bold"
+                                <button type="submit" class="btn btn-block font-weight-bold"
                                     style="background-color:#4dbf1c;color:white;font-size:18px;">
                                     Login Sekarang!
                                 </button>
