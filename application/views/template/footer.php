@@ -2,6 +2,42 @@
 
 
 <!--================ Start footer Area  =================-->
+<style>
+    /* Pastikan wrapper password tidak nutupi area tombol */
+.password-wrapper {
+    position: relative;
+}
+
+/* Biar icon mata hanya selebar icon, bukan blok penuh */
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 5;
+    width: auto;
+    height: auto;
+    display: inline-block;
+    background: transparent;
+    pointer-events: auto;
+}
+
+/* Supaya form dan button selalu bisa di klik */
+form {
+    position: relative;
+    z-index: 10;
+}
+
+/* Tambahan untuk button login */
+button[type="submit"],
+button.btn {
+    position: relative;
+    z-index: 20;  /* pastikan selalu di atas elemen lain */
+    pointer-events: auto;
+}
+
+</style>
 <footer class="footer-area p_60">
     <div class="container">
         <div class="row">
@@ -101,8 +137,8 @@
                         </div>
                         <div class=" col-md-6">
                             <form action="<?= base_url('welcome/validateLogin') ?>" method="post">
-                            <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
-                        value="<?= $this->security->get_csrf_hash(); ?>" />
+                                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
+                                value="<?= $this->security->get_csrf_hash(); ?>" />
                                 <div class="form-group">
                                     <label class="label-font" for="nis">Nomer Induk Siswa</label>
                                     <input type="text" value="<?= $this->session->flashdata('old_nis') ?>" class="form-control" name="nis" autocomplete="off" id="nis" placeholder="Masukan Nis mu disini ..">
@@ -124,7 +160,7 @@
                                         <i class="lnr lnr-eye"></i>
                                     </span>
                                 </div>
-<small class="text-danger"><?= $this->session->flashdata('password_error'); ?></small>
+                                <small class="text-danger"><?= $this->session->flashdata('password_error'); ?></small>
 
                                 </div>
 
@@ -139,8 +175,10 @@
                                     <i>privasi dan persyaratan ketentuan
                                         hukum kami </i> .
                                 </p>
-                                <button class="btn btn-block font-weight-bold" style="background-color: #4dbf1c;color:white;font-size:18px;">Login
-                                    Sekarang!</button>
+                                <<button type="submit" class="btn btn-block font-weight-bold"
+                                    style="background-color:#4dbf1c;color:white;font-size:18px;">
+                                    Login Sekarang!
+                                </button>
                             </form>
                         </div>
                     </div>
