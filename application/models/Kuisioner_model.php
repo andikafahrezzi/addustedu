@@ -84,6 +84,26 @@ public function analisis_pertanyaan($kuisioner_id, $pertanyaan_id, $tipe) {
                         ->result();
     }
 }
+public function analisis_total($kuisioner_id, $tipe) {
+    if ($tipe == 'skala') {
+        // Hitung grand mean semua pertanyaan (skala)
+        return $this->db->select('COUNT(*) as total_respon, 
+                                  AVG(jawaban_skala) as grand_mean, 
+                                  MIN(jawaban_skala) as nilai_min, 
+                                  MAX(jawaban_skala) as nilai_max')
+                        ->where('kuisioner_id', $kuisioner_id)
+                        ->get('kuisioner_jawaban')
+                        ->row();
+    } elseif ($tipe == 'pilihan') {
+        // Distribusi semua pilihan di 1 kuisioner (semua pertanyaan digabung)
+        return $this->db->select('jawaban_pilihan, COUNT(*) as total')
+                        ->where('kuisioner_id', $kuisioner_id)
+                        ->group_by('jawaban_pilihan')
+                        ->get('kuisioner_jawaban')
+                        ->result();
+    }
+}
+
 // ambil kuisioner aktif untuk user tertentu
 public function get_kuisioner_aktif($user_type, $user_id) {
     return $this->db->select('k.*')

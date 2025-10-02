@@ -9,7 +9,13 @@
                 <a href="<?= base_url('kuisioner') ?>" class="btn btn-secondary">Kembali</a>
             </div>
         </div>
-
+        <h4>Grand Mean (Keseluruhan Pertanyaan)</h4>
+        <p>
+            Rata-rata keseluruhan: <b><?= number_format($grand_mean->grand_mean ?? 0, 2); ?></b><br>
+            Jumlah Respon: <?= $grand_mean->total_respon ?? 0; ?><br>
+            Min: <?= $grand_mean->nilai_min ?? '-'; ?>, 
+            Max: <?= $grand_mean->nilai_max ?? '-'; ?>
+        </p>
         <?php foreach ($pertanyaan as $p): ?>
             <div class="card mt-3">
                 <div class="card-body">

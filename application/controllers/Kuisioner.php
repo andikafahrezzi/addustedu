@@ -133,19 +133,33 @@ public function delete_pertanyaan($id) {
 }
 // Hasil analisis kuisioner
 public function hasil($kuisioner_id) {
+    // Ambil data kuisioner
     $data['kuisioner']   = $this->Kuisioner_model->get_by_id($kuisioner_id);
     if (!$data['kuisioner']) {
         show_404();
     }
 
+    // Ambil semua pertanyaan
     $data['pertanyaan']  = $this->Kuisioner_model->get_pertanyaan($kuisioner_id);
     $data['hasil']       = [];
 
+    // Analisis per pertanyaan
     foreach ($data['pertanyaan'] as $p) {
-        $stat = $this->Kuisioner_model->analisis_pertanyaan($kuisioner_id, $p->id, $p->tipe_jawaban);
+        $stat = $this->Kuisioner_model->analisis_pertanyaan(
+            $kuisioner_id,
+            $p->id,
+            $p->tipe_jawaban
+        );
         $data['hasil'][$p->id] = $stat;
     }
 
+    // Analisis total / grand mean
+    $data['grand_mean'] = $this->Kuisioner_model->analisis_total(
+        $kuisioner_id,
+        'skala' // kalau mau grand mean hanya untuk pertanyaan tipe skala
+    );
+
+    // Load view
     $this->load->view('admin/partials/nava');
     $this->load->view('admin/data_hasil_kuisioner', $data);
     $this->load->view('admin/partials/foota');
