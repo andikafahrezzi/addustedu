@@ -7,7 +7,7 @@ class User extends CI_Controller
     {
         parent::__construct();
         $this->load->library('form_validation');
-        $this->load->model('Ujian_model');
+        $this->load->model(['Ujian_model', 'Kuisioner_model']);
         // $this->session->set_flashdata('not-login', 'Gagal!');
         if (!$this->session->userdata('logged_in') || $this->session->userdata('user_type') != 'siswa') {
             redirect('welcome');
@@ -16,7 +16,15 @@ class User extends CI_Controller
 public function index()
 {
 // Controller (misal di User.php -> function index() atau dashboard)
-$this->load->model('Ujian_model');
+        $this->load->model('Ujian_model');
+        $user_id = $this->session->userdata('nis'); // NIS atau ID siswa
+        $user_type    = 'siswa';
+
+        // cek apakah ada kuisioner aktif yang belum diisi
+        $kuisioner = $this->Kuisioner_model->get_kuisioner_aktif($user_type, $user_id);
+        if ($kuisioner) {
+            redirect('kuisioner_user/fill/'.$kuisioner->id);
+        }
 
 // Ambil data siswa dari sesi
 $this->db->select('siswa.*, kelas.nama_kelas, kelas.tingkat, kelas.jurusan');

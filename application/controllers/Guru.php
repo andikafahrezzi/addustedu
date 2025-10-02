@@ -9,7 +9,7 @@ class Guru extends CI_Controller
         parent::__construct();
         $this->load->helper('url');
         $this->session->set_flashdata('not-login', 'Gagal!');
-        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model', 'M_siswa', 'Ujian_model', 'Bank_soal_model', 'M_guru']);  
+        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model','Kuisioner_model', 'Tugas_model', 'M_siswa', 'Ujian_model', 'Bank_soal_model', 'M_guru']);  
         $this->load->library('form_validation');
         $this->load->helper('text');
         if (!$this->session->userdata('logged_in') || $this->session->userdata('user_type') != 'guru') {
@@ -28,6 +28,14 @@ class Guru extends CI_Controller
 
     public function index()
     {
+        $user_id = $this->session->userdata('nip'); // NIP atau ID guru
+        $user_type    = 'guru';
+
+        // cek apakah ada kuisioner aktif yang belum diisi
+        $kuisioner = $this->Kuisioner_model->get_kuisioner_aktif($user_type, $user_id);
+        if ($kuisioner) {
+            redirect('kuisioner_user/fill/'.$kuisioner->id);
+        }
         $data['user'] = $this->db->get_where('guru', ['nip' => $this->session->userdata('nip')])->row_array();
         $this->load->view('guru/navug');
         $this->load->view('guru/index');
