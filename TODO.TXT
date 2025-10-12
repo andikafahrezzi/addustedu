@@ -1,36 +1,22 @@
 TODO
 - GENERAL
     - cari tau bagaimana cara destroy session 
-    - menambahkan fungsi delete materi, quiz dan bank soal, tugas pada siswa, dan admin
-    - nama tidak boleh ada angka(validasi)
-    - TAMBAHKAN KEAMANAN XSS dll untuk keaman lebih lanjut di setiap form input
 
 - ADMIN
-    - cek navbar admin setiap komponen untuk clean code
-    - belum ada data ujian pada admin yang memungkinkan admin bisa melihat atau mengelola ujian
 
 - GURU
-    - tampilan mobile pada guru masih ngaco
     - cari tau cara non activekan navbar di mobile menu pada web guru
 
 - SISWA 
-    - tampilan quiz sama tugas masih ngaco
-    - tampilan upload tugas siswa masih ngaco
     - pada tabel siswa ada kolom image yang kita bisa gunakan untuk mengambil gamabr siswa.
         - gambar ini bisa digunakan untuk gambar di kolom fordis serta mempercantik tampilan navigasi user
 
 
 PR
-- beda user tetapi waktu tidak mulai dari 100
 - setiap function hapus, samakan seperti yang lainnya(ada modal hapus)
 - kedepannya jika ada form harus mengguna csrf
-- pada quiz, jawaban essay masih belum masuk kedalam database, jadi terhitung salah 
-    ( hapus pilihan essay, gunakan PG only)
 - comment di slicing coba cari comment_replies
-- berikan notifikasi jika data pertemuan sudah digunakan
-- penilaian essay masih blm di jumlahkan dengan total nilai pilihan ganda
-- jika guru 2 menambah pertemuan dan sudah tampil di siswa, lalu guru 2 atau admin menghapus pertemuannya
-    dan jadi kosong. seharusnya card guru juga ilang karena tidak ada pertemuan yang diberikan
+
 
 next can be a problem
 - change id at database siswa to nis
@@ -38,8 +24,6 @@ next can be a problem
 - score yang dikirim langsung hasilnya melalui submit, tidak ada perhitungan diluar itu
 - sekarang pembagian materi(belajar) tidak melalui tabel materi secara langsung tapi di normalisasi menggunkan tabel pertemuan
 
-update after hosting gratis menggunakan infinite free dengan php diatas 8.1++
-- tidak bisa edit komen di guru
 
 
 ALTER TABLE bank_soal AUTO_INCREMENT = 1;
