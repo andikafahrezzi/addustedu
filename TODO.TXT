@@ -16,6 +16,7 @@ PR
 - setiap function hapus, samakan seperti yang lainnya(ada modal hapus)
 - kedepannya jika ada form harus mengguna csrf
 - comment di slicing coba cari comment_replies
+- delete koneksi dan autofile di root dan folder admin (12/10/25)
 
 
 next can be a problem
