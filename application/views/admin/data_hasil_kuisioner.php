@@ -84,11 +84,16 @@
                             2 => 'Tidak Setuju',
                             1 => 'Sangat Tidak Setuju'
                         ];
-                        
+
+                        // HITUNG TOTAL DULU
                         $total_all_jawaban = 0;
                         $total_skor_kumulatif = 0;
-                        
-                        // Inisialisasi array untuk menyimpan data setiap skala
+
+                        // Step 1: Hitung total_all_jawaban dulu
+                        foreach ($distribusi_total as $dist) {
+                            $total_all_jawaban += $dist->total_jawaban;
+                        }
+                        // Step 2: Hitung persentase dengan total_all_jawaban yang sudah final
                         $data_skala = [];
                         for ($i = 1; $i <= 5; $i++) {
                             $data_skala[$i] = [
@@ -97,10 +102,7 @@
                                 'persentase' => 0
                             ];
                         }
-                        
-                        // Hitung total semua jawaban dan total skor
                         foreach ($distribusi_total as $dist) {
-                            $total_all_jawaban += $dist->total_jawaban;
                             $total_skor_kumulatif += $dist->jawaban_skala * $dist->total_jawaban;
                             $data_skala[$dist->jawaban_skala] = [
                                 'jumlah_jawaban' => $dist->total_jawaban,
