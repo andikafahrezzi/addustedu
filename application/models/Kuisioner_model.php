@@ -55,6 +55,7 @@ public function delete_pertanyaan($id) {
     return $this->db->where('id', $id)
                     ->delete('kuisioner_pertanyaan');
 }
+
 // Analisis per pertanyaan
 public function analisis_pertanyaan($kuisioner_id, $pertanyaan_id, $tipe) {
     if ($tipe == 'skala') {
@@ -103,46 +104,42 @@ public function analisis_total($kuisioner_id, $tipe) {
                         ->result();
     }
 }
-// Tambahkan method baru di Kuisioner_model
+
 public function analisis_pertanyaan_deskriptif($kuisioner_id, $pertanyaan_id) {
-    // Hitung distribusi jawaban per skala
-    $distribusi = $this->db->select('jawaban_skala, COUNT(*) as total')
+    $distribusi = $this->db->select('jawaban_skala, COUNT(*) as total_jawaban')
                           ->where('kuisioner_id', $kuisioner_id)
                           ->where('pertanyaan_id', $pertanyaan_id)
                           ->group_by('jawaban_skala')
                           ->get('kuisioner_jawaban')
                           ->result();
     
-    // Inisialisasi counter untuk setiap skala
     $count_5 = 0; $count_4 = 0; $count_3 = 0; $count_2 = 0; $count_1 = 0;
-    $total_responden = 0;
+    $total_jawaban = 0;  // GANTI total_responden MENJADI total_jawaban
     
-    // Mapping distribusi
     foreach ($distribusi as $d) {
         switch($d->jawaban_skala) {
-            case 5: $count_5 = $d->total; break;
-            case 4: $count_4 = $d->total; break;
-            case 3: $count_3 = $d->total; break;
-            case 2: $count_2 = $d->total; break;
-            case 1: $count_1 = $d->total; break;
+            case 5: $count_5 = $d->total_jawaban; break;
+            case 4: $count_4 = $d->total_jawaban; break;
+            case 3: $count_3 = $d->total_jawaban; break;
+            case 2: $count_2 = $d->total_jawaban; break;
+            case 1: $count_1 = $d->total_jawaban; break;
         }
-        $total_responden += $d->total;
+        $total_jawaban += $d->total_jawaban;  // TOTAL JAWABAN
     }
     
-    // Hitung seperti word: Total Skor = (count_5×5) + (count_4×4) + ...
     $total_skor = ($count_5 * 5) + ($count_4 * 4) + ($count_3 * 3) + ($count_2 * 2) + ($count_1 * 1);
-    $skor_maksimal = $total_responden * 5; // Skala tertinggi = 5
+    $skor_maksimal = $total_jawaban * 5;  // PERBAIKI: total_jawaban × 5, BUKAN total_responden × 5
     $persentase = $skor_maksimal > 0 ? ($total_skor / $skor_maksimal) * 100 : 0;
     
     return [
         'distribusi' => [
-            'ss' => $count_5,  // Sangat Setuju (5)
-            's'  => $count_4,  // Setuju (4)
-            'n'  => $count_3,  // Netral (3)
-            'ts' => $count_2,  // Tidak Setuju (2)
-            'sts'=> $count_1   // Sangat Tidak Setuju (1)
+            'ss' => $count_5,  
+            's'  => $count_4,  
+            'n'  => $count_3,  
+            'ts' => $count_2,  
+            'sts'=> $count_1   
         ],
-        'total_responden' => $total_responden,
+        'total_jawaban' => $total_jawaban,  // GANTI total_responden
         'total_skor' => $total_skor,
         'skor_maksimal' => $skor_maksimal,
         'persentase' => $persentase,
@@ -152,17 +149,17 @@ public function analisis_pertanyaan_deskriptif($kuisioner_id, $pertanyaan_id) {
 
 public function analisis_total_deskriptif($kuisioner_id) {
     // Hitung total skor semua pertanyaan (skala)
-    $total_data = $this->db->select('SUM(jawaban_skala) as total_skor, COUNT(*) as total_responden')
+    $total_data = $this->db->select('SUM(jawaban_skala) as total_skor, COUNT(*) as total_jawaban')
                           ->where('kuisioner_id', $kuisioner_id)
                           ->get('kuisioner_jawaban')
                           ->row();
     
-    $skor_maksimal = $total_data->total_responden * 5;
+    $skor_maksimal = $total_data->total_jawaban * 5;  // PERBAIKI: total_jawaban × 5
     $persentase = $skor_maksimal > 0 ? ($total_data->total_skor / $skor_maksimal) * 100 : 0;
     
     return [
         'total_skor' => $total_data->total_skor,
-        'total_responden' => $total_data->total_responden,
+        'total_jawaban' => $total_data->total_jawaban,  // GANTI total_responden
         'skor_maksimal' => $skor_maksimal,
         'persentase' => $persentase,
         'kategori' => $this->get_kategori_persentase($persentase)
@@ -177,7 +174,29 @@ private function get_kategori_persentase($persentase) {
     return 'Sangat Tidak Setuju';
 }
 
+public function get_total_user($kuisioner_id) {
+    return $this->db->select('COUNT(DISTINCT user_id) as total_user')
+                   ->where('kuisioner_id', $kuisioner_id)
+                   ->get('kuisioner_jawaban')
+                   ->row()->total_user;
+}
 
+public function get_distribusi_dengan_user($kuisioner_id) {
+    // Hitung distribusi per skala
+    $distribusi = $this->db->select('jawaban_skala, COUNT(*) as total_jawaban')
+                          ->where('kuisioner_id', $kuisioner_id)
+                          ->group_by('jawaban_skala')
+                          ->get('kuisioner_jawaban')
+                          ->result();
+    
+    // Hitung total user
+    $total_user = $this->get_total_user($kuisioner_id);
+    
+    return [
+        'distribusi' => $distribusi,
+        'total_user' => $total_user
+    ];
+}
 
 // ambil kuisioner aktif untuk user tertentu
 public function get_kuisioner_aktif($user_type, $user_id) {

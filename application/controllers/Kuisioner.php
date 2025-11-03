@@ -142,7 +142,7 @@ public function hasil($kuisioner_id) {
     // Ambil semua pertanyaan
     $data['pertanyaan']  = $this->Kuisioner_model->get_pertanyaan($kuisioner_id);
     $data['hasil']       = [];
-    $data['hasil_word']  = []; // Tambahkan untuk hasil seperti word
+    $data['hasil_word']  = []; // Untuk hasil seperti word
 
     // Analisis per pertanyaan (DUA CARA: lama & baru seperti word)
     foreach ($data['pertanyaan'] as $p) {
@@ -162,19 +162,31 @@ public function hasil($kuisioner_id) {
             );
         }
     }
-    $data['distribusi_total'] = $this->Kuisioner_model->get_total_distribusi($kuisioner_id);
+
+    // DISTRIBUSI DATA - HAPUS DUPLIKASI
+    $distribusi_data = $this->Kuisioner_model->get_distribusi_dengan_user($kuisioner_id);
+    $data['distribusi_total'] = $distribusi_data['distribusi'];
+    $data['total_user'] = $distribusi_data['total_user'];
+    
+    // HAPUS BARIS INI (karena sudah di atas):
+    // $data['distribusi_total'] = $this->Kuisioner_model->get_total_distribusi($kuisioner_id);
+    
+    // OPSIONAL: Jika masih butuh distribusi per pertanyaan
     $data['distribusi_per_pertanyaan'] = $this->Kuisioner_model->get_total_distribusi_per_pertanyaan($kuisioner_id);
     
-    // Hitung persentase distribusi total
-    $total_jawaban = $data['total_word']['total_responden'] ?? 0;
-    $data['persentase_distribusi'] = [];
-    
+    // Hitung persentase distribusi total - PERBAIKI VARIABLE
+    $total_jawaban = 0;
     foreach ($data['distribusi_total'] as $dist) {
-        $persentase = $total_jawaban > 0 ? ($dist->total / $total_jawaban) * 100 : 0;
+        $total_jawaban += $dist->total_jawaban; // PASTIKAN fieldnya total_jawaban
+    }
+    
+    $data['persentase_distribusi'] = [];
+    foreach ($data['distribusi_total'] as $dist) {
+        $persentase = $total_jawaban > 0 ? ($dist->total_jawaban / $total_jawaban) * 100 : 0;
         $data['persentase_distribusi'][$dist->jawaban_skala] = $persentase;
     }
 
-    // Analisis total - gunakan yang seperti word
+    // Analisis total
     $data['grand_mean'] = $this->Kuisioner_model->analisis_total($kuisioner_id, 'skala');
     $data['total_word'] = $this->Kuisioner_model->analisis_total_deskriptif($kuisioner_id);
 
