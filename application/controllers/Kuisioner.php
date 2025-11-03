@@ -162,6 +162,17 @@ public function hasil($kuisioner_id) {
             );
         }
     }
+    $data['distribusi_total'] = $this->Kuisioner_model->get_total_distribusi($kuisioner_id);
+    $data['distribusi_per_pertanyaan'] = $this->Kuisioner_model->get_total_distribusi_per_pertanyaan($kuisioner_id);
+    
+    // Hitung persentase distribusi total
+    $total_jawaban = $data['total_word']['total_responden'] ?? 0;
+    $data['persentase_distribusi'] = [];
+    
+    foreach ($data['distribusi_total'] as $dist) {
+        $persentase = $total_jawaban > 0 ? ($dist->total / $total_jawaban) * 100 : 0;
+        $data['persentase_distribusi'][$dist->jawaban_skala] = $persentase;
+    }
 
     // Analisis total - gunakan yang seperti word
     $data['grand_mean'] = $this->Kuisioner_model->analisis_total($kuisioner_id, 'skala');

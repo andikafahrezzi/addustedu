@@ -49,7 +49,106 @@
                 </p>
             </div>
         </div>
-
+<div class="card mt-4">
+    <div class="card-header">
+        <h4>📊 Distribusi Jawaban Keseluruhan</h4>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead class="table-success">
+                <tr>
+                    <th>Skala</th>
+                    <th>Kategori</th>
+                    <th>Jumlah Jawaban</th>
+                    <th>Persentase</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                $skala_labels = [
+                    5 => 'Sangat Setuju',
+                    4 => 'Setuju', 
+                    3 => 'Netral',
+                    2 => 'Tidak Setuju',
+                    1 => 'Sangat Tidak Setuju'
+                ];
+                
+                $total_all_jawaban = 0;
+                foreach ($distribusi_total as $dist) {
+                    $total_all_jawaban += $dist->total;
+                }
+                
+                for ($i = 5; $i >= 1; $i--): 
+                    $jumlah = 0;
+                    $persentase = 0;
+                    
+                    // Cari data untuk skala ini
+                    foreach ($distribusi_total as $dist) {
+                        if ($dist->jawaban_skala == $i) {
+                            $jumlah = $dist->total;
+                            $persentase = $total_all_jawaban > 0 ? ($jumlah / $total_all_jawaban) * 100 : 0;
+                            break;
+                        }
+                    }
+                ?>
+                <tr>
+                    <td><strong><?= $i ?></strong></td>
+                    <td><?= $skala_labels[$i] ?></td>
+                    <td><?= $jumlah ?> jawaban</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar 
+                                <?= $i == 5 ? 'bg-success' : '' ?>
+                                <?= $i == 4 ? 'bg-primary' : '' ?>
+                                <?= $i == 3 ? 'bg-warning' : '' ?>
+                                <?= $i == 2 ? 'bg-danger' : '' ?>
+                                <?= $i == 1 ? 'bg-dark' : '' ?>
+                            " style="width: <?= $persentase ?>%">
+                                <?= number_format($persentase, 1) ?>%
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <?php endfor; ?>
+                
+                <!-- TOTAL -->
+                <tr class="table-info">
+                    <td colspan="2"><strong>TOTAL</strong></td>
+                    <td><strong><?= $total_all_jawaban ?> jawaban</strong></td>
+                    <td><strong>100%</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- SUMMARY STATS -->
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <div class="card text-white bg-success">
+                    <div class="card-body">
+                        <h4><?= isset($distribusi_total[0]) && $distribusi_total[0]->jawaban_skala == 5 ? $distribusi_total[0]->total : 0 ?></h4>
+                        <p>Sangat Setuju</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-primary">
+                    <div class="card-body">
+                        <h4><?= isset($distribusi_total[1]) && $distribusi_total[1]->jawaban_skala == 4 ? $distribusi_total[1]->total : 0 ?></h4>
+                        <p>Setuju</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-warning">
+                    <div class="card-body">
+                        <h4><?= isset($distribusi_total[2]) && $distribusi_total[2]->jawaban_skala == 3 ? $distribusi_total[2]->total : 0 ?></h4>
+                        <p>Netral</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
         <!-- HASIL PER PERTANYAAN -->
         <?php foreach ($pertanyaan as $p): ?>
             <div class="card mt-3">

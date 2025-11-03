@@ -191,6 +191,26 @@ public function get_kuisioner_aktif($user_type, $user_id) {
         ->get()
         ->row();
 }
+// Tambahkan di Kuisioner_model
+public function get_total_distribusi($kuisioner_id) {
+    // Hitung total masing-masing skala untuk SEMUA pertanyaan
+    return $this->db->select('jawaban_skala, COUNT(*) as total')
+                   ->where('kuisioner_id', $kuisioner_id)
+                   ->group_by('jawaban_skala')
+                   ->order_by('jawaban_skala', 'DESC')
+                   ->get('kuisioner_jawaban')
+                   ->result();
+}
+
+public function get_total_distribusi_per_pertanyaan($kuisioner_id) {
+    // Hitung distribusi per pertanyaan (untuk chart detail)
+    return $this->db->select('pertanyaan_id, jawaban_skala, COUNT(*) as total')
+                   ->where('kuisioner_id', $kuisioner_id)
+                   ->group_by('pertanyaan_id, jawaban_skala')
+                   ->order_by('pertanyaan_id, jawaban_skala', 'DESC')
+                   ->get('kuisioner_jawaban')
+                   ->result();
+}
 
 // simpan jawaban
 public function simpan_jawaban($data) {
