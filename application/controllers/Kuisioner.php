@@ -142,22 +142,30 @@ public function hasil($kuisioner_id) {
     // Ambil semua pertanyaan
     $data['pertanyaan']  = $this->Kuisioner_model->get_pertanyaan($kuisioner_id);
     $data['hasil']       = [];
+    $data['hasil_word']  = []; // Tambahkan untuk hasil seperti word
 
-    // Analisis per pertanyaan
+    // Analisis per pertanyaan (DUA CARA: lama & baru seperti word)
     foreach ($data['pertanyaan'] as $p) {
+        // Method lama (statistik deskriptif)
         $stat = $this->Kuisioner_model->analisis_pertanyaan(
             $kuisioner_id,
             $p->id,
             $p->tipe_jawaban
         );
         $data['hasil'][$p->id] = $stat;
+        
+        // Method baru seperti word (hanya untuk tipe skala)
+        if ($p->tipe_jawaban == 'skala') {
+            $data['hasil_word'][$p->id] = $this->Kuisioner_model->analisis_pertanyaan_deskriptif(
+                $kuisioner_id, 
+                $p->id
+            );
+        }
     }
 
-    // Analisis total / grand mean
-    $data['grand_mean'] = $this->Kuisioner_model->analisis_total(
-        $kuisioner_id,
-        'skala' // kalau mau grand mean hanya untuk pertanyaan tipe skala
-    );
+    // Analisis total - gunakan yang seperti word
+    $data['grand_mean'] = $this->Kuisioner_model->analisis_total($kuisioner_id, 'skala');
+    $data['total_word'] = $this->Kuisioner_model->analisis_total_deskriptif($kuisioner_id);
 
     // Load view
     $this->load->view('admin/partials/nava');
