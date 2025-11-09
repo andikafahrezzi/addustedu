@@ -37,7 +37,7 @@
                                             <input required type="text" readonly name="nama_guru" value="<?= $user['nip'] ?>" class="form-control" id="inputEmail4">                                                                           
                                             <label for="inputEmail4">Nama Guru</label>
                                             <input required type="text" readonly name="nama_guru" value="<?= $user['nama_guru'] ?>" class="form-control" id="inputEmail4">      
-                                            <input type="hidden" name="id_mapel" value="<?= $user['id_mapel'] ?>">                                                                     
+                                            <input type="hidden" name="id_mapel" value="<?= $user['mapel_diajar'][0]['id']; ?>">                                                                   
                                         </div>
                                     </div>
                                     <div class="form-row">
