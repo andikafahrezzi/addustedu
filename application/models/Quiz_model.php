@@ -521,6 +521,37 @@ public function get_materi_options($nip) {
 
     return $this->db->get()->result();
 }
+public function get_materi_optionss($nip) {
+    // Ambil pertemuan yang hanya dimiliki materi guru login
+    $this->db->select('
+        pertemuan.id AS id_pertemuan,
+        materi.deskripsi,
+        kelas.nama_kelas,
+        kelas.tingkat,
+        mata_pelajaran.nama_mapel,
+        pertemuan.pertemuan_ke
+    ');
+    $this->db->from('pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+
+    // Filter pertemuan hanya dari materi milik guru login
+    $this->db->where('materi.id_guru', $nip);
+
+    $this->db->order_by('mata_pelajaran.nama_mapel', 'ASC');
+    $this->db->order_by('kelas.tingkat', 'ASC');
+    $this->db->order_by('kelas.nama_kelas', 'ASC');
+    $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
+    $this->db->group_by('pertemuan.id');
+
+    return $this->db->get()->result();
+}
+
+
+
+
+
 
 public function get_ujian_by_gurus($nip)
 {

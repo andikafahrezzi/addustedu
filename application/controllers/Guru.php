@@ -631,6 +631,7 @@ public function data_quiz()
     {
         $this->load->model('Quiz_model');
         $nip = $this->session->userdata('nip');
+        $data['nip'] = $nip; 
         
         // Validasi form
         $this->form_validation->set_rules('id_pertemuan', 'pertemuan', 'required');
@@ -656,7 +657,7 @@ public function data_quiz()
             redirect('guru/kelola_quiz/'.$quiz_id);
         }
         
-        $data['materi_list'] = $this->Quiz_model->get_materi_options($nip);
+        $data['materi_list'] = $this->Quiz_model->get_materi_optionss($nip);
         
         // Debug path view
         $view_path = APPPATH.'views/guru/add_quiz.php';
