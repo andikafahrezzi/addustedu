@@ -1,0 +1,3438 @@
+-- phpMyAdmin SQL Dump
+-- version 5.1.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Nov 14, 2025 at 02:35 PM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 7.4.16
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `db_addustedudev`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `absensi_pertemuan`
+--
+
+CREATE TABLE `absensi_pertemuan` (
+  `id` int(11) NOT NULL,
+  `id_pertemuan` int(11) NOT NULL,
+  `siswa_id` varchar(20) NOT NULL,
+  `status` enum('hadir','tidak_hadir') DEFAULT 'tidak_hadir',
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `calculation_version` varchar(32) DEFAULT NULL,
+  `last_calculated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `id` int(64) NOT NULL,
+  `username` varchar(128) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `email` varchar(128) NOT NULL,
+  `user_type` enum('admin') NOT NULL DEFAULT 'admin'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id`, `username`, `password`, `email`, `user_type`) VALUES
+(1, 'admin', '$2y$10$EX0L5MeIQldpkCuTZW.mjujTaj.Yy20IW0GOluecU/c.es.9r6E5.', 'admin@admin.com', 'admin');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bank_soal`
+--
+
+CREATE TABLE `bank_soal` (
+  `id_soal` int(11) NOT NULL,
+  `pertanyaan` text NOT NULL,
+  `pilihan_a` text DEFAULT NULL,
+  `pilihan_b` text DEFAULT NULL,
+  `pilihan_c` text DEFAULT NULL,
+  `pilihan_d` text DEFAULT NULL,
+  `kunci_jawaban` enum('A','B','C','D') DEFAULT NULL,
+  `tingkat_kesulitan` enum('mudah','sedang','sulit') DEFAULT 'sedang',
+  `tipe_kognitif` enum('ingatan','paham','aplikasi','analisis','evaluasi','kreasi') DEFAULT 'paham',
+  `created_by` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
+  `user_type` enum('admin','guru') NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `tipe_soal` enum('pilihan','essay') NOT NULL DEFAULT 'pilihan',
+  `id_mapel` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `bank_soal`
+--
+
+INSERT INTO `bank_soal` (`id_soal`, `pertanyaan`, `pilihan_a`, `pilihan_b`, `pilihan_c`, `pilihan_d`, `kunci_jawaban`, `tingkat_kesulitan`, `tipe_kognitif`, `created_by`, `user_type`, `created_at`, `tipe_soal`, `id_mapel`) VALUES
+(14, 'eewfewfewfewfe', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-03 11:51:31', 'essay', 2),
+(15, 'wefewfewfewfew', 'wfwfw', 'ewfwfew', 'ewfwefewfw', 'ewfewfw', 'A', 'sedang', 'paham', '1', 'admin', '2025-09-03 11:51:43', 'pilihan', 1),
+(18, 'ffsfsfs', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-04 10:14:19', 'essay', 1),
+(19, 'dfsdfsfsfs', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-04 10:14:26', 'essay', 1),
+(20, 'dfds', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-04 10:14:31', 'essay', 1),
+(21, 'ewrw', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-04 10:14:36', 'essay', 1),
+(22, 'wefwew', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-04 10:14:43', 'essay', 1),
+(23, 'fewfwf', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-04 10:14:48', 'essay', 1),
+(24, 'fwwefwfw', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-04 10:14:56', 'essay', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forum_diskusi`
+--
+
+CREATE TABLE `forum_diskusi` (
+  `id` int(11) NOT NULL,
+  `user_type` enum('siswa','guru') NOT NULL,
+  `user_id` varchar(20) NOT NULL,
+  `id_pertemuan` int(11) NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `komentar` text NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `forum_diskusi`
+--
+
+INSERT INTO `forum_diskusi` (`id`, `user_type`, `user_id`, `id_pertemuan`, `parent_id`, `komentar`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'guru', '21101140', 1, NULL, 'Jangan lupa kerjakan quiznya Teman-temanssss', '2025-08-17 21:35:30', '2025-09-02 12:53:43', NULL),
+(2, 'siswa', '12345678', 1, 1, 'test', '2025-08-22 14:31:08', NULL, NULL),
+(3, 'siswa', '12345678', 1, 2, 'test', '2025-08-22 14:31:22', NULL, NULL),
+(4, 'siswa', '12345678', 1, 3, 'test', '2025-08-22 14:31:34', NULL, NULL),
+(5, 'siswa', '12345678', 1, 3, 'dqwwwwwwwwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwwwwwww', '2025-08-22 14:32:48', NULL, NULL),
+(8, 'guru', '21101140', 1, NULL, 'testd', '2025-08-29 10:10:51', '2025-08-29 10:11:03', NULL),
+(9, 'guru', '21101140', 1, 5, 'balas', '2025-08-29 10:11:14', '2025-08-29 15:11:25', '2025-08-29 10:11:25'),
+(10, 'siswa', '12345678999', 1, NULL, 'kontol', '2025-08-29 14:28:45', '2025-08-29 19:29:01', '2025-08-29 14:29:01'),
+(11, 'siswa', '12345678999', 1, NULL, 'tests', '2025-08-29 14:32:05', '2025-08-29 14:32:24', NULL),
+(12, 'siswa', '12345678999', 1, 8, 'selamat pagi guru', '2025-08-29 14:32:41', '2025-08-29 19:32:54', '2025-08-29 14:32:54'),
+(13, 'siswa', '12345678', 1, NULL, 'test', '2025-09-02 09:50:36', NULL, NULL),
+(14, 'siswa', '12345678', 1, NULL, 'test', '2025-09-02 09:51:12', NULL, NULL),
+(15, 'siswa', '12345678', 1, NULL, 'dqwdqd', '2025-09-02 10:22:05', NULL, NULL),
+(16, 'siswa', '12345678', 1, NULL, 'dqwdqd', '2025-09-02 10:30:03', NULL, NULL),
+(17, 'siswa', '12345678', 1, NULL, 'vgfwfwf', '2025-09-02 11:06:54', NULL, NULL),
+(18, 'siswa', '12345678', 1, NULL, 'f34f3443f3f3f', '2025-09-02 11:11:36', NULL, NULL),
+(19, 'siswa', '12345678', 1, NULL, 'f34f3443f3f3f', '2025-09-02 11:11:42', NULL, NULL),
+(20, 'siswa', '12345678', 1, NULL, 'w', '2025-09-02 11:11:55', '2025-09-02 12:53:29', NULL),
+(21, 'siswa', '12345678', 1, NULL, 'QWDQWDQWDQ', '2025-09-02 11:16:01', '2025-09-02 17:53:48', '2025-09-02 12:53:48'),
+(24, 'siswa', '12345678', 1, NULL, 'test', '2025-09-05 16:42:10', NULL, NULL),
+(25, 'siswa', '12345678', 1, NULL, 'ss', '2025-09-05 16:46:31', NULL, NULL),
+(26, 'siswa', '12345678', 1, NULL, 'flash\\r\\n', '2025-09-05 17:13:10', NULL, NULL),
+(27, 'siswa', '12345678', 1, NULL, '111', '2025-09-05 17:39:23', NULL, NULL),
+(28, 'siswa', '12345678999', 1, NULL, 'test', '2025-11-14 13:04:35', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `guru`
+--
+
+CREATE TABLE `guru` (
+  `nip` varchar(20) NOT NULL,
+  `nuptk` varchar(25) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `nama_guru` varchar(128) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `user_type` enum('guru') NOT NULL DEFAULT 'guru',
+  `image` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `guru`
+--
+
+INSERT INTO `guru` (`nip`, `nuptk`, `email`, `nama_guru`, `password`, `user_type`, `image`) VALUES
+('21101140', '12345678', 'pahrulmaji@gmail.com', 'Guru Terbaik', '$2y$10$nP.nAiLkI0z/Hw7ZsGqaYOW5pRsOEXRmqmMkGfa4FBHTVqZWXvFZS', 'guru', 'default.jpg'),
+('21101141', '123456789', 'test@gmail.com', 'addust', '$2y$10$28MLmCOoNjd2sn2YT8Sj9OIffn5RuA/mvSQKXD9WzdNnN.u80EmNm', 'guru', 'default.jpg'),
+('21101142', '99999999', 'xxx@gmail.com', 'adwadqwq', '$2y$10$LBlsKbp2GM2v0zBn1hsiKe5YXUDw9HDMw8.V6L.jkzuwD38eS6JrO', 'guru', 'default.jpg'),
+('21101143', '11111111', 'test1q2ss2sss2@gmail.com', 'hehe', '$2y$10$itAvBhbsZcjsey.ldqUWF.Jpq5o8bom0S2Xod/rVITTlF0J6btGga', 'guru', 'default.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `guru_mapel`
+--
+
+CREATE TABLE `guru_mapel` (
+  `id` int(11) NOT NULL,
+  `id_guru` varchar(20) CHARACTER SET latin1 NOT NULL,
+  `id_mapel` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `guru_mapel`
+--
+
+INSERT INTO `guru_mapel` (`id`, `id_guru`, `id_mapel`) VALUES
+(51, '21101141', 3),
+(52, '21101141', 4),
+(53, '21101142', 1),
+(57, '21101140', 1),
+(58, '21101140', 2),
+(60, '21101143', 1),
+(61, '21101143', 2),
+(62, '21101143', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `jawaban_siswa`
+--
+
+CREATE TABLE `jawaban_siswa` (
+  `id` int(11) NOT NULL,
+  `quiz_siswa_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `jawaban` text DEFAULT NULL,
+  `poin_diperoleh` decimal(5,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `jawaban_siswa`
+--
+
+INSERT INTO `jawaban_siswa` (`id`, `quiz_siswa_id`, `question_id`, `jawaban`, `poin_diperoleh`) VALUES
+(26, 7, 30, 'a', '1.00'),
+(27, 7, 31, 'a', '1.00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kelas`
+--
+
+CREATE TABLE `kelas` (
+  `id` int(11) NOT NULL,
+  `nama_kelas` varchar(20) NOT NULL,
+  `tingkat` varchar(5) NOT NULL,
+  `jurusan` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `kelas`
+--
+
+INSERT INTO `kelas` (`id`, `nama_kelas`, `tingkat`, `jurusan`) VALUES
+(1, 'PC1IPS1', 'X', 'Ilmu Pengetahuan Sos'),
+(2, 'PC1IPS2', 'XI', 'Ilmu Pengetahuan Sos'),
+(3, 'PC1IPS3', 'XII', 'Ilmu Pengetahuan Sos'),
+(4, 'PC1IPA1', 'X', 'Ilmu Pengetahuan Ala'),
+(5, 'PC1IPA2', 'XI', 'Ilmu Pengetahuan Ala'),
+(6, 'PC1IPA3', 'XII', 'Ilmu Pengetahuan Ala');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kuisioner`
+--
+
+CREATE TABLE `kuisioner` (
+  `id` int(11) NOT NULL,
+  `judul` varchar(255) NOT NULL,
+  `deskripsi` text DEFAULT NULL,
+  `target` enum('siswa','guru','all') NOT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_by` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `kuisioner`
+--
+
+INSERT INTO `kuisioner` (`id`, `judul`, `deskripsi`, `target`, `is_active`, `created_by`, `created_at`, `updated_at`) VALUES
+(2, 'test', 'yeye', 'all', 1, 1, '2025-10-02 10:35:43', '2025-10-02 12:41:19');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kuisioner_jawaban`
+--
+
+CREATE TABLE `kuisioner_jawaban` (
+  `id` int(11) NOT NULL,
+  `kuisioner_id` int(11) NOT NULL,
+  `pertanyaan_id` int(11) NOT NULL,
+  `user_type` enum('siswa','guru') NOT NULL,
+  `user_id` varchar(20) NOT NULL,
+  `jawaban_skala` int(11) DEFAULT NULL,
+  `jawaban_text` text DEFAULT NULL,
+  `jawaban_pilihan` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `kuisioner_jawaban`
+--
+
+INSERT INTO `kuisioner_jawaban` (`id`, `kuisioner_id`, `pertanyaan_id`, `user_type`, `user_id`, `jawaban_skala`, `jawaban_text`, `jawaban_pilihan`, `created_at`) VALUES
+(1, 2, 12, 'siswa', '0095416290', 5, NULL, NULL, '2025-10-19 21:34:15'),
+(2, 2, 13, 'siswa', '0095416290', 5, NULL, NULL, '2025-10-31 09:42:14'),
+(3, 2, 14, 'siswa', '0095416290', 4, NULL, NULL, '2025-10-24 16:15:31'),
+(4, 2, 15, 'siswa', '0095416290', 5, NULL, NULL, '2025-10-26 20:09:17'),
+(5, 2, 16, 'siswa', '0095416290', 5, NULL, NULL, '2025-10-15 11:08:55'),
+(6, 2, 17, 'siswa', '0095416290', 4, NULL, NULL, '2025-10-17 12:52:32'),
+(7, 2, 18, 'siswa', '0095416290', 4, NULL, NULL, '2025-10-31 16:44:04'),
+(8, 2, 19, 'siswa', '0095416290', 4, NULL, NULL, '2025-10-25 15:37:39'),
+(9, 2, 20, 'siswa', '0095416290', 4, NULL, NULL, '2025-10-16 10:43:03'),
+(10, 2, 21, 'siswa', '0095416290', 4, NULL, NULL, '2025-10-19 22:09:52'),
+(11, 2, 22, 'siswa', '0095416290', 5, NULL, NULL, '2025-10-29 15:55:11'),
+(12, 2, 23, 'siswa', '0095416290', 4, NULL, NULL, '2025-10-17 14:31:25'),
+(13, 2, 24, 'siswa', '0095416290', 5, NULL, NULL, '2025-10-20 22:50:20'),
+(14, 2, 25, 'siswa', '0095416290', 4, NULL, NULL, '2025-10-17 22:21:55'),
+(15, 2, 26, 'siswa', '0095416290', 5, NULL, NULL, '2025-10-30 08:27:09'),
+(16, 2, 27, 'siswa', '0095416290', 4, NULL, NULL, '2025-10-21 21:19:55'),
+(17, 2, 28, 'siswa', '0095416290', 5, NULL, NULL, '2025-10-21 22:44:46'),
+(18, 2, 29, 'siswa', '0095416290', 5, NULL, NULL, '2025-10-31 20:08:20'),
+(19, 2, 30, 'siswa', '0095416290', 4, NULL, NULL, '2025-10-19 14:35:35'),
+(20, 2, 31, 'siswa', '0095416290', 4, NULL, NULL, '2025-10-31 14:13:51'),
+(21, 2, 12, 'siswa', '0128301889', 5, NULL, NULL, '2025-10-22 14:41:16'),
+(22, 2, 13, 'siswa', '0128301889', 4, NULL, NULL, '2025-10-23 19:18:13'),
+(23, 2, 14, 'siswa', '0128301889', 4, NULL, NULL, '2025-10-22 16:21:08'),
+(24, 2, 15, 'siswa', '0128301889', 5, NULL, NULL, '2025-10-15 22:46:58'),
+(25, 2, 16, 'siswa', '0128301889', 5, NULL, NULL, '2025-10-28 15:52:59'),
+(26, 2, 17, 'siswa', '0128301889', 4, NULL, NULL, '2025-10-26 12:24:15'),
+(27, 2, 18, 'siswa', '0128301889', 4, NULL, NULL, '2025-10-21 21:12:24'),
+(28, 2, 19, 'siswa', '0128301889', 4, NULL, NULL, '2025-10-30 10:06:07'),
+(29, 2, 20, 'siswa', '0128301889', 4, NULL, NULL, '2025-10-29 16:17:43'),
+(30, 2, 21, 'siswa', '0128301889', 5, NULL, NULL, '2025-10-22 10:24:33'),
+(31, 2, 22, 'siswa', '0128301889', 5, NULL, NULL, '2025-10-19 15:45:16'),
+(32, 2, 23, 'siswa', '0128301889', 4, NULL, NULL, '2025-10-26 10:46:22'),
+(33, 2, 24, 'siswa', '0128301889', 5, NULL, NULL, '2025-10-22 16:35:14'),
+(34, 2, 25, 'siswa', '0128301889', 4, NULL, NULL, '2025-10-24 12:56:45'),
+(35, 2, 26, 'siswa', '0128301889', 5, NULL, NULL, '2025-10-26 15:19:11'),
+(36, 2, 27, 'siswa', '0128301889', 5, NULL, NULL, '2025-10-21 20:58:25'),
+(37, 2, 28, 'siswa', '0128301889', 4, NULL, NULL, '2025-10-27 10:31:07'),
+(38, 2, 29, 'siswa', '0128301889', 4, NULL, NULL, '2025-10-30 14:25:49'),
+(39, 2, 30, 'siswa', '0128301889', 5, NULL, NULL, '2025-10-25 18:32:38'),
+(40, 2, 31, 'siswa', '0128301889', 5, NULL, NULL, '2025-10-17 22:15:24'),
+(41, 2, 12, 'siswa', '3146882349', 4, NULL, NULL, '2025-10-19 13:11:47'),
+(42, 2, 13, 'siswa', '3146882349', 4, NULL, NULL, '2025-10-25 19:10:28'),
+(43, 2, 14, 'siswa', '3146882349', 5, NULL, NULL, '2025-10-31 13:40:20'),
+(44, 2, 15, 'siswa', '3146882349', 5, NULL, NULL, '2025-10-25 19:12:38'),
+(45, 2, 16, 'siswa', '3146882349', 5, NULL, NULL, '2025-10-31 10:45:24'),
+(46, 2, 17, 'siswa', '3146882349', 5, NULL, NULL, '2025-10-25 18:46:41'),
+(47, 2, 18, 'siswa', '3146882349', 4, NULL, NULL, '2025-10-29 17:46:55'),
+(48, 2, 19, 'siswa', '3146882349', 4, NULL, NULL, '2025-10-22 16:30:50'),
+(49, 2, 20, 'siswa', '3146882349', 5, NULL, NULL, '2025-10-27 20:48:36'),
+(50, 2, 21, 'siswa', '3146882349', 5, NULL, NULL, '2025-10-19 13:13:57'),
+(51, 2, 22, 'siswa', '3146882349', 4, NULL, NULL, '2025-10-28 15:08:14'),
+(52, 2, 23, 'siswa', '3146882349', 5, NULL, NULL, '2025-10-15 08:54:27'),
+(53, 2, 24, 'siswa', '3146882349', 5, NULL, NULL, '2025-10-26 15:25:40'),
+(54, 2, 25, 'siswa', '3146882349', 4, NULL, NULL, '2025-10-23 09:07:16'),
+(55, 2, 26, 'siswa', '3146882349', 5, NULL, NULL, '2025-10-15 12:18:40'),
+(56, 2, 27, 'siswa', '3146882349', 4, NULL, NULL, '2025-10-19 22:54:44'),
+(57, 2, 28, 'siswa', '3146882349', 5, NULL, NULL, '2025-10-24 08:28:12'),
+(58, 2, 29, 'siswa', '3146882349', 5, NULL, NULL, '2025-10-25 08:26:03'),
+(59, 2, 30, 'siswa', '3146882349', 5, NULL, NULL, '2025-10-27 19:29:13'),
+(60, 2, 31, 'siswa', '3146882349', 5, NULL, NULL, '2025-10-25 08:15:15'),
+(61, 2, 12, 'siswa', '0063301626', 5, NULL, NULL, '2025-10-30 08:21:40'),
+(62, 2, 13, 'siswa', '0063301626', 4, NULL, NULL, '2025-10-23 18:52:18'),
+(63, 2, 14, 'siswa', '0063301626', 5, NULL, NULL, '2025-10-25 13:00:56'),
+(64, 2, 15, 'siswa', '0063301626', 5, NULL, NULL, '2025-10-22 12:03:25'),
+(65, 2, 16, 'siswa', '0063301626', 5, NULL, NULL, '2025-10-23 16:23:15'),
+(66, 2, 17, 'siswa', '0063301626', 4, NULL, NULL, '2025-10-27 14:56:21'),
+(67, 2, 18, 'siswa', '0063301626', 5, NULL, NULL, '2025-10-29 14:25:54'),
+(68, 2, 19, 'siswa', '0063301626', 4, NULL, NULL, '2025-10-26 14:05:14'),
+(69, 2, 20, 'siswa', '0063301626', 5, NULL, NULL, '2025-10-30 19:05:11'),
+(70, 2, 21, 'siswa', '0063301626', 5, NULL, NULL, '2025-10-26 15:24:31'),
+(71, 2, 22, 'siswa', '0063301626', 4, NULL, NULL, '2025-10-24 15:51:45'),
+(72, 2, 23, 'siswa', '0063301626', 4, NULL, NULL, '2025-10-31 10:47:32'),
+(73, 2, 24, 'siswa', '0063301626', 4, NULL, NULL, '2025-10-15 10:36:38'),
+(74, 2, 25, 'siswa', '0063301626', 4, NULL, NULL, '2025-10-29 10:25:30'),
+(75, 2, 26, 'siswa', '0063301626', 4, NULL, NULL, '2025-10-30 16:13:23'),
+(76, 2, 27, 'siswa', '0063301626', 4, NULL, NULL, '2025-10-17 20:49:34'),
+(77, 2, 28, 'siswa', '0063301626', 4, NULL, NULL, '2025-10-24 14:27:59'),
+(78, 2, 29, 'siswa', '0063301626', 5, NULL, NULL, '2025-10-16 16:27:40'),
+(79, 2, 30, 'siswa', '0063301626', 5, NULL, NULL, '2025-10-31 20:18:59'),
+(80, 2, 31, 'siswa', '0063301626', 4, NULL, NULL, '2025-10-19 12:32:50'),
+(81, 2, 12, 'siswa', '0073601675', 5, NULL, NULL, '2025-10-25 09:48:40'),
+(82, 2, 13, 'siswa', '0073601675', 5, NULL, NULL, '2025-10-27 20:57:16'),
+(83, 2, 14, 'siswa', '0073601675', 5, NULL, NULL, '2025-10-29 15:09:14'),
+(84, 2, 15, 'siswa', '0073601675', 5, NULL, NULL, '2025-10-30 13:02:09'),
+(85, 2, 16, 'siswa', '0073601675', 5, NULL, NULL, '2025-10-26 15:35:22'),
+(86, 2, 17, 'siswa', '0073601675', 4, NULL, NULL, '2025-10-21 18:19:31'),
+(87, 2, 18, 'siswa', '0073601675', 5, NULL, NULL, '2025-10-25 11:21:03'),
+(88, 2, 19, 'siswa', '0073601675', 4, NULL, NULL, '2025-10-26 21:23:19'),
+(89, 2, 20, 'siswa', '0073601675', 4, NULL, NULL, '2025-10-20 11:12:19'),
+(90, 2, 21, 'siswa', '0073601675', 4, NULL, NULL, '2025-10-17 17:45:50'),
+(91, 2, 22, 'siswa', '0073601675', 5, NULL, NULL, '2025-10-20 18:24:02'),
+(92, 2, 23, 'siswa', '0073601675', 5, NULL, NULL, '2025-10-28 09:07:17'),
+(93, 2, 24, 'siswa', '0073601675', 4, NULL, NULL, '2025-10-21 20:02:40'),
+(94, 2, 25, 'siswa', '0073601675', 4, NULL, NULL, '2025-10-20 20:05:00'),
+(95, 2, 26, 'siswa', '0073601675', 5, NULL, NULL, '2025-10-26 10:46:23'),
+(96, 2, 27, 'siswa', '0073601675', 5, NULL, NULL, '2025-10-17 17:55:38'),
+(97, 2, 28, 'siswa', '0073601675', 4, NULL, NULL, '2025-10-19 21:50:26'),
+(98, 2, 29, 'siswa', '0073601675', 5, NULL, NULL, '2025-10-15 10:45:17'),
+(99, 2, 30, 'siswa', '0073601675', 4, NULL, NULL, '2025-10-15 18:15:16'),
+(100, 2, 31, 'siswa', '0073601675', 5, NULL, NULL, '2025-10-17 22:27:19'),
+(101, 2, 12, 'siswa', '0084617145', 4, NULL, NULL, '2025-10-22 14:49:48'),
+(102, 2, 13, 'siswa', '0084617145', 5, NULL, NULL, '2025-10-20 21:37:23'),
+(103, 2, 14, 'siswa', '0084617145', 4, NULL, NULL, '2025-10-16 13:35:49'),
+(104, 2, 15, 'siswa', '0084617145', 4, NULL, NULL, '2025-10-20 16:43:00'),
+(105, 2, 16, 'siswa', '0084617145', 5, NULL, NULL, '2025-10-19 18:41:22'),
+(106, 2, 17, 'siswa', '0084617145', 5, NULL, NULL, '2025-10-15 18:27:06'),
+(107, 2, 18, 'siswa', '0084617145', 4, NULL, NULL, '2025-10-26 20:13:33'),
+(108, 2, 19, 'siswa', '0084617145', 4, NULL, NULL, '2025-10-30 10:06:04'),
+(109, 2, 20, 'siswa', '0084617145', 4, NULL, NULL, '2025-10-30 13:16:10'),
+(110, 2, 21, 'siswa', '0084617145', 4, NULL, NULL, '2025-10-30 13:57:44'),
+(111, 2, 22, 'siswa', '0084617145', 5, NULL, NULL, '2025-10-30 08:33:36'),
+(112, 2, 23, 'siswa', '0084617145', 4, NULL, NULL, '2025-10-16 10:41:55'),
+(113, 2, 24, 'siswa', '0084617145', 5, NULL, NULL, '2025-10-16 19:31:18'),
+(114, 2, 25, 'siswa', '0084617145', 5, NULL, NULL, '2025-10-30 17:30:35'),
+(115, 2, 26, 'siswa', '0084617145', 4, NULL, NULL, '2025-10-23 11:39:31'),
+(116, 2, 27, 'siswa', '0084617145', 5, NULL, NULL, '2025-10-26 12:39:20'),
+(117, 2, 28, 'siswa', '0084617145', 5, NULL, NULL, '2025-10-26 10:47:25'),
+(118, 2, 29, 'siswa', '0084617145', 5, NULL, NULL, '2025-10-25 21:25:28'),
+(119, 2, 30, 'siswa', '0084617145', 4, NULL, NULL, '2025-10-18 15:07:02'),
+(120, 2, 31, 'siswa', '0084617145', 5, NULL, NULL, '2025-10-16 22:39:20'),
+(121, 2, 12, 'siswa', '0084764574', 5, NULL, NULL, '2025-10-21 19:45:29'),
+(122, 2, 13, 'siswa', '0084764574', 4, NULL, NULL, '2025-10-21 13:44:35'),
+(123, 2, 14, 'siswa', '0084764574', 5, NULL, NULL, '2025-10-30 13:12:52'),
+(124, 2, 15, 'siswa', '0084764574', 5, NULL, NULL, '2025-10-15 20:14:37'),
+(125, 2, 16, 'siswa', '0084764574', 4, NULL, NULL, '2025-10-17 17:33:59'),
+(126, 2, 17, 'siswa', '0084764574', 4, NULL, NULL, '2025-10-19 16:10:03'),
+(127, 2, 18, 'siswa', '0084764574', 5, NULL, NULL, '2025-10-27 13:29:27'),
+(128, 2, 19, 'siswa', '0084764574', 5, NULL, NULL, '2025-10-24 13:16:15'),
+(129, 2, 20, 'siswa', '0084764574', 4, NULL, NULL, '2025-10-24 12:55:41'),
+(130, 2, 21, 'siswa', '0084764574', 5, NULL, NULL, '2025-10-21 21:10:18'),
+(131, 2, 22, 'siswa', '0084764574', 5, NULL, NULL, '2025-10-30 17:19:48'),
+(132, 2, 23, 'siswa', '0084764574', 4, NULL, NULL, '2025-10-16 22:48:03'),
+(133, 2, 24, 'siswa', '0084764574', 5, NULL, NULL, '2025-10-18 15:43:09'),
+(134, 2, 25, 'siswa', '0084764574', 5, NULL, NULL, '2025-10-27 20:52:54'),
+(135, 2, 26, 'siswa', '0084764574', 5, NULL, NULL, '2025-10-29 16:19:51'),
+(136, 2, 27, 'siswa', '0084764574', 4, NULL, NULL, '2025-10-17 17:46:59'),
+(137, 2, 28, 'siswa', '0084764574', 5, NULL, NULL, '2025-10-15 12:30:35'),
+(138, 2, 29, 'siswa', '0084764574', 4, NULL, NULL, '2025-10-22 20:48:36'),
+(139, 2, 30, 'siswa', '0084764574', 5, NULL, NULL, '2025-10-15 15:18:05'),
+(140, 2, 31, 'siswa', '0084764574', 5, NULL, NULL, '2025-10-21 13:44:31'),
+(141, 2, 12, 'siswa', '0086207880', 4, NULL, NULL, '2025-10-23 13:09:43'),
+(142, 2, 13, 'siswa', '0086207880', 4, NULL, NULL, '2025-10-27 10:27:53'),
+(143, 2, 14, 'siswa', '0086207880', 4, NULL, NULL, '2025-10-28 17:47:05'),
+(144, 2, 15, 'siswa', '0086207880', 4, NULL, NULL, '2025-10-17 16:19:56'),
+(145, 2, 16, 'siswa', '0086207880', 5, NULL, NULL, '2025-10-29 09:59:34'),
+(146, 2, 17, 'siswa', '0086207880', 5, NULL, NULL, '2025-10-29 15:57:16'),
+(147, 2, 18, 'siswa', '0086207880', 4, NULL, NULL, '2025-10-25 17:25:07'),
+(148, 2, 19, 'siswa', '0086207880', 4, NULL, NULL, '2025-10-22 08:54:24'),
+(149, 2, 20, 'siswa', '0086207880', 4, NULL, NULL, '2025-10-21 20:09:14'),
+(150, 2, 21, 'siswa', '0086207880', 5, NULL, NULL, '2025-10-31 17:23:59'),
+(151, 2, 22, 'siswa', '0086207880', 5, NULL, NULL, '2025-10-28 16:41:38'),
+(152, 2, 23, 'siswa', '0086207880', 4, NULL, NULL, '2025-10-29 18:02:04'),
+(153, 2, 24, 'siswa', '0086207880', 4, NULL, NULL, '2025-10-17 21:08:55'),
+(154, 2, 25, 'siswa', '0086207880', 4, NULL, NULL, '2025-10-18 15:47:28'),
+(155, 2, 26, 'siswa', '0086207880', 5, NULL, NULL, '2025-10-23 18:46:52'),
+(156, 2, 27, 'siswa', '0086207880', 4, NULL, NULL, '2025-10-26 11:12:15'),
+(157, 2, 28, 'siswa', '0086207880', 5, NULL, NULL, '2025-10-27 17:57:52'),
+(158, 2, 29, 'siswa', '0086207880', 4, NULL, NULL, '2025-10-28 15:10:22'),
+(159, 2, 30, 'siswa', '0086207880', 4, NULL, NULL, '2025-10-23 15:06:59'),
+(160, 2, 31, 'siswa', '0086207880', 5, NULL, NULL, '2025-10-31 11:07:58'),
+(161, 2, 12, 'siswa', '0087211088', 4, NULL, NULL, '2025-10-23 22:23:01'),
+(162, 2, 13, 'siswa', '0087211088', 5, NULL, NULL, '2025-10-29 13:10:48'),
+(163, 2, 14, 'siswa', '0087211088', 5, NULL, NULL, '2025-10-17 11:40:42'),
+(164, 2, 15, 'siswa', '0087211088', 5, NULL, NULL, '2025-10-22 16:37:23'),
+(165, 2, 16, 'siswa', '0087211088', 4, NULL, NULL, '2025-10-17 15:02:45'),
+(166, 2, 17, 'siswa', '0087211088', 5, NULL, NULL, '2025-10-31 22:45:57'),
+(167, 2, 18, 'siswa', '0087211088', 5, NULL, NULL, '2025-10-27 09:10:40'),
+(168, 2, 19, 'siswa', '0087211088', 5, NULL, NULL, '2025-10-19 19:02:51'),
+(169, 2, 20, 'siswa', '0087211088', 4, NULL, NULL, '2025-10-22 16:31:57'),
+(170, 2, 21, 'siswa', '0087211088', 4, NULL, NULL, '2025-10-31 14:14:52'),
+(171, 2, 22, 'siswa', '0087211088', 5, NULL, NULL, '2025-10-27 16:35:19'),
+(172, 2, 23, 'siswa', '0087211088', 5, NULL, NULL, '2025-10-22 14:03:51'),
+(173, 2, 24, 'siswa', '0087211088', 4, NULL, NULL, '2025-10-18 15:02:35'),
+(174, 2, 25, 'siswa', '0087211088', 5, NULL, NULL, '2025-10-25 16:49:27'),
+(175, 2, 26, 'siswa', '0087211088', 5, NULL, NULL, '2025-10-27 11:50:33'),
+(176, 2, 27, 'siswa', '0087211088', 4, NULL, NULL, '2025-10-29 14:34:33'),
+(177, 2, 28, 'siswa', '0087211088', 4, NULL, NULL, '2025-10-23 15:49:41'),
+(178, 2, 29, 'siswa', '0087211088', 5, NULL, NULL, '2025-10-28 09:01:53'),
+(179, 2, 30, 'siswa', '0087211088', 4, NULL, NULL, '2025-10-16 15:08:12'),
+(180, 2, 31, 'siswa', '0087211088', 5, NULL, NULL, '2025-10-23 17:43:42'),
+(181, 2, 12, 'siswa', '0087337628', 4, NULL, NULL, '2025-10-23 16:10:18'),
+(182, 2, 13, 'siswa', '0087337628', 5, NULL, NULL, '2025-10-31 20:22:19'),
+(183, 2, 14, 'siswa', '0087337628', 5, NULL, NULL, '2025-10-24 13:05:22'),
+(184, 2, 15, 'siswa', '0087337628', 5, NULL, NULL, '2025-10-28 12:08:44'),
+(185, 2, 16, 'siswa', '0087337628', 4, NULL, NULL, '2025-10-19 14:14:58'),
+(186, 2, 17, 'siswa', '0087337628', 4, NULL, NULL, '2025-10-31 13:00:51'),
+(187, 2, 18, 'siswa', '0087337628', 4, NULL, NULL, '2025-10-26 15:38:41'),
+(188, 2, 19, 'siswa', '0087337628', 4, NULL, NULL, '2025-10-21 16:30:52'),
+(189, 2, 20, 'siswa', '0087337628', 5, NULL, NULL, '2025-10-26 20:04:55'),
+(190, 2, 21, 'siswa', '0087337628', 4, NULL, NULL, '2025-10-17 14:57:22'),
+(191, 2, 22, 'siswa', '0087337628', 5, NULL, NULL, '2025-10-29 10:22:20'),
+(192, 2, 23, 'siswa', '0087337628', 5, NULL, NULL, '2025-10-15 12:31:38'),
+(193, 2, 24, 'siswa', '0087337628', 5, NULL, NULL, '2025-10-18 08:44:29'),
+(194, 2, 25, 'siswa', '0087337628', 4, NULL, NULL, '2025-10-31 22:53:33'),
+(195, 2, 26, 'siswa', '0087337628', 4, NULL, NULL, '2025-10-15 17:08:48'),
+(196, 2, 27, 'siswa', '0087337628', 5, NULL, NULL, '2025-10-24 22:04:31'),
+(197, 2, 28, 'siswa', '0087337628', 4, NULL, NULL, '2025-10-25 20:11:32'),
+(198, 2, 29, 'siswa', '0087337628', 4, NULL, NULL, '2025-10-30 12:38:22'),
+(199, 2, 30, 'siswa', '0087337628', 5, NULL, NULL, '2025-10-23 19:22:32'),
+(200, 2, 31, 'siswa', '0087337628', 5, NULL, NULL, '2025-10-17 08:37:05'),
+(201, 2, 12, 'siswa', '0091031828', 5, NULL, NULL, '2025-10-28 08:52:17'),
+(202, 2, 13, 'siswa', '0091031828', 5, NULL, NULL, '2025-10-16 09:06:19'),
+(203, 2, 14, 'siswa', '0091031828', 4, NULL, NULL, '2025-10-22 11:01:23'),
+(204, 2, 15, 'siswa', '0091031828', 5, NULL, NULL, '2025-10-15 17:08:47'),
+(205, 2, 16, 'siswa', '0091031828', 5, NULL, NULL, '2025-10-18 14:34:35'),
+(206, 2, 17, 'siswa', '0091031828', 4, NULL, NULL, '2025-10-18 15:42:10'),
+(207, 2, 18, 'siswa', '0091031828', 5, NULL, NULL, '2025-10-15 21:35:13'),
+(208, 2, 19, 'siswa', '0091031828', 4, NULL, NULL, '2025-10-30 16:04:41'),
+(209, 2, 20, 'siswa', '0091031828', 4, NULL, NULL, '2025-10-20 18:32:38'),
+(210, 2, 21, 'siswa', '0091031828', 5, NULL, NULL, '2025-10-15 13:41:25'),
+(211, 2, 22, 'siswa', '0091031828', 4, NULL, NULL, '2025-10-31 17:23:58'),
+(212, 2, 23, 'siswa', '0091031828', 5, NULL, NULL, '2025-10-26 09:41:02'),
+(213, 2, 24, 'siswa', '0091031828', 4, NULL, NULL, '2025-10-26 21:28:38'),
+(214, 2, 25, 'siswa', '0091031828', 5, NULL, NULL, '2025-10-31 17:08:51'),
+(215, 2, 26, 'siswa', '0091031828', 5, NULL, NULL, '2025-10-27 09:23:35'),
+(216, 2, 27, 'siswa', '0091031828', 5, NULL, NULL, '2025-10-16 09:06:22'),
+(217, 2, 28, 'siswa', '0091031828', 5, NULL, NULL, '2025-10-23 20:51:42'),
+(218, 2, 29, 'siswa', '0091031828', 5, NULL, NULL, '2025-10-28 08:50:01'),
+(219, 2, 30, 'siswa', '0091031828', 5, NULL, NULL, '2025-10-15 13:49:55'),
+(220, 2, 31, 'siswa', '0091031828', 4, NULL, NULL, '2025-10-17 08:56:31'),
+(221, 2, 12, 'siswa', '0092516158', 5, NULL, NULL, '2025-10-21 14:06:14'),
+(222, 2, 13, 'siswa', '0092516158', 5, NULL, NULL, '2025-10-27 22:35:06'),
+(223, 2, 14, 'siswa', '0092516158', 5, NULL, NULL, '2025-10-23 10:18:05'),
+(224, 2, 15, 'siswa', '0092516158', 5, NULL, NULL, '2025-10-22 14:03:53'),
+(225, 2, 16, 'siswa', '0092516158', 4, NULL, NULL, '2025-10-30 16:09:04'),
+(226, 2, 17, 'siswa', '0092516158', 5, NULL, NULL, '2025-10-17 08:45:42'),
+(227, 2, 18, 'siswa', '0092516158', 4, NULL, NULL, '2025-10-17 22:20:49'),
+(228, 2, 19, 'siswa', '0092516158', 4, NULL, NULL, '2025-10-18 17:24:13'),
+(229, 2, 20, 'siswa', '0092516158', 5, NULL, NULL, '2025-10-30 18:55:25'),
+(230, 2, 21, 'siswa', '0092516158', 4, NULL, NULL, '2025-10-25 22:05:27'),
+(231, 2, 22, 'siswa', '0092516158', 4, NULL, NULL, '2025-10-28 19:31:17'),
+(232, 2, 23, 'siswa', '0092516158', 5, NULL, NULL, '2025-10-26 16:57:02'),
+(233, 2, 24, 'siswa', '0092516158', 4, NULL, NULL, '2025-10-20 20:09:19'),
+(234, 2, 25, 'siswa', '0092516158', 4, NULL, NULL, '2025-10-23 12:01:11'),
+(235, 2, 26, 'siswa', '0092516158', 5, NULL, NULL, '2025-10-29 17:39:19'),
+(236, 2, 27, 'siswa', '0092516158', 5, NULL, NULL, '2025-10-22 09:10:35'),
+(237, 2, 28, 'siswa', '0092516158', 4, NULL, NULL, '2025-10-24 13:05:25'),
+(238, 2, 29, 'siswa', '0092516158', 5, NULL, NULL, '2025-10-31 13:44:39'),
+(239, 2, 30, 'siswa', '0092516158', 4, NULL, NULL, '2025-10-26 21:25:27'),
+(240, 2, 31, 'siswa', '0092516158', 4, NULL, NULL, '2025-10-31 17:16:27'),
+(241, 2, 12, 'siswa', '0094063500', 4, NULL, NULL, '2025-10-29 08:33:39'),
+(242, 2, 13, 'siswa', '0094063500', 5, NULL, NULL, '2025-10-15 13:44:37'),
+(243, 2, 14, 'siswa', '0094063500', 5, NULL, NULL, '2025-10-24 10:07:07'),
+(244, 2, 15, 'siswa', '0094063500', 4, NULL, NULL, '2025-10-29 16:19:53'),
+(245, 2, 16, 'siswa', '0094063500', 4, NULL, NULL, '2025-10-25 18:41:21'),
+(246, 2, 17, 'siswa', '0094063500', 5, NULL, NULL, '2025-10-23 12:55:47'),
+(247, 2, 18, 'siswa', '0094063500', 4, NULL, NULL, '2025-10-23 21:08:57'),
+(248, 2, 19, 'siswa', '0094063500', 4, NULL, NULL, '2025-10-15 22:40:31'),
+(249, 2, 20, 'siswa', '0094063500', 5, NULL, NULL, '2025-10-20 20:19:02'),
+(250, 2, 21, 'siswa', '0094063500', 4, NULL, NULL, '2025-10-18 12:51:22'),
+(251, 2, 22, 'siswa', '0094063500', 4, NULL, NULL, '2025-10-18 12:50:19'),
+(252, 2, 23, 'siswa', '0094063500', 4, NULL, NULL, '2025-10-21 17:59:08'),
+(253, 2, 24, 'siswa', '0094063500', 5, NULL, NULL, '2025-10-16 11:53:50'),
+(254, 2, 25, 'siswa', '0094063500', 5, NULL, NULL, '2025-10-16 22:23:09'),
+(255, 2, 26, 'siswa', '0094063500', 5, NULL, NULL, '2025-10-23 20:35:28'),
+(256, 2, 27, 'siswa', '0094063500', 5, NULL, NULL, '2025-10-22 16:25:25'),
+(257, 2, 28, 'siswa', '0094063500', 5, NULL, NULL, '2025-10-31 12:43:36'),
+(258, 2, 29, 'siswa', '0094063500', 5, NULL, NULL, '2025-10-25 14:18:15'),
+(259, 2, 30, 'siswa', '0094063500', 4, NULL, NULL, '2025-10-15 09:31:11'),
+(260, 2, 31, 'siswa', '0094063500', 4, NULL, NULL, '2025-10-23 12:52:31'),
+(261, 2, 12, 'siswa', '0096325350', 4, NULL, NULL, '2025-10-24 17:38:15'),
+(262, 2, 13, 'siswa', '0096325350', 4, NULL, NULL, '2025-10-29 13:11:50'),
+(263, 2, 14, 'siswa', '0096325350', 5, NULL, NULL, '2025-10-30 16:54:54'),
+(264, 2, 15, 'siswa', '0096325350', 5, NULL, NULL, '2025-10-22 18:16:12'),
+(265, 2, 16, 'siswa', '0096325350', 4, NULL, NULL, '2025-10-24 08:25:03'),
+(266, 2, 17, 'siswa', '0096325350', 4, NULL, NULL, '2025-10-17 16:14:37'),
+(267, 2, 18, 'siswa', '0096325350', 4, NULL, NULL, '2025-10-16 13:27:14'),
+(268, 2, 19, 'siswa', '0096325350', 5, NULL, NULL, '2025-10-21 14:00:43'),
+(269, 2, 20, 'siswa', '0096325350', 5, NULL, NULL, '2025-10-31 21:39:33'),
+(270, 2, 21, 'siswa', '0096325350', 5, NULL, NULL, '2025-10-21 17:48:13'),
+(271, 2, 22, 'siswa', '0096325350', 5, NULL, NULL, '2025-10-29 11:31:56'),
+(272, 2, 23, 'siswa', '0096325350', 4, NULL, NULL, '2025-10-28 16:23:19'),
+(273, 2, 24, 'siswa', '0096325350', 4, NULL, NULL, '2025-10-19 22:06:35'),
+(274, 2, 25, 'siswa', '0096325350', 5, NULL, NULL, '2025-10-22 13:23:51'),
+(275, 2, 26, 'siswa', '0096325350', 4, NULL, NULL, '2025-10-18 17:31:40'),
+(276, 2, 27, 'siswa', '0096325350', 5, NULL, NULL, '2025-10-16 20:07:03'),
+(277, 2, 28, 'siswa', '0096325350', 5, NULL, NULL, '2025-10-23 16:24:22'),
+(278, 2, 29, 'siswa', '0096325350', 5, NULL, NULL, '2025-10-30 18:55:24'),
+(279, 2, 30, 'siswa', '0096325350', 4, NULL, NULL, '2025-10-19 12:54:34'),
+(280, 2, 31, 'siswa', '0096325350', 4, NULL, NULL, '2025-10-16 21:12:22'),
+(281, 2, 12, 'siswa', '0098026915', 4, NULL, NULL, '2025-10-20 17:08:54'),
+(282, 2, 13, 'siswa', '0098026915', 4, NULL, NULL, '2025-10-30 09:40:11'),
+(283, 2, 14, 'siswa', '0098026915', 5, NULL, NULL, '2025-10-31 11:05:49'),
+(284, 2, 15, 'siswa', '0098026915', 5, NULL, NULL, '2025-10-27 12:04:32'),
+(285, 2, 16, 'siswa', '0098026915', 4, NULL, NULL, '2025-10-27 10:44:11'),
+(286, 2, 17, 'siswa', '0098026915', 5, NULL, NULL, '2025-10-31 20:17:53'),
+(287, 2, 18, 'siswa', '0098026915', 5, NULL, NULL, '2025-10-17 10:18:04'),
+(288, 2, 19, 'siswa', '0098026915', 4, NULL, NULL, '2025-10-28 17:59:00'),
+(289, 2, 20, 'siswa', '0098026915', 4, NULL, NULL, '2025-10-18 22:04:32'),
+(290, 2, 21, 'siswa', '0098026915', 4, NULL, NULL, '2025-10-28 16:20:02'),
+(291, 2, 22, 'siswa', '0098026915', 4, NULL, NULL, '2025-10-30 21:47:13'),
+(292, 2, 23, 'siswa', '0098026915', 5, NULL, NULL, '2025-10-20 11:13:23'),
+(293, 2, 24, 'siswa', '0098026915', 4, NULL, NULL, '2025-10-21 20:08:09'),
+(294, 2, 25, 'siswa', '0098026915', 4, NULL, NULL, '2025-10-24 15:56:09'),
+(295, 2, 26, 'siswa', '0098026915', 5, NULL, NULL, '2025-10-22 12:10:57'),
+(296, 2, 27, 'siswa', '0098026915', 4, NULL, NULL, '2025-10-20 21:36:16'),
+(297, 2, 28, 'siswa', '0098026915', 5, NULL, NULL, '2025-10-29 18:50:09'),
+(298, 2, 29, 'siswa', '0098026915', 4, NULL, NULL, '2025-10-31 21:37:25'),
+(299, 2, 30, 'siswa', '0098026915', 4, NULL, NULL, '2025-10-17 20:39:52'),
+(300, 2, 31, 'siswa', '0098026915', 4, NULL, NULL, '2025-10-18 22:05:37'),
+(301, 2, 12, 'siswa', '0101839911', 5, NULL, NULL, '2025-10-23 22:13:15'),
+(302, 2, 13, 'siswa', '0101839911', 5, NULL, NULL, '2025-10-20 19:48:48'),
+(303, 2, 14, 'siswa', '0101839911', 5, NULL, NULL, '2025-10-24 21:01:20'),
+(304, 2, 15, 'siswa', '0101839911', 5, NULL, NULL, '2025-10-15 12:20:51'),
+(305, 2, 16, 'siswa', '0101839911', 4, NULL, NULL, '2025-10-31 19:09:23'),
+(306, 2, 17, 'siswa', '0101839911', 5, NULL, NULL, '2025-10-20 09:38:51'),
+(307, 2, 18, 'siswa', '0101839911', 4, NULL, NULL, '2025-10-17 16:34:07'),
+(308, 2, 19, 'siswa', '0101839911', 5, NULL, NULL, '2025-10-16 17:01:11'),
+(309, 2, 20, 'siswa', '0101839911', 5, NULL, NULL, '2025-10-15 11:16:37'),
+(310, 2, 21, 'siswa', '0101839911', 4, NULL, NULL, '2025-10-22 14:45:33'),
+(311, 2, 22, 'siswa', '0101839911', 5, NULL, NULL, '2025-10-30 22:12:04'),
+(312, 2, 23, 'siswa', '0101839911', 5, NULL, NULL, '2025-10-25 19:56:24'),
+(313, 2, 24, 'siswa', '0101839911', 4, NULL, NULL, '2025-10-31 09:29:14'),
+(314, 2, 25, 'siswa', '0101839911', 5, NULL, NULL, '2025-10-15 21:21:06'),
+(315, 2, 26, 'siswa', '0101839911', 4, NULL, NULL, '2025-10-15 18:23:55'),
+(316, 2, 27, 'siswa', '0101839911', 4, NULL, NULL, '2025-10-21 15:26:41'),
+(317, 2, 28, 'siswa', '0101839911', 4, NULL, NULL, '2025-10-24 15:52:49'),
+(318, 2, 29, 'siswa', '0101839911', 4, NULL, NULL, '2025-10-28 16:37:21'),
+(319, 2, 30, 'siswa', '0101839911', 5, NULL, NULL, '2025-10-20 22:53:32'),
+(320, 2, 31, 'siswa', '0101839911', 4, NULL, NULL, '2025-10-23 15:56:13'),
+(321, 2, 12, 'siswa', '0103361826', 4, NULL, NULL, '2025-10-27 22:26:23'),
+(322, 2, 13, 'siswa', '0103361826', 5, NULL, NULL, '2025-10-28 09:19:11'),
+(323, 2, 14, 'siswa', '0103361826', 4, NULL, NULL, '2025-10-25 22:58:58'),
+(324, 2, 15, 'siswa', '0103361826', 5, NULL, NULL, '2025-10-31 20:25:31'),
+(325, 2, 16, 'siswa', '0103361826', 4, NULL, NULL, '2025-10-16 14:00:40'),
+(326, 2, 17, 'siswa', '0103361826', 4, NULL, NULL, '2025-10-30 12:42:44'),
+(327, 2, 18, 'siswa', '0103361826', 5, NULL, NULL, '2025-10-23 22:18:36'),
+(328, 2, 19, 'siswa', '0103361826', 4, NULL, NULL, '2025-10-30 11:13:31'),
+(329, 2, 20, 'siswa', '0103361826', 5, NULL, NULL, '2025-10-17 22:17:35'),
+(330, 2, 21, 'siswa', '0103361826', 4, NULL, NULL, '2025-10-28 16:24:21'),
+(331, 2, 22, 'siswa', '0103361826', 5, NULL, NULL, '2025-10-31 08:18:23'),
+(332, 2, 23, 'siswa', '0103361826', 4, NULL, NULL, '2025-10-16 11:59:11'),
+(333, 2, 24, 'siswa', '0103361826', 4, NULL, NULL, '2025-10-22 12:07:42'),
+(334, 2, 25, 'siswa', '0103361826', 4, NULL, NULL, '2025-10-25 16:58:14'),
+(335, 2, 26, 'siswa', '0103361826', 4, NULL, NULL, '2025-10-22 17:49:09'),
+(336, 2, 27, 'siswa', '0103361826', 4, NULL, NULL, '2025-10-18 08:39:07'),
+(337, 2, 28, 'siswa', '0103361826', 5, NULL, NULL, '2025-10-28 09:58:38'),
+(338, 2, 29, 'siswa', '0103361826', 4, NULL, NULL, '2025-10-24 19:18:12'),
+(339, 2, 30, 'siswa', '0103361826', 4, NULL, NULL, '2025-10-29 08:26:11'),
+(340, 2, 31, 'siswa', '0103361826', 5, NULL, NULL, '2025-10-27 19:28:09'),
+(341, 2, 12, 'siswa', '0104991736', 4, NULL, NULL, '2025-10-18 09:42:18'),
+(342, 2, 13, 'siswa', '0104991736', 4, NULL, NULL, '2025-10-20 11:11:16'),
+(343, 2, 14, 'siswa', '0104991736', 5, NULL, NULL, '2025-10-20 08:11:52'),
+(344, 2, 15, 'siswa', '0104991736', 5, NULL, NULL, '2025-10-21 13:54:21'),
+(345, 2, 16, 'siswa', '0104991736', 4, NULL, NULL, '2025-10-19 11:14:30'),
+(346, 2, 17, 'siswa', '0104991736', 5, NULL, NULL, '2025-10-26 21:30:46'),
+(347, 2, 18, 'siswa', '0104991736', 4, NULL, NULL, '2025-10-24 16:10:12'),
+(348, 2, 19, 'siswa', '0104991736', 5, NULL, NULL, '2025-10-30 22:09:53'),
+(349, 2, 20, 'siswa', '0104991736', 5, NULL, NULL, '2025-10-18 09:51:01'),
+(350, 2, 21, 'siswa', '0104991736', 5, NULL, NULL, '2025-10-27 21:23:12'),
+(351, 2, 22, 'siswa', '0104991736', 5, NULL, NULL, '2025-10-29 15:01:37'),
+(352, 2, 23, 'siswa', '0104991736', 4, NULL, NULL, '2025-10-22 22:29:34'),
+(353, 2, 24, 'siswa', '0104991736', 4, NULL, NULL, '2025-10-20 14:03:03'),
+(354, 2, 25, 'siswa', '0104991736', 4, NULL, NULL, '2025-10-24 11:36:18'),
+(355, 2, 26, 'siswa', '0104991736', 5, NULL, NULL, '2025-10-25 22:03:21'),
+(356, 2, 27, 'siswa', '0104991736', 5, NULL, NULL, '2025-10-29 14:47:35'),
+(357, 2, 28, 'siswa', '0104991736', 5, NULL, NULL, '2025-10-15 14:58:40'),
+(358, 2, 29, 'siswa', '0104991736', 4, NULL, NULL, '2025-10-16 08:06:23'),
+(359, 2, 30, 'siswa', '0104991736', 5, NULL, NULL, '2025-10-28 10:21:23'),
+(360, 2, 31, 'siswa', '0104991736', 5, NULL, NULL, '2025-10-16 22:30:39'),
+(361, 2, 12, 'siswa', '0105778035', 5, NULL, NULL, '2025-10-30 11:23:17'),
+(362, 2, 13, 'siswa', '0105778035', 4, NULL, NULL, '2025-10-22 13:25:07'),
+(363, 2, 14, 'siswa', '0105778035', 4, NULL, NULL, '2025-10-21 20:08:07'),
+(364, 2, 15, 'siswa', '0105778035', 4, NULL, NULL, '2025-10-25 15:36:32'),
+(365, 2, 16, 'siswa', '0105778035', 5, NULL, NULL, '2025-10-29 15:07:00'),
+(366, 2, 17, 'siswa', '0105778035', 5, NULL, NULL, '2025-10-23 11:50:26'),
+(367, 2, 18, 'siswa', '0105778035', 5, NULL, NULL, '2025-10-19 12:30:42'),
+(368, 2, 19, 'siswa', '0105778035', 5, NULL, NULL, '2025-10-28 10:17:01'),
+(369, 2, 20, 'siswa', '0105778035', 4, NULL, NULL, '2025-10-17 21:08:58'),
+(370, 2, 21, 'siswa', '0105778035', 4, NULL, NULL, '2025-10-23 08:38:05'),
+(371, 2, 22, 'siswa', '0105778035', 5, NULL, NULL, '2025-10-23 21:00:19'),
+(372, 2, 23, 'siswa', '0105778035', 5, NULL, NULL, '2025-10-15 11:08:02'),
+(373, 2, 24, 'siswa', '0105778035', 5, NULL, NULL, '2025-10-24 17:19:48'),
+(374, 2, 25, 'siswa', '0105778035', 4, NULL, NULL, '2025-10-16 09:13:52'),
+(375, 2, 26, 'siswa', '0105778035', 5, NULL, NULL, '2025-10-28 22:32:42'),
+(376, 2, 27, 'siswa', '0105778035', 5, NULL, NULL, '2025-10-23 19:10:41'),
+(377, 2, 28, 'siswa', '0105778035', 5, NULL, NULL, '2025-10-22 14:59:34'),
+(378, 2, 29, 'siswa', '0105778035', 5, NULL, NULL, '2025-10-27 08:53:22'),
+(379, 2, 30, 'siswa', '0105778035', 4, NULL, NULL, '2025-10-29 17:40:28'),
+(380, 2, 31, 'siswa', '0105778035', 4, NULL, NULL, '2025-10-19 14:13:54'),
+(381, 2, 12, 'siswa', '0107037461', 5, NULL, NULL, '2025-10-20 11:09:04'),
+(382, 2, 13, 'siswa', '0107037461', 5, NULL, NULL, '2025-10-19 18:44:34'),
+(383, 2, 14, 'siswa', '0107037461', 5, NULL, NULL, '2025-10-22 12:09:54'),
+(384, 2, 15, 'siswa', '0107037461', 4, NULL, NULL, '2025-10-24 16:04:45'),
+(385, 2, 16, 'siswa', '0107037461', 5, NULL, NULL, '2025-10-25 12:35:07'),
+(386, 2, 17, 'siswa', '0107037461', 5, NULL, NULL, '2025-10-29 18:04:11'),
+(387, 2, 18, 'siswa', '0107037461', 5, NULL, NULL, '2025-10-17 14:42:16'),
+(388, 2, 19, 'siswa', '0107037461', 4, NULL, NULL, '2025-10-21 11:53:47'),
+(389, 2, 20, 'siswa', '0107037461', 4, NULL, NULL, '2025-10-19 13:56:41'),
+(390, 2, 21, 'siswa', '0107037461', 5, NULL, NULL, '2025-10-31 09:37:47'),
+(391, 2, 22, 'siswa', '0107037461', 4, NULL, NULL, '2025-10-28 22:22:00'),
+(392, 2, 23, 'siswa', '0107037461', 5, NULL, NULL, '2025-10-21 12:12:16'),
+(393, 2, 24, 'siswa', '0107037461', 5, NULL, NULL, '2025-10-25 09:30:17'),
+(394, 2, 25, 'siswa', '0107037461', 5, NULL, NULL, '2025-10-28 09:03:03'),
+(395, 2, 26, 'siswa', '0107037461', 4, NULL, NULL, '2025-10-23 22:30:36'),
+(396, 2, 27, 'siswa', '0107037461', 5, NULL, NULL, '2025-10-27 11:55:52'),
+(397, 2, 28, 'siswa', '0107037461', 5, NULL, NULL, '2025-10-22 15:02:43'),
+(398, 2, 29, 'siswa', '0107037461', 5, NULL, NULL, '2025-10-21 14:52:07'),
+(399, 2, 30, 'siswa', '0107037461', 4, NULL, NULL, '2025-10-27 16:37:27'),
+(400, 2, 31, 'siswa', '0107037461', 4, NULL, NULL, '2025-10-28 18:10:42'),
+(401, 2, 12, 'siswa', '12345678', 4, NULL, NULL, '2025-10-31 21:23:22'),
+(402, 2, 13, 'siswa', '12345678', 5, NULL, NULL, '2025-10-19 11:31:48'),
+(403, 2, 14, 'siswa', '12345678', 5, NULL, NULL, '2025-10-18 12:01:09'),
+(404, 2, 15, 'siswa', '12345678', 5, NULL, NULL, '2025-10-20 12:41:26'),
+(405, 2, 16, 'siswa', '12345678', 4, NULL, NULL, '2025-10-19 22:11:58'),
+(406, 2, 17, 'siswa', '12345678', 4, NULL, NULL, '2025-10-21 09:28:00'),
+(407, 2, 18, 'siswa', '12345678', 5, NULL, NULL, '2025-10-30 21:42:50'),
+(408, 2, 19, 'siswa', '12345678', 4, NULL, NULL, '2025-10-31 17:05:39'),
+(409, 2, 20, 'siswa', '12345678', 4, NULL, NULL, '2025-10-17 16:23:15'),
+(410, 2, 21, 'siswa', '12345678', 4, NULL, NULL, '2025-10-16 21:13:26'),
+(411, 2, 22, 'siswa', '12345678', 5, NULL, NULL, '2025-10-20 09:34:30'),
+(412, 2, 23, 'siswa', '12345678', 5, NULL, NULL, '2025-10-26 21:23:15'),
+(413, 2, 24, 'siswa', '12345678', 4, NULL, NULL, '2025-10-15 18:22:45'),
+(414, 2, 25, 'siswa', '12345678', 5, NULL, NULL, '2025-10-17 19:15:04'),
+(415, 2, 26, 'siswa', '12345678', 5, NULL, NULL, '2025-10-26 17:14:15'),
+(416, 2, 27, 'siswa', '12345678', 5, NULL, NULL, '2025-10-16 20:43:11'),
+(417, 2, 28, 'siswa', '12345678', 5, NULL, NULL, '2025-10-20 10:53:00'),
+(418, 2, 29, 'siswa', '12345678', 4, NULL, NULL, '2025-10-27 18:22:41'),
+(419, 2, 30, 'siswa', '12345678', 4, NULL, NULL, '2025-10-22 10:43:00'),
+(420, 2, 31, 'siswa', '12345678', 5, NULL, NULL, '2025-10-23 18:07:29'),
+(421, 2, 12, 'siswa', '3016839237', 4, NULL, NULL, '2025-10-29 10:08:14'),
+(422, 2, 13, 'siswa', '3016839237', 5, NULL, NULL, '2025-10-18 16:24:16'),
+(423, 2, 14, 'siswa', '3016839237', 4, NULL, NULL, '2025-10-30 22:17:30'),
+(424, 2, 15, 'siswa', '3016839237', 5, NULL, NULL, '2025-10-30 14:28:05'),
+(425, 2, 16, 'siswa', '3016839237', 5, NULL, NULL, '2025-10-27 16:38:33'),
+(426, 2, 17, 'siswa', '3016839237', 5, NULL, NULL, '2025-10-24 12:39:29'),
+(427, 2, 18, 'siswa', '3016839237', 4, NULL, NULL, '2025-10-31 13:03:04'),
+(428, 2, 19, 'siswa', '3016839237', 4, NULL, NULL, '2025-10-28 12:17:26'),
+(429, 2, 20, 'siswa', '3016839237', 4, NULL, NULL, '2025-10-22 09:15:58'),
+(430, 2, 21, 'siswa', '3016839237', 4, NULL, NULL, '2025-10-22 21:16:38'),
+(431, 2, 22, 'siswa', '3016839237', 4, NULL, NULL, '2025-10-31 17:19:44'),
+(432, 2, 23, 'siswa', '3016839237', 5, NULL, NULL, '2025-10-19 09:52:01'),
+(433, 2, 24, 'siswa', '3016839237', 5, NULL, NULL, '2025-10-24 10:16:47'),
+(434, 2, 25, 'siswa', '3016839237', 4, NULL, NULL, '2025-10-22 17:59:58'),
+(435, 2, 26, 'siswa', '3016839237', 5, NULL, NULL, '2025-10-25 14:18:14'),
+(436, 2, 27, 'siswa', '3016839237', 4, NULL, NULL, '2025-10-25 13:53:23'),
+(437, 2, 28, 'siswa', '3016839237', 4, NULL, NULL, '2025-10-18 12:42:44'),
+(438, 2, 29, 'siswa', '3016839237', 5, NULL, NULL, '2025-10-25 11:30:46'),
+(439, 2, 30, 'siswa', '3016839237', 4, NULL, NULL, '2025-10-19 15:35:27'),
+(440, 2, 31, 'siswa', '3016839237', 5, NULL, NULL, '2025-10-22 14:51:02'),
+(441, 2, 12, 'siswa', '3044755103', 5, NULL, NULL, '2025-10-15 12:22:56'),
+(442, 2, 13, 'siswa', '3044755103', 5, NULL, NULL, '2025-10-19 14:18:16'),
+(443, 2, 14, 'siswa', '3044755103', 4, NULL, NULL, '2025-10-22 19:37:46'),
+(444, 2, 15, 'siswa', '3044755103', 4, NULL, NULL, '2025-10-27 16:37:28'),
+(445, 2, 16, 'siswa', '3044755103', 5, NULL, NULL, '2025-10-16 22:25:20'),
+(446, 2, 17, 'siswa', '3044755103', 4, NULL, NULL, '2025-10-30 15:43:07'),
+(447, 2, 18, 'siswa', '3044755103', 4, NULL, NULL, '2025-10-30 10:09:17'),
+(448, 2, 19, 'siswa', '3044755103', 5, NULL, NULL, '2025-10-28 12:58:01'),
+(449, 2, 20, 'siswa', '3044755103', 4, NULL, NULL, '2025-10-31 10:58:20'),
+(450, 2, 21, 'siswa', '3044755103', 5, NULL, NULL, '2025-10-29 22:21:50'),
+(451, 2, 22, 'siswa', '3044755103', 4, NULL, NULL, '2025-10-18 16:13:25'),
+(452, 2, 23, 'siswa', '3044755103', 4, NULL, NULL, '2025-10-15 18:24:00'),
+(453, 2, 24, 'siswa', '3044755103', 5, NULL, NULL, '2025-10-30 11:30:47'),
+(454, 2, 25, 'siswa', '3044755103', 4, NULL, NULL, '2025-10-26 11:13:19'),
+(455, 2, 26, 'siswa', '3044755103', 5, NULL, NULL, '2025-10-28 09:03:02'),
+(456, 2, 27, 'siswa', '3044755103', 4, NULL, NULL, '2025-10-31 20:13:39'),
+(457, 2, 28, 'siswa', '3044755103', 5, NULL, NULL, '2025-10-30 20:25:38'),
+(458, 2, 29, 'siswa', '3044755103', 5, NULL, NULL, '2025-10-29 12:03:21'),
+(459, 2, 30, 'siswa', '3044755103', 5, NULL, NULL, '2025-10-16 16:25:28'),
+(460, 2, 31, 'siswa', '3044755103', 4, NULL, NULL, '2025-10-18 16:15:37'),
+(461, 2, 12, 'siswa', '3068576912', 4, NULL, NULL, '2025-10-29 11:37:25'),
+(462, 2, 13, 'siswa', '3068576912', 4, NULL, NULL, '2025-10-30 19:04:07'),
+(463, 2, 14, 'siswa', '3068576912', 4, NULL, NULL, '2025-10-24 17:27:24'),
+(464, 2, 15, 'siswa', '3068576912', 5, NULL, NULL, '2025-10-15 11:54:58'),
+(465, 2, 16, 'siswa', '3068576912', 4, NULL, NULL, '2025-10-28 15:12:29'),
+(466, 2, 17, 'siswa', '3068576912', 5, NULL, NULL, '2025-10-26 22:47:03'),
+(467, 2, 18, 'siswa', '3068576912', 5, NULL, NULL, '2025-10-20 21:33:05'),
+(468, 2, 19, 'siswa', '3068576912', 5, NULL, NULL, '2025-10-25 19:04:58'),
+(469, 2, 20, 'siswa', '3068576912', 5, NULL, NULL, '2025-10-20 18:29:20'),
+(470, 2, 21, 'siswa', '3068576912', 4, NULL, NULL, '2025-10-21 10:32:16'),
+(471, 2, 22, 'siswa', '3068576912', 5, NULL, NULL, '2025-10-27 17:54:37'),
+(472, 2, 23, 'siswa', '3068576912', 4, NULL, NULL, '2025-10-16 13:26:08'),
+(473, 2, 24, 'siswa', '3068576912', 4, NULL, NULL, '2025-10-25 22:49:16'),
+(474, 2, 25, 'siswa', '3068576912', 5, NULL, NULL, '2025-10-24 10:09:18'),
+(475, 2, 26, 'siswa', '3068576912', 4, NULL, NULL, '2025-10-19 11:27:31'),
+(476, 2, 27, 'siswa', '3068576912', 4, NULL, NULL, '2025-10-28 10:18:06'),
+(477, 2, 28, 'siswa', '3068576912', 5, NULL, NULL, '2025-10-31 21:30:52'),
+(478, 2, 29, 'siswa', '3068576912', 5, NULL, NULL, '2025-10-24 12:44:51'),
+(479, 2, 30, 'siswa', '3068576912', 4, NULL, NULL, '2025-10-30 11:27:33'),
+(480, 2, 31, 'siswa', '3068576912', 4, NULL, NULL, '2025-10-21 17:59:08'),
+(481, 2, 12, 'siswa', '3073203066', 5, NULL, NULL, '2025-10-31 19:00:44'),
+(482, 2, 13, 'siswa', '3073203066', 5, NULL, NULL, '2025-10-31 08:18:21'),
+(483, 2, 14, 'siswa', '3073203066', 5, NULL, NULL, '2025-10-20 20:22:20'),
+(484, 2, 15, 'siswa', '3073203066', 5, NULL, NULL, '2025-10-27 21:25:23'),
+(485, 2, 16, 'siswa', '3073203066', 5, NULL, NULL, '2025-10-20 14:09:32'),
+(486, 2, 17, 'siswa', '3073203066', 4, NULL, NULL, '2025-10-26 17:01:17'),
+(487, 2, 18, 'siswa', '3073203066', 4, NULL, NULL, '2025-10-15 21:29:44'),
+(488, 2, 19, 'siswa', '3073203066', 4, NULL, NULL, '2025-10-29 19:08:24'),
+(489, 2, 20, 'siswa', '3073203066', 5, NULL, NULL, '2025-10-16 13:32:41'),
+(490, 2, 21, 'siswa', '3073203066', 5, NULL, NULL, '2025-10-31 16:45:09'),
+(491, 2, 22, 'siswa', '3073203066', 4, NULL, NULL, '2025-10-15 16:48:19'),
+(492, 2, 23, 'siswa', '3073203066', 4, NULL, NULL, '2025-10-30 09:35:45'),
+(493, 2, 24, 'siswa', '3073203066', 4, NULL, NULL, '2025-10-28 20:50:43'),
+(494, 2, 25, 'siswa', '3073203066', 4, NULL, NULL, '2025-10-22 18:20:34'),
+(495, 2, 26, 'siswa', '3073203066', 5, NULL, NULL, '2025-10-24 12:38:22'),
+(496, 2, 27, 'siswa', '3073203066', 5, NULL, NULL, '2025-10-25 10:10:18'),
+(497, 2, 28, 'siswa', '3073203066', 5, NULL, NULL, '2025-10-31 20:14:47'),
+(498, 2, 29, 'siswa', '3073203066', 4, NULL, NULL, '2025-10-28 10:34:19'),
+(499, 2, 30, 'siswa', '3073203066', 5, NULL, NULL, '2025-10-22 17:42:41'),
+(500, 2, 31, 'siswa', '3073203066', 4, NULL, NULL, '2025-10-24 18:01:54'),
+(501, 2, 12, 'siswa', '3091558263', 5, NULL, NULL, '2025-10-29 17:31:48'),
+(502, 2, 13, 'siswa', '3091558263', 4, NULL, NULL, '2025-10-15 17:11:00'),
+(503, 2, 14, 'siswa', '3091558263', 4, NULL, NULL, '2025-10-19 21:48:19'),
+(504, 2, 15, 'siswa', '3091558263', 4, NULL, NULL, '2025-10-29 18:55:36'),
+(505, 2, 16, 'siswa', '3091558263', 4, NULL, NULL, '2025-10-20 08:08:34'),
+(506, 2, 17, 'siswa', '3091558263', 4, NULL, NULL, '2025-10-22 08:42:28'),
+(507, 2, 18, 'siswa', '3091558263', 4, NULL, NULL, '2025-10-27 22:37:13'),
+(508, 2, 19, 'siswa', '3091558263', 4, NULL, NULL, '2025-10-24 10:56:18'),
+(509, 2, 20, 'siswa', '3091558263', 5, NULL, NULL, '2025-10-28 18:00:00'),
+(510, 2, 21, 'siswa', '3091558263', 4, NULL, NULL, '2025-10-19 09:51:52'),
+(511, 2, 22, 'siswa', '3091558263', 5, NULL, NULL, '2025-10-24 11:30:50'),
+(512, 2, 23, 'siswa', '3091558263', 5, NULL, NULL, '2025-10-16 10:29:05'),
+(513, 2, 24, 'siswa', '3091558263', 5, NULL, NULL, '2025-10-23 15:08:12'),
+(514, 2, 25, 'siswa', '3091558263', 5, NULL, NULL, '2025-10-20 20:04:57'),
+(515, 2, 26, 'siswa', '3091558263', 5, NULL, NULL, '2025-10-16 17:57:50'),
+(516, 2, 27, 'siswa', '3091558263', 4, NULL, NULL, '2025-10-17 17:54:35'),
+(517, 2, 28, 'siswa', '3091558263', 4, NULL, NULL, '2025-10-18 15:45:23'),
+(518, 2, 29, 'siswa', '3091558263', 5, NULL, NULL, '2025-10-15 13:35:54'),
+(519, 2, 30, 'siswa', '3091558263', 5, NULL, NULL, '2025-10-31 19:43:24'),
+(520, 2, 31, 'siswa', '3091558263', 5, NULL, NULL, '2025-10-17 08:52:11'),
+(521, 2, 12, 'siswa', '3124368879', 4, NULL, NULL, '2025-10-17 18:03:10'),
+(522, 2, 13, 'siswa', '3124368879', 5, NULL, NULL, '2025-10-16 11:01:20'),
+(523, 2, 14, 'siswa', '3124368879', 5, NULL, NULL, '2025-10-17 19:28:04'),
+(524, 2, 15, 'siswa', '3124368879', 5, NULL, NULL, '2025-10-24 20:40:46'),
+(525, 2, 16, 'siswa', '3124368879', 5, NULL, NULL, '2025-10-29 20:33:19'),
+(526, 2, 17, 'siswa', '3124368879', 5, NULL, NULL, '2025-10-24 22:16:28'),
+(527, 2, 18, 'siswa', '3124368879', 5, NULL, NULL, '2025-10-20 22:46:02'),
+(528, 2, 19, 'siswa', '3124368879', 5, NULL, NULL, '2025-10-18 12:01:10'),
+(529, 2, 20, 'siswa', '3124368879', 5, NULL, NULL, '2025-10-24 12:48:08'),
+(530, 2, 21, 'siswa', '3124368879', 4, NULL, NULL, '2025-10-19 10:10:18'),
+(531, 2, 22, 'siswa', '3124368879', 4, NULL, NULL, '2025-10-21 18:20:37'),
+(532, 2, 23, 'siswa', '3124368879', 4, NULL, NULL, '2025-10-23 12:51:30'),
+(533, 2, 24, 'siswa', '3124368879', 5, NULL, NULL, '2025-10-17 22:29:28'),
+(534, 2, 25, 'siswa', '3124368879', 5, NULL, NULL, '2025-10-18 09:07:12'),
+(535, 2, 26, 'siswa', '3124368879', 5, NULL, NULL, '2025-10-28 21:05:47'),
+(536, 2, 27, 'siswa', '3124368879', 5, NULL, NULL, '2025-10-17 15:10:22'),
+(537, 2, 28, 'siswa', '3124368879', 4, NULL, NULL, '2025-10-25 22:07:39'),
+(538, 2, 29, 'siswa', '3124368879', 5, NULL, NULL, '2025-10-26 17:11:58'),
+(539, 2, 30, 'siswa', '3124368879', 4, NULL, NULL, '2025-10-27 19:40:01'),
+(540, 2, 31, 'siswa', '3124368879', 4, NULL, NULL, '2025-10-19 08:28:15'),
+(541, 2, 12, 'siswa', '3128153661', 5, NULL, NULL, '2025-10-26 18:19:38'),
+(542, 2, 13, 'siswa', '3128153661', 4, NULL, NULL, '2025-10-19 15:40:58'),
+(543, 2, 14, 'siswa', '3128153661', 5, NULL, NULL, '2025-10-16 09:12:43'),
+(544, 2, 15, 'siswa', '3128153661', 4, NULL, NULL, '2025-10-29 10:26:36'),
+(545, 2, 16, 'siswa', '3128153661', 5, NULL, NULL, '2025-10-31 17:11:02'),
+(546, 2, 17, 'siswa', '3128153661', 5, NULL, NULL, '2025-10-31 08:21:37'),
+(547, 2, 18, 'siswa', '3128153661', 4, NULL, NULL, '2025-10-18 22:22:52'),
+(548, 2, 19, 'siswa', '3128153661', 4, NULL, NULL, '2025-10-25 12:47:58'),
+(549, 2, 20, 'siswa', '3128153661', 5, NULL, NULL, '2025-10-27 09:14:57'),
+(550, 2, 21, 'siswa', '3128153661', 4, NULL, NULL, '2025-10-20 17:59:06'),
+(551, 2, 22, 'siswa', '3128153661', 5, NULL, NULL, '2025-10-24 09:52:00'),
+(552, 2, 23, 'siswa', '3128153661', 4, NULL, NULL, '2025-10-15 22:39:24'),
+(553, 2, 24, 'siswa', '3128153661', 4, NULL, NULL, '2025-10-18 20:32:12'),
+(554, 2, 25, 'siswa', '3128153661', 4, NULL, NULL, '2025-10-22 21:14:30'),
+(555, 2, 26, 'siswa', '3128153661', 5, NULL, NULL, '2025-10-24 14:22:35'),
+(556, 2, 27, 'siswa', '3128153661', 5, NULL, NULL, '2025-10-22 19:28:04'),
+(557, 2, 28, 'siswa', '3128153661', 5, NULL, NULL, '2025-10-23 19:11:41'),
+(558, 2, 29, 'siswa', '3128153661', 5, NULL, NULL, '2025-10-22 15:02:49'),
+(559, 2, 30, 'siswa', '3128153661', 4, NULL, NULL, '2025-10-24 20:29:56'),
+(560, 2, 31, 'siswa', '3128153661', 4, NULL, NULL, '2025-10-18 14:31:21'),
+(561, 2, 12, 'siswa', '3745065752', 4, NULL, NULL, '2025-10-30 21:54:48'),
+(562, 2, 13, 'siswa', '3745065752', 4, NULL, NULL, '2025-10-15 13:33:45'),
+(563, 2, 14, 'siswa', '3745065752', 4, NULL, NULL, '2025-10-19 22:05:31'),
+(564, 2, 15, 'siswa', '3745065752', 4, NULL, NULL, '2025-10-20 14:19:14'),
+(565, 2, 16, 'siswa', '3745065752', 4, NULL, NULL, '2025-10-21 13:38:05'),
+(566, 2, 17, 'siswa', '3745065752', 5, NULL, NULL, '2025-10-22 15:08:17'),
+(567, 2, 18, 'siswa', '3745065752', 4, NULL, NULL, '2025-10-18 22:14:17'),
+(568, 2, 19, 'siswa', '3745065752', 5, NULL, NULL, '2025-10-28 19:35:32'),
+(569, 2, 20, 'siswa', '3745065752', 5, NULL, NULL, '2025-10-18 09:50:55'),
+(570, 2, 21, 'siswa', '3745065752', 4, NULL, NULL, '2025-10-29 19:23:40'),
+(571, 2, 22, 'siswa', '3745065752', 4, NULL, NULL, '2025-10-26 08:13:57'),
+(572, 2, 23, 'siswa', '3745065752', 4, NULL, NULL, '2025-10-26 10:43:07'),
+(573, 2, 24, 'siswa', '3745065752', 4, NULL, NULL, '2025-10-30 09:49:50'),
+(574, 2, 25, 'siswa', '3745065752', 5, NULL, NULL, '2025-10-15 10:29:05'),
+(575, 2, 26, 'siswa', '3745065752', 5, NULL, NULL, '2025-10-25 10:56:12'),
+(576, 2, 27, 'siswa', '3745065752', 4, NULL, NULL, '2025-10-22 16:28:42'),
+(577, 2, 28, 'siswa', '3745065752', 4, NULL, NULL, '2025-10-23 09:54:20'),
+(578, 2, 29, 'siswa', '3745065752', 5, NULL, NULL, '2025-10-29 13:17:17'),
+(579, 2, 30, 'siswa', '3745065752', 5, NULL, NULL, '2025-10-20 17:10:02'),
+(580, 2, 31, 'siswa', '3745065752', 5, NULL, NULL, '2025-10-17 19:25:49'),
+(581, 2, 12, 'siswa', '3839354749', 5, NULL, NULL, '2025-10-27 10:45:09'),
+(582, 2, 13, 'siswa', '3839354749', 5, NULL, NULL, '2025-10-19 17:28:26'),
+(583, 2, 14, 'siswa', '3839354749', 5, NULL, NULL, '2025-10-21 19:32:27'),
+(584, 2, 15, 'siswa', '3839354749', 5, NULL, NULL, '2025-10-30 18:41:22'),
+(585, 2, 16, 'siswa', '3839354749', 5, NULL, NULL, '2025-10-27 11:10:05'),
+(586, 2, 17, 'siswa', '3839354749', 5, NULL, NULL, '2025-10-24 20:25:42'),
+(587, 2, 18, 'siswa', '3839354749', 4, NULL, NULL, '2025-10-18 09:59:36'),
+(588, 2, 19, 'siswa', '3839354749', 4, NULL, NULL, '2025-10-27 13:42:21'),
+(589, 2, 20, 'siswa', '3839354749', 5, NULL, NULL, '2025-10-21 21:13:29'),
+(590, 2, 21, 'siswa', '3839354749', 5, NULL, NULL, '2025-10-19 11:11:18'),
+(591, 2, 22, 'siswa', '3839354749', 5, NULL, NULL, '2025-10-28 09:12:41'),
+(592, 2, 23, 'siswa', '3839354749', 5, NULL, NULL, '2025-10-16 21:19:52'),
+(593, 2, 24, 'siswa', '3839354749', 4, NULL, NULL, '2025-10-22 21:14:29'),
+(594, 2, 25, 'siswa', '3839354749', 5, NULL, NULL, '2025-10-20 13:44:39'),
+(595, 2, 26, 'siswa', '3839354749', 4, NULL, NULL, '2025-10-22 08:38:14'),
+(596, 2, 27, 'siswa', '3839354749', 4, NULL, NULL, '2025-10-22 17:45:52'),
+(597, 2, 28, 'siswa', '3839354749', 4, NULL, NULL, '2025-10-16 22:29:37'),
+(598, 2, 29, 'siswa', '3839354749', 5, NULL, NULL, '2025-10-19 16:51:38'),
+(599, 2, 30, 'siswa', '3839354749', 5, NULL, NULL, '2025-10-21 08:48:03'),
+(600, 2, 31, 'siswa', '3839354749', 5, NULL, NULL, '2025-10-18 11:47:08'),
+(601, 2, 12, 'siswa', '3898374246', 4, NULL, NULL, '2025-10-22 22:37:10'),
+(602, 2, 13, 'siswa', '3898374246', 4, NULL, NULL, '2025-10-26 10:53:55'),
+(603, 2, 14, 'siswa', '3898374246', 5, NULL, NULL, '2025-10-30 19:57:36'),
+(604, 2, 15, 'siswa', '3898374246', 4, NULL, NULL, '2025-10-15 17:02:19'),
+(605, 2, 16, 'siswa', '3898374246', 4, NULL, NULL, '2025-10-23 09:58:32'),
+(606, 2, 17, 'siswa', '3898374246', 5, NULL, NULL, '2025-10-18 19:13:50'),
+(607, 2, 18, 'siswa', '3898374246', 4, NULL, NULL, '2025-10-30 08:34:43'),
+(608, 2, 19, 'siswa', '3898374246', 5, NULL, NULL, '2025-10-19 17:30:35'),
+(609, 2, 20, 'siswa', '3898374246', 4, NULL, NULL, '2025-10-17 16:25:26'),
+(610, 2, 21, 'siswa', '3898374246', 5, NULL, NULL, '2025-10-18 14:28:04'),
+(611, 2, 22, 'siswa', '3898374246', 5, NULL, NULL, '2025-10-24 22:14:14'),
+(612, 2, 23, 'siswa', '3898374246', 4, NULL, NULL, '2025-10-27 10:34:25'),
+(613, 2, 24, 'siswa', '3898374246', 4, NULL, NULL, '2025-10-24 19:00:49'),
+(614, 2, 25, 'siswa', '3898374246', 4, NULL, NULL, '2025-10-29 09:02:49'),
+(615, 2, 26, 'siswa', '3898374246', 4, NULL, NULL, '2025-10-26 11:13:23'),
+(616, 2, 27, 'siswa', '3898374246', 4, NULL, NULL, '2025-10-20 18:31:29'),
+(617, 2, 28, 'siswa', '3898374246', 5, NULL, NULL, '2025-10-18 10:08:15'),
+(618, 2, 29, 'siswa', '3898374246', 5, NULL, NULL, '2025-10-27 21:12:25'),
+(619, 2, 30, 'siswa', '3898374246', 5, NULL, NULL, '2025-10-20 22:58:57'),
+(620, 2, 31, 'siswa', '3898374246', 5, NULL, NULL, '2025-10-19 22:50:25'),
+(621, 2, 12, 'siswa', '3957922406', 5, NULL, NULL, '2025-10-24 09:50:52'),
+(622, 2, 13, 'siswa', '3957922406', 5, NULL, NULL, '2025-10-27 08:05:15'),
+(623, 2, 14, 'siswa', '3957922406', 4, NULL, NULL, '2025-10-19 11:28:38'),
+(624, 2, 15, 'siswa', '3957922406', 5, NULL, NULL, '2025-10-30 13:05:17'),
+(625, 2, 16, 'siswa', '3957922406', 4, NULL, NULL, '2025-10-15 15:29:56'),
+(626, 2, 17, 'siswa', '3957922406', 4, NULL, NULL, '2025-10-21 11:59:17'),
+(627, 2, 18, 'siswa', '3957922406', 4, NULL, NULL, '2025-10-21 17:04:24'),
+(628, 2, 19, 'siswa', '3957922406', 5, NULL, NULL, '2025-10-29 20:28:58'),
+(629, 2, 20, 'siswa', '3957922406', 4, NULL, NULL, '2025-10-22 18:10:49'),
+(630, 2, 21, 'siswa', '3957922406', 5, NULL, NULL, '2025-10-23 20:31:08'),
+(631, 2, 22, 'siswa', '3957922406', 4, NULL, NULL, '2025-10-18 17:40:22'),
+(632, 2, 23, 'siswa', '3957922406', 5, NULL, NULL, '2025-10-17 09:14:50'),
+(633, 2, 24, 'siswa', '3957922406', 4, NULL, NULL, '2025-10-26 08:03:13'),
+(634, 2, 25, 'siswa', '3957922406', 4, NULL, NULL, '2025-10-21 19:50:49'),
+(635, 2, 26, 'siswa', '3957922406', 5, NULL, NULL, '2025-10-23 20:31:10'),
+(636, 2, 27, 'siswa', '3957922406', 4, NULL, NULL, '2025-10-31 21:42:46'),
+(637, 2, 28, 'siswa', '3957922406', 5, NULL, NULL, '2025-10-25 17:16:31'),
+(638, 2, 29, 'siswa', '3957922406', 5, NULL, NULL, '2025-10-25 16:54:52'),
+(639, 2, 30, 'siswa', '3957922406', 5, NULL, NULL, '2025-10-26 12:35:59'),
+(640, 2, 31, 'siswa', '3957922406', 4, NULL, NULL, '2025-10-16 20:53:57'),
+(641, 2, 12, 'siswa', '0014946300', 4, NULL, NULL, '2025-10-25 18:38:08'),
+(642, 2, 13, 'siswa', '0014946300', 5, NULL, NULL, '2025-10-23 09:03:58'),
+(643, 2, 14, 'siswa', '0014946300', 5, NULL, NULL, '2025-10-22 12:09:50'),
+(644, 2, 15, 'siswa', '0014946300', 5, NULL, NULL, '2025-10-19 09:47:32'),
+(645, 2, 16, 'siswa', '0014946300', 4, NULL, NULL, '2025-10-17 17:51:20'),
+(646, 2, 17, 'siswa', '0014946300', 4, NULL, NULL, '2025-10-22 21:09:06'),
+(647, 2, 18, 'siswa', '0014946300', 4, NULL, NULL, '2025-10-18 16:26:25'),
+(648, 2, 19, 'siswa', '0014946300', 5, NULL, NULL, '2025-10-27 11:56:02'),
+(649, 2, 20, 'siswa', '0014946300', 4, NULL, NULL, '2025-10-28 19:26:57'),
+(650, 2, 21, 'siswa', '0014946300', 4, NULL, NULL, '2025-10-19 10:54:05'),
+(651, 2, 22, 'siswa', '0014946300', 5, NULL, NULL, '2025-10-18 08:35:46'),
+(652, 2, 23, 'siswa', '0014946300', 4, NULL, NULL, '2025-10-19 08:18:26'),
+(653, 2, 24, 'siswa', '0014946300', 4, NULL, NULL, '2025-10-16 17:46:03'),
+(654, 2, 25, 'siswa', '0014946300', 5, NULL, NULL, '2025-10-25 10:00:32'),
+(655, 2, 26, 'siswa', '0014946300', 5, NULL, NULL, '2025-10-28 21:07:55'),
+(656, 2, 27, 'siswa', '0014946300', 4, NULL, NULL, '2025-10-25 11:22:09'),
+(657, 2, 28, 'siswa', '0014946300', 5, NULL, NULL, '2025-10-27 19:42:11'),
+(658, 2, 29, 'siswa', '0014946300', 5, NULL, NULL, '2025-10-26 19:47:42'),
+(659, 2, 30, 'siswa', '0014946300', 4, NULL, NULL, '2025-10-28 13:32:32'),
+(660, 2, 31, 'siswa', '0014946300', 4, NULL, NULL, '2025-10-27 15:16:51'),
+(661, 2, 12, 'siswa', '0028290024', 5, NULL, NULL, '2025-10-31 11:13:29'),
+(662, 2, 13, 'siswa', '0028290024', 5, NULL, NULL, '2025-10-21 16:35:21'),
+(663, 2, 14, 'siswa', '0028290024', 4, NULL, NULL, '2025-10-31 21:27:38'),
+(664, 2, 15, 'siswa', '0028290024', 5, NULL, NULL, '2025-10-17 13:15:15'),
+(665, 2, 16, 'siswa', '0028290024', 4, NULL, NULL, '2025-10-26 22:47:04'),
+(666, 2, 17, 'siswa', '0028290024', 5, NULL, NULL, '2025-10-27 18:16:16'),
+(667, 2, 18, 'siswa', '0028290024', 5, NULL, NULL, '2025-10-28 15:10:15'),
+(668, 2, 19, 'siswa', '0028290024', 5, NULL, NULL, '2025-10-20 09:42:06'),
+(669, 2, 20, 'siswa', '0028290024', 4, NULL, NULL, '2025-10-30 11:23:16'),
+(670, 2, 21, 'siswa', '0028290024', 4, NULL, NULL, '2025-10-16 08:40:22'),
+(671, 2, 22, 'siswa', '0028290024', 5, NULL, NULL, '2025-10-17 09:05:10'),
+(672, 2, 23, 'siswa', '0028290024', 5, NULL, NULL, '2025-10-20 20:19:06'),
+(673, 2, 24, 'siswa', '0028290024', 5, NULL, NULL, '2025-10-22 14:54:13'),
+(674, 2, 25, 'siswa', '0028290024', 4, NULL, NULL, '2025-10-22 22:35:00'),
+(675, 2, 26, 'siswa', '0028290024', 4, NULL, NULL, '2025-10-19 15:37:41'),
+(676, 2, 27, 'siswa', '0028290024', 5, NULL, NULL, '2025-10-28 12:06:39'),
+(677, 2, 28, 'siswa', '0028290024', 5, NULL, NULL, '2025-10-27 22:33:52'),
+(678, 2, 29, 'siswa', '0028290024', 5, NULL, NULL, '2025-10-30 15:46:21'),
+(679, 2, 30, 'siswa', '0028290024', 4, NULL, NULL, '2025-10-18 16:20:55'),
+(680, 2, 31, 'siswa', '0028290024', 5, NULL, NULL, '2025-10-23 17:27:29'),
+(681, 2, 12, 'siswa', '0031344056', 4, NULL, NULL, '2025-10-15 21:24:19'),
+(682, 2, 13, 'siswa', '0031344056', 4, NULL, NULL, '2025-10-30 12:59:56'),
+(683, 2, 14, 'siswa', '0031344056', 5, NULL, NULL, '2025-10-15 20:06:01'),
+(684, 2, 15, 'siswa', '0031344056', 5, NULL, NULL, '2025-10-30 10:12:25');
+INSERT INTO `kuisioner_jawaban` (`id`, `kuisioner_id`, `pertanyaan_id`, `user_type`, `user_id`, `jawaban_skala`, `jawaban_text`, `jawaban_pilihan`, `created_at`) VALUES
+(685, 2, 16, 'siswa', '0031344056', 5, NULL, NULL, '2025-10-23 18:09:36'),
+(686, 2, 17, 'siswa', '0031344056', 5, NULL, NULL, '2025-10-17 20:47:26'),
+(687, 2, 18, 'siswa', '0031344056', 5, NULL, NULL, '2025-10-28 16:18:54'),
+(688, 2, 19, 'siswa', '0031344056', 5, NULL, NULL, '2025-10-23 15:01:36'),
+(689, 2, 20, 'siswa', '0031344056', 5, NULL, NULL, '2025-10-15 11:02:33'),
+(690, 2, 21, 'siswa', '0031344056', 5, NULL, NULL, '2025-10-23 18:54:26'),
+(691, 2, 22, 'siswa', '0031344056', 4, NULL, NULL, '2025-10-17 09:18:07'),
+(692, 2, 23, 'siswa', '0031344056', 5, NULL, NULL, '2025-10-17 19:09:34'),
+(693, 2, 24, 'siswa', '0031344056', 4, NULL, NULL, '2025-10-20 15:29:55'),
+(694, 2, 25, 'siswa', '0031344056', 4, NULL, NULL, '2025-10-16 21:06:58'),
+(695, 2, 26, 'siswa', '0031344056', 4, NULL, NULL, '2025-10-24 12:44:54'),
+(696, 2, 27, 'siswa', '0031344056', 4, NULL, NULL, '2025-10-25 11:19:58'),
+(697, 2, 28, 'siswa', '0031344056', 5, NULL, NULL, '2025-10-23 18:10:44'),
+(698, 2, 29, 'siswa', '0031344056', 4, NULL, NULL, '2025-10-24 13:11:47'),
+(699, 2, 30, 'siswa', '0031344056', 4, NULL, NULL, '2025-10-24 19:00:47'),
+(700, 2, 31, 'siswa', '0031344056', 5, NULL, NULL, '2025-10-16 21:03:38'),
+(701, 2, 12, 'siswa', '0039378456', 4, NULL, NULL, '2025-10-20 15:26:44'),
+(702, 2, 13, 'siswa', '0039378456', 4, NULL, NULL, '2025-10-25 09:26:59'),
+(703, 2, 14, 'siswa', '0039378456', 5, NULL, NULL, '2025-10-18 08:33:43'),
+(704, 2, 15, 'siswa', '0039378456', 5, NULL, NULL, '2025-10-24 21:46:15'),
+(705, 2, 16, 'siswa', '0039378456', 5, NULL, NULL, '2025-10-15 10:40:59'),
+(706, 2, 17, 'siswa', '0039378456', 5, NULL, NULL, '2025-10-27 21:18:49'),
+(707, 2, 18, 'siswa', '0039378456', 4, NULL, NULL, '2025-10-20 09:40:01'),
+(708, 2, 19, 'siswa', '0039378456', 4, NULL, NULL, '2025-10-20 11:25:19'),
+(709, 2, 20, 'siswa', '0039378456', 4, NULL, NULL, '2025-10-29 12:46:00'),
+(710, 2, 21, 'siswa', '0039378456', 5, NULL, NULL, '2025-10-24 19:06:12'),
+(711, 2, 22, 'siswa', '0039378456', 5, NULL, NULL, '2025-10-16 09:18:16'),
+(712, 2, 23, 'siswa', '0039378456', 4, NULL, NULL, '2025-10-20 13:47:52'),
+(713, 2, 24, 'siswa', '0039378456', 4, NULL, NULL, '2025-10-24 17:36:02'),
+(714, 2, 25, 'siswa', '0039378456', 4, NULL, NULL, '2025-10-16 08:53:22'),
+(715, 2, 26, 'siswa', '0039378456', 4, NULL, NULL, '2025-10-30 21:47:15'),
+(716, 2, 27, 'siswa', '0039378456', 5, NULL, NULL, '2025-10-28 12:11:56'),
+(717, 2, 28, 'siswa', '0039378456', 4, NULL, NULL, '2025-10-16 20:50:45'),
+(718, 2, 29, 'siswa', '0039378456', 4, NULL, NULL, '2025-10-17 21:02:29'),
+(719, 2, 30, 'siswa', '0039378456', 4, NULL, NULL, '2025-10-20 14:11:43'),
+(720, 2, 31, 'siswa', '0039378456', 4, NULL, NULL, '2025-10-29 13:16:13'),
+(721, 2, 12, 'siswa', '0042184528', 4, NULL, NULL, '2025-10-28 09:13:45'),
+(722, 2, 13, 'siswa', '0042184528', 4, NULL, NULL, '2025-10-20 12:32:45'),
+(723, 2, 14, 'siswa', '0042184528', 4, NULL, NULL, '2025-10-26 19:55:16'),
+(724, 2, 15, 'siswa', '0042184528', 5, NULL, NULL, '2025-10-15 15:25:36'),
+(725, 2, 16, 'siswa', '0042184528', 5, NULL, NULL, '2025-10-31 18:27:15'),
+(726, 2, 17, 'siswa', '0042184528', 5, NULL, NULL, '2025-10-24 09:59:36'),
+(727, 2, 18, 'siswa', '0042184528', 4, NULL, NULL, '2025-10-23 12:01:10'),
+(728, 2, 19, 'siswa', '0042184528', 5, NULL, NULL, '2025-10-24 13:14:03'),
+(729, 2, 20, 'siswa', '0042184528', 5, NULL, NULL, '2025-10-23 22:18:37'),
+(730, 2, 21, 'siswa', '0042184528', 4, NULL, NULL, '2025-10-15 18:20:37'),
+(731, 2, 22, 'siswa', '0042184528', 4, NULL, NULL, '2025-10-26 09:30:11'),
+(732, 2, 23, 'siswa', '0042184528', 4, NULL, NULL, '2025-10-23 10:31:04'),
+(733, 2, 24, 'siswa', '0042184528', 5, NULL, NULL, '2025-10-25 19:08:16'),
+(734, 2, 25, 'siswa', '0042184528', 5, NULL, NULL, '2025-10-15 11:56:06'),
+(735, 2, 26, 'siswa', '0042184528', 5, NULL, NULL, '2025-10-18 21:54:51'),
+(736, 2, 27, 'siswa', '0042184528', 5, NULL, NULL, '2025-10-19 16:03:35'),
+(737, 2, 28, 'siswa', '0042184528', 5, NULL, NULL, '2025-10-17 12:13:08'),
+(738, 2, 29, 'siswa', '0042184528', 4, NULL, NULL, '2025-10-28 19:28:03'),
+(739, 2, 30, 'siswa', '0042184528', 5, NULL, NULL, '2025-10-20 21:39:30'),
+(740, 2, 31, 'siswa', '0042184528', 5, NULL, NULL, '2025-10-19 16:58:17'),
+(741, 2, 12, 'siswa', '0044795891', 5, NULL, NULL, '2025-10-26 21:30:49'),
+(742, 2, 13, 'siswa', '0044795891', 5, NULL, NULL, '2025-10-21 11:57:09'),
+(743, 2, 14, 'siswa', '0044795891', 5, NULL, NULL, '2025-10-29 16:22:10'),
+(744, 2, 15, 'siswa', '0044795891', 5, NULL, NULL, '2025-10-15 22:51:21'),
+(745, 2, 16, 'siswa', '0044795891', 4, NULL, NULL, '2025-10-15 13:54:21'),
+(746, 2, 17, 'siswa', '0044795891', 4, NULL, NULL, '2025-10-18 22:13:11'),
+(747, 2, 18, 'siswa', '0044795891', 4, NULL, NULL, '2025-10-28 10:25:39'),
+(748, 2, 19, 'siswa', '0044795891', 5, NULL, NULL, '2025-10-15 08:16:10'),
+(749, 2, 20, 'siswa', '0044795891', 4, NULL, NULL, '2025-10-27 17:53:31'),
+(750, 2, 21, 'siswa', '0044795891', 5, NULL, NULL, '2025-10-19 14:27:53'),
+(751, 2, 22, 'siswa', '0044795891', 4, NULL, NULL, '2025-10-31 15:35:24'),
+(752, 2, 23, 'siswa', '0044795891', 4, NULL, NULL, '2025-10-18 10:09:21'),
+(753, 2, 24, 'siswa', '0044795891', 4, NULL, NULL, '2025-10-21 08:53:25'),
+(754, 2, 25, 'siswa', '0044795891', 4, NULL, NULL, '2025-10-18 14:29:12'),
+(755, 2, 26, 'siswa', '0044795891', 5, NULL, NULL, '2025-10-22 14:55:15'),
+(756, 2, 27, 'siswa', '0044795891', 4, NULL, NULL, '2025-10-25 18:39:09'),
+(757, 2, 28, 'siswa', '0044795891', 5, NULL, NULL, '2025-10-24 15:43:08'),
+(758, 2, 29, 'siswa', '0044795891', 5, NULL, NULL, '2025-10-18 13:08:40'),
+(759, 2, 30, 'siswa', '0044795891', 5, NULL, NULL, '2025-10-27 19:43:15'),
+(760, 2, 31, 'siswa', '0044795891', 4, NULL, NULL, '2025-10-28 17:40:33'),
+(761, 2, 12, 'siswa', '0044875032', 5, NULL, NULL, '2025-10-16 10:33:19'),
+(762, 2, 13, 'siswa', '0044875032', 5, NULL, NULL, '2025-10-29 13:07:39'),
+(763, 2, 14, 'siswa', '0044875032', 5, NULL, NULL, '2025-10-22 17:46:01'),
+(764, 2, 15, 'siswa', '0044875032', 5, NULL, NULL, '2025-10-26 10:47:27'),
+(765, 2, 16, 'siswa', '0044875032', 5, NULL, NULL, '2025-10-20 19:45:33'),
+(766, 2, 17, 'siswa', '0044875032', 5, NULL, NULL, '2025-10-16 20:44:16'),
+(767, 2, 18, 'siswa', '0044875032', 4, NULL, NULL, '2025-10-15 18:25:58'),
+(768, 2, 19, 'siswa', '0044875032', 5, NULL, NULL, '2025-10-17 22:26:12'),
+(769, 2, 20, 'siswa', '0044875032', 5, NULL, NULL, '2025-10-16 09:23:36'),
+(770, 2, 21, 'siswa', '0044875032', 5, NULL, NULL, '2025-10-23 22:11:05'),
+(771, 2, 22, 'siswa', '0044875032', 5, NULL, NULL, '2025-10-20 22:46:57'),
+(772, 2, 23, 'siswa', '0044875032', 4, NULL, NULL, '2025-10-24 12:42:45'),
+(773, 2, 24, 'siswa', '0044875032', 5, NULL, NULL, '2025-10-29 15:50:43'),
+(774, 2, 25, 'siswa', '0044875032', 4, NULL, NULL, '2025-10-19 10:57:18'),
+(775, 2, 26, 'siswa', '0044875032', 5, NULL, NULL, '2025-10-21 21:17:47'),
+(776, 2, 27, 'siswa', '0044875032', 4, NULL, NULL, '2025-10-16 11:55:51'),
+(777, 2, 28, 'siswa', '0044875032', 5, NULL, NULL, '2025-10-15 18:17:23'),
+(778, 2, 29, 'siswa', '0044875032', 4, NULL, NULL, '2025-10-19 10:00:28'),
+(779, 2, 30, 'siswa', '0044875032', 4, NULL, NULL, '2025-10-24 15:48:37'),
+(780, 2, 31, 'siswa', '0044875032', 5, NULL, NULL, '2025-10-21 22:47:58'),
+(781, 2, 12, 'siswa', '0045351054', 5, NULL, NULL, '2025-10-25 15:41:56'),
+(782, 2, 13, 'siswa', '0045351054', 5, NULL, NULL, '2025-10-19 16:05:40'),
+(783, 2, 14, 'siswa', '0045351054', 4, NULL, NULL, '2025-10-20 15:33:14'),
+(784, 2, 15, 'siswa', '0045351054', 5, NULL, NULL, '2025-10-29 17:41:31'),
+(785, 2, 16, 'siswa', '0045351054', 5, NULL, NULL, '2025-10-18 13:05:24'),
+(786, 2, 17, 'siswa', '0045351054', 5, NULL, NULL, '2025-10-29 21:57:59'),
+(787, 2, 18, 'siswa', '0045351054', 4, NULL, NULL, '2025-10-27 11:51:39'),
+(788, 2, 19, 'siswa', '0045351054', 5, NULL, NULL, '2025-10-27 15:23:19'),
+(789, 2, 20, 'siswa', '0045351054', 4, NULL, NULL, '2025-10-22 21:57:12'),
+(790, 2, 21, 'siswa', '0045351054', 4, NULL, NULL, '2025-10-31 14:24:40'),
+(791, 2, 22, 'siswa', '0045351054', 4, NULL, NULL, '2025-10-28 16:21:04'),
+(792, 2, 23, 'siswa', '0045351054', 4, NULL, NULL, '2025-10-22 11:41:52'),
+(793, 2, 24, 'siswa', '0045351054', 4, NULL, NULL, '2025-10-27 19:43:18'),
+(794, 2, 25, 'siswa', '0045351054', 4, NULL, NULL, '2025-10-28 08:36:02'),
+(795, 2, 26, 'siswa', '0045351054', 4, NULL, NULL, '2025-10-27 14:03:59'),
+(796, 2, 27, 'siswa', '0045351054', 5, NULL, NULL, '2025-10-31 14:10:41'),
+(797, 2, 28, 'siswa', '0045351054', 5, NULL, NULL, '2025-10-20 08:05:24'),
+(798, 2, 29, 'siswa', '0045351054', 5, NULL, NULL, '2025-10-26 10:39:49'),
+(799, 2, 30, 'siswa', '0045351054', 4, NULL, NULL, '2025-10-20 11:10:06'),
+(800, 2, 31, 'siswa', '0045351054', 4, NULL, NULL, '2025-10-29 09:57:28'),
+(801, 2, 12, 'siswa', '0045683849', 5, NULL, NULL, '2025-10-19 17:19:48'),
+(802, 2, 13, 'siswa', '0045683849', 4, NULL, NULL, '2025-10-28 20:46:24'),
+(803, 2, 14, 'siswa', '0045683849', 5, NULL, NULL, '2025-10-19 11:22:10'),
+(804, 2, 15, 'siswa', '0045683849', 5, NULL, NULL, '2025-10-21 15:21:20'),
+(805, 2, 16, 'siswa', '0045683849', 5, NULL, NULL, '2025-10-16 16:37:24'),
+(806, 2, 17, 'siswa', '0045683849', 4, NULL, NULL, '2025-10-24 12:52:25'),
+(807, 2, 18, 'siswa', '0045683849', 5, NULL, NULL, '2025-10-19 20:19:09'),
+(808, 2, 19, 'siswa', '0045683849', 5, NULL, NULL, '2025-10-24 13:05:25'),
+(809, 2, 20, 'siswa', '0045683849', 5, NULL, NULL, '2025-10-30 09:45:30'),
+(810, 2, 21, 'siswa', '0045683849', 4, NULL, NULL, '2025-10-25 14:12:50'),
+(811, 2, 22, 'siswa', '0045683849', 5, NULL, NULL, '2025-10-16 22:39:15'),
+(812, 2, 23, 'siswa', '0045683849', 4, NULL, NULL, '2025-10-31 18:38:08'),
+(813, 2, 24, 'siswa', '0045683849', 5, NULL, NULL, '2025-10-23 11:34:12'),
+(814, 2, 25, 'siswa', '0045683849', 4, NULL, NULL, '2025-10-28 09:59:46'),
+(815, 2, 26, 'siswa', '0045683849', 5, NULL, NULL, '2025-10-18 10:22:20'),
+(816, 2, 27, 'siswa', '0045683849', 5, NULL, NULL, '2025-10-31 08:07:36'),
+(817, 2, 28, 'siswa', '0045683849', 5, NULL, NULL, '2025-10-24 19:05:13'),
+(818, 2, 29, 'siswa', '0045683849', 5, NULL, NULL, '2025-10-24 10:19:04'),
+(819, 2, 30, 'siswa', '0045683849', 4, NULL, NULL, '2025-10-24 17:39:17'),
+(820, 2, 31, 'siswa', '0045683849', 4, NULL, NULL, '2025-10-25 16:01:24'),
+(821, 2, 12, 'siswa', '0046215859', 5, NULL, NULL, '2025-10-27 17:05:29'),
+(822, 2, 13, 'siswa', '0046215859', 4, NULL, NULL, '2025-10-22 19:18:18'),
+(823, 2, 14, 'siswa', '0046215859', 5, NULL, NULL, '2025-10-18 11:28:41'),
+(824, 2, 15, 'siswa', '0046215859', 5, NULL, NULL, '2025-10-30 18:34:51'),
+(825, 2, 16, 'siswa', '0046215859', 5, NULL, NULL, '2025-10-19 16:56:04'),
+(826, 2, 17, 'siswa', '0046215859', 5, NULL, NULL, '2025-10-24 09:57:23'),
+(827, 2, 18, 'siswa', '0046215859', 4, NULL, NULL, '2025-10-18 21:45:09'),
+(828, 2, 19, 'siswa', '0046215859', 4, NULL, NULL, '2025-10-30 09:44:28'),
+(829, 2, 20, 'siswa', '0046215859', 4, NULL, NULL, '2025-10-17 14:38:55'),
+(830, 2, 21, 'siswa', '0046215859', 5, NULL, NULL, '2025-10-27 17:53:33'),
+(831, 2, 22, 'siswa', '0046215859', 4, NULL, NULL, '2025-10-29 21:54:53'),
+(832, 2, 23, 'siswa', '0046215859', 5, NULL, NULL, '2025-10-17 13:25:03'),
+(833, 2, 24, 'siswa', '0046215859', 5, NULL, NULL, '2025-10-28 21:13:23'),
+(834, 2, 25, 'siswa', '0046215859', 4, NULL, NULL, '2025-10-21 20:12:28'),
+(835, 2, 26, 'siswa', '0046215859', 5, NULL, NULL, '2025-10-22 22:28:29'),
+(836, 2, 27, 'siswa', '0046215859', 5, NULL, NULL, '2025-10-23 15:07:03'),
+(837, 2, 28, 'siswa', '0046215859', 5, NULL, NULL, '2025-10-21 11:00:19'),
+(838, 2, 29, 'siswa', '0046215859', 5, NULL, NULL, '2025-10-16 15:15:49'),
+(839, 2, 30, 'siswa', '0046215859', 4, NULL, NULL, '2025-10-17 20:38:42'),
+(840, 2, 31, 'siswa', '0046215859', 5, NULL, NULL, '2025-10-15 12:16:34'),
+(841, 2, 12, 'siswa', '0051192742', 4, NULL, NULL, '2025-10-20 17:14:16'),
+(842, 2, 13, 'siswa', '0051192742', 5, NULL, NULL, '2025-10-20 20:08:11'),
+(843, 2, 14, 'siswa', '0051192742', 5, NULL, NULL, '2025-10-17 10:22:22'),
+(844, 2, 15, 'siswa', '0051192742', 5, NULL, NULL, '2025-10-22 09:05:13'),
+(845, 2, 16, 'siswa', '0051192742', 5, NULL, NULL, '2025-10-21 16:46:03'),
+(846, 2, 17, 'siswa', '0051192742', 5, NULL, NULL, '2025-10-28 22:30:36'),
+(847, 2, 18, 'siswa', '0051192742', 5, NULL, NULL, '2025-10-27 11:49:27'),
+(848, 2, 19, 'siswa', '0051192742', 5, NULL, NULL, '2025-10-30 20:35:26'),
+(849, 2, 20, 'siswa', '0051192742', 4, NULL, NULL, '2025-10-26 10:48:33'),
+(850, 2, 21, 'siswa', '0051192742', 4, NULL, NULL, '2025-10-19 09:44:23'),
+(851, 2, 22, 'siswa', '0051192742', 5, NULL, NULL, '2025-10-22 22:35:02'),
+(852, 2, 23, 'siswa', '0051192742', 4, NULL, NULL, '2025-10-15 20:12:28'),
+(853, 2, 24, 'siswa', '0051192742', 5, NULL, NULL, '2025-10-18 21:51:33'),
+(854, 2, 25, 'siswa', '0051192742', 4, NULL, NULL, '2025-10-23 19:27:53'),
+(855, 2, 26, 'siswa', '0051192742', 4, NULL, NULL, '2025-10-27 14:59:38'),
+(856, 2, 27, 'siswa', '0051192742', 4, NULL, NULL, '2025-10-17 10:12:39'),
+(857, 2, 28, 'siswa', '0051192742', 5, NULL, NULL, '2025-10-18 10:03:54'),
+(858, 2, 29, 'siswa', '0051192742', 4, NULL, NULL, '2025-10-15 08:13:58'),
+(859, 2, 30, 'siswa', '0051192742', 4, NULL, NULL, '2025-10-15 16:49:22'),
+(860, 2, 31, 'siswa', '0051192742', 4, NULL, NULL, '2025-10-27 17:01:10'),
+(861, 2, 12, 'siswa', '0052818825', 5, NULL, NULL, '2025-10-20 11:17:42'),
+(862, 2, 13, 'siswa', '0052818825', 5, NULL, NULL, '2025-10-18 10:01:43'),
+(863, 2, 14, 'siswa', '0052818825', 5, NULL, NULL, '2025-10-23 19:25:49'),
+(864, 2, 15, 'siswa', '0052818825', 5, NULL, NULL, '2025-10-27 09:26:47'),
+(865, 2, 16, 'siswa', '0052818825', 5, NULL, NULL, '2025-10-15 10:45:15'),
+(866, 2, 17, 'siswa', '0052818825', 5, NULL, NULL, '2025-10-17 20:35:30'),
+(867, 2, 18, 'siswa', '0052818825', 5, NULL, NULL, '2025-10-21 15:30:58'),
+(868, 2, 19, 'siswa', '0052818825', 4, NULL, NULL, '2025-10-28 22:24:09'),
+(869, 2, 20, 'siswa', '0052818825', 5, NULL, NULL, '2025-10-21 12:13:14'),
+(870, 2, 21, 'siswa', '0052818825', 5, NULL, NULL, '2025-10-30 09:34:39'),
+(871, 2, 22, 'siswa', '0052818825', 5, NULL, NULL, '2025-10-30 21:42:50'),
+(872, 2, 23, 'siswa', '0052818825', 4, NULL, NULL, '2025-10-15 19:40:09'),
+(873, 2, 24, 'siswa', '0052818825', 5, NULL, NULL, '2025-10-18 20:37:33'),
+(874, 2, 25, 'siswa', '0052818825', 5, NULL, NULL, '2025-10-16 16:31:56'),
+(875, 2, 26, 'siswa', '0052818825', 4, NULL, NULL, '2025-10-30 22:20:41'),
+(876, 2, 27, 'siswa', '0052818825', 4, NULL, NULL, '2025-10-19 20:27:44'),
+(877, 2, 28, 'siswa', '0052818825', 4, NULL, NULL, '2025-10-23 15:58:20'),
+(878, 2, 29, 'siswa', '0052818825', 5, NULL, NULL, '2025-10-16 22:30:41'),
+(879, 2, 30, 'siswa', '0052818825', 5, NULL, NULL, '2025-10-22 13:40:13'),
+(880, 2, 31, 'siswa', '0052818825', 4, NULL, NULL, '2025-10-30 10:59:32'),
+(881, 2, 12, 'siswa', '0058595046', 5, NULL, NULL, '2025-10-16 11:55:51'),
+(882, 2, 13, 'siswa', '0058595046', 5, NULL, NULL, '2025-10-19 18:34:50'),
+(883, 2, 14, 'siswa', '0058595046', 4, NULL, NULL, '2025-10-27 13:43:24'),
+(884, 2, 15, 'siswa', '0058595046', 5, NULL, NULL, '2025-10-21 08:08:33'),
+(885, 2, 16, 'siswa', '0058595046', 4, NULL, NULL, '2025-10-17 18:07:27'),
+(886, 2, 17, 'siswa', '0058595046', 5, NULL, NULL, '2025-10-20 20:09:16'),
+(887, 2, 18, 'siswa', '0058595046', 5, NULL, NULL, '2025-10-28 12:54:45'),
+(888, 2, 19, 'siswa', '0058595046', 4, NULL, NULL, '2025-10-16 11:52:40'),
+(889, 2, 20, 'siswa', '0058595046', 5, NULL, NULL, '2025-10-26 08:21:35'),
+(890, 2, 21, 'siswa', '0058595046', 5, NULL, NULL, '2025-10-25 16:46:16'),
+(891, 2, 22, 'siswa', '0058595046', 4, NULL, NULL, '2025-10-20 16:50:30'),
+(892, 2, 23, 'siswa', '0058595046', 4, NULL, NULL, '2025-10-25 09:34:34'),
+(893, 2, 24, 'siswa', '0058595046', 4, NULL, NULL, '2025-10-15 18:19:33'),
+(894, 2, 25, 'siswa', '0058595046', 5, NULL, NULL, '2025-10-20 12:37:05'),
+(895, 2, 26, 'siswa', '0058595046', 5, NULL, NULL, '2025-10-30 16:11:13'),
+(896, 2, 27, 'siswa', '0058595046', 5, NULL, NULL, '2025-10-16 20:49:38'),
+(897, 2, 28, 'siswa', '0058595046', 5, NULL, NULL, '2025-10-25 09:33:27'),
+(898, 2, 29, 'siswa', '0058595046', 5, NULL, NULL, '2025-10-31 20:07:12'),
+(899, 2, 30, 'siswa', '0058595046', 5, NULL, NULL, '2025-10-24 22:12:02'),
+(900, 2, 31, 'siswa', '0058595046', 5, NULL, NULL, '2025-10-15 09:36:38'),
+(901, 2, 12, 'siswa', '0062303354', 4, NULL, NULL, '2025-10-19 21:38:36'),
+(902, 2, 13, 'siswa', '0062303354', 4, NULL, NULL, '2025-10-26 11:55:59'),
+(903, 2, 14, 'siswa', '0062303354', 4, NULL, NULL, '2025-10-31 11:14:34'),
+(904, 2, 15, 'siswa', '0062303354', 4, NULL, NULL, '2025-10-28 19:25:49'),
+(905, 2, 16, 'siswa', '0062303354', 5, NULL, NULL, '2025-10-27 10:43:03'),
+(906, 2, 17, 'siswa', '0062303354', 4, NULL, NULL, '2025-10-18 20:37:32'),
+(907, 2, 18, 'siswa', '0062303354', 5, NULL, NULL, '2025-10-23 09:54:14'),
+(908, 2, 19, 'siswa', '0062303354', 5, NULL, NULL, '2025-10-29 16:30:43'),
+(909, 2, 20, 'siswa', '0062303354', 4, NULL, NULL, '2025-10-20 13:57:35'),
+(910, 2, 21, 'siswa', '0062303354', 4, NULL, NULL, '2025-10-27 14:50:57'),
+(911, 2, 22, 'siswa', '0062303354', 4, NULL, NULL, '2025-10-21 10:36:37'),
+(912, 2, 23, 'siswa', '0062303354', 4, NULL, NULL, '2025-10-21 10:44:10'),
+(913, 2, 24, 'siswa', '0062303354', 5, NULL, NULL, '2025-10-25 10:06:57'),
+(914, 2, 25, 'siswa', '0062303354', 4, NULL, NULL, '2025-10-23 10:19:04'),
+(915, 2, 26, 'siswa', '0062303354', 4, NULL, NULL, '2025-10-29 21:09:00'),
+(916, 2, 27, 'siswa', '0062303354', 5, NULL, NULL, '2025-10-28 12:03:24'),
+(917, 2, 28, 'siswa', '0062303354', 5, NULL, NULL, '2025-10-15 18:16:19'),
+(918, 2, 29, 'siswa', '0062303354', 5, NULL, NULL, '2025-10-31 14:21:25'),
+(919, 2, 30, 'siswa', '0062303354', 4, NULL, NULL, '2025-10-17 14:48:41'),
+(920, 2, 31, 'siswa', '0062303354', 4, NULL, NULL, '2025-10-17 18:00:56'),
+(921, 2, 12, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-25 09:33:32'),
+(922, 2, 13, 'siswa', '0064797771', 4, NULL, NULL, '2025-10-23 13:22:47'),
+(923, 2, 14, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-25 19:04:56'),
+(924, 2, 15, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-28 14:44:23'),
+(925, 2, 16, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-24 15:43:11'),
+(926, 2, 17, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-25 14:25:46'),
+(927, 2, 18, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-29 12:56:48'),
+(928, 2, 19, 'siswa', '0064797771', 4, NULL, NULL, '2025-10-28 11:54:43'),
+(929, 2, 20, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-24 22:06:39'),
+(930, 2, 21, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-27 22:30:41'),
+(931, 2, 22, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-25 10:00:33'),
+(932, 2, 23, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-17 14:38:58'),
+(933, 2, 24, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-30 19:54:17'),
+(934, 2, 25, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-30 11:28:40'),
+(935, 2, 26, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-28 22:32:46'),
+(936, 2, 27, 'siswa', '0064797771', 4, NULL, NULL, '2025-10-16 17:47:04'),
+(937, 2, 28, 'siswa', '0064797771', 4, NULL, NULL, '2025-10-31 17:12:13'),
+(938, 2, 29, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-30 21:51:35'),
+(939, 2, 30, 'siswa', '0064797771', 4, NULL, NULL, '2025-10-31 18:44:33'),
+(940, 2, 31, 'siswa', '0064797771', 5, NULL, NULL, '2025-10-18 10:19:06'),
+(941, 2, 12, 'siswa', '0065165563', 5, NULL, NULL, '2025-10-25 12:39:24'),
+(942, 2, 13, 'siswa', '0065165563', 4, NULL, NULL, '2025-10-16 11:54:52'),
+(943, 2, 14, 'siswa', '0065165563', 5, NULL, NULL, '2025-10-22 13:30:26'),
+(944, 2, 15, 'siswa', '0065165563', 5, NULL, NULL, '2025-10-17 17:49:11'),
+(945, 2, 16, 'siswa', '0065165563', 4, NULL, NULL, '2025-10-26 21:40:35'),
+(946, 2, 17, 'siswa', '0065165563', 5, NULL, NULL, '2025-10-31 21:39:36'),
+(947, 2, 18, 'siswa', '0065165563', 4, NULL, NULL, '2025-10-24 16:15:30'),
+(948, 2, 19, 'siswa', '0065165563', 5, NULL, NULL, '2025-10-22 19:38:50'),
+(949, 2, 20, 'siswa', '0065165563', 4, NULL, NULL, '2025-10-31 08:05:23'),
+(950, 2, 21, 'siswa', '0065165563', 5, NULL, NULL, '2025-10-22 08:53:20'),
+(951, 2, 22, 'siswa', '0065165563', 4, NULL, NULL, '2025-10-16 14:47:40'),
+(952, 2, 23, 'siswa', '0065165563', 4, NULL, NULL, '2025-10-17 17:45:51'),
+(953, 2, 24, 'siswa', '0065165563', 5, NULL, NULL, '2025-10-21 22:34:02'),
+(954, 2, 25, 'siswa', '0065165563', 4, NULL, NULL, '2025-10-18 19:05:09'),
+(955, 2, 26, 'siswa', '0065165563', 5, NULL, NULL, '2025-10-18 15:41:02'),
+(956, 2, 27, 'siswa', '0065165563', 4, NULL, NULL, '2025-10-23 08:45:42'),
+(957, 2, 28, 'siswa', '0065165563', 4, NULL, NULL, '2025-10-15 15:21:20'),
+(958, 2, 29, 'siswa', '0065165563', 5, NULL, NULL, '2025-10-15 11:04:40'),
+(959, 2, 30, 'siswa', '0065165563', 4, NULL, NULL, '2025-10-31 12:40:22'),
+(960, 2, 31, 'siswa', '0065165563', 5, NULL, NULL, '2025-10-16 22:36:05'),
+(961, 2, 12, 'siswa', '0066988913', 5, NULL, NULL, '2025-10-29 12:08:42'),
+(962, 2, 13, 'siswa', '0066988913', 4, NULL, NULL, '2025-10-21 18:20:33'),
+(963, 2, 14, 'siswa', '0066988913', 5, NULL, NULL, '2025-10-18 18:56:35'),
+(964, 2, 15, 'siswa', '0066988913', 4, NULL, NULL, '2025-10-29 22:17:30'),
+(965, 2, 16, 'siswa', '0066988913', 5, NULL, NULL, '2025-10-27 17:56:50'),
+(966, 2, 17, 'siswa', '0066988913', 4, NULL, NULL, '2025-10-20 17:03:25'),
+(967, 2, 18, 'siswa', '0066988913', 5, NULL, NULL, '2025-10-22 13:24:02'),
+(968, 2, 19, 'siswa', '0066988913', 5, NULL, NULL, '2025-10-26 13:00:53'),
+(969, 2, 20, 'siswa', '0066988913', 4, NULL, NULL, '2025-10-19 12:31:47'),
+(970, 2, 21, 'siswa', '0066988913', 4, NULL, NULL, '2025-10-22 22:45:47'),
+(971, 2, 22, 'siswa', '0066988913', 5, NULL, NULL, '2025-10-17 18:00:56'),
+(972, 2, 23, 'siswa', '0066988913', 5, NULL, NULL, '2025-10-25 09:37:47'),
+(973, 2, 24, 'siswa', '0066988913', 4, NULL, NULL, '2025-10-17 15:06:56'),
+(974, 2, 25, 'siswa', '0066988913', 4, NULL, NULL, '2025-10-20 11:19:51'),
+(975, 2, 26, 'siswa', '0066988913', 4, NULL, NULL, '2025-10-15 11:56:06'),
+(976, 2, 27, 'siswa', '0066988913', 5, NULL, NULL, '2025-10-19 10:57:20'),
+(977, 2, 28, 'siswa', '0066988913', 5, NULL, NULL, '2025-10-15 17:11:00'),
+(978, 2, 29, 'siswa', '0066988913', 4, NULL, NULL, '2025-10-18 19:05:10'),
+(979, 2, 30, 'siswa', '0066988913', 5, NULL, NULL, '2025-10-27 17:54:41'),
+(980, 2, 31, 'siswa', '0066988913', 5, NULL, NULL, '2025-10-27 15:07:09'),
+(981, 2, 12, 'siswa', '0073767204', 4, NULL, NULL, '2025-10-25 22:45:59'),
+(982, 2, 13, 'siswa', '0073767204', 5, NULL, NULL, '2025-10-23 15:55:09'),
+(983, 2, 14, 'siswa', '0073767204', 5, NULL, NULL, '2025-10-22 10:35:26'),
+(984, 2, 15, 'siswa', '0073767204', 4, NULL, NULL, '2025-10-29 22:20:45'),
+(985, 2, 16, 'siswa', '0073767204', 5, NULL, NULL, '2025-10-26 21:40:33'),
+(986, 2, 17, 'siswa', '0073767204', 5, NULL, NULL, '2025-10-20 11:09:05'),
+(987, 2, 18, 'siswa', '0073767204', 5, NULL, NULL, '2025-10-26 14:15:53'),
+(988, 2, 19, 'siswa', '0073767204', 5, NULL, NULL, '2025-10-27 16:39:38'),
+(989, 2, 20, 'siswa', '0073767204', 4, NULL, NULL, '2025-10-15 15:22:24'),
+(990, 2, 21, 'siswa', '0073767204', 5, NULL, NULL, '2025-10-21 11:04:37'),
+(991, 2, 22, 'siswa', '0073767204', 5, NULL, NULL, '2025-10-24 10:14:39'),
+(992, 2, 23, 'siswa', '0073767204', 5, NULL, NULL, '2025-10-30 18:48:58'),
+(993, 2, 24, 'siswa', '0073767204', 4, NULL, NULL, '2025-10-17 16:26:25'),
+(994, 2, 25, 'siswa', '0073767204', 5, NULL, NULL, '2025-10-30 22:13:08'),
+(995, 2, 26, 'siswa', '0073767204', 4, NULL, NULL, '2025-10-31 15:43:06'),
+(996, 2, 27, 'siswa', '0073767204', 4, NULL, NULL, '2025-10-23 13:16:18'),
+(997, 2, 28, 'siswa', '0073767204', 5, NULL, NULL, '2025-10-25 21:43:54'),
+(998, 2, 29, 'siswa', '0073767204', 4, NULL, NULL, '2025-10-17 17:47:01'),
+(999, 2, 30, 'siswa', '0073767204', 5, NULL, NULL, '2025-10-23 14:45:22'),
+(1000, 2, 31, 'siswa', '0073767204', 5, NULL, NULL, '2025-10-15 12:20:51'),
+(1001, 2, 12, 'siswa', '0077490337', 4, NULL, NULL, '2025-10-26 16:58:06'),
+(1002, 2, 13, 'siswa', '0077490337', 5, NULL, NULL, '2025-10-24 10:11:25'),
+(1003, 2, 14, 'siswa', '0077490337', 4, NULL, NULL, '2025-10-18 18:41:25'),
+(1004, 2, 15, 'siswa', '0077490337', 4, NULL, NULL, '2025-10-30 15:49:33'),
+(1005, 2, 16, 'siswa', '0077490337', 4, NULL, NULL, '2025-10-29 13:08:40'),
+(1006, 2, 17, 'siswa', '0077490337', 5, NULL, NULL, '2025-10-29 13:16:16'),
+(1007, 2, 18, 'siswa', '0077490337', 5, NULL, NULL, '2025-10-28 12:14:14'),
+(1008, 2, 19, 'siswa', '0077490337', 4, NULL, NULL, '2025-10-28 13:27:15'),
+(1009, 2, 20, 'siswa', '0077490337', 5, NULL, NULL, '2025-10-29 15:54:02'),
+(1010, 2, 21, 'siswa', '0077490337', 4, NULL, NULL, '2025-10-18 16:24:12'),
+(1011, 2, 22, 'siswa', '0077490337', 5, NULL, NULL, '2025-10-26 20:09:15'),
+(1012, 2, 23, 'siswa', '0077490337', 5, NULL, NULL, '2025-10-18 16:22:05'),
+(1013, 2, 24, 'siswa', '0077490337', 4, NULL, NULL, '2025-10-21 20:05:56'),
+(1014, 2, 25, 'siswa', '0077490337', 4, NULL, NULL, '2025-10-22 18:20:33'),
+(1015, 2, 26, 'siswa', '0077490337', 5, NULL, NULL, '2025-10-15 08:08:30'),
+(1016, 2, 27, 'siswa', '0077490337', 4, NULL, NULL, '2025-10-18 16:15:33'),
+(1017, 2, 28, 'siswa', '0077490337', 4, NULL, NULL, '2025-10-24 19:58:38'),
+(1018, 2, 29, 'siswa', '0077490337', 4, NULL, NULL, '2025-10-21 11:01:22'),
+(1019, 2, 30, 'siswa', '0077490337', 5, NULL, NULL, '2025-10-30 11:16:43'),
+(1020, 2, 31, 'siswa', '0077490337', 5, NULL, NULL, '2025-10-29 22:10:58'),
+(1021, 2, 12, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-31 19:44:31'),
+(1022, 2, 13, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-22 09:05:08'),
+(1023, 2, 14, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-30 09:48:43'),
+(1024, 2, 15, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-29 18:57:38'),
+(1025, 2, 16, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-30 15:49:32'),
+(1026, 2, 17, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-25 12:46:54'),
+(1027, 2, 18, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-18 14:37:48'),
+(1028, 2, 19, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-18 19:09:30'),
+(1029, 2, 20, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-27 14:08:20'),
+(1030, 2, 21, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-19 14:29:08'),
+(1031, 2, 22, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-25 15:36:34'),
+(1032, 2, 23, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-24 18:49:00'),
+(1033, 2, 24, 'siswa', '0079552543', 5, NULL, NULL, '2025-10-27 09:20:21'),
+(1034, 2, 25, 'siswa', '0079552543', 5, NULL, NULL, '2025-10-24 18:49:58'),
+(1035, 2, 26, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-17 17:32:52'),
+(1036, 2, 27, 'siswa', '0079552543', 5, NULL, NULL, '2025-10-16 10:35:26'),
+(1037, 2, 28, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-29 21:00:17'),
+(1038, 2, 29, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-22 20:43:10'),
+(1039, 2, 30, 'siswa', '0079552543', 5, NULL, NULL, '2025-10-17 17:41:29'),
+(1040, 2, 31, 'siswa', '0079552543', 4, NULL, NULL, '2025-10-25 20:16:55'),
+(1041, 2, 12, 'siswa', '0079655473', 5, NULL, NULL, '2025-10-17 15:50:49'),
+(1042, 2, 13, 'siswa', '0079655473', 5, NULL, NULL, '2025-10-22 16:18:54'),
+(1043, 2, 14, 'siswa', '0079655473', 5, NULL, NULL, '2025-10-21 09:20:21'),
+(1044, 2, 15, 'siswa', '0079655473', 5, NULL, NULL, '2025-10-15 16:44:02'),
+(1045, 2, 16, 'siswa', '0079655473', 5, NULL, NULL, '2025-10-27 21:05:48'),
+(1046, 2, 17, 'siswa', '0079655473', 5, NULL, NULL, '2025-10-23 09:57:33'),
+(1047, 2, 18, 'siswa', '0079655473', 5, NULL, NULL, '2025-10-30 20:27:44'),
+(1048, 2, 19, 'siswa', '0079655473', 4, NULL, NULL, '2025-10-23 14:36:47'),
+(1049, 2, 20, 'siswa', '0079655473', 4, NULL, NULL, '2025-10-19 08:20:35'),
+(1050, 2, 21, 'siswa', '0079655473', 5, NULL, NULL, '2025-10-28 12:03:25'),
+(1051, 2, 22, 'siswa', '0079655473', 5, NULL, NULL, '2025-10-22 13:37:54'),
+(1052, 2, 23, 'siswa', '0079655473', 5, NULL, NULL, '2025-10-29 08:35:55'),
+(1053, 2, 24, 'siswa', '0079655473', 5, NULL, NULL, '2025-10-21 15:15:50'),
+(1054, 2, 25, 'siswa', '0079655473', 4, NULL, NULL, '2025-10-24 17:33:48'),
+(1055, 2, 26, 'siswa', '0079655473', 4, NULL, NULL, '2025-10-21 21:17:46'),
+(1056, 2, 27, 'siswa', '0079655473', 5, NULL, NULL, '2025-10-25 09:46:31'),
+(1057, 2, 28, 'siswa', '0079655473', 4, NULL, NULL, '2025-10-27 22:42:34'),
+(1058, 2, 29, 'siswa', '0079655473', 5, NULL, NULL, '2025-10-29 09:03:54'),
+(1059, 2, 30, 'siswa', '0079655473', 4, NULL, NULL, '2025-10-19 10:05:55'),
+(1060, 2, 31, 'siswa', '0079655473', 4, NULL, NULL, '2025-10-31 18:31:38'),
+(1061, 2, 12, 'siswa', '0079948350', 5, NULL, NULL, '2025-10-17 20:54:57'),
+(1062, 2, 13, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-19 12:34:01'),
+(1063, 2, 14, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-15 21:30:43'),
+(1064, 2, 15, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-25 16:57:06'),
+(1065, 2, 16, 'siswa', '0079948350', 5, NULL, NULL, '2025-10-16 12:09:01'),
+(1066, 2, 17, 'siswa', '0079948350', 5, NULL, NULL, '2025-10-31 08:22:40'),
+(1067, 2, 18, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-22 11:59:12'),
+(1068, 2, 19, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-27 15:20:08'),
+(1069, 2, 20, 'siswa', '0079948350', 5, NULL, NULL, '2025-10-30 16:11:11'),
+(1070, 2, 21, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-22 22:32:47'),
+(1071, 2, 22, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-18 22:26:12'),
+(1072, 2, 23, 'siswa', '0079948350', 5, NULL, NULL, '2025-10-30 12:58:51'),
+(1073, 2, 24, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-24 13:18:23'),
+(1074, 2, 25, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-17 17:39:24'),
+(1075, 2, 26, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-31 18:37:00'),
+(1076, 2, 27, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-31 09:46:28'),
+(1077, 2, 28, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-16 11:41:53'),
+(1078, 2, 29, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-31 22:44:51'),
+(1079, 2, 30, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-29 09:48:46'),
+(1080, 2, 31, 'siswa', '0079948350', 4, NULL, NULL, '2025-10-31 16:48:24'),
+(1081, 2, 12, 'siswa', '0082779275', 5, NULL, NULL, '2025-10-27 20:03:47'),
+(1082, 2, 13, 'siswa', '0082779275', 5, NULL, NULL, '2025-10-20 15:29:54'),
+(1083, 2, 14, 'siswa', '0082779275', 4, NULL, NULL, '2025-10-27 13:40:15'),
+(1084, 2, 15, 'siswa', '0082779275', 4, NULL, NULL, '2025-10-23 18:07:29'),
+(1085, 2, 16, 'siswa', '0082779275', 4, NULL, NULL, '2025-10-29 08:39:09'),
+(1086, 2, 17, 'siswa', '0082779275', 5, NULL, NULL, '2025-10-28 12:17:30'),
+(1087, 2, 18, 'siswa', '0082779275', 5, NULL, NULL, '2025-10-25 12:36:06'),
+(1088, 2, 19, 'siswa', '0082779275', 5, NULL, NULL, '2025-10-20 14:03:05'),
+(1089, 2, 20, 'siswa', '0082779275', 4, NULL, NULL, '2025-10-19 13:03:12'),
+(1090, 2, 21, 'siswa', '0082779275', 5, NULL, NULL, '2025-10-23 10:07:11'),
+(1091, 2, 22, 'siswa', '0082779275', 5, NULL, NULL, '2025-10-22 12:12:11'),
+(1092, 2, 23, 'siswa', '0082779275', 4, NULL, NULL, '2025-10-15 11:01:25'),
+(1093, 2, 24, 'siswa', '0082779275', 4, NULL, NULL, '2025-10-30 14:33:23'),
+(1094, 2, 25, 'siswa', '0082779275', 4, NULL, NULL, '2025-10-21 21:22:09'),
+(1095, 2, 26, 'siswa', '0082779275', 5, NULL, NULL, '2025-10-15 09:22:35'),
+(1096, 2, 27, 'siswa', '0082779275', 5, NULL, NULL, '2025-10-23 20:37:43'),
+(1097, 2, 28, 'siswa', '0082779275', 5, NULL, NULL, '2025-10-22 08:51:10'),
+(1098, 2, 29, 'siswa', '0082779275', 4, NULL, NULL, '2025-10-31 09:23:43'),
+(1099, 2, 30, 'siswa', '0082779275', 4, NULL, NULL, '2025-10-15 20:08:09'),
+(1100, 2, 31, 'siswa', '0082779275', 4, NULL, NULL, '2025-10-23 11:46:08'),
+(1101, 2, 12, 'siswa', '0084276194', 4, NULL, NULL, '2025-10-24 18:38:10'),
+(1102, 2, 13, 'siswa', '0084276194', 5, NULL, NULL, '2025-10-18 11:24:25'),
+(1103, 2, 14, 'siswa', '0084276194', 5, NULL, NULL, '2025-10-19 15:47:25'),
+(1104, 2, 15, 'siswa', '0084276194', 5, NULL, NULL, '2025-10-24 13:19:26'),
+(1105, 2, 16, 'siswa', '0084276194', 4, NULL, NULL, '2025-10-29 15:05:51'),
+(1106, 2, 17, 'siswa', '0084276194', 4, NULL, NULL, '2025-10-27 14:00:42'),
+(1107, 2, 18, 'siswa', '0084276194', 5, NULL, NULL, '2025-10-22 18:09:42'),
+(1108, 2, 19, 'siswa', '0084276194', 4, NULL, NULL, '2025-10-17 14:57:23'),
+(1109, 2, 20, 'siswa', '0084276194', 4, NULL, NULL, '2025-10-18 19:18:10'),
+(1110, 2, 21, 'siswa', '0084276194', 5, NULL, NULL, '2025-10-20 19:53:07'),
+(1111, 2, 22, 'siswa', '0084276194', 5, NULL, NULL, '2025-10-19 14:26:56'),
+(1112, 2, 23, 'siswa', '0084276194', 4, NULL, NULL, '2025-10-15 21:37:21'),
+(1113, 2, 24, 'siswa', '0084276194', 5, NULL, NULL, '2025-10-23 18:57:45'),
+(1114, 2, 25, 'siswa', '0084276194', 5, NULL, NULL, '2025-10-17 08:51:06'),
+(1115, 2, 26, 'siswa', '0084276194', 4, NULL, NULL, '2025-10-26 13:50:06'),
+(1116, 2, 27, 'siswa', '0084276194', 4, NULL, NULL, '2025-10-27 18:13:01'),
+(1117, 2, 28, 'siswa', '0084276194', 4, NULL, NULL, '2025-10-19 21:35:21'),
+(1118, 2, 29, 'siswa', '0084276194', 4, NULL, NULL, '2025-10-15 22:49:12'),
+(1119, 2, 30, 'siswa', '0084276194', 5, NULL, NULL, '2025-10-19 15:41:02'),
+(1120, 2, 31, 'siswa', '0084276194', 4, NULL, NULL, '2025-10-22 21:12:18'),
+(1121, 2, 12, 'siswa', '0086769753', 5, NULL, NULL, '2025-10-26 17:04:28'),
+(1122, 2, 13, 'siswa', '0086769753', 4, NULL, NULL, '2025-10-24 09:59:34'),
+(1123, 2, 14, 'siswa', '0086769753', 5, NULL, NULL, '2025-10-29 17:24:11'),
+(1124, 2, 15, 'siswa', '0086769753', 5, NULL, NULL, '2025-10-19 21:54:46'),
+(1125, 2, 16, 'siswa', '0086769753', 4, NULL, NULL, '2025-10-22 20:51:42'),
+(1126, 2, 17, 'siswa', '0086769753', 5, NULL, NULL, '2025-10-29 12:47:08'),
+(1127, 2, 18, 'siswa', '0086769753', 4, NULL, NULL, '2025-10-20 16:58:05'),
+(1128, 2, 19, 'siswa', '0086769753', 5, NULL, NULL, '2025-10-24 22:16:26'),
+(1129, 2, 20, 'siswa', '0086769753', 4, NULL, NULL, '2025-10-25 08:07:38'),
+(1130, 2, 21, 'siswa', '0086769753', 5, NULL, NULL, '2025-10-15 20:54:07'),
+(1131, 2, 22, 'siswa', '0086769753', 5, NULL, NULL, '2025-10-18 12:57:47'),
+(1132, 2, 23, 'siswa', '0086769753', 4, NULL, NULL, '2025-10-20 10:50:44'),
+(1133, 2, 24, 'siswa', '0086769753', 4, NULL, NULL, '2025-10-24 12:55:41'),
+(1134, 2, 25, 'siswa', '0086769753', 5, NULL, NULL, '2025-10-20 16:47:18'),
+(1135, 2, 26, 'siswa', '0086769753', 4, NULL, NULL, '2025-10-31 11:16:39'),
+(1136, 2, 27, 'siswa', '0086769753', 5, NULL, NULL, '2025-10-25 13:13:55'),
+(1137, 2, 28, 'siswa', '0086769753', 5, NULL, NULL, '2025-10-15 12:25:12'),
+(1138, 2, 29, 'siswa', '0086769753', 5, NULL, NULL, '2025-10-18 19:15:55'),
+(1139, 2, 30, 'siswa', '0086769753', 5, NULL, NULL, '2025-10-24 11:20:03'),
+(1140, 2, 31, 'siswa', '0086769753', 4, NULL, NULL, '2025-10-22 10:32:12'),
+(1141, 2, 12, 'siswa', '0087217408', 4, NULL, NULL, '2025-10-24 15:55:03'),
+(1142, 2, 13, 'siswa', '0087217408', 4, NULL, NULL, '2025-10-18 18:53:18'),
+(1143, 2, 14, 'siswa', '0087217408', 5, NULL, NULL, '2025-10-22 18:04:17'),
+(1144, 2, 15, 'siswa', '0087217408', 4, NULL, NULL, '2025-10-21 10:43:03'),
+(1145, 2, 16, 'siswa', '0087217408', 4, NULL, NULL, '2025-10-25 15:38:44'),
+(1146, 2, 17, 'siswa', '0087217408', 5, NULL, NULL, '2025-10-25 21:29:50'),
+(1147, 2, 18, 'siswa', '0087217408', 5, NULL, NULL, '2025-10-18 18:59:49'),
+(1148, 2, 19, 'siswa', '0087217408', 4, NULL, NULL, '2025-10-20 08:14:07'),
+(1149, 2, 20, 'siswa', '0087217408', 5, NULL, NULL, '2025-10-15 13:58:41'),
+(1150, 2, 21, 'siswa', '0087217408', 5, NULL, NULL, '2025-10-26 18:20:43'),
+(1151, 2, 22, 'siswa', '0087217408', 5, NULL, NULL, '2025-10-28 11:43:54'),
+(1152, 2, 23, 'siswa', '0087217408', 4, NULL, NULL, '2025-10-19 09:42:14'),
+(1153, 2, 24, 'siswa', '0087217408', 4, NULL, NULL, '2025-10-26 10:41:02'),
+(1154, 2, 25, 'siswa', '0087217408', 4, NULL, NULL, '2025-10-25 17:27:16'),
+(1155, 2, 26, 'siswa', '0087217408', 5, NULL, NULL, '2025-10-17 20:43:06'),
+(1156, 2, 27, 'siswa', '0087217408', 4, NULL, NULL, '2025-10-21 21:14:36'),
+(1157, 2, 28, 'siswa', '0087217408', 4, NULL, NULL, '2025-10-26 16:48:18'),
+(1158, 2, 29, 'siswa', '0087217408', 4, NULL, NULL, '2025-10-23 12:03:21'),
+(1159, 2, 30, 'siswa', '0087217408', 5, NULL, NULL, '2025-10-15 11:14:26'),
+(1160, 2, 31, 'siswa', '0087217408', 4, NULL, NULL, '2025-10-15 18:27:11'),
+(1161, 2, 12, 'siswa', '0089969128', 5, NULL, NULL, '2025-10-17 09:59:44'),
+(1162, 2, 13, 'siswa', '0089969128', 5, NULL, NULL, '2025-10-22 09:03:59'),
+(1163, 2, 14, 'siswa', '0089969128', 5, NULL, NULL, '2025-10-17 13:14:08'),
+(1164, 2, 15, 'siswa', '0089969128', 5, NULL, NULL, '2025-10-24 18:01:55'),
+(1165, 2, 16, 'siswa', '0089969128', 5, NULL, NULL, '2025-10-31 09:38:56'),
+(1166, 2, 17, 'siswa', '0089969128', 5, NULL, NULL, '2025-10-30 13:58:48'),
+(1167, 2, 18, 'siswa', '0089969128', 4, NULL, NULL, '2025-10-21 14:55:22'),
+(1168, 2, 19, 'siswa', '0089969128', 4, NULL, NULL, '2025-10-20 11:22:06'),
+(1169, 2, 20, 'siswa', '0089969128', 4, NULL, NULL, '2025-10-26 10:51:46'),
+(1170, 2, 21, 'siswa', '0089969128', 4, NULL, NULL, '2025-10-15 13:42:26'),
+(1171, 2, 22, 'siswa', '0089969128', 4, NULL, NULL, '2025-10-16 09:15:01'),
+(1172, 2, 23, 'siswa', '0089969128', 4, NULL, NULL, '2025-10-26 13:42:28'),
+(1173, 2, 24, 'siswa', '0089969128', 4, NULL, NULL, '2025-10-28 10:22:26'),
+(1174, 2, 25, 'siswa', '0089969128', 4, NULL, NULL, '2025-10-17 14:50:51'),
+(1175, 2, 26, 'siswa', '0089969128', 5, NULL, NULL, '2025-10-16 09:27:54'),
+(1176, 2, 27, 'siswa', '0089969128', 4, NULL, NULL, '2025-10-18 14:35:40'),
+(1177, 2, 28, 'siswa', '0089969128', 5, NULL, NULL, '2025-10-29 16:14:33'),
+(1178, 2, 29, 'siswa', '0089969128', 4, NULL, NULL, '2025-10-21 21:19:58'),
+(1179, 2, 30, 'siswa', '0089969128', 5, NULL, NULL, '2025-10-22 18:57:47'),
+(1180, 2, 31, 'siswa', '0089969128', 4, NULL, NULL, '2025-10-17 15:54:05'),
+(1181, 2, 12, 'siswa', '0093590373', 5, NULL, NULL, '2025-10-23 11:39:35'),
+(1182, 2, 13, 'siswa', '0093590373', 4, NULL, NULL, '2025-10-19 13:51:15'),
+(1183, 2, 14, 'siswa', '0093590373', 5, NULL, NULL, '2025-10-31 17:15:24'),
+(1184, 2, 15, 'siswa', '0093590373', 4, NULL, NULL, '2025-10-29 18:46:51'),
+(1185, 2, 16, 'siswa', '0093590373', 5, NULL, NULL, '2025-10-21 21:19:59'),
+(1186, 2, 17, 'siswa', '0093590373', 5, NULL, NULL, '2025-10-26 17:02:23'),
+(1187, 2, 18, 'siswa', '0093590373', 5, NULL, NULL, '2025-10-31 14:06:20'),
+(1188, 2, 19, 'siswa', '0093590373', 4, NULL, NULL, '2025-10-25 10:48:38'),
+(1189, 2, 20, 'siswa', '0093590373', 5, NULL, NULL, '2025-10-17 10:25:39'),
+(1190, 2, 21, 'siswa', '0093590373', 5, NULL, NULL, '2025-10-15 08:09:40'),
+(1191, 2, 22, 'siswa', '0093590373', 5, NULL, NULL, '2025-10-26 15:22:26'),
+(1192, 2, 23, 'siswa', '0093590373', 4, NULL, NULL, '2025-10-19 22:04:28'),
+(1193, 2, 24, 'siswa', '0093590373', 4, NULL, NULL, '2025-10-21 13:36:01'),
+(1194, 2, 25, 'siswa', '0093590373', 4, NULL, NULL, '2025-10-24 19:06:17'),
+(1195, 2, 26, 'siswa', '0093590373', 4, NULL, NULL, '2025-10-26 09:24:47'),
+(1196, 2, 27, 'siswa', '0093590373', 5, NULL, NULL, '2025-10-19 09:46:33'),
+(1197, 2, 28, 'siswa', '0093590373', 4, NULL, NULL, '2025-10-23 09:08:21'),
+(1198, 2, 29, 'siswa', '0093590373', 4, NULL, NULL, '2025-10-29 08:36:00'),
+(1199, 2, 30, 'siswa', '0093590373', 4, NULL, NULL, '2025-10-29 17:47:58'),
+(1200, 2, 31, 'siswa', '0093590373', 5, NULL, NULL, '2025-10-27 09:21:25'),
+(1201, 2, 12, 'siswa', '0093801678', 4, NULL, NULL, '2025-10-16 12:05:35'),
+(1202, 2, 13, 'siswa', '0093801678', 5, NULL, NULL, '2025-10-29 22:20:48'),
+(1203, 2, 14, 'siswa', '0093801678', 5, NULL, NULL, '2025-10-24 19:03:06'),
+(1204, 2, 15, 'siswa', '0093801678', 4, NULL, NULL, '2025-10-22 11:47:15'),
+(1205, 2, 16, 'siswa', '0093801678', 5, NULL, NULL, '2025-10-28 12:07:39'),
+(1206, 2, 17, 'siswa', '0093801678', 5, NULL, NULL, '2025-10-25 12:38:20'),
+(1207, 2, 18, 'siswa', '0093801678', 5, NULL, NULL, '2025-10-29 22:16:28'),
+(1208, 2, 19, 'siswa', '0093801678', 5, NULL, NULL, '2025-10-19 17:32:44'),
+(1209, 2, 20, 'siswa', '0093801678', 4, NULL, NULL, '2025-10-17 14:40:07'),
+(1210, 2, 21, 'siswa', '0093801678', 5, NULL, NULL, '2025-10-26 17:12:02'),
+(1211, 2, 22, 'siswa', '0093801678', 5, NULL, NULL, '2025-10-28 10:26:46'),
+(1212, 2, 23, 'siswa', '0093801678', 5, NULL, NULL, '2025-10-20 09:29:11'),
+(1213, 2, 24, 'siswa', '0093801678', 4, NULL, NULL, '2025-10-24 16:09:04'),
+(1214, 2, 25, 'siswa', '0093801678', 5, NULL, NULL, '2025-10-21 11:02:26'),
+(1215, 2, 26, 'siswa', '0093801678', 4, NULL, NULL, '2025-10-16 10:27:53'),
+(1216, 2, 27, 'siswa', '0093801678', 4, NULL, NULL, '2025-10-29 22:11:04'),
+(1217, 2, 28, 'siswa', '0093801678', 5, NULL, NULL, '2025-10-30 10:09:11'),
+(1218, 2, 29, 'siswa', '0093801678', 5, NULL, NULL, '2025-10-31 11:11:19'),
+(1219, 2, 30, 'siswa', '0093801678', 4, NULL, NULL, '2025-10-18 20:44:06'),
+(1220, 2, 31, 'siswa', '0093801678', 4, NULL, NULL, '2025-10-22 10:36:28'),
+(1221, 2, 12, 'siswa', '0095454453', 5, NULL, NULL, '2025-10-18 13:13:03'),
+(1222, 2, 13, 'siswa', '0095454453', 5, NULL, NULL, '2025-10-31 22:55:41'),
+(1223, 2, 14, 'siswa', '0095454453', 5, NULL, NULL, '2025-10-23 14:28:12'),
+(1224, 2, 15, 'siswa', '0095454453', 5, NULL, NULL, '2025-10-17 10:21:17'),
+(1225, 2, 16, 'siswa', '0095454453', 4, NULL, NULL, '2025-10-30 16:11:08'),
+(1226, 2, 17, 'siswa', '0095454453', 4, NULL, NULL, '2025-10-19 08:15:13'),
+(1227, 2, 18, 'siswa', '0095454453', 4, NULL, NULL, '2025-10-15 08:05:24'),
+(1228, 2, 19, 'siswa', '0095454453', 5, NULL, NULL, '2025-10-25 17:29:30'),
+(1229, 2, 20, 'siswa', '0095454453', 4, NULL, NULL, '2025-10-27 16:34:13'),
+(1230, 2, 21, 'siswa', '0095454453', 4, NULL, NULL, '2025-10-16 14:48:47'),
+(1231, 2, 22, 'siswa', '0095454453', 5, NULL, NULL, '2025-10-18 15:46:27'),
+(1232, 2, 23, 'siswa', '0095454453', 5, NULL, NULL, '2025-10-24 18:01:55'),
+(1233, 2, 24, 'siswa', '0095454453', 5, NULL, NULL, '2025-10-16 20:46:24'),
+(1234, 2, 25, 'siswa', '0095454453', 5, NULL, NULL, '2025-10-20 16:40:44'),
+(1235, 2, 26, 'siswa', '0095454453', 5, NULL, NULL, '2025-10-19 13:52:19'),
+(1236, 2, 27, 'siswa', '0095454453', 5, NULL, NULL, '2025-10-30 18:47:50'),
+(1237, 2, 28, 'siswa', '0095454453', 5, NULL, NULL, '2025-10-23 10:14:44'),
+(1238, 2, 29, 'siswa', '0095454453', 5, NULL, NULL, '2025-10-26 13:58:40'),
+(1239, 2, 30, 'siswa', '0095454453', 4, NULL, NULL, '2025-10-21 13:44:38'),
+(1240, 2, 31, 'siswa', '0095454453', 5, NULL, NULL, '2025-10-27 08:47:55'),
+(1241, 2, 12, 'siswa', '0096317085', 4, NULL, NULL, '2025-10-24 21:53:46'),
+(1242, 2, 13, 'siswa', '0096317085', 4, NULL, NULL, '2025-10-24 10:12:31'),
+(1243, 2, 14, 'siswa', '0096317085', 4, NULL, NULL, '2025-10-26 10:46:27'),
+(1244, 2, 15, 'siswa', '0096317085', 5, NULL, NULL, '2025-10-19 14:28:03'),
+(1245, 2, 16, 'siswa', '0096317085', 5, NULL, NULL, '2025-10-15 18:22:47'),
+(1246, 2, 17, 'siswa', '0096317085', 5, NULL, NULL, '2025-10-27 10:39:45'),
+(1247, 2, 18, 'siswa', '0096317085', 5, NULL, NULL, '2025-10-15 15:24:33'),
+(1248, 2, 19, 'siswa', '0096317085', 5, NULL, NULL, '2025-10-16 19:32:24'),
+(1249, 2, 20, 'siswa', '0096317085', 4, NULL, NULL, '2025-10-30 11:33:03'),
+(1250, 2, 21, 'siswa', '0096317085', 5, NULL, NULL, '2025-10-26 18:34:40'),
+(1251, 2, 22, 'siswa', '0096317085', 5, NULL, NULL, '2025-10-19 12:40:32'),
+(1252, 2, 23, 'siswa', '0096317085', 5, NULL, NULL, '2025-10-25 08:29:15'),
+(1253, 2, 24, 'siswa', '0096317085', 5, NULL, NULL, '2025-10-24 08:43:24'),
+(1254, 2, 25, 'siswa', '0096317085', 5, NULL, NULL, '2025-10-15 19:30:19'),
+(1255, 2, 26, 'siswa', '0096317085', 4, NULL, NULL, '2025-10-24 16:05:44'),
+(1256, 2, 27, 'siswa', '0096317085', 4, NULL, NULL, '2025-10-29 09:58:31'),
+(1257, 2, 28, 'siswa', '0096317085', 5, NULL, NULL, '2025-10-31 17:22:54'),
+(1258, 2, 29, 'siswa', '0096317085', 4, NULL, NULL, '2025-10-24 12:55:42'),
+(1259, 2, 30, 'siswa', '0096317085', 5, NULL, NULL, '2025-10-26 11:00:20'),
+(1260, 2, 31, 'siswa', '0096317085', 5, NULL, NULL, '2025-10-23 13:25:57'),
+(1261, 2, 12, 'siswa', '0099268185', 5, NULL, NULL, '2025-10-27 10:30:05'),
+(1262, 2, 13, 'siswa', '0099268185', 5, NULL, NULL, '2025-10-20 21:24:26'),
+(1263, 2, 14, 'siswa', '0099268185', 5, NULL, NULL, '2025-10-20 21:32:00'),
+(1264, 2, 15, 'siswa', '0099268185', 4, NULL, NULL, '2025-10-29 10:12:33'),
+(1265, 2, 16, 'siswa', '0099268185', 4, NULL, NULL, '2025-10-19 20:15:50'),
+(1266, 2, 17, 'siswa', '0099268185', 4, NULL, NULL, '2025-10-23 10:27:47'),
+(1267, 2, 18, 'siswa', '0099268185', 5, NULL, NULL, '2025-10-20 08:19:24'),
+(1268, 2, 19, 'siswa', '0099268185', 4, NULL, NULL, '2025-10-16 12:14:16'),
+(1269, 2, 20, 'siswa', '0099268185', 5, NULL, NULL, '2025-10-21 22:44:48'),
+(1270, 2, 21, 'siswa', '0099268185', 5, NULL, NULL, '2025-10-22 22:23:05'),
+(1271, 2, 22, 'siswa', '0099268185', 4, NULL, NULL, '2025-10-18 08:38:04'),
+(1272, 2, 23, 'siswa', '0099268185', 4, NULL, NULL, '2025-10-15 21:19:58'),
+(1273, 2, 24, 'siswa', '0099268185', 5, NULL, NULL, '2025-10-20 22:55:43'),
+(1274, 2, 25, 'siswa', '0099268185', 5, NULL, NULL, '2025-10-17 09:57:35'),
+(1275, 2, 26, 'siswa', '0099268185', 4, NULL, NULL, '2025-10-25 20:16:54'),
+(1276, 2, 27, 'siswa', '0099268185', 5, NULL, NULL, '2025-10-31 17:14:19'),
+(1277, 2, 28, 'siswa', '0099268185', 5, NULL, NULL, '2025-10-22 17:55:36'),
+(1278, 2, 29, 'siswa', '0099268185', 4, NULL, NULL, '2025-10-22 16:19:00'),
+(1279, 2, 30, 'siswa', '0099268185', 4, NULL, NULL, '2025-10-18 22:05:37'),
+(1280, 2, 31, 'siswa', '0099268185', 5, NULL, NULL, '2025-10-21 13:45:38'),
+(1281, 2, 12, 'siswa', '2021383151', 5, NULL, NULL, '2025-10-24 11:25:22'),
+(1282, 2, 13, 'siswa', '2021383151', 5, NULL, NULL, '2025-10-17 18:04:16'),
+(1283, 2, 14, 'siswa', '2021383151', 4, NULL, NULL, '2025-10-29 22:10:59'),
+(1284, 2, 15, 'siswa', '2021383151', 4, NULL, NULL, '2025-10-19 08:23:48'),
+(1285, 2, 16, 'siswa', '2021383151', 5, NULL, NULL, '2025-10-31 10:01:33'),
+(1286, 2, 17, 'siswa', '2021383151', 5, NULL, NULL, '2025-10-16 09:09:36'),
+(1287, 2, 18, 'siswa', '2021383151', 5, NULL, NULL, '2025-10-28 13:30:24'),
+(1288, 2, 19, 'siswa', '2021383151', 4, NULL, NULL, '2025-10-19 22:54:39'),
+(1289, 2, 20, 'siswa', '2021383151', 5, NULL, NULL, '2025-10-15 13:44:34'),
+(1290, 2, 21, 'siswa', '2021383151', 5, NULL, NULL, '2025-10-24 18:01:56'),
+(1291, 2, 22, 'siswa', '2021383151', 5, NULL, NULL, '2025-10-20 17:20:46'),
+(1292, 2, 23, 'siswa', '2021383151', 5, NULL, NULL, '2025-10-28 15:14:36'),
+(1293, 2, 24, 'siswa', '2021383151', 4, NULL, NULL, '2025-10-31 18:37:01'),
+(1294, 2, 25, 'siswa', '2021383151', 4, NULL, NULL, '2025-10-18 11:42:44'),
+(1295, 2, 26, 'siswa', '2021383151', 5, NULL, NULL, '2025-10-26 17:09:51'),
+(1296, 2, 27, 'siswa', '2021383151', 5, NULL, NULL, '2025-10-23 22:29:31'),
+(1297, 2, 28, 'siswa', '2021383151', 4, NULL, NULL, '2025-10-30 12:48:08'),
+(1298, 2, 29, 'siswa', '2021383151', 4, NULL, NULL, '2025-10-27 09:10:35'),
+(1299, 2, 30, 'siswa', '2021383151', 4, NULL, NULL, '2025-10-23 11:31:58'),
+(1300, 2, 31, 'siswa', '2021383151', 4, NULL, NULL, '2025-10-24 08:15:17'),
+(1301, 2, 12, 'siswa', '2052804732', 5, NULL, NULL, '2025-10-24 20:22:25'),
+(1302, 2, 13, 'siswa', '2052804732', 4, NULL, NULL, '2025-10-28 22:29:28'),
+(1303, 2, 14, 'siswa', '2052804732', 5, NULL, NULL, '2025-10-17 22:20:50'),
+(1304, 2, 15, 'siswa', '2052804732', 4, NULL, NULL, '2025-10-22 17:53:31'),
+(1305, 2, 16, 'siswa', '2052804732', 5, NULL, NULL, '2025-10-16 19:21:32'),
+(1306, 2, 17, 'siswa', '2052804732', 5, NULL, NULL, '2025-10-29 08:43:29'),
+(1307, 2, 18, 'siswa', '2052804732', 4, NULL, NULL, '2025-10-30 17:31:40'),
+(1308, 2, 19, 'siswa', '2052804732', 5, NULL, NULL, '2025-10-16 08:59:45'),
+(1309, 2, 20, 'siswa', '2052804732', 5, NULL, NULL, '2025-10-28 15:08:13'),
+(1310, 2, 21, 'siswa', '2052804732', 5, NULL, NULL, '2025-10-25 11:17:44'),
+(1311, 2, 22, 'siswa', '2052804732', 5, NULL, NULL, '2025-10-28 18:57:46'),
+(1312, 2, 23, 'siswa', '2052804732', 5, NULL, NULL, '2025-10-23 18:53:21'),
+(1313, 2, 24, 'siswa', '2052804732', 4, NULL, NULL, '2025-10-25 17:24:06'),
+(1314, 2, 25, 'siswa', '2052804732', 4, NULL, NULL, '2025-10-18 10:13:35'),
+(1315, 2, 26, 'siswa', '2052804732', 4, NULL, NULL, '2025-10-28 21:14:30'),
+(1316, 2, 27, 'siswa', '2052804732', 5, NULL, NULL, '2025-10-22 19:40:01'),
+(1317, 2, 28, 'siswa', '2052804732', 4, NULL, NULL, '2025-10-19 08:19:35'),
+(1318, 2, 29, 'siswa', '2052804732', 5, NULL, NULL, '2025-10-15 13:40:17'),
+(1319, 2, 30, 'siswa', '2052804732', 4, NULL, NULL, '2025-10-19 10:54:04'),
+(1320, 2, 31, 'siswa', '2052804732', 5, NULL, NULL, '2025-10-30 18:41:22'),
+(1321, 2, 12, 'siswa', '2061010927', 5, NULL, NULL, '2025-10-16 20:04:45'),
+(1322, 2, 13, 'siswa', '2061010927', 5, NULL, NULL, '2025-10-25 12:32:55'),
+(1323, 2, 14, 'siswa', '2061010927', 5, NULL, NULL, '2025-10-15 13:33:47'),
+(1324, 2, 15, 'siswa', '2061010927', 4, NULL, NULL, '2025-10-29 17:41:25'),
+(1325, 2, 16, 'siswa', '2061010927', 4, NULL, NULL, '2025-10-17 16:25:23'),
+(1326, 2, 17, 'siswa', '2061010927', 5, NULL, NULL, '2025-10-15 13:33:45'),
+(1327, 2, 18, 'siswa', '2061010927', 4, NULL, NULL, '2025-10-17 17:31:47'),
+(1328, 2, 19, 'siswa', '2061010927', 4, NULL, NULL, '2025-10-24 16:14:30'),
+(1329, 2, 20, 'siswa', '2061010927', 5, NULL, NULL, '2025-10-24 13:05:23'),
+(1330, 2, 21, 'siswa', '2061010927', 5, NULL, NULL, '2025-10-19 11:18:54'),
+(1331, 2, 22, 'siswa', '2061010927', 5, NULL, NULL, '2025-10-21 09:12:47'),
+(1332, 2, 23, 'siswa', '2061010927', 4, NULL, NULL, '2025-10-19 14:15:00'),
+(1333, 2, 24, 'siswa', '2061010927', 4, NULL, NULL, '2025-10-19 14:30:11'),
+(1334, 2, 25, 'siswa', '2061010927', 4, NULL, NULL, '2025-10-23 13:16:15'),
+(1335, 2, 26, 'siswa', '2061010927', 4, NULL, NULL, '2025-10-23 11:42:44'),
+(1336, 2, 27, 'siswa', '2061010927', 5, NULL, NULL, '2025-10-29 12:08:44'),
+(1337, 2, 28, 'siswa', '2061010927', 4, NULL, NULL, '2025-10-31 10:56:09'),
+(1338, 2, 29, 'siswa', '2061010927', 5, NULL, NULL, '2025-10-22 12:06:40'),
+(1339, 2, 30, 'siswa', '2061010927', 4, NULL, NULL, '2025-10-19 11:22:06'),
+(1340, 2, 31, 'siswa', '2061010927', 4, NULL, NULL, '2025-10-28 20:39:48'),
+(1341, 2, 12, 'siswa', '2065234615', 4, NULL, NULL, '2025-10-29 10:13:36'),
+(1342, 2, 13, 'siswa', '2065234615', 4, NULL, NULL, '2025-10-30 17:25:11'),
+(1343, 2, 14, 'siswa', '2065234615', 5, NULL, NULL, '2025-10-30 15:47:24'),
+(1344, 2, 15, 'siswa', '2065234615', 5, NULL, NULL, '2025-10-17 17:47:00'),
+(1345, 2, 16, 'siswa', '2065234615', 5, NULL, NULL, '2025-10-25 19:10:28'),
+(1346, 2, 17, 'siswa', '2065234615', 5, NULL, NULL, '2025-10-28 14:53:06'),
+(1347, 2, 18, 'siswa', '2065234615', 5, NULL, NULL, '2025-10-16 18:11:56'),
+(1348, 2, 19, 'siswa', '2065234615', 4, NULL, NULL, '2025-10-26 08:12:54'),
+(1349, 2, 20, 'siswa', '2065234615', 5, NULL, NULL, '2025-10-30 20:27:43'),
+(1350, 2, 21, 'siswa', '2065234615', 4, NULL, NULL, '2025-10-16 17:52:29'),
+(1351, 2, 22, 'siswa', '2065234615', 5, NULL, NULL, '2025-10-29 18:01:58'),
+(1352, 2, 23, 'siswa', '2065234615', 5, NULL, NULL, '2025-10-16 09:13:49'),
+(1353, 2, 24, 'siswa', '2065234615', 4, NULL, NULL, '2025-10-27 14:55:20'),
+(1354, 2, 25, 'siswa', '2065234615', 5, NULL, NULL, '2025-10-22 15:09:19'),
+(1355, 2, 26, 'siswa', '2065234615', 4, NULL, NULL, '2025-10-29 20:39:43'),
+(1356, 2, 27, 'siswa', '2065234615', 5, NULL, NULL, '2025-10-17 17:41:36'),
+(1357, 2, 28, 'siswa', '2065234615', 5, NULL, NULL, '2025-10-16 17:43:46'),
+(1358, 2, 29, 'siswa', '2065234615', 5, NULL, NULL, '2025-10-16 14:45:34'),
+(1359, 2, 30, 'siswa', '2065234615', 5, NULL, NULL, '2025-10-21 22:47:59'),
+(1360, 2, 31, 'siswa', '2065234615', 5, NULL, NULL, '2025-10-17 22:16:30'),
+(1361, 2, 12, 'siswa', '2078814025', 5, NULL, NULL, '2025-10-16 13:22:52');
+INSERT INTO `kuisioner_jawaban` (`id`, `kuisioner_id`, `pertanyaan_id`, `user_type`, `user_id`, `jawaban_skala`, `jawaban_text`, `jawaban_pilihan`, `created_at`) VALUES
+(1362, 2, 13, 'siswa', '2078814025', 4, NULL, NULL, '2025-10-23 22:11:07'),
+(1363, 2, 14, 'siswa', '2078814025', 4, NULL, NULL, '2025-10-28 21:03:36'),
+(1364, 2, 15, 'siswa', '2078814025', 5, NULL, NULL, '2025-10-25 14:09:35'),
+(1365, 2, 16, 'siswa', '2078814025', 4, NULL, NULL, '2025-10-24 15:40:55'),
+(1366, 2, 17, 'siswa', '2078814025', 5, NULL, NULL, '2025-10-20 21:18:55'),
+(1367, 2, 18, 'siswa', '2078814025', 5, NULL, NULL, '2025-10-26 13:39:18'),
+(1368, 2, 19, 'siswa', '2078814025', 5, NULL, NULL, '2025-10-26 19:45:34'),
+(1369, 2, 20, 'siswa', '2078814025', 5, NULL, NULL, '2025-10-20 20:11:26'),
+(1370, 2, 21, 'siswa', '2078814025', 5, NULL, NULL, '2025-10-30 15:46:26'),
+(1371, 2, 22, 'siswa', '2078814025', 5, NULL, NULL, '2025-10-30 22:16:22'),
+(1372, 2, 23, 'siswa', '2078814025', 4, NULL, NULL, '2025-10-18 21:51:34'),
+(1373, 2, 24, 'siswa', '2078814025', 4, NULL, NULL, '2025-10-29 13:10:50'),
+(1374, 2, 25, 'siswa', '2078814025', 5, NULL, NULL, '2025-10-29 11:37:24'),
+(1375, 2, 26, 'siswa', '2078814025', 4, NULL, NULL, '2025-10-24 13:06:28'),
+(1376, 2, 27, 'siswa', '2078814025', 4, NULL, NULL, '2025-10-30 11:31:56'),
+(1377, 2, 28, 'siswa', '2078814025', 4, NULL, NULL, '2025-10-26 22:57:48'),
+(1378, 2, 29, 'siswa', '2078814025', 4, NULL, NULL, '2025-10-24 11:29:44'),
+(1379, 2, 30, 'siswa', '2078814025', 4, NULL, NULL, '2025-10-15 14:55:23'),
+(1380, 2, 31, 'siswa', '2078814025', 4, NULL, NULL, '2025-10-28 12:18:32'),
+(1381, 2, 12, 'siswa', '2082533938', 5, NULL, NULL, '2025-10-18 19:07:21'),
+(1382, 2, 13, 'siswa', '2082533938', 4, NULL, NULL, '2025-10-15 21:27:31'),
+(1383, 2, 14, 'siswa', '2082533938', 4, NULL, NULL, '2025-10-26 19:34:40'),
+(1384, 2, 15, 'siswa', '2082533938', 5, NULL, NULL, '2025-10-18 11:21:10'),
+(1385, 2, 16, 'siswa', '2082533938', 5, NULL, NULL, '2025-10-23 10:08:17'),
+(1386, 2, 17, 'siswa', '2082533938', 4, NULL, NULL, '2025-10-18 08:23:56'),
+(1387, 2, 18, 'siswa', '2082533938', 5, NULL, NULL, '2025-10-27 09:18:14'),
+(1388, 2, 19, 'siswa', '2082533938', 4, NULL, NULL, '2025-10-29 14:31:17'),
+(1389, 2, 20, 'siswa', '2082533938', 5, NULL, NULL, '2025-10-25 14:22:30'),
+(1390, 2, 21, 'siswa', '2082533938', 4, NULL, NULL, '2025-10-22 09:14:49'),
+(1391, 2, 22, 'siswa', '2082533938', 4, NULL, NULL, '2025-10-25 19:06:12'),
+(1392, 2, 23, 'siswa', '2082533938', 5, NULL, NULL, '2025-10-31 17:12:11'),
+(1393, 2, 24, 'siswa', '2082533938', 4, NULL, NULL, '2025-10-15 12:14:23'),
+(1394, 2, 25, 'siswa', '2082533938', 4, NULL, NULL, '2025-10-29 17:33:57'),
+(1395, 2, 26, 'siswa', '2082533938', 4, NULL, NULL, '2025-10-28 15:01:44'),
+(1396, 2, 27, 'siswa', '2082533938', 5, NULL, NULL, '2025-10-29 12:05:31'),
+(1397, 2, 28, 'siswa', '2082533938', 4, NULL, NULL, '2025-10-17 19:19:20'),
+(1398, 2, 29, 'siswa', '2082533938', 5, NULL, NULL, '2025-10-24 16:16:35'),
+(1399, 2, 30, 'siswa', '2082533938', 4, NULL, NULL, '2025-10-17 11:32:07'),
+(1400, 2, 31, 'siswa', '2082533938', 4, NULL, NULL, '2025-10-26 13:49:00'),
+(1401, 2, 12, 'siswa', '2098350667', 5, NULL, NULL, '2025-10-30 18:43:36'),
+(1402, 2, 13, 'siswa', '2098350667', 5, NULL, NULL, '2025-10-20 09:32:26'),
+(1403, 2, 14, 'siswa', '2098350667', 5, NULL, NULL, '2025-10-21 12:20:49'),
+(1404, 2, 15, 'siswa', '2098350667', 4, NULL, NULL, '2025-10-15 18:35:49'),
+(1405, 2, 16, 'siswa', '2098350667', 4, NULL, NULL, '2025-10-17 20:38:45'),
+(1406, 2, 17, 'siswa', '2098350667', 5, NULL, NULL, '2025-10-29 18:57:44'),
+(1407, 2, 18, 'siswa', '2098350667', 5, NULL, NULL, '2025-10-29 18:06:21'),
+(1408, 2, 19, 'siswa', '2098350667', 4, NULL, NULL, '2025-10-18 19:05:13'),
+(1409, 2, 20, 'siswa', '2098350667', 5, NULL, NULL, '2025-10-22 18:14:05'),
+(1410, 2, 21, 'siswa', '2098350667', 5, NULL, NULL, '2025-10-20 15:36:29'),
+(1411, 2, 22, 'siswa', '2098350667', 5, NULL, NULL, '2025-10-26 15:34:18'),
+(1412, 2, 23, 'siswa', '2098350667', 5, NULL, NULL, '2025-10-16 21:23:14'),
+(1413, 2, 24, 'siswa', '2098350667', 4, NULL, NULL, '2025-10-22 08:52:15'),
+(1414, 2, 25, 'siswa', '2098350667', 5, NULL, NULL, '2025-10-27 17:48:13'),
+(1415, 2, 26, 'siswa', '2098350667', 5, NULL, NULL, '2025-10-25 11:16:38'),
+(1416, 2, 27, 'siswa', '2098350667', 4, NULL, NULL, '2025-10-16 12:16:24'),
+(1417, 2, 28, 'siswa', '2098350667', 4, NULL, NULL, '2025-10-30 20:23:28'),
+(1418, 2, 29, 'siswa', '2098350667', 4, NULL, NULL, '2025-10-25 14:19:21'),
+(1419, 2, 30, 'siswa', '2098350667', 5, NULL, NULL, '2025-10-31 14:17:08'),
+(1420, 2, 31, 'siswa', '2098350667', 5, NULL, NULL, '2025-10-25 17:24:04'),
+(1421, 2, 12, 'siswa', '3045646933', 4, NULL, NULL, '2025-10-26 19:47:40'),
+(1422, 2, 13, 'siswa', '3045646933', 4, NULL, NULL, '2025-10-16 14:54:13'),
+(1423, 2, 14, 'siswa', '3045646933', 4, NULL, NULL, '2025-10-21 17:09:50'),
+(1424, 2, 15, 'siswa', '3045646933', 5, NULL, NULL, '2025-10-31 17:26:16'),
+(1425, 2, 16, 'siswa', '3045646933', 4, NULL, NULL, '2025-10-20 14:10:35'),
+(1426, 2, 17, 'siswa', '3045646933', 4, NULL, NULL, '2025-10-26 22:44:50'),
+(1427, 2, 18, 'siswa', '3045646933', 5, NULL, NULL, '2025-10-22 09:20:20'),
+(1428, 2, 19, 'siswa', '3045646933', 5, NULL, NULL, '2025-10-22 10:36:27'),
+(1429, 2, 20, 'siswa', '3045646933', 4, NULL, NULL, '2025-10-16 21:15:35'),
+(1430, 2, 21, 'siswa', '3045646933', 4, NULL, NULL, '2025-10-17 12:52:32'),
+(1431, 2, 22, 'siswa', '3045646933', 4, NULL, NULL, '2025-10-26 10:58:17'),
+(1432, 2, 23, 'siswa', '3045646933', 4, NULL, NULL, '2025-10-25 17:13:16'),
+(1433, 2, 24, 'siswa', '3045646933', 5, NULL, NULL, '2025-10-24 20:32:07'),
+(1434, 2, 25, 'siswa', '3045646933', 5, NULL, NULL, '2025-10-25 09:44:21'),
+(1435, 2, 26, 'siswa', '3045646933', 5, NULL, NULL, '2025-10-25 15:31:10'),
+(1436, 2, 27, 'siswa', '3045646933', 4, NULL, NULL, '2025-10-17 17:42:39'),
+(1437, 2, 28, 'siswa', '3045646933', 4, NULL, NULL, '2025-10-17 08:48:51'),
+(1438, 2, 29, 'siswa', '3045646933', 5, NULL, NULL, '2025-10-30 21:48:16'),
+(1439, 2, 30, 'siswa', '3045646933', 5, NULL, NULL, '2025-10-16 13:43:29'),
+(1440, 2, 31, 'siswa', '3045646933', 4, NULL, NULL, '2025-10-30 19:58:36'),
+(1441, 2, 12, 'siswa', '3061461498', 4, NULL, NULL, '2025-10-15 16:49:21'),
+(1442, 2, 13, 'siswa', '3061461498', 4, NULL, NULL, '2025-10-26 13:40:21'),
+(1443, 2, 14, 'siswa', '3061461498', 5, NULL, NULL, '2025-10-26 10:39:51'),
+(1444, 2, 15, 'siswa', '3061461498', 4, NULL, NULL, '2025-10-18 21:00:15'),
+(1445, 2, 16, 'siswa', '3061461498', 4, NULL, NULL, '2025-10-26 15:33:15'),
+(1446, 2, 17, 'siswa', '3061461498', 5, NULL, NULL, '2025-10-17 09:02:53'),
+(1447, 2, 18, 'siswa', '3061461498', 4, NULL, NULL, '2025-10-31 19:03:56'),
+(1448, 2, 19, 'siswa', '3061461498', 5, NULL, NULL, '2025-10-29 15:10:18'),
+(1449, 2, 20, 'siswa', '3061461498', 4, NULL, NULL, '2025-10-18 08:35:46'),
+(1450, 2, 21, 'siswa', '3061461498', 4, NULL, NULL, '2025-10-18 17:35:04'),
+(1451, 2, 22, 'siswa', '3061461498', 5, NULL, NULL, '2025-10-30 16:11:13'),
+(1452, 2, 23, 'siswa', '3061461498', 5, NULL, NULL, '2025-10-16 18:09:47'),
+(1453, 2, 24, 'siswa', '3061461498', 5, NULL, NULL, '2025-10-16 08:57:36'),
+(1454, 2, 25, 'siswa', '3061461498', 4, NULL, NULL, '2025-10-17 09:00:46'),
+(1455, 2, 26, 'siswa', '3061461498', 5, NULL, NULL, '2025-10-15 16:40:40'),
+(1456, 2, 27, 'siswa', '3061461498', 4, NULL, NULL, '2025-10-28 19:29:11'),
+(1457, 2, 28, 'siswa', '3061461498', 4, NULL, NULL, '2025-10-27 12:17:33'),
+(1458, 2, 29, 'siswa', '3061461498', 5, NULL, NULL, '2025-10-28 11:44:03'),
+(1459, 2, 30, 'siswa', '3061461498', 4, NULL, NULL, '2025-10-16 13:37:57'),
+(1460, 2, 31, 'siswa', '3061461498', 5, NULL, NULL, '2025-10-28 10:30:01'),
+(1461, 2, 12, 'siswa', '3063319075', 5, NULL, NULL, '2025-10-31 08:18:24'),
+(1462, 2, 13, 'siswa', '3063319075', 4, NULL, NULL, '2025-10-17 17:38:18'),
+(1463, 2, 14, 'siswa', '3063319075', 5, NULL, NULL, '2025-10-19 13:08:33'),
+(1464, 2, 15, 'siswa', '3063319075', 4, NULL, NULL, '2025-10-18 21:53:47'),
+(1465, 2, 16, 'siswa', '3063319075', 4, NULL, NULL, '2025-10-28 10:29:00'),
+(1466, 2, 17, 'siswa', '3063319075', 5, NULL, NULL, '2025-10-28 11:51:32'),
+(1467, 2, 18, 'siswa', '3063319075', 4, NULL, NULL, '2025-10-31 15:44:04'),
+(1468, 2, 19, 'siswa', '3063319075', 4, NULL, NULL, '2025-10-25 18:27:13'),
+(1469, 2, 20, 'siswa', '3063319075', 5, NULL, NULL, '2025-10-20 12:30:38'),
+(1470, 2, 21, 'siswa', '3063319075', 5, NULL, NULL, '2025-10-20 18:36:51'),
+(1471, 2, 22, 'siswa', '3063319075', 4, NULL, NULL, '2025-10-26 22:56:43'),
+(1472, 2, 23, 'siswa', '3063319075', 5, NULL, NULL, '2025-10-29 19:16:06'),
+(1473, 2, 24, 'siswa', '3063319075', 5, NULL, NULL, '2025-10-22 21:18:47'),
+(1474, 2, 25, 'siswa', '3063319075', 4, NULL, NULL, '2025-10-26 12:32:48'),
+(1475, 2, 26, 'siswa', '3063319075', 4, NULL, NULL, '2025-10-26 11:57:07'),
+(1476, 2, 27, 'siswa', '3063319075', 5, NULL, NULL, '2025-10-25 17:24:07'),
+(1477, 2, 28, 'siswa', '3063319075', 4, NULL, NULL, '2025-10-22 11:39:40'),
+(1478, 2, 29, 'siswa', '3063319075', 4, NULL, NULL, '2025-10-30 14:30:08'),
+(1479, 2, 30, 'siswa', '3063319075', 4, NULL, NULL, '2025-10-24 11:31:51'),
+(1480, 2, 31, 'siswa', '3063319075', 5, NULL, NULL, '2025-10-16 12:07:47'),
+(1481, 2, 12, 'siswa', '3072235768', 5, NULL, NULL, '2025-10-25 11:24:17'),
+(1482, 2, 13, 'siswa', '3072235768', 4, NULL, NULL, '2025-10-21 09:15:04'),
+(1483, 2, 14, 'siswa', '3072235768', 5, NULL, NULL, '2025-10-30 17:30:35'),
+(1484, 2, 15, 'siswa', '3072235768', 4, NULL, NULL, '2025-10-21 15:31:03'),
+(1485, 2, 16, 'siswa', '3072235768', 5, NULL, NULL, '2025-10-23 12:57:56'),
+(1486, 2, 17, 'siswa', '3072235768', 5, NULL, NULL, '2025-10-21 11:15:27'),
+(1487, 2, 18, 'siswa', '3072235768', 5, NULL, NULL, '2025-10-21 10:50:36'),
+(1488, 2, 19, 'siswa', '3072235768', 5, NULL, NULL, '2025-10-29 16:21:05'),
+(1489, 2, 20, 'siswa', '3072235768', 4, NULL, NULL, '2025-10-25 22:51:28'),
+(1490, 2, 21, 'siswa', '3072235768', 5, NULL, NULL, '2025-10-24 14:23:43'),
+(1491, 2, 22, 'siswa', '3072235768', 4, NULL, NULL, '2025-10-30 14:23:38'),
+(1492, 2, 23, 'siswa', '3072235768', 4, NULL, NULL, '2025-10-20 16:49:22'),
+(1493, 2, 24, 'siswa', '3072235768', 4, NULL, NULL, '2025-10-29 08:35:55'),
+(1494, 2, 25, 'siswa', '3072235768', 5, NULL, NULL, '2025-10-20 08:23:45'),
+(1495, 2, 26, 'siswa', '3072235768', 5, NULL, NULL, '2025-10-30 16:07:56'),
+(1496, 2, 27, 'siswa', '3072235768', 4, NULL, NULL, '2025-10-28 22:26:21'),
+(1497, 2, 28, 'siswa', '3072235768', 4, NULL, NULL, '2025-10-15 08:54:31'),
+(1498, 2, 29, 'siswa', '3072235768', 5, NULL, NULL, '2025-10-29 15:00:32'),
+(1499, 2, 30, 'siswa', '3072235768', 5, NULL, NULL, '2025-10-27 16:42:50'),
+(1500, 2, 31, 'siswa', '3072235768', 4, NULL, NULL, '2025-10-15 18:26:07'),
+(1501, 2, 12, 'siswa', '3080556625', 4, NULL, NULL, '2025-10-19 12:35:10'),
+(1502, 2, 13, 'siswa', '3080556625', 4, NULL, NULL, '2025-10-29 22:15:24'),
+(1503, 2, 14, 'siswa', '3080556625', 4, NULL, NULL, '2025-10-18 10:09:19'),
+(1504, 2, 15, 'siswa', '3080556625', 4, NULL, NULL, '2025-10-27 11:00:21'),
+(1505, 2, 16, 'siswa', '3080556625', 5, NULL, NULL, '2025-10-24 18:45:41'),
+(1506, 2, 17, 'siswa', '3080556625', 4, NULL, NULL, '2025-10-29 17:39:25'),
+(1507, 2, 18, 'siswa', '3080556625', 4, NULL, NULL, '2025-10-22 19:28:04'),
+(1508, 2, 19, 'siswa', '3080556625', 5, NULL, NULL, '2025-10-26 15:32:06'),
+(1509, 2, 20, 'siswa', '3080556625', 5, NULL, NULL, '2025-10-22 11:58:08'),
+(1510, 2, 21, 'siswa', '3080556625', 5, NULL, NULL, '2025-10-20 14:05:11'),
+(1511, 2, 22, 'siswa', '3080556625', 5, NULL, NULL, '2025-10-30 14:22:37'),
+(1512, 2, 23, 'siswa', '3080556625', 5, NULL, NULL, '2025-10-16 16:30:50'),
+(1513, 2, 24, 'siswa', '3080556625', 5, NULL, NULL, '2025-10-29 12:54:36'),
+(1514, 2, 25, 'siswa', '3080556625', 4, NULL, NULL, '2025-10-27 17:06:34'),
+(1515, 2, 26, 'siswa', '3080556625', 5, NULL, NULL, '2025-10-16 20:47:31'),
+(1516, 2, 27, 'siswa', '3080556625', 4, NULL, NULL, '2025-10-22 16:32:01'),
+(1517, 2, 28, 'siswa', '3080556625', 5, NULL, NULL, '2025-10-23 21:54:57'),
+(1518, 2, 29, 'siswa', '3080556625', 4, NULL, NULL, '2025-10-19 10:09:15'),
+(1519, 2, 30, 'siswa', '3080556625', 5, NULL, NULL, '2025-10-17 14:43:17'),
+(1520, 2, 31, 'siswa', '3080556625', 4, NULL, NULL, '2025-10-23 17:44:45'),
+(1521, 2, 12, 'siswa', '3107966544', 5, NULL, NULL, '2025-10-24 11:19:59'),
+(1522, 2, 13, 'siswa', '3107966544', 5, NULL, NULL, '2025-10-31 21:37:21'),
+(1523, 2, 14, 'siswa', '3107966544', 5, NULL, NULL, '2025-10-25 11:23:13'),
+(1524, 2, 15, 'siswa', '3107966544', 5, NULL, NULL, '2025-10-31 08:24:50'),
+(1525, 2, 16, 'siswa', '3107966544', 4, NULL, NULL, '2025-10-24 20:28:48'),
+(1526, 2, 17, 'siswa', '3107966544', 5, NULL, NULL, '2025-10-29 11:44:55'),
+(1527, 2, 18, 'siswa', '3107966544', 4, NULL, NULL, '2025-10-21 16:39:38'),
+(1528, 2, 19, 'siswa', '3107966544', 4, NULL, NULL, '2025-10-16 18:27:06'),
+(1529, 2, 20, 'siswa', '3107966544', 4, NULL, NULL, '2025-10-21 16:35:18'),
+(1530, 2, 21, 'siswa', '3107966544', 5, NULL, NULL, '2025-10-30 10:07:08'),
+(1531, 2, 22, 'siswa', '3107966544', 4, NULL, NULL, '2025-10-18 09:46:39'),
+(1532, 2, 23, 'siswa', '3107966544', 5, NULL, NULL, '2025-10-26 15:39:43'),
+(1533, 2, 24, 'siswa', '3107966544', 5, NULL, NULL, '2025-10-17 17:55:37'),
+(1534, 2, 25, 'siswa', '3107966544', 4, NULL, NULL, '2025-10-31 17:26:15'),
+(1535, 2, 26, 'siswa', '3107966544', 5, NULL, NULL, '2025-10-30 18:41:25'),
+(1536, 2, 27, 'siswa', '3107966544', 4, NULL, NULL, '2025-10-30 15:46:19'),
+(1537, 2, 28, 'siswa', '3107966544', 4, NULL, NULL, '2025-10-27 16:36:21'),
+(1538, 2, 29, 'siswa', '3107966544', 4, NULL, NULL, '2025-10-30 16:13:20'),
+(1539, 2, 30, 'siswa', '3107966544', 4, NULL, NULL, '2025-10-18 22:09:52'),
+(1540, 2, 31, 'siswa', '3107966544', 5, NULL, NULL, '2025-10-29 17:41:26'),
+(1541, 2, 12, 'siswa', '3749766539', 4, NULL, NULL, '2025-10-22 20:46:23'),
+(1542, 2, 13, 'siswa', '3749766539', 5, NULL, NULL, '2025-10-15 10:45:19'),
+(1543, 2, 14, 'siswa', '3749766539', 4, NULL, NULL, '2025-10-28 20:46:26'),
+(1544, 2, 15, 'siswa', '3749766539', 5, NULL, NULL, '2025-10-15 15:18:05'),
+(1545, 2, 16, 'siswa', '3749766539', 5, NULL, NULL, '2025-10-25 14:21:26'),
+(1546, 2, 17, 'siswa', '3749766539', 4, NULL, NULL, '2025-10-19 09:28:11'),
+(1547, 2, 18, 'siswa', '3749766539', 5, NULL, NULL, '2025-10-17 09:55:26'),
+(1548, 2, 19, 'siswa', '3749766539', 4, NULL, NULL, '2025-10-29 21:50:35'),
+(1549, 2, 20, 'siswa', '3749766539', 4, NULL, NULL, '2025-10-23 09:56:27'),
+(1550, 2, 21, 'siswa', '3749766539', 4, NULL, NULL, '2025-10-28 19:31:15'),
+(1551, 2, 22, 'siswa', '3749766539', 5, NULL, NULL, '2025-10-25 08:24:51'),
+(1552, 2, 23, 'siswa', '3749766539', 4, NULL, NULL, '2025-10-31 16:53:45'),
+(1553, 2, 24, 'siswa', '3749766539', 4, NULL, NULL, '2025-10-17 17:29:38'),
+(1554, 2, 25, 'siswa', '3749766539', 5, NULL, NULL, '2025-10-28 17:51:23'),
+(1555, 2, 26, 'siswa', '3749766539', 4, NULL, NULL, '2025-10-27 17:46:03'),
+(1556, 2, 27, 'siswa', '3749766539', 5, NULL, NULL, '2025-10-24 08:29:20'),
+(1557, 2, 28, 'siswa', '3749766539', 4, NULL, NULL, '2025-10-16 19:36:42'),
+(1558, 2, 29, 'siswa', '3749766539', 5, NULL, NULL, '2025-10-21 20:54:06'),
+(1559, 2, 30, 'siswa', '3749766539', 5, NULL, NULL, '2025-10-29 21:42:54'),
+(1560, 2, 31, 'siswa', '3749766539', 4, NULL, NULL, '2025-10-22 21:09:04'),
+(1561, 2, 12, 'siswa', '3762315024', 5, NULL, NULL, '2025-10-23 18:52:19'),
+(1562, 2, 13, 'siswa', '3762315024', 4, NULL, NULL, '2025-10-15 10:43:09'),
+(1563, 2, 14, 'siswa', '3762315024', 5, NULL, NULL, '2025-10-25 11:26:22'),
+(1564, 2, 15, 'siswa', '3762315024', 5, NULL, NULL, '2025-10-29 13:27:07'),
+(1565, 2, 16, 'siswa', '3762315024', 4, NULL, NULL, '2025-10-28 13:23:50'),
+(1566, 2, 17, 'siswa', '3762315024', 4, NULL, NULL, '2025-10-24 20:21:20'),
+(1567, 2, 18, 'siswa', '3762315024', 5, NULL, NULL, '2025-10-15 11:15:29'),
+(1568, 2, 19, 'siswa', '3762315024', 5, NULL, NULL, '2025-10-16 13:37:58'),
+(1569, 2, 20, 'siswa', '3762315024', 5, NULL, NULL, '2025-10-15 12:14:19'),
+(1570, 2, 21, 'siswa', '3762315024', 5, NULL, NULL, '2025-10-28 09:04:05'),
+(1571, 2, 22, 'siswa', '3762315024', 4, NULL, NULL, '2025-10-16 16:29:51'),
+(1572, 2, 23, 'siswa', '3762315024', 5, NULL, NULL, '2025-10-19 09:45:24'),
+(1573, 2, 24, 'siswa', '3762315024', 5, NULL, NULL, '2025-10-28 15:02:47'),
+(1574, 2, 25, 'siswa', '3762315024', 5, NULL, NULL, '2025-10-30 22:58:02'),
+(1575, 2, 26, 'siswa', '3762315024', 4, NULL, NULL, '2025-10-20 19:56:20'),
+(1576, 2, 27, 'siswa', '3762315024', 5, NULL, NULL, '2025-10-21 10:40:57'),
+(1577, 2, 28, 'siswa', '3762315024', 5, NULL, NULL, '2025-10-29 08:33:45'),
+(1578, 2, 29, 'siswa', '3762315024', 4, NULL, NULL, '2025-10-17 14:38:58'),
+(1579, 2, 30, 'siswa', '3762315024', 5, NULL, NULL, '2025-10-31 21:30:55'),
+(1580, 2, 31, 'siswa', '3762315024', 4, NULL, NULL, '2025-10-23 14:42:12'),
+(1581, 2, 12, 'siswa', '3994681926', 5, NULL, NULL, '2025-10-26 21:16:46'),
+(1582, 2, 13, 'siswa', '3994681926', 4, NULL, NULL, '2025-10-30 13:01:07'),
+(1583, 2, 14, 'siswa', '3994681926', 5, NULL, NULL, '2025-10-17 11:46:06'),
+(1584, 2, 15, 'siswa', '3994681926', 4, NULL, NULL, '2025-10-31 10:43:13'),
+(1585, 2, 16, 'siswa', '3994681926', 5, NULL, NULL, '2025-10-16 17:52:27'),
+(1586, 2, 17, 'siswa', '3994681926', 5, NULL, NULL, '2025-10-15 08:14:01'),
+(1587, 2, 18, 'siswa', '3994681926', 4, NULL, NULL, '2025-10-29 22:30:34'),
+(1588, 2, 19, 'siswa', '3994681926', 4, NULL, NULL, '2025-10-30 17:17:35'),
+(1589, 2, 20, 'siswa', '3994681926', 4, NULL, NULL, '2025-10-30 09:54:09'),
+(1590, 2, 21, 'siswa', '3994681926', 4, NULL, NULL, '2025-10-29 10:16:51'),
+(1591, 2, 22, 'siswa', '3994681926', 4, NULL, NULL, '2025-10-24 14:31:20'),
+(1592, 2, 23, 'siswa', '3994681926', 4, NULL, NULL, '2025-10-27 09:22:35'),
+(1593, 2, 24, 'siswa', '3994681926', 5, NULL, NULL, '2025-10-19 22:57:53'),
+(1594, 2, 25, 'siswa', '3994681926', 5, NULL, NULL, '2025-10-22 12:16:24'),
+(1595, 2, 26, 'siswa', '3994681926', 4, NULL, NULL, '2025-10-31 10:00:27'),
+(1596, 2, 27, 'siswa', '3994681926', 4, NULL, NULL, '2025-10-15 12:31:36'),
+(1597, 2, 28, 'siswa', '3994681926', 5, NULL, NULL, '2025-10-26 21:23:17'),
+(1598, 2, 29, 'siswa', '3994681926', 4, NULL, NULL, '2025-10-25 09:33:37'),
+(1599, 2, 30, 'siswa', '3994681926', 4, NULL, NULL, '2025-10-21 17:05:27'),
+(1600, 2, 31, 'siswa', '3994681926', 4, NULL, NULL, '2025-10-26 13:53:16'),
+(1601, 2, 12, 'siswa', '9779152739', 5, NULL, NULL, '2025-10-26 11:17:40'),
+(1602, 2, 13, 'siswa', '9779152739', 4, NULL, NULL, '2025-10-20 11:17:39'),
+(1603, 2, 14, 'siswa', '9779152739', 4, NULL, NULL, '2025-10-17 15:10:16'),
+(1604, 2, 15, 'siswa', '9779152739', 5, NULL, NULL, '2025-10-22 18:13:58'),
+(1605, 2, 16, 'siswa', '9779152739', 4, NULL, NULL, '2025-10-17 22:25:15'),
+(1606, 2, 17, 'siswa', '9779152739', 4, NULL, NULL, '2025-10-21 19:50:48'),
+(1607, 2, 18, 'siswa', '9779152739', 5, NULL, NULL, '2025-10-16 08:47:55'),
+(1608, 2, 19, 'siswa', '9779152739', 4, NULL, NULL, '2025-10-18 15:53:54'),
+(1609, 2, 20, 'siswa', '9779152739', 5, NULL, NULL, '2025-10-24 12:41:36'),
+(1610, 2, 21, 'siswa', '9779152739', 5, NULL, NULL, '2025-10-15 12:22:56'),
+(1611, 2, 22, 'siswa', '9779152739', 5, NULL, NULL, '2025-10-16 18:12:58'),
+(1612, 2, 23, 'siswa', '9779152739', 4, NULL, NULL, '2025-10-21 10:41:55'),
+(1613, 2, 24, 'siswa', '9779152739', 5, NULL, NULL, '2025-10-15 13:47:52'),
+(1614, 2, 25, 'siswa', '9779152739', 4, NULL, NULL, '2025-10-22 09:04:11'),
+(1615, 2, 26, 'siswa', '9779152739', 5, NULL, NULL, '2025-10-30 16:55:01'),
+(1616, 2, 27, 'siswa', '9779152739', 4, NULL, NULL, '2025-10-27 16:42:47'),
+(1617, 2, 28, 'siswa', '9779152739', 5, NULL, NULL, '2025-10-30 21:52:38'),
+(1618, 2, 29, 'siswa', '9779152739', 5, NULL, NULL, '2025-10-15 14:00:47'),
+(1619, 2, 30, 'siswa', '9779152739', 5, NULL, NULL, '2025-10-16 20:46:25'),
+(1620, 2, 31, 'siswa', '9779152739', 5, NULL, NULL, '2025-10-26 09:27:56'),
+(1621, 2, 12, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-29 11:37:23'),
+(1622, 2, 13, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-23 10:10:28'),
+(1623, 2, 14, 'siswa', '9804913006', 5, NULL, NULL, '2025-10-26 21:36:14'),
+(1624, 2, 15, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-17 17:40:31'),
+(1625, 2, 16, 'siswa', '9804913006', 5, NULL, NULL, '2025-10-23 17:37:14'),
+(1626, 2, 17, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-30 15:48:35'),
+(1627, 2, 18, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-26 21:26:31'),
+(1628, 2, 19, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-29 14:31:23'),
+(1629, 2, 20, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-26 12:22:00'),
+(1630, 2, 21, 'siswa', '9804913006', 5, NULL, NULL, '2025-10-27 19:46:28'),
+(1631, 2, 22, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-27 16:47:08'),
+(1632, 2, 23, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-17 21:59:14'),
+(1633, 2, 24, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-22 13:44:32'),
+(1634, 2, 25, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-28 16:30:47'),
+(1635, 2, 26, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-27 14:50:59'),
+(1636, 2, 27, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-17 15:08:08'),
+(1637, 2, 28, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-30 20:17:59'),
+(1638, 2, 29, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-23 12:49:17'),
+(1639, 2, 30, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-17 19:17:10'),
+(1640, 2, 31, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-27 14:56:28'),
+(1641, 2, 12, 'siswa', '987654321', 5, NULL, NULL, '2025-10-20 20:24:26'),
+(1642, 2, 13, 'siswa', '987654321', 5, NULL, NULL, '2025-10-24 19:20:21'),
+(1643, 2, 14, 'siswa', '987654321', 5, NULL, NULL, '2025-10-24 17:26:21'),
+(1644, 2, 15, 'siswa', '987654321', 4, NULL, NULL, '2025-10-17 13:23:53'),
+(1645, 2, 16, 'siswa', '987654321', 4, NULL, NULL, '2025-10-27 22:27:25'),
+(1646, 2, 17, 'siswa', '987654321', 5, NULL, NULL, '2025-10-23 13:10:50'),
+(1647, 2, 18, 'siswa', '987654321', 5, NULL, NULL, '2025-10-28 22:35:56'),
+(1648, 2, 19, 'siswa', '987654321', 5, NULL, NULL, '2025-10-16 14:03:54'),
+(1649, 2, 20, 'siswa', '987654321', 4, NULL, NULL, '2025-10-31 18:47:46'),
+(1650, 2, 21, 'siswa', '987654321', 5, NULL, NULL, '2025-10-20 10:38:46'),
+(1651, 2, 22, 'siswa', '987654321', 5, NULL, NULL, '2025-10-24 21:42:53'),
+(1652, 2, 23, 'siswa', '987654321', 4, NULL, NULL, '2025-10-15 08:06:26'),
+(1653, 2, 24, 'siswa', '987654321', 5, NULL, NULL, '2025-10-17 08:41:22'),
+(1654, 2, 25, 'siswa', '987654321', 5, NULL, NULL, '2025-10-30 08:32:35'),
+(1655, 2, 26, 'siswa', '987654321', 4, NULL, NULL, '2025-10-29 10:25:34'),
+(1656, 2, 27, 'siswa', '987654321', 5, NULL, NULL, '2025-10-19 17:15:26'),
+(1657, 2, 28, 'siswa', '987654321', 4, NULL, NULL, '2025-10-30 11:18:56'),
+(1658, 2, 29, 'siswa', '987654321', 5, NULL, NULL, '2025-10-30 14:13:54'),
+(1659, 2, 30, 'siswa', '987654321', 5, NULL, NULL, '2025-10-27 08:56:34'),
+(1660, 2, 31, 'siswa', '987654321', 4, NULL, NULL, '2025-10-25 20:15:49'),
+(1661, 2, 12, 'siswa', '9996776172', 4, NULL, NULL, '2025-10-22 10:26:42'),
+(1662, 2, 13, 'siswa', '9996776172', 4, NULL, NULL, '2025-10-15 16:32:04'),
+(1663, 2, 14, 'siswa', '9996776172', 5, NULL, NULL, '2025-10-26 09:18:20'),
+(1664, 2, 15, 'siswa', '9996776172', 5, NULL, NULL, '2025-10-31 12:49:06'),
+(1665, 2, 16, 'siswa', '9996776172', 4, NULL, NULL, '2025-10-15 22:51:17'),
+(1666, 2, 17, 'siswa', '9996776172', 5, NULL, NULL, '2025-10-26 17:07:42'),
+(1667, 2, 18, 'siswa', '9996776172', 4, NULL, NULL, '2025-10-28 16:13:28'),
+(1668, 2, 19, 'siswa', '9996776172', 5, NULL, NULL, '2025-10-19 11:15:34'),
+(1669, 2, 20, 'siswa', '9996776172', 4, NULL, NULL, '2025-10-15 16:46:12'),
+(1670, 2, 21, 'siswa', '9996776172', 5, NULL, NULL, '2025-10-15 21:23:15'),
+(1671, 2, 22, 'siswa', '9996776172', 4, NULL, NULL, '2025-10-15 17:07:42'),
+(1672, 2, 23, 'siswa', '9996776172', 4, NULL, NULL, '2025-10-25 16:07:50'),
+(1673, 2, 24, 'siswa', '9996776172', 5, NULL, NULL, '2025-10-27 11:48:23'),
+(1674, 2, 25, 'siswa', '9996776172', 5, NULL, NULL, '2025-10-24 12:35:07'),
+(1675, 2, 26, 'siswa', '9996776172', 5, NULL, NULL, '2025-10-16 17:03:22'),
+(1676, 2, 27, 'siswa', '9996776172', 5, NULL, NULL, '2025-10-17 18:58:54'),
+(1677, 2, 28, 'siswa', '9996776172', 5, NULL, NULL, '2025-10-18 10:23:24'),
+(1678, 2, 29, 'siswa', '9996776172', 5, NULL, NULL, '2025-10-31 14:06:18'),
+(1679, 2, 30, 'siswa', '9996776172', 4, NULL, NULL, '2025-10-16 20:53:58'),
+(1680, 2, 31, 'siswa', '9996776172', 4, NULL, NULL, '2025-10-15 17:55:48'),
+(1681, 2, 12, 'siswa', '99999999', 4, NULL, NULL, '2025-10-30 20:29:51'),
+(1682, 2, 13, 'siswa', '99999999', 5, NULL, NULL, '2025-10-27 22:43:42'),
+(1683, 2, 14, 'siswa', '99999999', 4, NULL, NULL, '2025-10-28 18:11:53'),
+(1684, 2, 15, 'siswa', '99999999', 5, NULL, NULL, '2025-10-26 18:31:32'),
+(1685, 2, 16, 'siswa', '99999999', 4, NULL, NULL, '2025-10-29 08:41:15'),
+(1686, 2, 17, 'siswa', '99999999', 4, NULL, NULL, '2025-10-19 19:55:24'),
+(1687, 2, 18, 'siswa', '99999999', 4, NULL, NULL, '2025-10-29 17:34:01'),
+(1688, 2, 19, 'siswa', '99999999', 4, NULL, NULL, '2025-10-31 16:59:14'),
+(1689, 2, 20, 'siswa', '99999999', 4, NULL, NULL, '2025-10-23 18:03:12'),
+(1690, 2, 21, 'siswa', '99999999', 5, NULL, NULL, '2025-10-26 19:48:44'),
+(1691, 2, 22, 'siswa', '99999999', 4, NULL, NULL, '2025-10-20 16:01:21'),
+(1692, 2, 23, 'siswa', '99999999', 5, NULL, NULL, '2025-10-23 14:40:00'),
+(1693, 2, 24, 'siswa', '99999999', 4, NULL, NULL, '2025-10-18 21:44:06'),
+(1694, 2, 25, 'siswa', '99999999', 4, NULL, NULL, '2025-10-18 09:54:15'),
+(1695, 2, 26, 'siswa', '99999999', 5, NULL, NULL, '2025-10-30 08:30:21'),
+(1696, 2, 27, 'siswa', '99999999', 4, NULL, NULL, '2025-10-18 11:31:57'),
+(1697, 2, 28, 'siswa', '99999999', 4, NULL, NULL, '2025-10-17 08:41:25'),
+(1698, 2, 29, 'siswa', '99999999', 4, NULL, NULL, '2025-10-29 10:16:55'),
+(1699, 2, 30, 'siswa', '99999999', 5, NULL, NULL, '2025-10-16 11:50:28'),
+(1700, 2, 31, 'siswa', '99999999', 5, NULL, NULL, '2025-10-29 16:28:35'),
+(2559, 2, 12, 'guru', '1282023001', 5, NULL, NULL, '2025-10-26 19:48:43'),
+(2560, 2, 13, 'guru', '1282023001', 4, NULL, NULL, '2025-10-31 12:21:58'),
+(2561, 2, 14, 'guru', '1282023001', 5, NULL, NULL, '2025-10-19 18:41:25'),
+(2562, 2, 15, 'guru', '1282023001', 4, NULL, NULL, '2025-10-15 20:12:32'),
+(2563, 2, 16, 'guru', '1282023001', 4, NULL, NULL, '2025-10-27 13:38:08'),
+(2564, 2, 17, 'guru', '1282023001', 5, NULL, NULL, '2025-10-24 12:48:10'),
+(2565, 2, 18, 'guru', '1282023001', 4, NULL, NULL, '2025-10-30 11:13:27'),
+(2566, 2, 19, 'guru', '1282023001', 5, NULL, NULL, '2025-10-31 22:42:41'),
+(2567, 2, 20, 'guru', '1282023001', 4, NULL, NULL, '2025-10-28 19:29:08'),
+(2568, 2, 21, 'guru', '1282023001', 4, NULL, NULL, '2025-10-30 18:53:18'),
+(2569, 2, 22, 'guru', '1282023001', 5, NULL, NULL, '2025-10-18 18:44:36'),
+(2570, 2, 23, 'guru', '1282023001', 5, NULL, NULL, '2025-10-23 20:40:52'),
+(2571, 2, 24, 'guru', '1282023001', 4, NULL, NULL, '2025-10-19 10:04:51'),
+(2572, 2, 25, 'guru', '1282023001', 4, NULL, NULL, '2025-10-30 11:27:36'),
+(2573, 2, 26, 'guru', '1282023001', 5, NULL, NULL, '2025-10-21 08:59:52'),
+(2574, 2, 27, 'guru', '1282023001', 4, NULL, NULL, '2025-10-21 16:48:21'),
+(2575, 2, 28, 'guru', '1282023001', 4, NULL, NULL, '2025-10-25 08:19:33'),
+(2576, 2, 29, 'guru', '1282023001', 5, NULL, NULL, '2025-10-19 22:04:25'),
+(2577, 2, 30, 'guru', '1282023001', 5, NULL, NULL, '2025-10-18 12:51:26'),
+(2578, 2, 31, 'guru', '1282023001', 5, NULL, NULL, '2025-10-31 20:09:24'),
+(2579, 2, 12, 'guru', '1282023002', 5, NULL, NULL, '2025-10-22 16:34:08'),
+(2580, 2, 13, 'guru', '1282023002', 5, NULL, NULL, '2025-10-22 13:35:45'),
+(2581, 2, 14, 'guru', '1282023002', 4, NULL, NULL, '2025-10-29 12:49:16'),
+(2582, 2, 15, 'guru', '1282023002', 5, NULL, NULL, '2025-10-26 19:41:12'),
+(2583, 2, 16, 'guru', '1282023002', 5, NULL, NULL, '2025-10-17 21:54:54'),
+(2584, 2, 17, 'guru', '1282023002', 5, NULL, NULL, '2025-10-24 10:18:59'),
+(2585, 2, 18, 'guru', '1282023002', 5, NULL, NULL, '2025-10-31 20:12:37'),
+(2586, 2, 19, 'guru', '1282023002', 4, NULL, NULL, '2025-10-23 22:31:38'),
+(2587, 2, 20, 'guru', '1282023002', 5, NULL, NULL, '2025-10-19 12:46:00'),
+(2588, 2, 21, 'guru', '1282023002', 5, NULL, NULL, '2025-10-22 08:46:53'),
+(2589, 2, 22, 'guru', '1282023002', 4, NULL, NULL, '2025-10-15 17:03:26'),
+(2590, 2, 23, 'guru', '1282023002', 4, NULL, NULL, '2025-10-28 22:30:33'),
+(2591, 2, 24, 'guru', '1282023002', 4, NULL, NULL, '2025-10-28 10:15:51'),
+(2592, 2, 25, 'guru', '1282023002', 5, NULL, NULL, '2025-10-31 12:44:42'),
+(2593, 2, 26, 'guru', '1282023002', 4, NULL, NULL, '2025-10-22 11:57:03'),
+(2594, 2, 27, 'guru', '1282023002', 4, NULL, NULL, '2025-10-29 09:53:09'),
+(2595, 2, 28, 'guru', '1282023002', 4, NULL, NULL, '2025-10-17 13:22:45'),
+(2596, 2, 29, 'guru', '1282023002', 5, NULL, NULL, '2025-10-17 19:19:17'),
+(2597, 2, 30, 'guru', '1282023002', 5, NULL, NULL, '2025-10-28 12:02:23'),
+(2598, 2, 31, 'guru', '1282023002', 5, NULL, NULL, '2025-10-16 22:34:56'),
+(2599, 2, 12, 'guru', '1282023003', 5, NULL, NULL, '2025-10-15 11:04:41'),
+(2600, 2, 13, 'guru', '1282023003', 4, NULL, NULL, '2025-10-16 19:25:54'),
+(2601, 2, 14, 'guru', '1282023003', 4, NULL, NULL, '2025-10-26 16:47:14'),
+(2602, 2, 15, 'guru', '1282023003', 5, NULL, NULL, '2025-10-21 14:08:21'),
+(2603, 2, 16, 'guru', '1282023003', 4, NULL, NULL, '2025-10-27 17:02:13'),
+(2604, 2, 17, 'guru', '1282023003', 4, NULL, NULL, '2025-10-21 21:14:35'),
+(2605, 2, 18, 'guru', '1282023003', 4, NULL, NULL, '2025-10-22 15:06:04'),
+(2606, 2, 19, 'guru', '1282023003', 4, NULL, NULL, '2025-10-17 15:02:42'),
+(2607, 2, 20, 'guru', '1282023003', 4, NULL, NULL, '2025-10-31 15:38:42'),
+(2608, 2, 21, 'guru', '1282023003', 5, NULL, NULL, '2025-10-30 20:18:03'),
+(2609, 2, 22, 'guru', '1282023003', 4, NULL, NULL, '2025-10-26 10:51:50'),
+(2610, 2, 23, 'guru', '1282023003', 5, NULL, NULL, '2025-10-24 21:54:48'),
+(2611, 2, 24, 'guru', '1282023003', 4, NULL, NULL, '2025-10-15 11:08:01'),
+(2612, 2, 25, 'guru', '1282023003', 5, NULL, NULL, '2025-10-18 08:42:21'),
+(2613, 2, 26, 'guru', '1282023003', 5, NULL, NULL, '2025-10-21 19:38:56'),
+(2614, 2, 27, 'guru', '1282023003', 5, NULL, NULL, '2025-10-16 22:47:56'),
+(2615, 2, 28, 'guru', '1282023003', 4, NULL, NULL, '2025-10-15 10:32:15'),
+(2616, 2, 29, 'guru', '1282023003', 5, NULL, NULL, '2025-10-24 20:22:26'),
+(2617, 2, 30, 'guru', '1282023003', 4, NULL, NULL, '2025-10-31 18:37:59'),
+(2618, 2, 31, 'guru', '1282023003', 4, NULL, NULL, '2025-10-20 14:14:52'),
+(2619, 2, 12, 'guru', '1282023004', 5, NULL, NULL, '2025-10-27 19:31:20'),
+(2620, 2, 13, 'guru', '1282023004', 4, NULL, NULL, '2025-10-26 20:17:54'),
+(2621, 2, 14, 'guru', '1282023004', 5, NULL, NULL, '2025-10-24 21:38:37'),
+(2622, 2, 15, 'guru', '1282023004', 4, NULL, NULL, '2025-10-17 22:34:56'),
+(2623, 2, 16, 'guru', '1282023004', 5, NULL, NULL, '2025-10-16 16:25:29'),
+(2624, 2, 17, 'guru', '1282023004', 4, NULL, NULL, '2025-10-20 08:15:10'),
+(2625, 2, 18, 'guru', '1282023004', 4, NULL, NULL, '2025-10-15 22:31:50'),
+(2626, 2, 19, 'guru', '1282023004', 5, NULL, NULL, '2025-10-22 15:05:00'),
+(2627, 2, 20, 'guru', '1282023004', 5, NULL, NULL, '2025-10-27 12:22:57'),
+(2628, 2, 21, 'guru', '1282023004', 5, NULL, NULL, '2025-10-23 15:59:25'),
+(2629, 2, 22, 'guru', '1282023004', 4, NULL, NULL, '2025-10-24 13:59:55'),
+(2630, 2, 23, 'guru', '1282023004', 5, NULL, NULL, '2025-10-25 08:24:52'),
+(2631, 2, 24, 'guru', '1282023004', 4, NULL, NULL, '2025-10-19 19:54:21'),
+(2632, 2, 25, 'guru', '1282023004', 4, NULL, NULL, '2025-10-17 15:10:19'),
+(2633, 2, 26, 'guru', '1282023004', 4, NULL, NULL, '2025-10-25 20:14:44'),
+(2634, 2, 27, 'guru', '1282023004', 5, NULL, NULL, '2025-10-23 18:53:26'),
+(2635, 2, 28, 'guru', '1282023004', 5, NULL, NULL, '2025-10-20 09:20:30'),
+(2636, 2, 29, 'guru', '1282023004', 5, NULL, NULL, '2025-10-17 09:09:26'),
+(2637, 2, 30, 'guru', '1282023004', 5, NULL, NULL, '2025-10-21 19:31:24'),
+(2638, 2, 31, 'guru', '1282023004', 4, NULL, NULL, '2025-10-30 14:12:50'),
+(2639, 2, 12, 'guru', '1282023005', 5, NULL, NULL, '2025-10-19 16:57:12'),
+(2640, 2, 13, 'guru', '1282023005', 4, NULL, NULL, '2025-10-17 11:48:18'),
+(2641, 2, 14, 'guru', '1282023005', 4, NULL, NULL, '2025-10-24 16:59:20'),
+(2642, 2, 15, 'guru', '1282023005', 5, NULL, NULL, '2025-10-28 18:05:22'),
+(2643, 2, 16, 'guru', '1282023005', 5, NULL, NULL, '2025-10-30 17:27:25'),
+(2644, 2, 17, 'guru', '1282023005', 5, NULL, NULL, '2025-10-21 19:37:50'),
+(2645, 2, 18, 'guru', '1282023005', 4, NULL, NULL, '2025-10-18 09:43:24'),
+(2646, 2, 19, 'guru', '1282023005', 5, NULL, NULL, '2025-10-15 18:19:33'),
+(2647, 2, 20, 'guru', '1282023005', 5, NULL, NULL, '2025-10-22 19:22:38'),
+(2648, 2, 21, 'guru', '1282023005', 4, NULL, NULL, '2025-10-22 09:08:23'),
+(2649, 2, 22, 'guru', '1282023005', 5, NULL, NULL, '2025-10-22 16:36:17'),
+(2650, 2, 23, 'guru', '1282023005', 5, NULL, NULL, '2025-10-19 15:36:33'),
+(2651, 2, 24, 'guru', '1282023005', 5, NULL, NULL, '2025-10-17 21:54:54'),
+(2652, 2, 25, 'guru', '1282023005', 5, NULL, NULL, '2025-10-21 15:18:04'),
+(2653, 2, 26, 'guru', '1282023005', 4, NULL, NULL, '2025-10-29 22:17:36'),
+(2654, 2, 27, 'guru', '1282023005', 4, NULL, NULL, '2025-10-29 22:11:03'),
+(2655, 2, 28, 'guru', '1282023005', 5, NULL, NULL, '2025-10-24 15:54:58'),
+(2656, 2, 29, 'guru', '1282023005', 4, NULL, NULL, '2025-10-15 17:55:48'),
+(2657, 2, 30, 'guru', '1282023005', 4, NULL, NULL, '2025-10-29 13:28:13'),
+(2658, 2, 31, 'guru', '1282023005', 5, NULL, NULL, '2025-10-26 12:38:15'),
+(2659, 2, 12, 'guru', '1282023006', 4, NULL, NULL, '2025-10-15 08:06:24'),
+(2660, 2, 13, 'guru', '1282023006', 5, NULL, NULL, '2025-10-21 19:46:28'),
+(2661, 2, 14, 'guru', '1282023006', 4, NULL, NULL, '2025-10-30 12:50:15'),
+(2662, 2, 15, 'guru', '1282023006', 5, NULL, NULL, '2025-10-18 19:01:53'),
+(2663, 2, 16, 'guru', '1282023006', 4, NULL, NULL, '2025-10-18 21:58:04'),
+(2664, 2, 17, 'guru', '1282023006', 4, NULL, NULL, '2025-10-18 16:19:52'),
+(2665, 2, 18, 'guru', '1282023006', 4, NULL, NULL, '2025-10-19 10:05:55'),
+(2666, 2, 19, 'guru', '1282023006', 4, NULL, NULL, '2025-10-30 15:41:00'),
+(2667, 2, 20, 'guru', '1282023006', 5, NULL, NULL, '2025-10-28 11:34:15'),
+(2668, 2, 21, 'guru', '1282023006', 5, NULL, NULL, '2025-10-31 12:27:24'),
+(2669, 2, 22, 'guru', '1282023006', 5, NULL, NULL, '2025-10-19 10:09:13'),
+(2670, 2, 23, 'guru', '1282023006', 5, NULL, NULL, '2025-10-25 08:20:39'),
+(2671, 2, 24, 'guru', '1282023006', 4, NULL, NULL, '2025-10-17 22:36:00'),
+(2672, 2, 25, 'guru', '1282023006', 4, NULL, NULL, '2025-10-17 09:52:10'),
+(2673, 2, 26, 'guru', '1282023006', 4, NULL, NULL, '2025-10-29 14:35:38'),
+(2674, 2, 27, 'guru', '1282023006', 4, NULL, NULL, '2025-10-19 10:48:38'),
+(2675, 2, 28, 'guru', '1282023006', 5, NULL, NULL, '2025-10-29 08:43:27'),
+(2676, 2, 29, 'guru', '1282023006', 4, NULL, NULL, '2025-10-17 15:02:42'),
+(2677, 2, 30, 'guru', '1282023006', 4, NULL, NULL, '2025-10-28 18:19:26'),
+(2678, 2, 31, 'guru', '1282023006', 4, NULL, NULL, '2025-10-30 20:32:09'),
+(2679, 2, 12, 'guru', '1282023007', 4, NULL, NULL, '2025-10-17 15:55:10'),
+(2680, 2, 13, 'guru', '1282023007', 4, NULL, NULL, '2025-10-31 17:17:29'),
+(2681, 2, 14, 'guru', '1282023007', 5, NULL, NULL, '2025-10-24 08:26:07'),
+(2682, 2, 15, 'guru', '1282023007', 4, NULL, NULL, '2025-10-30 21:39:35'),
+(2683, 2, 16, 'guru', '1282023007', 4, NULL, NULL, '2025-10-19 11:23:16'),
+(2684, 2, 17, 'guru', '1282023007', 4, NULL, NULL, '2025-10-18 12:57:52'),
+(2685, 2, 18, 'guru', '1282023007', 5, NULL, NULL, '2025-10-30 08:21:45'),
+(2686, 2, 19, 'guru', '1282023007', 5, NULL, NULL, '2025-10-17 16:33:03'),
+(2687, 2, 20, 'guru', '1282023007', 5, NULL, NULL, '2025-10-29 15:57:15'),
+(2688, 2, 21, 'guru', '1282023007', 4, NULL, NULL, '2025-10-21 16:38:34'),
+(2689, 2, 22, 'guru', '1282023007', 5, NULL, NULL, '2025-10-15 11:00:24'),
+(2690, 2, 23, 'guru', '1282023007', 4, NULL, NULL, '2025-10-31 18:27:19'),
+(2691, 2, 24, 'guru', '1282023007', 4, NULL, NULL, '2025-10-19 16:05:44'),
+(2692, 2, 25, 'guru', '1282023007', 4, NULL, NULL, '2025-10-30 11:18:58'),
+(2693, 2, 26, 'guru', '1282023007', 5, NULL, NULL, '2025-10-29 13:20:34'),
+(2694, 2, 27, 'guru', '1282023007', 5, NULL, NULL, '2025-10-22 18:17:18'),
+(2695, 2, 28, 'guru', '1282023007', 5, NULL, NULL, '2025-10-19 13:01:02'),
+(2696, 2, 29, 'guru', '1282023007', 4, NULL, NULL, '2025-10-24 15:42:02'),
+(2697, 2, 30, 'guru', '1282023007', 4, NULL, NULL, '2025-10-22 20:58:16'),
+(2698, 2, 31, 'guru', '1282023007', 4, NULL, NULL, '2025-10-21 16:46:09'),
+(2699, 2, 12, 'guru', '1282023008', 4, NULL, NULL, '2025-10-27 14:51:00'),
+(2700, 2, 13, 'guru', '1282023008', 4, NULL, NULL, '2025-10-21 15:18:02'),
+(2701, 2, 14, 'guru', '1282023008', 4, NULL, NULL, '2025-10-22 10:37:35'),
+(2702, 2, 15, 'guru', '1282023008', 4, NULL, NULL, '2025-10-25 20:13:41'),
+(2703, 2, 16, 'guru', '1282023008', 5, NULL, NULL, '2025-10-29 21:01:22'),
+(2704, 2, 17, 'guru', '1282023008', 5, NULL, NULL, '2025-10-30 11:20:02'),
+(2705, 2, 18, 'guru', '1282023008', 4, NULL, NULL, '2025-10-28 12:11:04'),
+(2706, 2, 19, 'guru', '1282023008', 5, NULL, NULL, '2025-10-25 20:19:07'),
+(2707, 2, 20, 'guru', '1282023008', 5, NULL, NULL, '2025-10-25 13:55:31'),
+(2708, 2, 21, 'guru', '1282023008', 5, NULL, NULL, '2025-10-29 15:01:37'),
+(2709, 2, 22, 'guru', '1282023008', 4, NULL, NULL, '2025-10-18 08:31:29'),
+(2710, 2, 23, 'guru', '1282023008', 5, NULL, NULL, '2025-10-16 19:34:31'),
+(2711, 2, 24, 'guru', '1282023008', 5, NULL, NULL, '2025-10-15 12:20:52'),
+(2712, 2, 25, 'guru', '1282023008', 4, NULL, NULL, '2025-10-18 20:35:30'),
+(2713, 2, 26, 'guru', '1282023008', 5, NULL, NULL, '2025-10-16 10:36:36'),
+(2714, 2, 27, 'guru', '1282023008', 4, NULL, NULL, '2025-10-15 15:35:23'),
+(2715, 2, 28, 'guru', '1282023008', 4, NULL, NULL, '2025-10-30 22:01:13'),
+(2716, 2, 29, 'guru', '1282023008', 4, NULL, NULL, '2025-10-26 11:09:04'),
+(2717, 2, 30, 'guru', '1282023008', 5, NULL, NULL, '2025-10-18 12:02:14'),
+(2718, 2, 31, 'guru', '1282023008', 4, NULL, NULL, '2025-10-28 17:52:24'),
+(2719, 2, 12, 'guru', '1282023009', 4, NULL, NULL, '2025-10-30 12:40:31'),
+(2720, 2, 13, 'guru', '1282023009', 5, NULL, NULL, '2025-10-23 17:44:45'),
+(2721, 2, 14, 'guru', '1282023009', 5, NULL, NULL, '2025-10-26 15:32:13'),
+(2722, 2, 15, 'guru', '1282023009', 4, NULL, NULL, '2025-10-27 10:34:27'),
+(2723, 2, 16, 'guru', '1282023009', 5, NULL, NULL, '2025-10-22 15:18:56'),
+(2724, 2, 17, 'guru', '1282023009', 5, NULL, NULL, '2025-10-15 19:44:24'),
+(2725, 2, 18, 'guru', '1282023009', 5, NULL, NULL, '2025-10-17 22:33:49'),
+(2726, 2, 19, 'guru', '1282023009', 4, NULL, NULL, '2025-10-28 15:16:50'),
+(2727, 2, 20, 'guru', '1282023009', 4, NULL, NULL, '2025-10-22 22:35:00'),
+(2728, 2, 21, 'guru', '1282023009', 4, NULL, NULL, '2025-10-19 15:41:01'),
+(2729, 2, 22, 'guru', '1282023009', 5, NULL, NULL, '2025-10-31 18:48:52'),
+(2730, 2, 23, 'guru', '1282023009', 5, NULL, NULL, '2025-10-15 13:46:43'),
+(2731, 2, 24, 'guru', '1282023009', 4, NULL, NULL, '2025-10-20 19:47:40'),
+(2732, 2, 25, 'guru', '1282023009', 4, NULL, NULL, '2025-10-17 18:59:51'),
+(2733, 2, 26, 'guru', '1282023009', 4, NULL, NULL, '2025-10-17 19:26:50'),
+(2734, 2, 27, 'guru', '1282023009', 5, NULL, NULL, '2025-10-29 18:59:46'),
+(2735, 2, 28, 'guru', '1282023009', 5, NULL, NULL, '2025-10-16 21:02:35'),
+(2736, 2, 29, 'guru', '1282023009', 5, NULL, NULL, '2025-10-19 08:19:28'),
+(2737, 2, 30, 'guru', '1282023009', 4, NULL, NULL, '2025-10-25 21:36:21'),
+(2738, 2, 31, 'guru', '1282023009', 5, NULL, NULL, '2025-10-28 10:15:52'),
+(2739, 2, 12, 'guru', '1282023010', 5, NULL, NULL, '2025-10-21 10:39:44'),
+(2740, 2, 13, 'guru', '1282023010', 5, NULL, NULL, '2025-10-25 20:24:25'),
+(2741, 2, 14, 'guru', '1282023010', 5, NULL, NULL, '2025-10-17 11:29:52'),
+(2742, 2, 15, 'guru', '1282023010', 5, NULL, NULL, '2025-10-27 10:40:45'),
+(2743, 2, 16, 'guru', '1282023010', 5, NULL, NULL, '2025-10-27 11:59:15'),
+(2744, 2, 17, 'guru', '1282023010', 4, NULL, NULL, '2025-10-25 13:47:55'),
+(2745, 2, 18, 'guru', '1282023010', 4, NULL, NULL, '2025-10-26 13:01:57'),
+(2746, 2, 19, 'guru', '1282023010', 5, NULL, NULL, '2025-10-27 14:03:58'),
+(2747, 2, 20, 'guru', '1282023010', 5, NULL, NULL, '2025-10-21 20:12:29'),
+(2748, 2, 21, 'guru', '1282023010', 5, NULL, NULL, '2025-10-26 20:12:28'),
+(2749, 2, 22, 'guru', '1282023010', 5, NULL, NULL, '2025-10-25 16:03:33'),
+(2750, 2, 23, 'guru', '1282023010', 5, NULL, NULL, '2025-10-25 09:43:17'),
+(2751, 2, 24, 'guru', '1282023010', 4, NULL, NULL, '2025-10-21 09:21:32'),
+(2752, 2, 25, 'guru', '1282023010', 5, NULL, NULL, '2025-10-22 14:46:34'),
+(2753, 2, 26, 'guru', '1282023010', 5, NULL, NULL, '2025-10-15 14:00:51'),
+(2754, 2, 27, 'guru', '1282023010', 4, NULL, NULL, '2025-10-24 10:01:43'),
+(2755, 2, 28, 'guru', '1282023010', 5, NULL, NULL, '2025-10-23 22:15:25'),
+(2756, 2, 29, 'guru', '1282023010', 4, NULL, NULL, '2025-10-19 16:49:28'),
+(2757, 2, 30, 'guru', '1282023010', 5, NULL, NULL, '2025-10-19 15:35:32'),
+(2758, 2, 31, 'guru', '1282023010', 5, NULL, NULL, '2025-10-31 09:30:18'),
+(2759, 2, 12, 'guru', '1282023011', 5, NULL, NULL, '2025-10-15 09:31:16'),
+(2760, 2, 13, 'guru', '1282023011', 5, NULL, NULL, '2025-10-19 22:54:42'),
+(2761, 2, 14, 'guru', '1282023011', 5, NULL, NULL, '2025-10-29 08:21:49'),
+(2762, 2, 15, 'guru', '1282023011', 4, NULL, NULL, '2025-10-26 12:21:56'),
+(2763, 2, 16, 'guru', '1282023011', 5, NULL, NULL, '2025-10-22 10:34:24'),
+(2764, 2, 17, 'guru', '1282023011', 4, NULL, NULL, '2025-10-16 17:57:52'),
+(2765, 2, 18, 'guru', '1282023011', 5, NULL, NULL, '2025-10-30 08:19:36'),
+(2766, 2, 19, 'guru', '1282023011', 4, NULL, NULL, '2025-10-21 21:20:59'),
+(2767, 2, 20, 'guru', '1282023011', 5, NULL, NULL, '2025-10-22 17:42:40'),
+(2768, 2, 21, 'guru', '1282023011', 4, NULL, NULL, '2025-10-19 16:04:37'),
+(2769, 2, 22, 'guru', '1282023011', 5, NULL, NULL, '2025-10-29 13:17:20'),
+(2770, 2, 23, 'guru', '1282023011', 5, NULL, NULL, '2025-10-19 18:51:05'),
+(2771, 2, 24, 'guru', '1282023011', 5, NULL, NULL, '2025-10-17 10:26:38'),
+(2772, 2, 25, 'guru', '1282023011', 5, NULL, NULL, '2025-10-24 08:32:34'),
+(2773, 2, 26, 'guru', '1282023011', 4, NULL, NULL, '2025-10-24 22:10:57'),
+(2774, 2, 27, 'guru', '1282023011', 4, NULL, NULL, '2025-10-27 18:12:01'),
+(2775, 2, 28, 'guru', '1282023011', 4, NULL, NULL, '2025-10-19 21:47:13'),
+(2776, 2, 29, 'guru', '1282023011', 5, NULL, NULL, '2025-10-16 09:09:34'),
+(2777, 2, 30, 'guru', '1282023011', 4, NULL, NULL, '2025-10-18 22:02:23'),
+(2778, 2, 31, 'guru', '1282023011', 5, NULL, NULL, '2025-10-30 10:05:55'),
+(2779, 2, 12, 'guru', '1282023012', 4, NULL, NULL, '2025-10-15 08:07:32'),
+(2780, 2, 13, 'guru', '1282023012', 4, NULL, NULL, '2025-10-29 15:52:50'),
+(2781, 2, 14, 'guru', '1282023012', 5, NULL, NULL, '2025-10-21 09:32:18'),
+(2782, 2, 15, 'guru', '1282023012', 5, NULL, NULL, '2025-10-27 20:02:41'),
+(2783, 2, 16, 'guru', '1282023012', 4, NULL, NULL, '2025-10-23 16:20:58'),
+(2784, 2, 17, 'guru', '1282023012', 5, NULL, NULL, '2025-10-24 09:44:27'),
+(2785, 2, 18, 'guru', '1282023012', 4, NULL, NULL, '2025-10-29 10:19:04'),
+(2786, 2, 19, 'guru', '1282023012', 4, NULL, NULL, '2025-10-30 12:36:12'),
+(2787, 2, 20, 'guru', '1282023012', 4, NULL, NULL, '2025-10-25 14:07:25'),
+(2788, 2, 21, 'guru', '1282023012', 5, NULL, NULL, '2025-10-22 09:03:02'),
+(2789, 2, 22, 'guru', '1282023012', 4, NULL, NULL, '2025-10-30 17:22:00'),
+(2790, 2, 23, 'guru', '1282023012', 5, NULL, NULL, '2025-10-20 22:59:57'),
+(2791, 2, 24, 'guru', '1282023012', 5, NULL, NULL, '2025-10-21 12:27:22'),
+(2792, 2, 25, 'guru', '1282023012', 4, NULL, NULL, '2025-10-17 13:26:06'),
+(2793, 2, 26, 'guru', '1282023012', 4, NULL, NULL, '2025-10-25 17:14:18'),
+(2794, 2, 27, 'guru', '1282023012', 5, NULL, NULL, '2025-10-16 08:47:57'),
+(2795, 2, 28, 'guru', '1282023012', 4, NULL, NULL, '2025-10-19 21:49:22'),
+(2796, 2, 29, 'guru', '1282023012', 4, NULL, NULL, '2025-10-16 09:10:35'),
+(2797, 2, 30, 'guru', '1282023012', 4, NULL, NULL, '2025-10-21 15:30:00'),
+(2798, 2, 31, 'guru', '1282023012', 5, NULL, NULL, '2025-10-23 09:49:52'),
+(2799, 2, 12, 'guru', '1282023013', 5, NULL, NULL, '2025-10-30 19:12:41'),
+(2800, 2, 13, 'guru', '1282023013', 5, NULL, NULL, '2025-10-19 18:47:46'),
+(2801, 2, 14, 'guru', '1282023013', 5, NULL, NULL, '2025-10-19 19:10:28'),
+(2802, 2, 15, 'guru', '1282023013', 5, NULL, NULL, '2025-10-28 14:52:01'),
+(2803, 2, 16, 'guru', '1282023013', 5, NULL, NULL, '2025-10-22 19:31:14'),
+(2804, 2, 17, 'guru', '1282023013', 5, NULL, NULL, '2025-10-25 09:43:16'),
+(2805, 2, 18, 'guru', '1282023013', 4, NULL, NULL, '2025-10-16 20:48:38'),
+(2806, 2, 19, 'guru', '1282023013', 5, NULL, NULL, '2025-10-29 08:36:56'),
+(2807, 2, 20, 'guru', '1282023013', 5, NULL, NULL, '2025-10-23 21:05:39'),
+(2808, 2, 21, 'guru', '1282023013', 4, NULL, NULL, '2025-10-21 18:15:14'),
+(2809, 2, 22, 'guru', '1282023013', 4, NULL, NULL, '2025-10-22 22:29:33'),
+(2810, 2, 23, 'guru', '1282023013', 4, NULL, NULL, '2025-10-28 10:30:58'),
+(2811, 2, 24, 'guru', '1282023013', 4, NULL, NULL, '2025-10-25 12:33:52'),
+(2812, 2, 25, 'guru', '1282023013', 5, NULL, NULL, '2025-10-31 20:02:45'),
+(2813, 2, 26, 'guru', '1282023013', 5, NULL, NULL, '2025-10-18 21:53:45'),
+(2814, 2, 27, 'guru', '1282023013', 4, NULL, NULL, '2025-10-19 22:09:49'),
+(2815, 2, 28, 'guru', '1282023013', 5, NULL, NULL, '2025-10-29 10:15:50'),
+(2816, 2, 29, 'guru', '1282023013', 4, NULL, NULL, '2025-10-24 16:07:57'),
+(2817, 2, 30, 'guru', '1282023013', 4, NULL, NULL, '2025-10-15 10:29:05'),
+(2818, 2, 31, 'guru', '1282023013', 5, NULL, NULL, '2025-10-25 11:15:33'),
+(2819, 2, 12, 'guru', '1282023014', 4, NULL, NULL, '2025-10-23 13:27:09'),
+(2820, 2, 13, 'guru', '1282023014', 4, NULL, NULL, '2025-10-21 21:11:19'),
+(2821, 2, 14, 'guru', '1282023014', 4, NULL, NULL, '2025-10-17 16:35:09'),
+(2822, 2, 15, 'guru', '1282023014', 4, NULL, NULL, '2025-10-24 19:04:07'),
+(2823, 2, 16, 'guru', '1282023014', 4, NULL, NULL, '2025-10-29 20:35:31'),
+(2824, 2, 17, 'guru', '1282023014', 5, NULL, NULL, '2025-10-27 08:51:17'),
+(2825, 2, 18, 'guru', '1282023014', 5, NULL, NULL, '2025-10-23 20:49:30'),
+(2826, 2, 19, 'guru', '1282023014', 4, NULL, NULL, '2025-10-15 18:37:54'),
+(2827, 2, 20, 'guru', '1282023014', 5, NULL, NULL, '2025-10-24 21:40:46'),
+(2828, 2, 21, 'guru', '1282023014', 5, NULL, NULL, '2025-10-31 11:12:22'),
+(2829, 2, 22, 'guru', '1282023014', 4, NULL, NULL, '2025-10-16 20:46:22'),
+(2830, 2, 23, 'guru', '1282023014', 5, NULL, NULL, '2025-10-28 10:26:44'),
+(2831, 2, 24, 'guru', '1282023014', 4, NULL, NULL, '2025-10-24 19:14:51'),
+(2832, 2, 25, 'guru', '1282023014', 5, NULL, NULL, '2025-10-16 20:49:41'),
+(2833, 2, 26, 'guru', '1282023014', 5, NULL, NULL, '2025-10-30 14:36:41'),
+(2834, 2, 27, 'guru', '1282023014', 5, NULL, NULL, '2025-10-17 21:52:44'),
+(2835, 2, 28, 'guru', '1282023014', 4, NULL, NULL, '2025-10-19 22:59:07'),
+(2836, 2, 29, 'guru', '1282023014', 5, NULL, NULL, '2025-10-28 10:27:43'),
+(2837, 2, 30, 'guru', '1282023014', 4, NULL, NULL, '2025-10-19 16:52:45'),
+(2838, 2, 31, 'guru', '1282023014', 4, NULL, NULL, '2025-10-23 08:35:54'),
+(2839, 2, 12, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2840, 2, 13, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2841, 2, 14, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2842, 2, 15, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2843, 2, 16, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2844, 2, 17, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2845, 2, 18, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2846, 2, 19, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2847, 2, 20, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2848, 2, 21, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2849, 2, 22, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2850, 2, 23, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2851, 2, 24, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2852, 2, 25, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2853, 2, 26, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2854, 2, 27, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2855, 2, 28, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2856, 2, 29, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2857, 2, 30, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2858, 2, 31, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
+(2859, 2, 12, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2860, 2, 13, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2861, 2, 14, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2862, 2, 15, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2863, 2, 16, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2864, 2, 17, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2865, 2, 18, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2866, 2, 19, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2867, 2, 20, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2868, 2, 21, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2869, 2, 22, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2870, 2, 23, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2871, 2, 24, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2872, 2, 25, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2873, 2, 26, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2874, 2, 27, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2875, 2, 28, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2876, 2, 29, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2877, 2, 30, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
+(2878, 2, 31, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kuisioner_pertanyaan`
+--
+
+CREATE TABLE `kuisioner_pertanyaan` (
+  `id` int(11) NOT NULL,
+  `kuisioner_id` int(11) NOT NULL,
+  `pertanyaan` text NOT NULL,
+  `tipe_jawaban` enum('skala','pilihan','text') NOT NULL DEFAULT 'skala',
+  `skala_min` int(11) DEFAULT 1,
+  `skala_max` int(11) DEFAULT 5,
+  `opsi_pilihan` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`opsi_pilihan`)),
+  `urutan` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `kuisioner_pertanyaan`
+--
+
+INSERT INTO `kuisioner_pertanyaan` (`id`, `kuisioner_id`, `pertanyaan`, `tipe_jawaban`, `skala_min`, `skala_max`, `opsi_pilihan`, `urutan`) VALUES
+(12, 2, 'Tampilan antarmuka aplikasi e-learning ini menarik dan konsisten di setiap halaman.', 'skala', 1, 5, NULL, 1),
+(13, 2, 'Tata letak menu mudah dipahami oleh pengguna.', 'skala', 1, 5, NULL, 2),
+(14, 2, 'Ikon dan tombol pada aplikasi mudah dikenali fungsinya.', 'skala', 1, 5, NULL, 3),
+(15, 2, 'Warna dan tipografi yang digunakan tidak mengganggu kenyamanan membaca', 'skala', 1, 5, NULL, 4),
+(16, 2, 'Struktur halaman mempermudah saya menemukan fitur yang dibutuhkan.', 'skala', 1, 5, NULL, 5),
+(17, 2, 'Semua fitur utama aplikasi (materi, tugas, ujian, forum) berfungsi dengan baik.', 'skala', 1, 5, NULL, 6),
+(18, 2, 'Proses login dan akses ke halaman utama berjalan lancar tanpa error.', 'skala', 1, 5, NULL, 7),
+(19, 2, 'Sistem menampilkan pesan kesalahan yang jelas saat terjadi kesalahan input.', 'skala', 1, 5, NULL, 8),
+(20, 2, 'Pengunggahan dan pengunduhan file berjalan dengan cepat dan stabil.', 'skala', 1, 5, NULL, 9),
+(21, 2, 'Fitur forum diskusi dapat digunakan tanpa kendala.', 'skala', 1, 5, NULL, 10),
+(22, 2, 'Aplikasi mudah dipelajari tanpa perlu panduan khusus.', 'skala', 1, 5, NULL, 11),
+(23, 2, 'Instruksi pada setiap fitur mudah dipahami.', 'skala', 1, 5, NULL, 12),
+(24, 2, 'Navigasi antar halaman berlangsung dengan cepat.', 'skala', 1, 5, NULL, 13),
+(25, 2, 'Saya merasa nyaman menggunakan aplikasi ini dalam waktu lama.', 'skala', 1, 5, NULL, 14),
+(26, 2, 'Aplikasi dapat digunakan dengan baik di berbagai perangkat (PC dan smartphone).', 'skala', 1, 5, NULL, 15),
+(27, 2, 'Aplikasi merespons perintah pengguna dengan cepat.', 'skala', 1, 5, NULL, 16),
+(28, 2, 'Aplikasi jarang mengalami gangguan atau error saat digunakan.', 'skala', 1, 5, NULL, 17),
+(29, 2, 'Saya merasa aplikasi ini membantu proses pembelajaran dengan efektif.', 'skala', 1, 5, NULL, 18),
+(30, 2, 'Secara keseluruhan, saya puas dengan kinerja aplikasi ini.', 'skala', 1, 5, NULL, 19),
+(31, 2, 'Saya akan merekomendasikan aplikasi ini kepada pengguna lain.\r\n', 'skala', 1, 5, NULL, 20);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kuisioner_status`
+--
+
+CREATE TABLE `kuisioner_status` (
+  `id` int(11) NOT NULL,
+  `user_type` enum('siswa','guru') NOT NULL,
+  `user_id` varchar(20) NOT NULL,
+  `kuisioner_id` int(11) NOT NULL,
+  `is_completed` tinyint(1) DEFAULT 0,
+  `completed_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `kuisioner_status`
+--
+
+INSERT INTO `kuisioner_status` (`id`, `user_type`, `user_id`, `kuisioner_id`, `is_completed`, `completed_at`) VALUES
+(1, 'siswa', '0095416290', 2, 1, '2025-10-23 20:59:55'),
+(2, 'siswa', '0128301889', 2, 1, '2025-10-30 22:20:30'),
+(3, 'siswa', '3146882349', 2, 1, '2025-10-21 09:16:16'),
+(4, 'siswa', '0063301626', 2, 1, '2025-10-18 16:44:44'),
+(5, 'siswa', '0073601675', 2, 1, '2025-10-15 17:05:33'),
+(6, 'siswa', '0084617145', 2, 1, '2025-10-25 17:31:49'),
+(7, 'siswa', '0084764574', 2, 1, '2025-10-20 12:56:52'),
+(8, 'siswa', '0086207880', 2, 1, '2025-10-30 17:19:54'),
+(9, 'siswa', '0087211088', 2, 1, '2025-10-20 09:53:27'),
+(10, 'siswa', '0087337628', 2, 1, '2025-10-29 12:07:11'),
+(11, 'siswa', '0091031828', 2, 1, '2025-10-21 08:10:02'),
+(12, 'siswa', '0092516158', 2, 1, '2025-10-27 10:46:36'),
+(13, 'siswa', '0094063500', 2, 1, '2025-10-31 14:27:23'),
+(14, 'siswa', '0096325350', 2, 1, '2025-10-27 09:19:05'),
+(15, 'siswa', '0098026915', 2, 1, '2025-10-25 09:52:38'),
+(16, 'siswa', '0101839911', 2, 1, '2025-10-24 14:46:21'),
+(17, 'siswa', '0103361826', 2, 1, '2025-10-18 16:15:27'),
+(18, 'siswa', '0104991736', 2, 1, '2025-10-20 21:50:37'),
+(19, 'siswa', '0105778035', 2, 1, '2025-10-27 14:27:59'),
+(20, 'siswa', '0107037461', 2, 1, '2025-10-27 15:23:34'),
+(21, 'siswa', '12345678', 2, 1, '2025-10-23 19:36:42'),
+(22, 'siswa', '3016839237', 2, 1, '2025-10-19 17:16:52'),
+(23, 'siswa', '3044755103', 2, 1, '2025-10-26 15:22:58'),
+(24, 'siswa', '3068576912', 2, 1, '2025-10-20 15:39:08'),
+(25, 'siswa', '3073203066', 2, 1, '2025-10-18 16:39:55'),
+(26, 'siswa', '3091558263', 2, 1, '2025-10-19 14:40:21'),
+(27, 'siswa', '3124368879', 2, 1, '2025-10-25 16:27:59'),
+(28, 'siswa', '3128153661', 2, 1, '2025-10-25 14:22:10'),
+(29, 'siswa', '3745065752', 2, 1, '2025-10-27 15:39:07'),
+(30, 'siswa', '3839354749', 2, 1, '2025-10-26 16:52:16'),
+(31, 'siswa', '3898374246', 2, 1, '2025-10-20 14:20:20'),
+(32, 'siswa', '3957922406', 2, 1, '2025-10-29 10:14:18'),
+(33, 'siswa', '0014946300', 2, 1, '2025-10-22 09:24:33'),
+(34, 'siswa', '0028290024', 2, 1, '2025-10-31 22:29:36'),
+(35, 'siswa', '0031344056', 2, 1, '2025-10-24 19:27:48'),
+(36, 'siswa', '0039378456', 2, 1, '2025-10-21 18:34:05'),
+(37, 'siswa', '0042184528', 2, 1, '2025-10-21 16:54:53'),
+(38, 'siswa', '0044795891', 2, 1, '2025-10-24 10:23:22'),
+(39, 'siswa', '0044875032', 2, 1, '2025-10-21 09:43:45'),
+(40, 'siswa', '0045351054', 2, 1, '2025-10-19 19:24:20'),
+(41, 'siswa', '0045683849', 2, 1, '2025-10-29 14:35:06'),
+(42, 'siswa', '0046215859', 2, 1, '2025-10-18 20:43:33'),
+(43, 'siswa', '0051192742', 2, 1, '2025-10-16 21:22:21'),
+(44, 'siswa', '0052818825', 2, 1, '2025-10-27 10:46:23'),
+(45, 'siswa', '0058595046', 2, 1, '2025-10-18 11:51:37'),
+(46, 'siswa', '0062303354', 2, 1, '2025-10-29 21:20:44'),
+(47, 'siswa', '0064797771', 2, 1, '2025-10-27 17:56:54'),
+(48, 'siswa', '0065165563', 2, 1, '2025-10-27 19:42:46'),
+(49, 'siswa', '0066988913', 2, 1, '2025-10-15 20:32:39'),
+(50, 'siswa', '0073767204', 2, 1, '2025-10-26 18:44:22'),
+(51, 'siswa', '0077490337', 2, 1, '2025-10-29 10:14:27'),
+(52, 'siswa', '0079552543', 2, 1, '2025-10-30 10:18:55'),
+(53, 'siswa', '0079655473', 2, 1, '2025-10-17 15:19:32'),
+(54, 'siswa', '0079948350', 2, 1, '2025-10-25 08:33:28'),
+(55, 'siswa', '0082779275', 2, 1, '2025-10-22 09:12:39'),
+(56, 'siswa', '0084276194', 2, 1, '2025-10-16 12:30:01'),
+(57, 'siswa', '0086769753', 2, 1, '2025-10-26 20:10:51'),
+(58, 'siswa', '0087217408', 2, 1, '2025-10-28 18:16:40'),
+(59, 'siswa', '0089969128', 2, 1, '2025-10-16 15:28:24'),
+(60, 'siswa', '0093590373', 2, 1, '2025-10-23 20:48:02'),
+(61, 'siswa', '0093801678', 2, 1, '2025-10-16 15:14:03'),
+(62, 'siswa', '0095454453', 2, 1, '2025-10-17 19:37:42'),
+(63, 'siswa', '0096317085', 2, 1, '2025-10-24 21:54:53'),
+(64, 'siswa', '0099268185', 2, 1, '2025-10-28 09:25:35'),
+(65, 'siswa', '2021383151', 2, 1, '2025-10-15 09:42:57'),
+(66, 'siswa', '2052804732', 2, 1, '2025-10-18 19:02:34'),
+(67, 'siswa', '2061010927', 2, 1, '2025-10-25 23:23:56'),
+(68, 'siswa', '2065234615', 2, 1, '2025-10-17 15:01:30'),
+(69, 'siswa', '2078814025', 2, 1, '2025-10-17 21:14:26'),
+(70, 'siswa', '2082533938', 2, 1, '2025-10-30 10:08:48'),
+(71, 'siswa', '2098350667', 2, 1, '2025-10-18 13:33:51'),
+(72, 'siswa', '3045646933', 2, 1, '2025-10-16 12:04:22'),
+(73, 'siswa', '3061461498', 2, 1, '2025-10-19 20:47:10'),
+(74, 'siswa', '3063319075', 2, 1, '2025-10-15 12:40:44'),
+(75, 'siswa', '3072235768', 2, 1, '2025-10-22 18:40:06'),
+(76, 'siswa', '3080556625', 2, 1, '2025-10-28 16:36:52'),
+(77, 'siswa', '3107966544', 2, 1, '2025-10-29 19:42:32'),
+(78, 'siswa', '3749766539', 2, 1, '2025-10-17 09:13:17'),
+(79, 'siswa', '3762315024', 2, 1, '2025-10-23 11:42:22'),
+(80, 'siswa', '3994681926', 2, 1, '2025-10-18 20:38:08'),
+(81, 'siswa', '9779152739', 2, 1, '2025-10-17 14:51:27'),
+(82, 'siswa', '9804913006', 2, 1, '2025-10-29 09:10:48'),
+(83, 'siswa', '987654321', 2, 1, '2025-10-29 11:58:30'),
+(84, 'siswa', '9996776172', 2, 1, '2025-10-23 19:24:45'),
+(85, 'siswa', '99999999', 2, 1, '2025-10-15 18:25:24'),
+(128, 'guru', '1282023001', 2, 1, '2025-10-27 09:25:45'),
+(129, 'guru', '1282023002', 2, 1, '2025-10-16 20:57:31'),
+(130, 'guru', '1282023003', 2, 1, '2025-10-24 09:00:07'),
+(131, 'guru', '1282023004', 2, 1, '2025-10-29 13:22:43'),
+(132, 'guru', '1282023005', 2, 1, '2025-10-18 15:07:46'),
+(133, 'guru', '1282023006', 2, 1, '2025-10-25 11:18:53'),
+(134, 'guru', '1282023007', 2, 1, '2025-10-24 13:31:13'),
+(135, 'guru', '1282023008', 2, 1, '2025-10-29 17:40:57'),
+(136, 'guru', '1282023009', 2, 1, '2025-10-23 13:15:27'),
+(137, 'guru', '1282023010', 2, 1, '2025-10-20 15:39:56'),
+(138, 'guru', '1282023011', 2, 1, '2025-10-18 14:51:38'),
+(139, 'guru', '1282023012', 2, 1, '2025-10-19 09:51:15'),
+(140, 'guru', '1282023013', 2, 1, '2025-10-30 11:48:23'),
+(141, 'guru', '1282023014', 2, 1, '2025-10-21 17:29:13'),
+(142, 'guru', '21101140', 2, 1, '2025-11-09 15:04:26'),
+(143, 'siswa', '12345678999', 2, 1, '2025-11-14 13:04:12');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mata_pelajaran`
+--
+
+CREATE TABLE `mata_pelajaran` (
+  `id` int(11) NOT NULL,
+  `nama_mapel` varchar(128) NOT NULL,
+  `deskripsi` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mata_pelajaran`
+--
+
+INSERT INTO `mata_pelajaran` (`id`, `nama_mapel`, `deskripsi`) VALUES
+(1, 'Administrasi', 'lorems'),
+(2, 'Matematika', 'lorems'),
+(3, 'Ilmu Pengetahuan Alam', 'lorems'),
+(4, 'Ilmu Pengetahuan Sosial', 'lorems'),
+(5, 'Manajemen', 'lorems');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `materi`
+--
+
+CREATE TABLE `materi` (
+  `id` int(11) NOT NULL,
+  `id_guru` varchar(20) NOT NULL,
+  `id_mapel` int(11) NOT NULL,
+  `id_kelas` int(11) NOT NULL,
+  `video` varchar(1024) DEFAULT NULL,
+  `deskripsi` varchar(1024) NOT NULL,
+  `linkform` varchar(100) DEFAULT NULL,
+  `modul` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `materi`
+--
+
+INSERT INTO `materi` (`id`, `id_guru`, `id_mapel`, `id_kelas`, `video`, `deskripsi`, `linkform`, `modul`) VALUES
+(1, '21101140', 1, 1, 'https://www.youtube.com/embed/1T2gaG5vPk8?rel=0', 'ini sudah diubah', 'cacsa', '563-Article_Text-2917-1-10-20220728.pdf'),
+(2, '21101140', 2, 1, 'https://www.youtube.com/embed/QFLAuddS6qM?rel=0', 'FWFEWFEWF', 'FWEFWFWFWF', '918-1743-1-SM.pdf'),
+(3, '21101140', 2, 1, 'https://www.youtube.com/embed/eQv10AP5BG0?rel=0&modestbranding=1', 'CACASC', ' CACACACAC', '563-Article_Text-2917-1-10-202207281.pdf'),
+(4, '21101140', 1, 1, 'https://www.youtube.com/embed/1T2gaG5vPk8?rel=0', 'https://youtu.be/1T2gaG5vPk8?si=5jN4C95SL1LHaFIP', 'fwefwefwe', '1416-Article_Text-2548-1-10-20221110.pdf'),
+(5, '21101140', 2, 1, 'https://www.youtube.com/embed/eQv10AP5BG0?rel=0', 'cddqwd', 'qwdqwdq', '563-Article_Text-2917-1-10-202207282.pdf'),
+(7, '21101141', 3, 1, 'https://www.youtube.com/embed/x1x71WPgy8I?rel=0', 'bisa', 'https://youtu.be/x1x71WPgy8I?si=GddFy3cPJ7Q-Nwzw', '3163-7623-1-PB1.pdf'),
+(8, '21101141', 3, 1, 'https://www.youtube.com/embed/x1x71WPgy8I?rel=0', 'https://youtu.be/x1x71WPgy8I?si=RSjxs7rBj7fZk7Fa', 'https://youtu.be/x1x71WPgy8I?si=RSjxs7rBj7fZk7Fa', '412-Article_Text-1358-1-10-20220625.pdf'),
+(15, '21101140', 1, 1, 'https://www.youtube.com/embed/wagcvhbhJBI?rel=0&modestbranding=1', 'https://youtu.be/wagcvhbhJBI?si=wDioWV0Fxl0j6zH9', 'https://youtu.be/wagcvhbhJBI?si=wDioWV0Fxl0j6zH9', 'a-minimalist-logo-design-featuring-cipta_jAt9Jmy3QEuaw19ibe2qGg_st4LSp_bRmufrXTNLK6Hdg1.jpeg'),
+(16, '21101140', 1, 1, 'https://www.youtube.com/embed/wagcvhbhJBI?rel=0&modestbranding=1', 'woi', 'https://youtu.be/wagcvhbhJBI?si=wDioWV0Fxl0j6zH9', 'a-minimalist-logo-design-featuring-cipta_jAt9Jmy3QEuaw19ibe2qGg_st4LSp_bRmufrXTNLK6Hdg2.jpeg'),
+(21, '21101142', 1, 2, 'https://www.youtube.com/embed/vZDVm1ndx1E?rel=0&modestbranding=1', 'admin', ' https://youtu.be/vZDVm1ndx1E?si=umcHX87dTg4PP8uO', 'healthcare-11-00706-v21.pdf'),
+(22, '21101142', 1, 1, 'https://www.youtube.com/embed/vZDVm1ndx1E?rel=0&modestbranding=1', 'guru', ' https://youtu.be/vZDVm1ndx1E?si=LMW2ct6o72wwRRct', 'healthcare-11-00706-v22.pdf'),
+(23, '21101140', 1, 3, 'https://www.youtube.com/embed/vZDVm1ndx1E?rel=0&modestbranding=1', 'ss', ' https://youtu.be/vZDVm1ndx1E?si=LMW2ct6o72wwRRct', 'healthcare-11-00706-v23.pdf'),
+(24, '21101142', 1, 3, 'https://www.youtube.com/embed/vZDVm1ndx1E?rel=0&modestbranding=1', 'guru21', ' https://youtu.be/vZDVm1ndx1E?si=LMW2ct6o72wwRRct', 'healthcare-11-00706-v24.pdf'),
+(25, '21101140', 1, 1, 'https://www.youtube.com/embed/3EOdeZPizUY?rel=0&modestbranding=1', 'https://youtu.be/3EOdeZPizUY?si=AKA3sol_enGhXruX', ' https://youtu.be/3EOdeZPizUY?si=AKA3sol_enGhXruX', 'bukti_daftar.pdf');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pengaturan_absensi`
+--
+
+CREATE TABLE `pengaturan_absensi` (
+  `id` int(11) NOT NULL,
+  `nama` varchar(50) DEFAULT NULL,
+  `nilai` varchar(50) DEFAULT NULL,
+  `keterangan` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pengaturan_absensi`
+--
+
+INSERT INTO `pengaturan_absensi` (`id`, `nama`, `nilai`, `keterangan`) VALUES
+(1, 'min_komentar', '2', 'Minimal komentar untuk dianggap hadir'),
+(2, 'min_hari', '2', 'Minimal hari berbeda berkomentar'),
+(3, 'require_quiz', '1', 'Wajib menyelesaikan quiz'),
+(4, 'batas_waktu_hari', '7', 'Batas waktu absensi dalam hari setelah pertemuan');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pertemuan`
+--
+
+CREATE TABLE `pertemuan` (
+  `id` int(11) NOT NULL,
+  `id_materi` int(11) NOT NULL,
+  `id_guru` varchar(20) DEFAULT NULL,
+  `id_kelas` int(11) NOT NULL,
+  `pertemuan_ke` int(11) NOT NULL,
+  `tanggal` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pertemuan`
+--
+
+INSERT INTO `pertemuan` (`id`, `id_materi`, `id_guru`, `id_kelas`, `pertemuan_ke`, `tanggal`) VALUES
+(1, 1, '21101140', 1, 1, '2025-11-14'),
+(2, 2, '21101140', 1, 1, '2025-08-17'),
+(6, 8, '21101141', 1, 3, '2025-08-28'),
+(7, 7, '21101141', 1, 2, '2025-08-28'),
+(10, 7, '21101141', 1, 1, '2025-08-28'),
+(16, 1, '21101140', 1, 3, '2025-09-03'),
+(23, 4, '21101140', 1, 2, '2025-09-06'),
+(24, 1, '21101140', 1, 8, '2025-09-06'),
+(28, 22, '21101142', 1, 1, '2025-09-06'),
+(29, 1, '21101142', 1, 2, '2025-09-06'),
+(30, 1, '21101140', 1, 5, '2025-09-06'),
+(31, 23, '21101142', 3, 1, '2025-09-06');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quiz`
+--
+
+CREATE TABLE `quiz` (
+  `id` int(11) NOT NULL,
+  `id_pertemuan` int(11) NOT NULL,
+  `judul` varchar(255) NOT NULL,
+  `deskripsi` text DEFAULT NULL,
+  `waktu_pengerjaan` int(11) NOT NULL DEFAULT 30,
+  `attempts` int(11) NOT NULL DEFAULT 1,
+  `shuffle_questions` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `quiz`
+--
+
+INSERT INTO `quiz` (`id`, `id_pertemuan`, `judul`, `deskripsi`, `waktu_pengerjaan`, `attempts`, `shuffle_questions`, `created_at`) VALUES
+(8, 1, 'qsqs', 'l', 30, 1, 1, '2025-09-04 12:30:09'),
+(10, 2, 'qsqs', '1', 30, 1, 1, '2025-09-04 17:35:46'),
+(12, 2, 'nasi goreng', 'qq', 30, 1, 1, '2025-09-04 17:53:03'),
+(13, 16, 'nasi goreng', 'quiz', 30, 1, 1, '2025-09-04 18:00:32'),
+(15, 29, 'test', '123', 30, 1, 1, '2025-11-13 01:10:34');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quiz_questions`
+--
+
+CREATE TABLE `quiz_questions` (
+  `id` int(11) NOT NULL,
+  `quiz_id` int(11) NOT NULL,
+  `pertanyaan` text NOT NULL,
+  `tipe` enum('pilihan','essay') NOT NULL DEFAULT 'pilihan',
+  `opsi_a` text DEFAULT NULL,
+  `opsi_b` text DEFAULT NULL,
+  `opsi_c` text DEFAULT NULL,
+  `opsi_d` text DEFAULT NULL,
+  `jawaban` varchar(10) DEFAULT NULL,
+  `poin` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `quiz_questions`
+--
+
+INSERT INTO `quiz_questions` (`id`, `quiz_id`, `pertanyaan`, `tipe`, `opsi_a`, `opsi_b`, `opsi_c`, `opsi_d`, `jawaban`, `poin`) VALUES
+(25, 12, 'qq', 'pilihan', 'qq', 'qq', 'qq', 'qq', 'a', 1),
+(30, 8, '123', 'pilihan', '1', '1', '1', '1', 'a', 1),
+(31, 8, '1', 'pilihan', '1', '1', '1', '1', 'a', 1),
+(32, 15, 'wdqwddq', 'pilihan', 'dqwqwd', 'dqddqqd', 'qwdqwdq', 'wqdq', 'a', 1),
+(33, 15, 'dqwdqd', 'pilihan', 'dqdq', 'dq', 'dqd', 'qdqdqd', 'a', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quiz_siswa`
+--
+
+CREATE TABLE `quiz_siswa` (
+  `id` int(11) NOT NULL,
+  `quiz_id` int(11) NOT NULL,
+  `siswa_id` varchar(20) CHARACTER SET latin1 NOT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `status` enum('ongoing','completed') NOT NULL DEFAULT 'ongoing',
+  `score` decimal(5,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `quiz_siswa`
+--
+
+INSERT INTO `quiz_siswa` (`id`, `quiz_id`, `siswa_id`, `start_time`, `end_time`, `status`, `score`) VALUES
+(7, 8, '12345678', '2025-09-05 16:41:47', '2025-09-05 16:41:50', 'completed', '100.00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rps`
+--
+
+CREATE TABLE `rps` (
+  `id_rps` int(11) NOT NULL,
+  `guru_mapel_id` int(11) NOT NULL,
+  `kelas_id` int(11) NOT NULL,
+  `file_rps` varchar(255) NOT NULL,
+  `semester` varchar(20) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `rps`
+--
+
+INSERT INTO `rps` (`id_rps`, `guru_mapel_id`, `kelas_id`, `file_rps`, `semester`, `created_at`, `updated_at`) VALUES
+(12, 58, 1, 'RPS_21101140_58_1_1762697120.pdf', '2025 genap', '2025-11-09 15:05:20', '2025-11-09 21:05:20');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `siswa`
+--
+
+CREATE TABLE `siswa` (
+  `nis` varchar(20) NOT NULL,
+  `nama` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(128) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `is_active` int(1) NOT NULL,
+  `date_created` date DEFAULT NULL,
+  `id_kelas` int(11) NOT NULL,
+  `user_type` enum('siswa') NOT NULL DEFAULT 'siswa'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `siswa`
+--
+
+INSERT INTO `siswa` (`nis`, `nama`, `password`, `email`, `image`, `is_active`, `date_created`, `id_kelas`, `user_type`) VALUES
+('0014946300', 'AHMAD RAMADHAN', '$2y$10$tTHz4uu4lIIDhh/6ioP03OxjZesPnHwEuhyq9yJdGSILmVY.4WSvu', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0028290024', 'Gysen Wangsa', '$2y$10$03c2Ogjd.pjcUkgcUPZDlO2LyOWVQ9zRa.tfMlcYyz06Np57eG.KW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0031344056', 'Muhamad Safeih', '$2y$10$6XqssnCTCCVLN8AYQG87BO92Vx7fRam42xgrpCWHdo5vKusLzYsT2', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0039378456', 'Rimpi', '$2y$10$9Ge/nrPtX.iYnzVbdkCA5.MWnpujPwyLROrg.jbOBOkoGs3Bk64He', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0042184528', 'Michael Agustian', '$2y$10$vvsuScGTv04RIjycS34m1u7z4zfig3Y02940.7Vg.RZhghPeXKwP2', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0044795891', 'PUTRI SYAKILLAH ANASTASYAH', '$2y$10$fOQNokYNdDzBzOp9c0Hy2uLwmEJJMw4c8N35qdjo7r3imLpb8DX5q', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0044875032', 'Firda Atikah Putri', '$2y$10$8tX.zyAX4vA1oTpUQKo9XOF0BIJmyycS5Oio.RyTSAd175ZaocRvm', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0045351054', 'ADJIE ADITYA NUGRAHA', '$2y$10$y/bU.feIGomGb2okY3/eeudSIMbHIpLq0mgz/qLu0fJtzmPheeET6', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0045683849', 'Adelia Dian Megareta', '$2y$10$RXVshgafC5d8ZAjENvKlU.nE9sbCvjB4kefE9ICpF.rKUKlZ7g9Yi', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0046215859', 'PUTRA MARHAEN', '$2y$10$oynlAvxI9Rar3oGgBBiQtePasae9PEWQ/zZoW0L0F4e3gX544wJfq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0051192742', 'ANGGA ERLANGGA PUTRA', '$2y$10$i2TqPGqNJYyEZMH3YnJ12umNLZi1MoM9fjJznGeMT.bE/QS6N1DPO', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0052818825', 'Muhammad Rogib', '$2y$10$EmjEUih17YDHeBq5fqx7sOOqR8rhIRByPuum3/b6Y5h6ph1KfDWbG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0058595046', 'Muhamad Rizky Andrean', '$2y$10$kYwH5JcY6y4O2mmwuxZeSer5gkPjYWo45N73Vx6fPZw7RlxW.6Fiu', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0062303354', 'Lydia Listiawan', '$2y$10$qbK1xUNHRObdA74KQCsc8.BHevH/3FL3NGk/aGZsBmQGwMLiUgr8u', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0063301626', 'Muhammad Adi Saputra', '$2y$10$8K1RXvtI79zQot575Hp5bONzcMtRPQmCXNqbzvc2rtYtlT6sOed9y', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0064797771', 'MUHAMMAD DIKI MIFTACHHUDIN', '$2y$10$h/QnJMR3zsSyB9qjPch9TuItiVAmbE9E1cE/zGGrbQI52NmnCkDp6', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0065165563', 'Vazia Zulia vasha', '$2y$10$uhpWfnpV0XQzc9MfL8mwmuSvIyYUimTY.6sPXE1QzWQhNfCzYcAJS', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0066988913', 'Bunga Nur Aulia', '$2y$10$8mhG9bLPB.lNqu50k.rYcOd5kHbJJo9NklCd.R18t7UatIIfAnikq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0073601675', 'Rizky Agusti', '$2y$10$v4ikO7fT/BIALCGRnB17mePajvlb4WQZVu79VpGT0jZT3qQ0kDWv2', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0073767204', 'RHEVA DESFARINI', '$2y$10$FzD/LN/gAltJK1IikEMBsuHw496HH06U9JPocsB.qObeytye4ZskK', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0077490337', 'GADIS GITA LAUREN', '$2y$10$eiatmRJNktL.A7DVqsSAtOYM8/rGVD/P4j7XXpeCh3fLYDHEJobE6', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0079552543', 'VICKY DWI VERNANDA', '$2y$10$Oz92XviFvhN3hW8DMBqZke/KYRJ6Un1e/9oadwO1cRsOeRWF75Sve', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0079655473', 'M.TRISTAN RIVALDY', '$2y$10$CnCNbYen8uWstCAyri44t.QvS9XJThS78/fhUWZgvha.ojcwNYL52', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0079948350', 'NURJELANI', '$2y$10$kg8cWSiD8b2Y/5jk6fo08upSaKw5RmuEIFPkO.UrQelzlkcDXh4Pi', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0082779275', 'Putri aurelia', '$2y$10$WQ2F1ijuoiV9PBBUTQnWxeeePjuNOHohuxDtt1ralRZIZIPc61jxa', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0084276194', 'ALDI SUPARDI', '$2y$10$m6OCY62exhF2eYVwUBuriO8ZwzpbNL2WfWHlU1kVgd/btAUs/YvNG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0084617145', 'Washfi Faraz Kamilah', '$2y$10$oZmq5.pIPAjghKncGJ5tFeyI3XMec13Y09Uj7xFsLJ51Mq5LPHOEW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0084764574', 'Eva', '$2y$10$oLtnnomtpUsDvAGcMa3q2.Ej4ZK.aZYfpbuWw0iwh7dH3SoNez8jC', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0086207880', 'DIMAS YOGA RAMADHAN', '$2y$10$kG4YxdHxRh7ulUo5/Jt63.8qnC6MnI535njMDlqGZVKxTnrIhhPK.', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0086769753', 'SHEILA NATASYA', '$2y$10$XT0oeorIYMln56qANv8fvegC4Xe1p8Q7oPSNt7CU0DjrCoJBMuUp.', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0087211088', 'AZKIYATU ZAHRA', '$2y$10$DhAwTVBOAWcsjy7Bp.ddpuSlBSYzb3uR2Mi7Jk.Acxo0yT4W/NIJa', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0087217408', 'Zavio Rizki Saputra', '$2y$10$wjDTyFMBm0h5ZHQqrwNdlegqcv3Qkj0PeMTkVZoHbZ9gDgYpccmmS', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0087337628', 'KHAERUN NURI', '$2y$10$1vQhC21F9kWra2pIO52OauVhC4eHD1cYF0q5VW.3V.AnjGPYfNTwG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0089969128', 'AHMAD SYAHRONI', '$2y$10$KD2fMerNSSCjQSDXc.YAf.K5zY.UwfG5knDQG9WMstP/VLmq0rOUK', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0091031828', 'MEIDY MAQFIRAH', '$2y$10$XBMzkmoTwqLkHQPavrpyDe6VPqpH9f7qm/evM8FTI5R/HTUstmUVK', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0092516158', 'Kholilurohman', '$2y$10$.9qDcB..QGOtC.nNyO/19eZUlX6fMVyzxpN9buGSrc5XIkHGprRnq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0093590373', 'TAZKIYAH NURMALA', '$2y$10$R27lTpfImsKZ4MdByz0Vy.H4ytPUGb4hpAwvN3pDWf/GwXdEs6oP.', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0093801678', 'Arif Rahman Tiar', '$2y$10$MtM0hk4FFg4KM5sLjN6ykOQXAcMVJVzSMzGJnQqe6RD3accnUZknu', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0094063500', 'SONGO ABABIL', '$2y$10$MGoKqRbVrR0AXY8U6JIvluFNWCkJITjdVwiaOs5EO9.gbOdRJW7aC', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0095416290', 'FAHMI RIDHO', '$2y$10$cFBG1XgWLEecbbCzk7nwGOXvLAITPWkgoPNl8yllUASBNsPTsmbUy', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 1, 'siswa'),
+('0095454453', 'MUHAMAD FIRMANSYAH', '$2y$10$01UKK.cQszZTi9w9ecm5Nu/1NSgJkRM/rH0claDl21nraZeux60ta', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0096317085', 'RAISYA RAMADHANI', '$2y$10$K3xdFdUPg1PPt7HK7i5w8u9dXI/u2DZ/f5EXGulyak1S3ZgBms/By', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0096325350', 'Muhammad Raihan', '$2y$10$ZfeDlT7alkpGwICxKIUbzejxISI9SdMlAzLXrGDQW6bUaWHraa9BG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0098026915', 'SYAHRUL AL HAJJ DZULFIKAR', '$2y$10$2EzognR4ir8QWRGdzbl2qu7.zteT3PtZSEr5J94/QM72uwd7TJyRe', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0099268185', 'AHMAD FIRAS BAHIRA', '$2y$10$0Wp076hnYzAtwgLRwNAyJuSlkQ3U3QasyVuKsH2jWlMysptaqS6UK', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('0101839911', 'Sri Wahyuni', '$2y$10$vVtHOKtOe5fRZw1cTT7OUOXD6mPDAqdf0tGfO1nGzHsZJVhTw7CKG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0103361826', 'Noviyanti', '$2y$10$94ra5McZAsHGHWdzCGr/huGm/tHaI2P9lfXwHQ.BV9P80Sc6MH2He', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0104991736', 'MUHAMAD AUZAI', '$2y$10$T1nQr/K253yTuUCX6lGJxOTPjF80/EDUW5oIo0Xir0n1rxvqLLObi', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0105778035', 'SAIDA', '$2y$10$BqCIEkKARJ0urmZPqMacI.URaB69hwGjRYBymUWHcIsQfhTYA2bBi', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0107037461', 'Alvian Yusuf Handoko', '$2y$10$Hb1b6o2jfUgTxqNGtWVdyOIxocIyAU1i6uuxQeoRcsJfx5VMT7kxO', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('0128301889', 'MUHAMMAD DWI ANDRE ARAFAH', '$2y$10$SoyvO/bSlcn6qQj2gLvncel7ggiLECuiyh2ypHMZazFW88ciu/Rfa', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 1, 'siswa'),
+('12345678', 'Max Verstapen', '$2y$10$/Eh6H/5Hf8iA1VDqVdHUW.WcoVxzMb2BDbtIBtvDBnHawZ4l4Nu6a', 'maxverstapen123@gmail.com', 'default.jpg', 1, '2025-08-17', 1, 'siswa'),
+('123456789', 'Future', '$2y$10$9NEj6LYVp9wOQBz8QK8YS.rWYbSGUFXzX3wvJ1YUx16ocBKbwMglu', 'tesswswt@gmail.com', 'default.jpg', 1, '2025-08-24', 1, 'siswa'),
+('1234567899', 'John Doe', '$2y$10$nWSiM/QQvZQn45WJ5iFAqu8cVQAX5An2MAvYUKNCEFRucxbo/caI2', 'lorem@example.com', 'default.jpg', 1, '2025-08-17', 1, 'siswa'),
+('12345678999', 'Lionel Messi', '$2y$10$lP4uN/pwesy7qZf5OewCfeD0eBsC1v2ThQt57gU8nxcZkPEbB0d1u', 'loremas@example.com', 'default.jpg', 1, '2025-08-28', 1, 'siswa'),
+('1234678', 'xxxx', '$2y$10$9cTGJxLdsIqL7a6/ajuxa.uiIAnI5CRv7hlWmsN8QalmpH.X4/mUG', 'xxxxx@admin.com', 'default.jpg', 1, '2025-09-02', 1, 'siswa'),
+('2021383151', 'Fina Wardawiyah', '$2y$10$yxcqV7A4Ij4lVpoPiFvwTuekv5/M.rzbfZJQI1gaGbztKsy27lUlS', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('2052804732', 'Ibra Wimarta', '$2y$10$lvfH5Ja0VqUtTtcNu69CXuJENtgaY5xuyv51DaBm90KEoSWxtP6ha', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('2061010927', 'Sinta', '$2y$10$o/j.yiVic0MiEEH.GtIetO46rTYiSTGJQUBql4Mx2PdRNJajGMIRe', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('2065234615', 'Khairunnisa', '$2y$10$AA3cuqhftxR7bH532zliB.4VC6LZELsKXMtGKOjANEkTblxsWk0Rq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('2078814025', 'Maulana Indra Prama', '$2y$10$3A2nywhcVsAUVsGiIvlUiuaTrdtepKSo8wuSu891/9cMsmazeO5Ny', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('2082533938', 'Noval Adrian Wijaya', '$2y$10$S20Ol0Xg053tZk57pE6T4OgC/789J6SCeRwKNK9cA9Zyx8hI9lzLi', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('2098350667', 'Fitri', '$2y$10$gdZxMR.XAUeegQcX2VhX9uK.NoKsedBfQVgZNd346uL2Wdpr6D35K', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('211011400894', 'andika fahrezi', '$2y$10$eFREJ7KH68zQSCQ5fq8u2umg6o9e7hQWa7v/pf7Ja4GCcJ3OZAj4u', 'addust@gmail.com', 'default.jpg', 1, '2025-09-02', 1, 'siswa'),
+('3016839237', 'Siti Inayah Haq', '$2y$10$RGqQfddF9YLklemd6Z2wOeo9q3Q.Gf8coDMCQusNL6RMZAILaVs/W', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('3044755103', 'Ahmad Khorib', '$2y$10$5SQn5ehFilubXIJuvxo91ezIweHYN9ACubgjQDkjsv3YHaBnIzqz2', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('3045646933', 'Usli Imam Safei', '$2y$10$DrHHuY5XB8TM44G4lTXMJu0/dnXSLbqZroxI9DB7XkROCWkb4RIiq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('3061461498', 'MUHAMMAD SAYYID FATUR ROHMAN', '$2y$10$1.bMfAtrY8w3ym4II8IBAuep9xvBVs64l1HQo.n9AAmroxEzW559a', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('3063319075', 'Muhammad Maulana Ilyas', '$2y$10$f.7kRD80CbUQYXj5HwSl4Ooj7iaoQ1o4E2975RvhQIkvHPVo6SgsS', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('3068576912', 'Aida', '$2y$10$Ybh0Qsc5nPYm0imC8a1/aeT1s4one0eX9Gc4L/zXaB7UBPYCAoYs6', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('3072235768', 'Muhammad Taju Syarop Fauzi', '$2y$10$VYNkM2xOfljoopfK8U5T/.kMnrw5jQB6PlPnVwHLIflNT.MLzvBpm', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('3073203066', 'Muhammad Rynaldi', '$2y$10$0qB2qMboDJyejbpGDqH4WuS.p8FQbyHA/UbJaCLMNFpbzbrj2J9Ve', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('3080556625', 'HAPIZ YUSRI', '$2y$10$5VB2VlHUvGrrCumBVnN4LeLByJz4oHO5yoYhrtiaVNHxfkO4dxnwa', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('3091558263', 'Muhammad Husni Makki Sonhaji', '$2y$10$ZtZoSYWLIIR3eRdR4G1FIutY97FhxlqF3gaSecQB4lQquAi9KwYPW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('3107966544', 'Najwa Putri Awaliyah', '$2y$10$GU2b7kMCB/IqgkhG4JRHIu/g5ZE7M2p7lxgdkMttKvXO/5KHqRMtW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('3124368879', 'RIZKI FAUZI', '$2y$10$BESosJi.b8Wd9pt5lEolJ.9jBvxMM.mKbFhRgv8JqC7vn5tb8ONTW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('3128153661', 'MUHAMMAD SYAFIQ ZAKY ISKANDAR', '$2y$10$6s/PehvFniS8PnCXzxD3V.Jgb2Ixzzpu8C3FFUW1rH7/MWsQ9FniG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('3146882349', 'Laila Khanza Az Zahra', '$2y$10$qD9CH/atCzNDUMHCGufktuOcVrlDcriubZqCY5GCBESpsG76jB8Yi', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 1, 'siswa'),
+('3745065752', 'KARTONO', '$2y$10$xZtKC4dCkI07dd1YYVBKUummtWP9FPUFivhtui6kxKrmHJyPK5thy', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('3749766539', 'ZAINUDIN', '$2y$10$k7Llad7i8zkOSAtoE6aXW.gJntEu.BEQEUJ4/ww1Gf35miYNtEAFa', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('3762315024', 'Nurlaela', '$2y$10$6ZJ3duyRnyjueNsmDUkPxem22rBxVnVWGPp6uqSiBE//ZMDcEO3xW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('3839354749', 'SYAIPUDIN', '$2y$10$lAG1lPxELOCuIsGHDuU4zeh98FYw8w8zJspnRpbgZVj4mdC8PlFJq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('3898374246', 'Apiyah', '$2y$10$UikFYs2w9rO2dtzM0XulNu1O4yu79JkJOxU37TNF6RwKl/zBOoKCi', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('3957922406', 'Dwi Bayu Pribadi', '$2y$10$jV9uJ0k3iVsiYXzHUloCougVTGf59ZtV7DRgT12dQKvw8RPNuOB6G', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
+('3994681926', 'Khumaeratur Rodhiyah', '$2y$10$FBico9ArDuD9JA7ZwLWPb.9e.7AuHbAPoSkkWR6Uz56GuhjOLFRse', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('9779152739', 'Jamsuri', '$2y$10$HjCmLGWbRUQ3mSeM2fcm7.hCxSAM83bh76s74s1C/O/QLTQsYO20S', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('9804913006', 'Mukri', '$2y$10$yhZWr2fAidPm1jCEMVHX5uOmhoxlj3MEetZ5DRpu2NN/beLvQJP2q', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
+('9996776172', 'Wiji Sanuri', '$2y$10$j/rWcoOALkIBkg5tVs.Esu3Wg4mrwxXvAHULT4Vcj2i/pmi9CksGq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_jawaban_siswa`
+--
+
+CREATE TABLE `tbl_jawaban_siswa` (
+  `id_jawaban` int(11) NOT NULL,
+  `nis` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
+  `id_ujian` int(11) DEFAULT NULL,
+  `id_soal` int(11) DEFAULT NULL,
+  `bank_soal_id` int(11) DEFAULT NULL,
+  `jawaban` varchar(1) DEFAULT NULL,
+  `jawaban_essay` text DEFAULT NULL,
+  `ragu_ragu` tinyint(1) DEFAULT 0,
+  `is_selesai` tinyint(1) DEFAULT 0,
+  `jumlah_benar` int(11) DEFAULT 0,
+  `jumlah_salah` int(11) DEFAULT 0,
+  `score` float DEFAULT 0,
+  `tanggal_submit` datetime DEFAULT NULL,
+  `waktu_jawab` timestamp NOT NULL DEFAULT current_timestamp(),
+  `waktu_mulai_ujian` datetime DEFAULT NULL,
+  `waktu_submit` datetime DEFAULT NULL,
+  `sumber` enum('tbl_soal','bank_soal') NOT NULL DEFAULT 'tbl_soal',
+  `nilai_essay` int(11) DEFAULT NULL,
+  `catatan_essay` text DEFAULT NULL,
+  `nilai_akhir` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_soal`
+--
+
+CREATE TABLE `tbl_soal` (
+  `id_soal` int(11) NOT NULL,
+  `id_ujian` int(11) DEFAULT NULL,
+  `pertanyaan` text DEFAULT NULL,
+  `pilihan_a` varchar(255) DEFAULT NULL,
+  `pilihan_b` varchar(255) DEFAULT NULL,
+  `pilihan_c` varchar(255) DEFAULT NULL,
+  `pilihan_d` varchar(255) DEFAULT NULL,
+  `kunci_jawaban` varchar(1) DEFAULT NULL,
+  `tipe_soal` enum('pilihan','essay') NOT NULL DEFAULT 'pilihan'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_soal`
+--
+
+INSERT INTO `tbl_soal` (`id_soal`, `id_ujian`, `pertanyaan`, `pilihan_a`, `pilihan_b`, `pilihan_c`, `pilihan_d`, `kunci_jawaban`, `tipe_soal`) VALUES
+(11, 16, 'aaa', 'aaa', 'aaa', 'aaa', 'aaa', 'A', 'pilihan'),
+(12, 16, 'aaa', 'aaa', 'aaa', 'aaa', 'aaa', 'A', 'pilihan'),
+(13, 16, 'aaa', 'aaa', 'aaa', 'aaa', 'aaa', 'A', 'pilihan');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_ujian`
+--
+
+CREATE TABLE `tbl_ujian` (
+  `id_ujian` int(11) NOT NULL,
+  `nip_guru` varchar(20) CHARACTER SET latin1 NOT NULL,
+  `nama_ujian` varchar(100) DEFAULT NULL,
+  `tanggal_mulai` date DEFAULT NULL,
+  `tanggal_selesai` date DEFAULT NULL,
+  `durasi` int(11) DEFAULT NULL,
+  `status` enum('aktif','nonaktif') DEFAULT NULL,
+  `id_pertemuan` int(11) DEFAULT NULL,
+  `soal_source` enum('manual','bank_soal') DEFAULT 'manual',
+  `bobot_pg` tinyint(3) DEFAULT 70,
+  `bobot_essay` tinyint(3) DEFAULT 30
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_ujian`
+--
+
+INSERT INTO `tbl_ujian` (`id_ujian`, `nip_guru`, `nama_ujian`, `tanggal_mulai`, `tanggal_selesai`, `durasi`, `status`, `id_pertemuan`, `soal_source`, `bobot_pg`, `bobot_essay`) VALUES
+(16, '21101140', 'UTS', '2025-10-23', '2025-10-31', 30, 'aktif', 1, 'manual', 70, 30);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tugas_siswa`
+--
+
+CREATE TABLE `tugas_siswa` (
+  `id` int(11) NOT NULL,
+  `siswa_id` varchar(20) CHARACTER SET latin1 NOT NULL,
+  `id_pertemuan` int(11) NOT NULL,
+  `file_path` varchar(255) NOT NULL,
+  `original_filename` varchar(255) NOT NULL,
+  `file_type` varchar(50) NOT NULL,
+  `file_size` int(11) NOT NULL,
+  `catatan` text DEFAULT NULL,
+  `nilai` decimal(5,2) DEFAULT NULL,
+  `dikirim_pada` datetime NOT NULL,
+  `diupdate_pada` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tugas_siswa`
+--
+
+INSERT INTO `tugas_siswa` (`id`, `siswa_id`, `id_pertemuan`, `file_path`, `original_filename`, `file_type`, `file_size`, `catatan`, `nilai`, `dikirim_pada`, `diupdate_pada`) VALUES
+(5, '123456789', 1, 'assets/tugas_uploads/7d71d572c6f0e74636ec4ba70261c941.jpeg', 'a-minimalist-logo-design-featuring-cipta_jAt9Jmy3QEuaw19ibe2qGg_st4LSp_bRmufrXTNLK6Hdg (JPEG)', 'image/jpeg', 39, '', '100.00', '2025-09-04 11:08:23', '2025-09-04 11:08:50'),
+(8, '12345678', 1, 'assets/tugas_uploads/06ad4a91a635bbc70d45a50d2c1bced7.PDF', 'TAGIHAN KEUANGAN (2) (PDF)', 'application/pdf', 159, NULL, NULL, '2025-11-09 15:36:19', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ujian_soal`
+--
+
+CREATE TABLE `ujian_soal` (
+  `id` int(11) NOT NULL,
+  `ujian_id` int(11) NOT NULL,
+  `soal_id` int(11) DEFAULT NULL,
+  `bank_soal_id` int(11) DEFAULT NULL,
+  `sumber` enum('bank_soal','tbl_soal') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `ujian_soal`
+--
+
+INSERT INTO `ujian_soal` (`id`, `ujian_id`, `soal_id`, `bank_soal_id`, `sumber`) VALUES
+(40, 16, NULL, 24, 'bank_soal'),
+(41, 16, NULL, 15, 'bank_soal'),
+(42, 16, 11, NULL, 'tbl_soal'),
+(43, 16, 12, NULL, 'tbl_soal'),
+(44, 16, 13, NULL, 'tbl_soal');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `absensi_pertemuan`
+--
+ALTER TABLE `absensi_pertemuan`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_absensi_pertemuan` (`id_pertemuan`),
+  ADD KEY `fk_absensi_siswa` (`siswa_id`);
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `bank_soal`
+--
+ALTER TABLE `bank_soal`
+  ADD PRIMARY KEY (`id_soal`),
+  ADD KEY `id_mapel` (`id_mapel`);
+
+--
+-- Indexes for table `forum_diskusi`
+--
+ALTER TABLE `forum_diskusi`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_pertemuan` (`id_pertemuan`),
+  ADD KEY `user_composite` (`user_type`,`user_id`),
+  ADD KEY `fk_parent` (`parent_id`);
+
+--
+-- Indexes for table `guru`
+--
+ALTER TABLE `guru`
+  ADD PRIMARY KEY (`nip`),
+  ADD UNIQUE KEY `uq_nis` (`nip`),
+  ADD UNIQUE KEY `nuptk` (`nuptk`);
+
+--
+-- Indexes for table `guru_mapel`
+--
+ALTER TABLE `guru_mapel`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_guru` (`id_guru`),
+  ADD KEY `id_mapel` (`id_mapel`);
+
+--
+-- Indexes for table `jawaban_siswa`
+--
+ALTER TABLE `jawaban_siswa`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `quiz_siswa_id` (`quiz_siswa_id`),
+  ADD KEY `question_id` (`question_id`);
+
+--
+-- Indexes for table `kelas`
+--
+ALTER TABLE `kelas`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nama_kelas` (`nama_kelas`);
+
+--
+-- Indexes for table `kuisioner`
+--
+ALTER TABLE `kuisioner`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_admin` (`created_by`);
+
+--
+-- Indexes for table `kuisioner_jawaban`
+--
+ALTER TABLE `kuisioner_jawaban`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_pertanyaan` (`pertanyaan_id`);
+
+--
+-- Indexes for table `kuisioner_pertanyaan`
+--
+ALTER TABLE `kuisioner_pertanyaan`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `kuisioner_id` (`kuisioner_id`);
+
+--
+-- Indexes for table `kuisioner_status`
+--
+ALTER TABLE `kuisioner_status`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_user_kuisioner` (`user_type`,`user_id`,`kuisioner_id`),
+  ADD KEY `fk_status_kuisioner` (`kuisioner_id`);
+
+--
+-- Indexes for table `mata_pelajaran`
+--
+ALTER TABLE `mata_pelajaran`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `materi`
+--
+ALTER TABLE `materi`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_guru` (`id_guru`),
+  ADD KEY `id_mapel` (`id_mapel`),
+  ADD KEY `fk_materi_kelas` (`id_kelas`);
+
+--
+-- Indexes for table `pengaturan_absensi`
+--
+ALTER TABLE `pengaturan_absensi`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `pertemuan`
+--
+ALTER TABLE `pertemuan`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_materi` (`id_materi`),
+  ADD KEY `id_kelas` (`id_kelas`);
+
+--
+-- Indexes for table `quiz`
+--
+ALTER TABLE `quiz`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_pertemuan` (`id_pertemuan`);
+
+--
+-- Indexes for table `quiz_questions`
+--
+ALTER TABLE `quiz_questions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `quiz_id` (`quiz_id`);
+
+--
+-- Indexes for table `quiz_siswa`
+--
+ALTER TABLE `quiz_siswa`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `quiz_id` (`quiz_id`),
+  ADD KEY `siswa_id` (`siswa_id`);
+
+--
+-- Indexes for table `rps`
+--
+ALTER TABLE `rps`
+  ADD PRIMARY KEY (`id_rps`),
+  ADD KEY `fk_rps_guru_mapel` (`guru_mapel_id`),
+  ADD KEY `fk_rps_kelas` (`kelas_id`);
+
+--
+-- Indexes for table `siswa`
+--
+ALTER TABLE `siswa`
+  ADD PRIMARY KEY (`nis`),
+  ADD KEY `id_kelas` (`id_kelas`);
+
+--
+-- Indexes for table `tbl_jawaban_siswa`
+--
+ALTER TABLE `tbl_jawaban_siswa`
+  ADD PRIMARY KEY (`id_jawaban`),
+  ADD KEY `nis` (`nis`),
+  ADD KEY `id_ujian` (`id_ujian`),
+  ADD KEY `fk_jawaban_tbl_soal` (`id_soal`),
+  ADD KEY `fk_jawaban_bank_soal` (`bank_soal_id`);
+
+--
+-- Indexes for table `tbl_soal`
+--
+ALTER TABLE `tbl_soal`
+  ADD PRIMARY KEY (`id_soal`),
+  ADD KEY `id_ujian` (`id_ujian`);
+
+--
+-- Indexes for table `tbl_ujian`
+--
+ALTER TABLE `tbl_ujian`
+  ADD PRIMARY KEY (`id_ujian`),
+  ADD KEY `nip_guru` (`nip_guru`),
+  ADD KEY `id_pertemuan` (`id_pertemuan`);
+
+--
+-- Indexes for table `tugas_siswa`
+--
+ALTER TABLE `tugas_siswa`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `siswa_id` (`siswa_id`),
+  ADD KEY `id_pertemuan` (`id_pertemuan`);
+
+--
+-- Indexes for table `ujian_soal`
+--
+ALTER TABLE `ujian_soal`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `bank_soal_id` (`bank_soal_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `absensi_pertemuan`
+--
+ALTER TABLE `absensi_pertemuan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+
+--
+-- AUTO_INCREMENT for table `bank_soal`
+--
+ALTER TABLE `bank_soal`
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT for table `forum_diskusi`
+--
+ALTER TABLE `forum_diskusi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+
+--
+-- AUTO_INCREMENT for table `guru_mapel`
+--
+ALTER TABLE `guru_mapel`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+
+--
+-- AUTO_INCREMENT for table `jawaban_siswa`
+--
+ALTER TABLE `jawaban_siswa`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT for table `kelas`
+--
+ALTER TABLE `kelas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `kuisioner`
+--
+ALTER TABLE `kuisioner`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `kuisioner_jawaban`
+--
+ALTER TABLE `kuisioner_jawaban`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2879;
+
+--
+-- AUTO_INCREMENT for table `kuisioner_pertanyaan`
+--
+ALTER TABLE `kuisioner_pertanyaan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+
+--
+-- AUTO_INCREMENT for table `kuisioner_status`
+--
+ALTER TABLE `kuisioner_status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
+
+--
+-- AUTO_INCREMENT for table `mata_pelajaran`
+--
+ALTER TABLE `mata_pelajaran`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `materi`
+--
+ALTER TABLE `materi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT for table `pengaturan_absensi`
+--
+ALTER TABLE `pengaturan_absensi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `pertemuan`
+--
+ALTER TABLE `pertemuan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+
+--
+-- AUTO_INCREMENT for table `quiz`
+--
+ALTER TABLE `quiz`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `quiz_questions`
+--
+ALTER TABLE `quiz_questions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+
+--
+-- AUTO_INCREMENT for table `quiz_siswa`
+--
+ALTER TABLE `quiz_siswa`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `rps`
+--
+ALTER TABLE `rps`
+  MODIFY `id_rps` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `tbl_jawaban_siswa`
+--
+ALTER TABLE `tbl_jawaban_siswa`
+  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+
+--
+-- AUTO_INCREMENT for table `tbl_soal`
+--
+ALTER TABLE `tbl_soal`
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `tbl_ujian`
+--
+ALTER TABLE `tbl_ujian`
+  MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `tugas_siswa`
+--
+ALTER TABLE `tugas_siswa`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `ujian_soal`
+--
+ALTER TABLE `ujian_soal`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `absensi_pertemuan`
+--
+ALTER TABLE `absensi_pertemuan`
+  ADD CONSTRAINT `fk_absensi_pertemuan` FOREIGN KEY (`id_pertemuan`) REFERENCES `pertemuan` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_absensi_siswa` FOREIGN KEY (`siswa_id`) REFERENCES `siswa` (`nis`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `bank_soal`
+--
+ALTER TABLE `bank_soal`
+  ADD CONSTRAINT `fk_soal_mapel` FOREIGN KEY (`id_mapel`) REFERENCES `mata_pelajaran` (`id`);
+
+--
+-- Constraints for table `forum_diskusi`
+--
+ALTER TABLE `forum_diskusi`
+  ADD CONSTRAINT `fk_forum_pertemuan` FOREIGN KEY (`id_pertemuan`) REFERENCES `pertemuan` (`id`),
+  ADD CONSTRAINT `fk_parent` FOREIGN KEY (`parent_id`) REFERENCES `forum_diskusi` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `guru_mapel`
+--
+ALTER TABLE `guru_mapel`
+  ADD CONSTRAINT `guru_mapel_ibfk_1` FOREIGN KEY (`id_guru`) REFERENCES `guru` (`nip`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `guru_mapel_ibfk_2` FOREIGN KEY (`id_mapel`) REFERENCES `mata_pelajaran` (`id`);
+
+--
+-- Constraints for table `jawaban_siswa`
+--
+ALTER TABLE `jawaban_siswa`
+  ADD CONSTRAINT `jawaban_siswa_ibfk_1` FOREIGN KEY (`quiz_siswa_id`) REFERENCES `quiz_siswa` (`id`),
+  ADD CONSTRAINT `jawaban_siswa_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `quiz_questions` (`id`);
+
+--
+-- Constraints for table `kuisioner`
+--
+ALTER TABLE `kuisioner`
+  ADD CONSTRAINT `fk_admin` FOREIGN KEY (`created_by`) REFERENCES `admin` (`id`);
+
+--
+-- Constraints for table `kuisioner_jawaban`
+--
+ALTER TABLE `kuisioner_jawaban`
+  ADD CONSTRAINT `fk_pertanyaan` FOREIGN KEY (`pertanyaan_id`) REFERENCES `kuisioner_pertanyaan` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `kuisioner_pertanyaan`
+--
+ALTER TABLE `kuisioner_pertanyaan`
+  ADD CONSTRAINT `fk_kuisioner` FOREIGN KEY (`kuisioner_id`) REFERENCES `kuisioner` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `kuisioner_status`
+--
+ALTER TABLE `kuisioner_status`
+  ADD CONSTRAINT `fk_status_kuisioner` FOREIGN KEY (`kuisioner_id`) REFERENCES `kuisioner` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `materi`
+--
+ALTER TABLE `materi`
+  ADD CONSTRAINT `fk_materi_guru` FOREIGN KEY (`id_guru`) REFERENCES `guru` (`nip`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_materi_mapel` FOREIGN KEY (`id_mapel`) REFERENCES `mata_pelajaran` (`id`);
+
+--
+-- Constraints for table `pertemuan`
+--
+ALTER TABLE `pertemuan`
+  ADD CONSTRAINT `fk_pertemuan_kelas` FOREIGN KEY (`id_kelas`) REFERENCES `kelas` (`id`),
+  ADD CONSTRAINT `fk_pertemuan_materi` FOREIGN KEY (`id_materi`) REFERENCES `materi` (`id`);
+
+--
+-- Constraints for table `quiz`
+--
+ALTER TABLE `quiz`
+  ADD CONSTRAINT `quiz_ibfk_1` FOREIGN KEY (`id_pertemuan`) REFERENCES `pertemuan` (`id`);
+
+--
+-- Constraints for table `quiz_questions`
+--
+ALTER TABLE `quiz_questions`
+  ADD CONSTRAINT `quiz_questions_ibfk_1` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`id`);
+
+--
+-- Constraints for table `quiz_siswa`
+--
+ALTER TABLE `quiz_siswa`
+  ADD CONSTRAINT `quiz_siswa_ibfk_1` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`id`),
+  ADD CONSTRAINT `quiz_siswa_ibfk_2` FOREIGN KEY (`siswa_id`) REFERENCES `siswa` (`nis`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `rps`
+--
+ALTER TABLE `rps`
+  ADD CONSTRAINT `fk_rps_guru_mapel` FOREIGN KEY (`guru_mapel_id`) REFERENCES `guru_mapel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_rps_kelas` FOREIGN KEY (`kelas_id`) REFERENCES `kelas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `siswa`
+--
+ALTER TABLE `siswa`
+  ADD CONSTRAINT `fk_siswa_kelas` FOREIGN KEY (`id_kelas`) REFERENCES `kelas` (`id`);
+
+--
+-- Constraints for table `tbl_jawaban_siswa`
+--
+ALTER TABLE `tbl_jawaban_siswa`
+  ADD CONSTRAINT `fk_jawaban_ke_tblsoal` FOREIGN KEY (`id_soal`) REFERENCES `tbl_soal` (`id_soal`),
+  ADD CONSTRAINT `tbl_jawaban_siswa_ibfk_1` FOREIGN KEY (`nis`) REFERENCES `siswa` (`nis`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_jawaban_siswa_ibfk_2` FOREIGN KEY (`id_ujian`) REFERENCES `tbl_ujian` (`id_ujian`),
+  ADD CONSTRAINT `tbl_jawaban_siswa_ibfk_4` FOREIGN KEY (`bank_soal_id`) REFERENCES `bank_soal` (`id_soal`);
+
+--
+-- Constraints for table `tbl_soal`
+--
+ALTER TABLE `tbl_soal`
+  ADD CONSTRAINT `fk_soal_ujian` FOREIGN KEY (`id_ujian`) REFERENCES `tbl_ujian` (`id_ujian`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `tbl_ujian`
+--
+ALTER TABLE `tbl_ujian`
+  ADD CONSTRAINT `fk_ujian_guru` FOREIGN KEY (`nip_guru`) REFERENCES `guru` (`nip`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_ujian_pertemuan` FOREIGN KEY (`id_pertemuan`) REFERENCES `pertemuan` (`id`);
+
+--
+-- Constraints for table `tugas_siswa`
+--
+ALTER TABLE `tugas_siswa`
+  ADD CONSTRAINT `fk_tugas_pertemuan` FOREIGN KEY (`id_pertemuan`) REFERENCES `pertemuan` (`id`),
+  ADD CONSTRAINT `fk_tugas_siswa` FOREIGN KEY (`siswa_id`) REFERENCES `siswa` (`nis`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `ujian_soal`
+--
+ALTER TABLE `ujian_soal`
+  ADD CONSTRAINT `fk_ujian_soal` FOREIGN KEY (`bank_soal_id`) REFERENCES `bank_soal` (`id_soal`) ON DELETE SET NULL;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -181,10 +181,20 @@ public function get_materi_by_mapel()
     $this->load->view('guru/footg');
 }
     // Update pertemuan
-    public function update()
+public function update()
 {
     $this->load->model('M_pertemuan');
-    $id           = $this->input->post('id_pertemuan');
+    $id = $this->input->post('id_pertemuan');
+    
+    // === TAMBAH INI: AMBIL DATA ASLI SEBELUM UPDATE ===
+    $original_data = $this->db->get_where('pertemuan', ['id' => $id])->row_array();
+    if (!$original_data) {
+        $this->session->set_flashdata('error', 'Pertemuan tidak ditemukan.');
+        redirect('pertemuan');
+        return;
+    }
+    // === END TAMBAH ===
+
     $id_guru       = $this->session->userdata('nip');
     $id_materi     = $this->input->post('id_materi');
     $id_kelas      = $this->input->post('id_kelas');
@@ -204,6 +214,27 @@ public function get_materi_by_mapel()
         redirect('pertemuan/edit/' . $id);
         return;
     }
+
+    // === VALIDASI PERUBAHAN YANG MEMPENGARUHI ABSENSI ===
+    $fields_that_affect_absensi = ['tanggal', 'id_kelas', 'id_mapel'];
+    $is_absensi_affected = false;
+    
+    foreach ($fields_that_affect_absensi as $field) {
+        // Bandingkan dengan data asli
+        if ($this->input->post($field) != $original_data[$field]) {
+            $is_absensi_affected = true;
+            break;
+        }
+    }
+    
+    // Auto-invalidate absensi jika perlu
+    if ($is_absensi_affected) {
+        $this->load->model('Absensi_model');
+        // Hanya invalidate, tidak hitung ulang otomatis
+        $this->db->where('id_pertemuan', $id)
+                ->update('absensi_pertemuan', ['calculation_version' => NULL]);
+    }
+    // === END VALIDASI ===
 
     $data = [
         'id_materi'    => $id_materi,

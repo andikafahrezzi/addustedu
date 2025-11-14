@@ -83,6 +83,9 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group" role="group">
+                                                    <a href="<?= site_url('absensi/lihat/'.$p->id) ?>" class="btn btn-sm btn-info" title="Lihat Absensi">
+                                                        <i class="fas fa-users"></i>
+                                                    </a>
                                                     <a href="<?= site_url('guru/belajar/'.$p->id) ?>" class="btn btn-sm btn-success" title="Lihat">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
