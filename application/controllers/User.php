@@ -15,7 +15,7 @@ class User extends CI_Controller
     }
 public function index()
 {
-// Controller (misal di User.php -> function index() atau dashboard)
+        // Controller (misal di User.php -> function index() atau dashboard)
         $this->load->model('Ujian_model');
         $user_id = $this->session->userdata('nis'); // NIS atau ID siswa
         $user_type    = 'siswa';
@@ -26,16 +26,16 @@ public function index()
             redirect('kuisioner_user/fill/'.$kuisioner->id);
         }
 
-// Ambil data siswa dari sesi
-$this->db->select('siswa.*, kelas.nama_kelas, kelas.tingkat, kelas.jurusan');
-$this->db->from('siswa');
-$this->db->join('kelas', 'kelas.id = siswa.id_kelas');
-$this->db->where('siswa.nis', $this->session->userdata('nis'));
-$data['user'] = $this->db->get()->row_array();
+    // Ambil data siswa dari sesi
+    $this->db->select('siswa.*, kelas.nama_kelas, kelas.tingkat, kelas.jurusan');
+    $this->db->from('siswa');
+    $this->db->join('kelas', 'kelas.id = siswa.id_kelas');
+    $this->db->where('siswa.nis', $this->session->userdata('nis'));
+    $data['user'] = $this->db->get()->row_array();
 
-if ($data['user']) {
-    $id_kelas_siswa = $data['user']['id_kelas'];
-    $data['kelas_siswa'] = $id_kelas_siswa;
+    if ($data['user']) {
+        $id_kelas_siswa = $data['user']['id_kelas'];
+        $data['kelas_siswa'] = $id_kelas_siswa;
 
     // Ambil nama_kelas dari id_kelas siswa
     $kelas = $this->db->get_where('kelas', ['id' => $id_kelas_siswa])->row();
@@ -65,13 +65,38 @@ if ($data['user']) {
     $data['mapel_data'] = $mapel_data;
 
     // Ambil semua pertemuan untuk kelas siswa
-    $this->db->select('pertemuan.*, materi.deskripsi AS deskripsi_materi, guru.nip AS id_guru, materi.id_mapel');
-    $this->db->from('pertemuan');
-    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
-    $this->db->join('guru', 'guru.nip = materi.id_guru');
-    $this->db->where('pertemuan.id_kelas', $id_kelas_siswa);
-    $pertemuan = $this->db->get()->result_array();
-    $data['pertemuan'] = $pertemuan;
+    // Ambil semua pertemuan untuk kelas siswa
+$this->db->select('
+    pertemuan.*,
+    materi.deskripsi AS deskripsi_materi,
+    materi.id_mapel,
+    guru.nama_guru,
+    guru.nip AS id_guru,
+    mata_pelajaran.nama_mapel,
+    kelas.nama_kelas
+');
+$this->db->from('pertemuan');
+
+// JOIN BENAR: guru dari pertemuan
+$this->db->join('guru', 'guru.nip = pertemuan.id_guru');
+
+// JOIN materi hanya sebagai referensi konten, bukan guru
+$this->db->join('materi', 'materi.id = pertemuan.id_materi');
+
+// JOIN mapel & kelas sama seperti sebelumnya
+$this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+$this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+
+$this->db->where('pertemuan.id_kelas', $id_kelas_siswa);
+
+// urutkan sesuai keinginan
+$this->db->order_by('pertemuan.id_guru ASC');
+$this->db->order_by('materi.id_mapel ASC');
+$this->db->order_by('pertemuan.pertemuan_ke ASC');
+
+$pertemuan = $this->db->get()->result_array();
+$data['pertemuan'] = $pertemuan;
+
 
     // Ambil ujian per guru dan mapel
     $ujian_data = [];
@@ -87,9 +112,9 @@ if ($data['user']) {
     $this->load->view('user/navu');
     $this->load->view('user/index', $data);
     $this->load->view('user/foots');
-} else {
-    redirect('welcome/');
-}
+    } else {
+        redirect('welcome/');
+    }
 
 }
 
