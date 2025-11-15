@@ -11,40 +11,63 @@ class Absensi_model extends CI_Model {
     }
 
     // Hitung data REAL-TIME dari tabel asli
-    public function hitung_data_siswa($id_pertemuan, $siswa_id) {
-        // Total komentar - hitung langsung
-        $total_komentar = $this->db
-            ->where('id_pertemuan', $id_pertemuan)
-            ->where('user_type', 'siswa')
-            ->where('user_id', $siswa_id)
-            ->count_all_results('forum_diskusi');
-        
-        // Hari berbeda - hitung langsung  
-        $hari_berbeda = $this->db
-            ->select('COUNT(DISTINCT DATE(created_at)) as total')
-            ->where('id_pertemuan', $id_pertemuan)
-            ->where('user_type', 'siswa')
-            ->where('user_id', $siswa_id)
-            ->get('forum_diskusi')
-            ->row()->total ?? 0;
-        
-        // Quiz completed - cek langsung
-        $quiz_completed = $this->db
-            ->select('qs.id')
-            ->from('quiz_siswa qs')
-            ->join('quiz q', 'q.id = qs.quiz_id')
-            ->where('q.id_pertemuan', $id_pertemuan)
-            ->where('qs.siswa_id', $siswa_id)
-            ->where('qs.status', 'completed')
-            ->get()
-            ->num_rows() > 0;
-        
+    public function hitung_data_siswa($id_pertemuan, $siswa_id)
+    {
+        // Ambil batas waktu
+        $batas = $this->get_info_batas_waktu($id_pertemuan);
+        $batas_waktu = $batas ? $batas['batas_waktu'] : null;
+
+        /* ---------------------------------------
+        1. Hitung total komentar 
+        --------------------------------------- */
+        $this->db->where('id_pertemuan', $id_pertemuan)
+                ->where('user_type', 'siswa')
+                ->where('user_id', $siswa_id);
+
+        if ($batas_waktu) {
+            $this->db->where('DATE(created_at) <=', $batas_waktu);
+        }
+
+        $total_komentar = $this->db->count_all_results('forum_diskusi');
+
+        /* ---------------------------------------
+        2. Hitung hari berbeda komentar
+        --------------------------------------- */
+        $this->db->select('COUNT(DISTINCT DATE(created_at)) as total')
+                ->where('id_pertemuan', $id_pertemuan)
+                ->where('user_type', 'siswa')
+                ->where('user_id', $siswa_id);
+
+        if ($batas_waktu) {
+            $this->db->where('DATE(created_at) <=', $batas_waktu);
+        }
+
+        $hari_berbeda = $this->db->get('forum_diskusi')->row()->total ?? 0;
+
+        /* ---------------------------------------
+        3. Cek quiz selesai
+        --------------------------------------- */
+        $this->db->select('qs.id')
+                ->from('quiz_siswa qs')
+                ->join('quiz q', 'q.id = qs.quiz_id')
+                ->where('q.id_pertemuan', $id_pertemuan)
+                ->where('qs.siswa_id', $siswa_id)
+                ->where('qs.status', 'completed');
+
+        // filter waktu berdasarkan end_time
+        if ($batas_waktu) {
+            $this->db->where('DATE(qs.end_time) <=', $batas_waktu);
+        }
+
+        $quiz_completed = $this->db->count_all_results(); // <= EKSEKUSI
+
         return [
-            'total_komentar' => $total_komentar,
-            'hari_berbeda' => $hari_berbeda,
-            'quiz_completed' => $quiz_completed
+            'total_komentar'  => $total_komentar,
+            'hari_berbeda'    => $hari_berbeda,
+            'quiz_completed'  => $quiz_completed
         ];
     }
+
 
     // Tentukan status berdasarkan data real-time
     public function tentukan_status($data_siswa, $pengaturan) {
