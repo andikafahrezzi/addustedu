@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 16, 2025 at 01:23 AM
+-- Generation Time: Nov 15, 2025 at 11:24 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `db_addustedudev`
+-- Database: `db_addusteduprod`
 --
 
 -- --------------------------------------------------------
@@ -38,30 +38,6 @@ CREATE TABLE `absensi_pertemuan` (
   `last_calculated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `absensi_pertemuan`
---
-
-INSERT INTO `absensi_pertemuan` (`id`, `id_pertemuan`, `siswa_id`, `status`, `created_at`, `updated_at`, `calculation_version`, `last_calculated_at`) VALUES
-(100, 1, '0095416290', 'tidak_hadir', '2025-11-15 16:58:53', '2025-11-15 16:58:53', 'd232fdb9828052483bfe254943a8b544', '2025-11-15 10:58:53'),
-(101, 1, '0128301889', 'tidak_hadir', '2025-11-15 16:58:53', '2025-11-15 16:58:53', 'd232fdb9828052483bfe254943a8b544', '2025-11-15 10:58:53'),
-(102, 1, '12345678', 'hadir', '2025-11-15 16:58:53', '2025-11-15 16:58:53', 'd232fdb9828052483bfe254943a8b544', '2025-11-15 10:58:53'),
-(103, 1, '123456789', 'tidak_hadir', '2025-11-15 16:58:53', '2025-11-15 16:58:53', 'd232fdb9828052483bfe254943a8b544', '2025-11-15 10:58:53'),
-(104, 1, '1234567899', 'tidak_hadir', '2025-11-15 16:58:53', '2025-11-15 16:58:53', 'd232fdb9828052483bfe254943a8b544', '2025-11-15 10:58:53'),
-(105, 1, '12345678999', 'hadir', '2025-11-15 16:58:53', '2025-11-15 16:58:53', 'd232fdb9828052483bfe254943a8b544', '2025-11-15 10:58:53'),
-(106, 1, '1234678', 'tidak_hadir', '2025-11-15 16:58:53', '2025-11-15 16:58:53', 'd232fdb9828052483bfe254943a8b544', '2025-11-15 10:58:53'),
-(107, 1, '211011400894', 'tidak_hadir', '2025-11-15 16:58:53', '2025-11-15 16:58:53', 'd232fdb9828052483bfe254943a8b544', '2025-11-15 10:58:53'),
-(108, 1, '3146882349', 'tidak_hadir', '2025-11-15 16:58:53', '2025-11-15 16:58:53', 'd232fdb9828052483bfe254943a8b544', '2025-11-15 10:58:53'),
-(118, 23, '0095416290', 'tidak_hadir', '2025-11-15 17:00:01', '2025-11-15 17:00:01', '2eedfc66eb98506e578980700d2d3ef0', '2025-11-15 11:00:01'),
-(119, 23, '0128301889', 'tidak_hadir', '2025-11-15 17:00:01', '2025-11-15 17:00:01', '2eedfc66eb98506e578980700d2d3ef0', '2025-11-15 11:00:01'),
-(120, 23, '12345678', 'tidak_hadir', '2025-11-15 17:00:01', '2025-11-15 17:00:01', '2eedfc66eb98506e578980700d2d3ef0', '2025-11-15 11:00:01'),
-(121, 23, '123456789', 'tidak_hadir', '2025-11-15 17:00:01', '2025-11-15 17:00:01', '2eedfc66eb98506e578980700d2d3ef0', '2025-11-15 11:00:01'),
-(122, 23, '1234567899', 'tidak_hadir', '2025-11-15 17:00:01', '2025-11-15 17:00:01', '2eedfc66eb98506e578980700d2d3ef0', '2025-11-15 11:00:01'),
-(123, 23, '12345678999', 'tidak_hadir', '2025-11-15 17:00:01', '2025-11-15 17:00:01', '2eedfc66eb98506e578980700d2d3ef0', '2025-11-15 11:00:01'),
-(124, 23, '1234678', 'tidak_hadir', '2025-11-15 17:00:01', '2025-11-15 17:00:01', '2eedfc66eb98506e578980700d2d3ef0', '2025-11-15 11:00:01'),
-(125, 23, '211011400894', 'tidak_hadir', '2025-11-15 17:00:01', '2025-11-15 17:00:01', '2eedfc66eb98506e578980700d2d3ef0', '2025-11-15 11:00:01'),
-(126, 23, '3146882349', 'tidak_hadir', '2025-11-15 17:00:01', '2025-11-15 17:00:01', '2eedfc66eb98506e578980700d2d3ef0', '2025-11-15 11:00:01');
-
 -- --------------------------------------------------------
 
 --
@@ -71,7 +47,7 @@ INSERT INTO `absensi_pertemuan` (`id`, `id_pertemuan`, `siswa_id`, `status`, `cr
 CREATE TABLE `admin` (
   `id` int(64) NOT NULL,
   `username` varchar(128) NOT NULL,
-  `password` varchar(255) DEFAULT NULL,
+  `password` varchar(128) NOT NULL,
   `email` varchar(128) NOT NULL,
   `user_type` enum('admin') NOT NULL DEFAULT 'admin'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -106,21 +82,6 @@ CREATE TABLE `bank_soal` (
   `id_mapel` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `bank_soal`
---
-
-INSERT INTO `bank_soal` (`id_soal`, `pertanyaan`, `pilihan_a`, `pilihan_b`, `pilihan_c`, `pilihan_d`, `kunci_jawaban`, `tingkat_kesulitan`, `tipe_kognitif`, `created_by`, `user_type`, `created_at`, `tipe_soal`, `id_mapel`) VALUES
-(14, 'eewfewfewfewfe', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-03 11:51:31', 'essay', 2),
-(15, 'wefewfewfewfew', 'wfwfw', 'ewfwfew', 'ewfwefewfw', 'ewfewfw', 'A', 'sedang', 'paham', '1', 'admin', '2025-09-03 11:51:43', 'pilihan', 1),
-(18, 'ffsfsfs', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-04 10:14:19', 'essay', 1),
-(19, 'dfsdfsfsfs', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-04 10:14:26', 'essay', 1),
-(20, 'dfds', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-04 10:14:31', 'essay', 1),
-(21, 'ewrw', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-04 10:14:36', 'essay', 1),
-(22, 'wefwew', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-04 10:14:43', 'essay', 1),
-(23, 'fewfwf', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-04 10:14:48', 'essay', 1),
-(24, 'fwwefwfw', NULL, NULL, NULL, NULL, NULL, 'sedang', 'paham', '1', 'admin', '2025-09-04 10:14:56', 'essay', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -138,41 +99,6 @@ CREATE TABLE `forum_diskusi` (
   `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `forum_diskusi`
---
-
-INSERT INTO `forum_diskusi` (`id`, `user_type`, `user_id`, `id_pertemuan`, `parent_id`, `komentar`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'guru', '21101140', 1, NULL, 'Jangan lupa kerjakan quiznya Teman-temanssss', '2025-08-17 21:35:30', '2025-09-02 12:53:43', NULL),
-(2, 'siswa', '12345678', 1, 1, 'test', '2025-08-22 14:31:08', NULL, NULL),
-(3, 'siswa', '12345678', 1, 2, 'test', '2025-08-22 14:31:22', NULL, NULL),
-(4, 'siswa', '12345678', 1, 3, 'test', '2025-08-22 14:31:34', NULL, NULL),
-(5, 'siswa', '12345678', 1, 3, 'dqwwwwwwwwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwdqwwwwwww', '2025-08-22 14:32:48', NULL, NULL),
-(8, 'guru', '21101140', 1, NULL, 'testd', '2025-08-29 10:10:51', '2025-08-29 10:11:03', NULL),
-(9, 'guru', '21101140', 1, 5, 'balas', '2025-08-29 10:11:14', '2025-08-29 15:11:25', '2025-08-29 10:11:25'),
-(10, 'siswa', '12345678999', 1, NULL, 'kontol', '2025-08-29 14:28:45', '2025-08-29 19:29:01', '2025-08-29 14:29:01'),
-(11, 'siswa', '12345678999', 1, NULL, 'tests', '2025-08-29 14:32:05', '2025-08-29 14:32:24', NULL),
-(12, 'siswa', '12345678999', 1, 8, 'selamat pagi guru', '2025-08-29 14:32:41', '2025-08-29 19:32:54', '2025-08-29 14:32:54'),
-(13, 'siswa', '12345678', 1, NULL, 'test', '2025-09-02 09:50:36', NULL, NULL),
-(14, 'siswa', '12345678', 1, NULL, 'test', '2025-09-02 09:51:12', NULL, NULL),
-(15, 'siswa', '12345678', 1, NULL, 'dqwdqd', '2025-09-02 10:22:05', NULL, NULL),
-(16, 'siswa', '12345678', 1, NULL, 'dqwdqd', '2025-09-02 10:30:03', NULL, NULL),
-(17, 'siswa', '12345678', 1, NULL, 'vgfwfwf', '2025-09-02 11:06:54', NULL, NULL),
-(18, 'siswa', '12345678', 1, NULL, 'f34f3443f3f3f', '2025-09-02 11:11:36', NULL, NULL),
-(19, 'siswa', '12345678', 1, NULL, 'f34f3443f3f3f', '2025-09-02 11:11:42', NULL, NULL),
-(20, 'siswa', '12345678', 1, NULL, 'w', '2025-09-02 11:11:55', '2025-09-02 12:53:29', NULL),
-(21, 'siswa', '12345678', 1, NULL, 'QWDQWDQWDQ', '2025-09-02 11:16:01', '2025-09-02 17:53:48', '2025-09-02 12:53:48'),
-(24, 'siswa', '12345678', 1, NULL, 'test', '2025-09-05 16:42:10', NULL, NULL),
-(25, 'siswa', '12345678', 1, NULL, 'ss', '2025-09-05 16:46:31', NULL, NULL),
-(26, 'siswa', '12345678', 1, NULL, 'flash\\r\\n', '2025-09-05 17:13:10', NULL, NULL),
-(27, 'siswa', '12345678', 1, NULL, '111', '2025-09-05 17:39:23', NULL, NULL),
-(28, 'siswa', '12345678999', 1, NULL, 'test', '2025-11-14 13:04:35', NULL, NULL),
-(29, 'siswa', '12345678', 33, NULL, 'test', '2025-11-15 09:30:31', NULL, NULL),
-(30, 'siswa', '123456789', 33, NULL, 'hadir', '2025-11-15 10:22:57', NULL, NULL),
-(31, 'siswa', '12345678', 33, NULL, 'ya', '2025-11-15 10:30:32', NULL, NULL),
-(32, 'siswa', '12345678', 32, NULL, 'test', '2025-11-15 10:30:48', NULL, NULL),
-(33, 'siswa', '12345678', 23, NULL, 'ya', '2025-11-15 10:31:05', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -195,10 +121,20 @@ CREATE TABLE `guru` (
 --
 
 INSERT INTO `guru` (`nip`, `nuptk`, `email`, `nama_guru`, `password`, `user_type`, `image`) VALUES
-('21101140', '12345678', 'pahrulmaji@gmail.com', 'Guru Terbaik', '$2y$10$nP.nAiLkI0z/Hw7ZsGqaYOW5pRsOEXRmqmMkGfa4FBHTVqZWXvFZS', 'guru', 'default.jpg'),
-('21101141', '123456789', 'test@gmail.com', 'addust', '$2y$10$28MLmCOoNjd2sn2YT8Sj9OIffn5RuA/mvSQKXD9WzdNnN.u80EmNm', 'guru', 'default.jpg'),
-('21101142', '99999999', 'xxx@gmail.com', 'adwadqwq', '$2y$10$LBlsKbp2GM2v0zBn1hsiKe5YXUDw9HDMw8.V6L.jkzuwD38eS6JrO', 'guru', 'default.jpg'),
-('21101143', '11111111', 'test1q2ss2sss2@gmail.com', 'hehe', '$2y$10$itAvBhbsZcjsey.ldqUWF.Jpq5o8bom0S2Xod/rVITTlF0J6btGga', 'guru', 'default.jpg');
+('1282023001', '1282023001', 'guru1@gmail.com', 'Ahmad Safei', '$2y$10$8iwiPrS9jYUVAhZAF.3a9.oa4EA/f5scljh/ZJqksTUkQgiKzONza', 'guru', 'default.jpg'),
+('1282023002', '1282023002', 'guru2@gmail.com', 'Ahmad Nazir', '$2y$10$.OOU9m9OZX9X3MbLFOU5ruCA4YhQc0Sh3H2NS0h4TkSnIbyPLhrdK', 'guru', 'default.jpg'),
+('1282023003', '1282023003', 'guru3@gmail.com', 'Arif Prasetyo', '$2y$10$EQsFl9fKEyxedhLi31/JpumijVbDxdbc/6Y/gFeUzNUtxecdfq/Ae', 'guru', 'default.jpg'),
+('1282023004', '1282023004', 'guru4@gmail.com', 'Agus Supandi', '$2y$10$e0MDxwA3v9Oxb23QQT3d6u0iV2URL0Jre0hznziz9AlO2sHiKogOq', 'guru', 'default.jpg'),
+('1282023005', '1282023005', 'guru5@gmail.com', 'Desi Permatasari', '$2y$10$itzA3Zc3HcZNUNUxx.LatumXtbpdVXj0fgznIThNcr1DVfBotFJJ.', 'guru', 'default.jpg'),
+('1282023006', '1282023006', 'guru6@gmail.com', 'Fahrur Roji', '$2y$10$OkEScASteYCZydjKijA2..yhw6CQIoCwrSoxysJG3K5LsURBFKUdO', 'guru', 'default.jpg'),
+('1282023007', '1282023007', 'guru7@gmail.com', 'Kurnia Sandi', '$2y$10$UfjOJqhZfBvtxLpwLDdMfe0Wp2bg4gHSjTujdssye1jPY5nME/PK.', 'guru', 'default.jpg'),
+('1282023008', '1282023008', 'guru8@gmail.com', 'Naimah', '$2y$10$be.ETcD5GsOpSn.sOJl7serSLMKNiyjLxnIfidpsK71HNzUWelqUW', 'guru', 'default.jpg'),
+('1282023009', '1282023009', 'guru9@gmail.com', 'Indah Safitri', '$2y$10$TsZpKBLYAFCSuuzVmtui2.22tVQzSgLYfI9nng7hfLz62rOU1v/Iq', 'guru', 'default.jpg'),
+('1282023010', '1282023010', 'guru10@gmail.com', 'Irwan Humaidi Nur', '$2y$10$dyPAftCxYnMlsEaFxl3hBOS4ewcnLwyfugAjVBMEC6iLO3OA.H1Om', 'guru', 'default.jpg'),
+('1282023011', '1282023011', 'guru11@gmail.comsq', 'Mochamad Mubin', '$2y$10$lLguJu.ylmMc9wSNBPOLRO5Xlvm4TDV23j/Yu.82ctTsL8jeRA54i', 'guru', 'default.jpg'),
+('1282023012', '1282023012', 'guru12@gmail.com', 'Linda Hidayah', '$2y$10$jHpMomr8IyATmN0DoJ8I.uJDWnCwdbF4o7aa2OD4wY46SodzLbpSa', 'guru', 'default.jpg'),
+('1282023013', '1282023013', 'guru13@gmail.com', 'Amsarudin', '$2y$10$Xzwy9nT.gY7tb06MO8m0AOQnQ9fF.KZ6tWmXB78LdAJuOv0QW8gsq', 'guru', 'default.jpg'),
+('1282023014', '1282023014', 'guru14@gmail.com', 'Windah Arofah', '$2y$10$W4QtGNnMsW/zjDEgKCS34uVOC54YskHhFB4aly0mvSpsIDsFhPIUi', 'guru', 'default.jpg');
 
 -- --------------------------------------------------------
 
@@ -217,14 +153,26 @@ CREATE TABLE `guru_mapel` (
 --
 
 INSERT INTO `guru_mapel` (`id`, `id_guru`, `id_mapel`) VALUES
-(51, '21101141', 3),
-(52, '21101141', 4),
-(53, '21101142', 1),
-(57, '21101140', 1),
-(58, '21101140', 2),
-(60, '21101143', 1),
-(61, '21101143', 2),
-(62, '21101143', 3);
+(1, '1282023001', 1),
+(3, '1282023002', 3),
+(4, '1282023002', 15),
+(5, '1282023003', 9),
+(6, '1282023004', 4),
+(7, '1282023005', 11),
+(8, '1282023006', 6),
+(9, '1282023007', 1),
+(10, '1282023008', 2),
+(11, '1282023008', 5),
+(12, '1282023009', 15),
+(13, '1282023010', 4),
+(14, '1282023010', 10),
+(15, '1282023011', 6),
+(16, '1282023011', 13),
+(17, '1282023012', 11),
+(18, '1282023012', 13),
+(19, '1282023013', 9),
+(20, '1282023013', 14),
+(21, '1282023014', 12);
 
 -- --------------------------------------------------------
 
@@ -239,16 +187,6 @@ CREATE TABLE `jawaban_siswa` (
   `jawaban` text DEFAULT NULL,
   `poin_diperoleh` decimal(5,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `jawaban_siswa`
---
-
-INSERT INTO `jawaban_siswa` (`id`, `quiz_siswa_id`, `question_id`, `jawaban`, `poin_diperoleh`) VALUES
-(26, 7, 30, 'a', '1.00'),
-(27, 7, 31, 'a', '1.00'),
-(28, 8, 30, 'a', '1.00'),
-(29, 8, 31, 'a', '1.00');
 
 -- --------------------------------------------------------
 
@@ -268,12 +206,9 @@ CREATE TABLE `kelas` (
 --
 
 INSERT INTO `kelas` (`id`, `nama_kelas`, `tingkat`, `jurusan`) VALUES
-(1, 'PC1IPS1', 'X', 'Ilmu Pengetahuan Sos'),
-(2, 'PC1IPS2', 'XI', 'Ilmu Pengetahuan Sos'),
-(3, 'PC1IPS3', 'XII', 'Ilmu Pengetahuan Sos'),
-(4, 'PC1IPA1', 'X', 'Ilmu Pengetahuan Ala'),
-(5, 'PC1IPA2', 'XI', 'Ilmu Pengetahuan Ala'),
-(6, 'PC1IPA3', 'XII', 'Ilmu Pengetahuan Ala');
+(1, 'PASD1', 'SD', 'Sekolah Dasar'),
+(2, 'PBSMP1', 'SMP', 'sekolah menengah per'),
+(3, 'PCSMA1', 'SMA', 'sekolah menengah akh');
 
 -- --------------------------------------------------------
 
@@ -297,7 +232,7 @@ CREATE TABLE `kuisioner` (
 --
 
 INSERT INTO `kuisioner` (`id`, `judul`, `deskripsi`, `target`, `is_active`, `created_by`, `created_at`, `updated_at`) VALUES
-(2, 'test', 'yeye', 'all', 1, 1, '2025-10-02 10:35:43', '2025-10-02 12:41:19');
+(2, 'Kuisioner Auto Fill (id=2)', 'Auto-generated kuisioner untuk simulasi', 'all', 1, 1, '2025-10-10 09:40:13', '2025-11-02 21:35:36');
 
 -- --------------------------------------------------------
 
@@ -1964,26 +1899,6 @@ INSERT INTO `kuisioner_jawaban` (`id`, `kuisioner_id`, `pertanyaan_id`, `user_ty
 (1638, 2, 29, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-23 12:49:17'),
 (1639, 2, 30, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-17 19:17:10'),
 (1640, 2, 31, 'siswa', '9804913006', 4, NULL, NULL, '2025-10-27 14:56:28'),
-(1641, 2, 12, 'siswa', '987654321', 5, NULL, NULL, '2025-10-20 20:24:26'),
-(1642, 2, 13, 'siswa', '987654321', 5, NULL, NULL, '2025-10-24 19:20:21'),
-(1643, 2, 14, 'siswa', '987654321', 5, NULL, NULL, '2025-10-24 17:26:21'),
-(1644, 2, 15, 'siswa', '987654321', 4, NULL, NULL, '2025-10-17 13:23:53'),
-(1645, 2, 16, 'siswa', '987654321', 4, NULL, NULL, '2025-10-27 22:27:25'),
-(1646, 2, 17, 'siswa', '987654321', 5, NULL, NULL, '2025-10-23 13:10:50'),
-(1647, 2, 18, 'siswa', '987654321', 5, NULL, NULL, '2025-10-28 22:35:56'),
-(1648, 2, 19, 'siswa', '987654321', 5, NULL, NULL, '2025-10-16 14:03:54'),
-(1649, 2, 20, 'siswa', '987654321', 4, NULL, NULL, '2025-10-31 18:47:46'),
-(1650, 2, 21, 'siswa', '987654321', 5, NULL, NULL, '2025-10-20 10:38:46'),
-(1651, 2, 22, 'siswa', '987654321', 5, NULL, NULL, '2025-10-24 21:42:53'),
-(1652, 2, 23, 'siswa', '987654321', 4, NULL, NULL, '2025-10-15 08:06:26'),
-(1653, 2, 24, 'siswa', '987654321', 5, NULL, NULL, '2025-10-17 08:41:22'),
-(1654, 2, 25, 'siswa', '987654321', 5, NULL, NULL, '2025-10-30 08:32:35'),
-(1655, 2, 26, 'siswa', '987654321', 4, NULL, NULL, '2025-10-29 10:25:34'),
-(1656, 2, 27, 'siswa', '987654321', 5, NULL, NULL, '2025-10-19 17:15:26'),
-(1657, 2, 28, 'siswa', '987654321', 4, NULL, NULL, '2025-10-30 11:18:56'),
-(1658, 2, 29, 'siswa', '987654321', 5, NULL, NULL, '2025-10-30 14:13:54'),
-(1659, 2, 30, 'siswa', '987654321', 5, NULL, NULL, '2025-10-27 08:56:34'),
-(1660, 2, 31, 'siswa', '987654321', 4, NULL, NULL, '2025-10-25 20:15:49'),
 (1661, 2, 12, 'siswa', '9996776172', 4, NULL, NULL, '2025-10-22 10:26:42'),
 (1662, 2, 13, 'siswa', '9996776172', 4, NULL, NULL, '2025-10-15 16:32:04'),
 (1663, 2, 14, 'siswa', '9996776172', 5, NULL, NULL, '2025-10-26 09:18:20'),
@@ -2004,26 +1919,6 @@ INSERT INTO `kuisioner_jawaban` (`id`, `kuisioner_id`, `pertanyaan_id`, `user_ty
 (1678, 2, 29, 'siswa', '9996776172', 5, NULL, NULL, '2025-10-31 14:06:18'),
 (1679, 2, 30, 'siswa', '9996776172', 4, NULL, NULL, '2025-10-16 20:53:58'),
 (1680, 2, 31, 'siswa', '9996776172', 4, NULL, NULL, '2025-10-15 17:55:48'),
-(1681, 2, 12, 'siswa', '99999999', 4, NULL, NULL, '2025-10-30 20:29:51'),
-(1682, 2, 13, 'siswa', '99999999', 5, NULL, NULL, '2025-10-27 22:43:42'),
-(1683, 2, 14, 'siswa', '99999999', 4, NULL, NULL, '2025-10-28 18:11:53'),
-(1684, 2, 15, 'siswa', '99999999', 5, NULL, NULL, '2025-10-26 18:31:32'),
-(1685, 2, 16, 'siswa', '99999999', 4, NULL, NULL, '2025-10-29 08:41:15'),
-(1686, 2, 17, 'siswa', '99999999', 4, NULL, NULL, '2025-10-19 19:55:24'),
-(1687, 2, 18, 'siswa', '99999999', 4, NULL, NULL, '2025-10-29 17:34:01'),
-(1688, 2, 19, 'siswa', '99999999', 4, NULL, NULL, '2025-10-31 16:59:14'),
-(1689, 2, 20, 'siswa', '99999999', 4, NULL, NULL, '2025-10-23 18:03:12'),
-(1690, 2, 21, 'siswa', '99999999', 5, NULL, NULL, '2025-10-26 19:48:44'),
-(1691, 2, 22, 'siswa', '99999999', 4, NULL, NULL, '2025-10-20 16:01:21'),
-(1692, 2, 23, 'siswa', '99999999', 5, NULL, NULL, '2025-10-23 14:40:00'),
-(1693, 2, 24, 'siswa', '99999999', 4, NULL, NULL, '2025-10-18 21:44:06'),
-(1694, 2, 25, 'siswa', '99999999', 4, NULL, NULL, '2025-10-18 09:54:15'),
-(1695, 2, 26, 'siswa', '99999999', 5, NULL, NULL, '2025-10-30 08:30:21'),
-(1696, 2, 27, 'siswa', '99999999', 4, NULL, NULL, '2025-10-18 11:31:57'),
-(1697, 2, 28, 'siswa', '99999999', 4, NULL, NULL, '2025-10-17 08:41:25'),
-(1698, 2, 29, 'siswa', '99999999', 4, NULL, NULL, '2025-10-29 10:16:55'),
-(1699, 2, 30, 'siswa', '99999999', 5, NULL, NULL, '2025-10-16 11:50:28'),
-(1700, 2, 31, 'siswa', '99999999', 5, NULL, NULL, '2025-10-29 16:28:35'),
 (2559, 2, 12, 'guru', '1282023001', 5, NULL, NULL, '2025-10-26 19:48:43'),
 (2560, 2, 13, 'guru', '1282023001', 4, NULL, NULL, '2025-10-31 12:21:58'),
 (2561, 2, 14, 'guru', '1282023001', 5, NULL, NULL, '2025-10-19 18:41:25'),
@@ -2303,88 +2198,7 @@ INSERT INTO `kuisioner_jawaban` (`id`, `kuisioner_id`, `pertanyaan_id`, `user_ty
 (2835, 2, 28, 'guru', '1282023014', 4, NULL, NULL, '2025-10-19 22:59:07'),
 (2836, 2, 29, 'guru', '1282023014', 5, NULL, NULL, '2025-10-28 10:27:43'),
 (2837, 2, 30, 'guru', '1282023014', 4, NULL, NULL, '2025-10-19 16:52:45'),
-(2838, 2, 31, 'guru', '1282023014', 4, NULL, NULL, '2025-10-23 08:35:54'),
-(2839, 2, 12, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2840, 2, 13, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2841, 2, 14, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2842, 2, 15, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2843, 2, 16, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2844, 2, 17, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2845, 2, 18, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2846, 2, 19, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2847, 2, 20, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2848, 2, 21, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2849, 2, 22, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2850, 2, 23, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2851, 2, 24, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2852, 2, 25, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2853, 2, 26, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2854, 2, 27, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2855, 2, 28, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2856, 2, 29, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2857, 2, 30, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2858, 2, 31, 'guru', '21101140', 5, NULL, NULL, '2025-11-09 15:04:26'),
-(2859, 2, 12, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2860, 2, 13, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2861, 2, 14, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2862, 2, 15, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2863, 2, 16, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2864, 2, 17, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2865, 2, 18, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2866, 2, 19, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2867, 2, 20, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2868, 2, 21, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2869, 2, 22, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2870, 2, 23, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2871, 2, 24, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2872, 2, 25, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2873, 2, 26, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2874, 2, 27, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2875, 2, 28, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2876, 2, 29, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2877, 2, 30, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2878, 2, 31, 'siswa', '12345678999', 5, NULL, NULL, '2025-11-14 13:04:12'),
-(2879, 2, 12, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:17'),
-(2880, 2, 13, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:17'),
-(2881, 2, 14, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:17'),
-(2882, 2, 15, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:17'),
-(2883, 2, 16, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:17'),
-(2884, 2, 17, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18'),
-(2885, 2, 18, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18'),
-(2886, 2, 19, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18'),
-(2887, 2, 20, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18'),
-(2888, 2, 21, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18'),
-(2889, 2, 22, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18'),
-(2890, 2, 23, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18'),
-(2891, 2, 24, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18'),
-(2892, 2, 25, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18'),
-(2893, 2, 26, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18'),
-(2894, 2, 27, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18'),
-(2895, 2, 28, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18'),
-(2896, 2, 29, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18'),
-(2897, 2, 30, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18'),
-(2898, 2, 31, 'guru', '21101142', 5, NULL, NULL, '2025-11-15 09:34:18');
-INSERT INTO `kuisioner_jawaban` (`id`, `kuisioner_id`, `pertanyaan_id`, `user_type`, `user_id`, `jawaban_skala`, `jawaban_text`, `jawaban_pilihan`, `created_at`) VALUES
-(2899, 2, 12, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2900, 2, 13, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2901, 2, 14, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2902, 2, 15, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2903, 2, 16, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2904, 2, 17, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2905, 2, 18, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2906, 2, 19, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2907, 2, 20, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2908, 2, 21, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2909, 2, 22, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2910, 2, 23, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2911, 2, 24, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2912, 2, 25, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2913, 2, 26, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2914, 2, 27, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:39'),
-(2915, 2, 28, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:40'),
-(2916, 2, 29, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:40'),
-(2917, 2, 30, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:40'),
-(2918, 2, 31, 'siswa', '123456789', 5, NULL, NULL, '2025-11-15 10:22:40');
+(2838, 2, 31, 'guru', '1282023014', 4, NULL, NULL, '2025-10-23 08:35:54');
 
 -- --------------------------------------------------------
 
@@ -2531,9 +2345,7 @@ INSERT INTO `kuisioner_status` (`id`, `user_type`, `user_id`, `kuisioner_id`, `i
 (80, 'siswa', '3994681926', 2, 1, '2025-10-18 20:38:08'),
 (81, 'siswa', '9779152739', 2, 1, '2025-10-17 14:51:27'),
 (82, 'siswa', '9804913006', 2, 1, '2025-10-29 09:10:48'),
-(83, 'siswa', '987654321', 2, 1, '2025-10-29 11:58:30'),
 (84, 'siswa', '9996776172', 2, 1, '2025-10-23 19:24:45'),
-(85, 'siswa', '99999999', 2, 1, '2025-10-15 18:25:24'),
 (128, 'guru', '1282023001', 2, 1, '2025-10-27 09:25:45'),
 (129, 'guru', '1282023002', 2, 1, '2025-10-16 20:57:31'),
 (130, 'guru', '1282023003', 2, 1, '2025-10-24 09:00:07'),
@@ -2547,11 +2359,7 @@ INSERT INTO `kuisioner_status` (`id`, `user_type`, `user_id`, `kuisioner_id`, `i
 (138, 'guru', '1282023011', 2, 1, '2025-10-18 14:51:38'),
 (139, 'guru', '1282023012', 2, 1, '2025-10-19 09:51:15'),
 (140, 'guru', '1282023013', 2, 1, '2025-10-30 11:48:23'),
-(141, 'guru', '1282023014', 2, 1, '2025-10-21 17:29:13'),
-(142, 'guru', '21101140', 2, 1, '2025-11-09 15:04:26'),
-(143, 'siswa', '12345678999', 2, 1, '2025-11-14 13:04:12'),
-(144, 'guru', '21101142', 2, 1, '2025-11-15 09:34:18'),
-(145, 'siswa', '123456789', 2, 1, '2025-11-15 10:22:40');
+(141, 'guru', '1282023014', 2, 1, '2025-10-21 17:29:13');
 
 -- --------------------------------------------------------
 
@@ -2570,11 +2378,21 @@ CREATE TABLE `mata_pelajaran` (
 --
 
 INSERT INTO `mata_pelajaran` (`id`, `nama_mapel`, `deskripsi`) VALUES
-(1, 'Administrasi', 'lorems'),
-(2, 'Matematika', 'lorems'),
-(3, 'Ilmu Pengetahuan Alam', 'lorems'),
-(4, 'Ilmu Pengetahuan Sosial', 'lorems'),
-(5, 'Manajemen', 'lorems');
+(1, 'Sejarah Indonesia', 'Sejarah Indonesia'),
+(2, 'Ilmu Pengetahuan Sosial', 'Ilmu Pengetahuan Sosial'),
+(3, 'Sosiologi', 'Sosiologi'),
+(4, 'Pendidikan Kewarganegaraan', 'Pendidikan Kewarganegaraan'),
+(5, 'Ekonomi', 'Ekonomi'),
+(6, 'Matematika', 'Matematika'),
+(7, 'Pendidikan Jasmani Olahraga dan Kesehatan', 'Pendidikan Jasmani Olahraga dan Kesehatan'),
+(8, 'Sejarah', 'Sejarah'),
+(9, 'Pendidikan Agama', 'Pendidikan Agama'),
+(10, 'Geografi', 'Geografi'),
+(11, 'Bahasa Indonesia', 'Bahasa Indonesia'),
+(12, 'Bahasa Inggris', 'Bahasa Inggris'),
+(13, 'Seni Budaya', 'Seni Budaya'),
+(14, 'Baca Tulis Quran', 'Baca Tulis Quran'),
+(15, 'Ilmu Pengetahuan Alam', 'lorems');
 
 -- --------------------------------------------------------
 
@@ -2592,26 +2410,6 @@ CREATE TABLE `materi` (
   `linkform` varchar(100) DEFAULT NULL,
   `modul` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `materi`
---
-
-INSERT INTO `materi` (`id`, `id_guru`, `id_mapel`, `id_kelas`, `video`, `deskripsi`, `linkform`, `modul`) VALUES
-(1, '21101140', 1, 1, 'https://www.youtube.com/embed/1T2gaG5vPk8?rel=0', 'ini sudah diubah', 'cacsa', '563-Article_Text-2917-1-10-20220728.pdf'),
-(2, '21101140', 2, 1, 'https://www.youtube.com/embed/QFLAuddS6qM?rel=0', 'FWFEWFEWF', 'FWEFWFWFWF', '918-1743-1-SM.pdf'),
-(3, '21101140', 2, 1, 'https://www.youtube.com/embed/eQv10AP5BG0?rel=0&modestbranding=1', 'CACASC', ' CACACACAC', '563-Article_Text-2917-1-10-202207281.pdf'),
-(4, '21101140', 1, 1, 'https://www.youtube.com/embed/1T2gaG5vPk8?rel=0', 'https://youtu.be/1T2gaG5vPk8?si=5jN4C95SL1LHaFIP', 'fwefwefwe', '1416-Article_Text-2548-1-10-20221110.pdf'),
-(5, '21101140', 2, 1, 'https://www.youtube.com/embed/eQv10AP5BG0?rel=0', 'cddqwd', 'qwdqwdq', '563-Article_Text-2917-1-10-202207282.pdf'),
-(7, '21101141', 3, 1, 'https://www.youtube.com/embed/x1x71WPgy8I?rel=0', 'bisa', 'https://youtu.be/x1x71WPgy8I?si=GddFy3cPJ7Q-Nwzw', '3163-7623-1-PB1.pdf'),
-(8, '21101141', 3, 1, 'https://www.youtube.com/embed/x1x71WPgy8I?rel=0', 'https://youtu.be/x1x71WPgy8I?si=RSjxs7rBj7fZk7Fa', 'https://youtu.be/x1x71WPgy8I?si=RSjxs7rBj7fZk7Fa', '412-Article_Text-1358-1-10-20220625.pdf'),
-(15, '21101140', 1, 1, 'https://www.youtube.com/embed/wagcvhbhJBI?rel=0&modestbranding=1', 'https://youtu.be/wagcvhbhJBI?si=wDioWV0Fxl0j6zH9', 'https://youtu.be/wagcvhbhJBI?si=wDioWV0Fxl0j6zH9', 'a-minimalist-logo-design-featuring-cipta_jAt9Jmy3QEuaw19ibe2qGg_st4LSp_bRmufrXTNLK6Hdg1.jpeg'),
-(16, '21101140', 1, 1, 'https://www.youtube.com/embed/wagcvhbhJBI?rel=0&modestbranding=1', 'woi', 'https://youtu.be/wagcvhbhJBI?si=wDioWV0Fxl0j6zH9', 'a-minimalist-logo-design-featuring-cipta_jAt9Jmy3QEuaw19ibe2qGg_st4LSp_bRmufrXTNLK6Hdg2.jpeg'),
-(21, '21101142', 1, 2, 'https://www.youtube.com/embed/vZDVm1ndx1E?rel=0&modestbranding=1', 'admin', ' https://youtu.be/vZDVm1ndx1E?si=umcHX87dTg4PP8uO', 'healthcare-11-00706-v21.pdf'),
-(22, '21101142', 1, 1, 'https://www.youtube.com/embed/vZDVm1ndx1E?rel=0&modestbranding=1', 'guru', 'https://youtu.be/vZDVm1ndx1E?si=LMW2ct6o72wwRRct', 's8.pdf'),
-(23, '21101140', 1, 3, 'https://www.youtube.com/embed/vZDVm1ndx1E?rel=0&modestbranding=1', 'ss', ' https://youtu.be/vZDVm1ndx1E?si=LMW2ct6o72wwRRct', 'healthcare-11-00706-v23.pdf'),
-(24, '21101142', 1, 3, 'https://www.youtube.com/embed/vZDVm1ndx1E?rel=0&modestbranding=1', 'guru21', ' https://youtu.be/vZDVm1ndx1E?si=LMW2ct6o72wwRRct', 'healthcare-11-00706-v24.pdf'),
-(25, '21101140', 1, 1, 'https://www.youtube.com/embed/3EOdeZPizUY?rel=0&modestbranding=1', 'https://youtu.be/3EOdeZPizUY?si=AKA3sol_enGhXruX', ' https://youtu.be/3EOdeZPizUY?si=AKA3sol_enGhXruX', 'bukti_daftar.pdf');
 
 -- --------------------------------------------------------
 
@@ -2634,7 +2432,7 @@ INSERT INTO `pengaturan_absensi` (`id`, `nama`, `nilai`, `keterangan`) VALUES
 (1, 'min_komentar', '2', 'Minimal komentar untuk dianggap hadir'),
 (2, 'min_hari', '2', 'Minimal hari berbeda berkomentar'),
 (3, 'require_quiz', '1', 'Wajib menyelesaikan quiz'),
-(4, 'batas_waktu_hari', '7', 'Batas waktu absensi dalam hari setelah pertemuan'),
+(4, 'batas_waktu_hari', '7', 'Komentar & quiz setelah hari ke-X tidak dihitung'),
 (5, 'batas_waktu_enable', '1', '0=nonaktif, 1=aktif');
 
 -- --------------------------------------------------------
@@ -2652,27 +2450,6 @@ CREATE TABLE `pertemuan` (
   `tanggal` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `pertemuan`
---
-
-INSERT INTO `pertemuan` (`id`, `id_materi`, `id_guru`, `id_kelas`, `pertemuan_ke`, `tanggal`) VALUES
-(1, 1, '21101140', 1, 1, '2025-11-14'),
-(2, 2, '21101140', 1, 1, '2025-08-17'),
-(6, 8, '21101141', 1, 3, '2025-08-28'),
-(7, 7, '21101141', 1, 2, '2025-08-28'),
-(10, 7, '21101141', 1, 1, '2025-08-28'),
-(16, 1, '21101140', 1, 3, '2025-09-03'),
-(23, 4, '21101140', 1, 2, '2025-09-06'),
-(24, 1, '21101140', 1, 8, '2025-09-06'),
-(28, 22, '21101142', 1, 1, '2025-09-06'),
-(29, 1, '21101142', 1, 2, '2025-09-06'),
-(30, 1, '21101140', 1, 5, '2025-09-06'),
-(31, 23, '21101142', 3, 1, '2025-09-06'),
-(32, 22, '21101140', 1, 7, '2025-11-14'),
-(33, 22, '21101140', 1, 4, '2025-11-14'),
-(34, 25, '21101142', 1, 9, '2025-11-15');
-
 -- --------------------------------------------------------
 
 --
@@ -2689,17 +2466,6 @@ CREATE TABLE `quiz` (
   `shuffle_questions` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `quiz`
---
-
-INSERT INTO `quiz` (`id`, `id_pertemuan`, `judul`, `deskripsi`, `waktu_pengerjaan`, `attempts`, `shuffle_questions`, `created_at`) VALUES
-(8, 1, 'qsqs', 'l', 30, 1, 1, '2025-09-04 12:30:09'),
-(10, 2, 'qsqs', '1', 30, 1, 1, '2025-09-04 17:35:46'),
-(12, 2, 'nasi goreng', 'qq', 30, 1, 1, '2025-09-04 17:53:03'),
-(13, 16, 'nasi goreng', 'quiz', 30, 1, 1, '2025-09-04 18:00:32'),
-(15, 29, 'test', '123', 30, 1, 1, '2025-11-13 01:10:34');
 
 -- --------------------------------------------------------
 
@@ -2720,17 +2486,6 @@ CREATE TABLE `quiz_questions` (
   `poin` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `quiz_questions`
---
-
-INSERT INTO `quiz_questions` (`id`, `quiz_id`, `pertanyaan`, `tipe`, `opsi_a`, `opsi_b`, `opsi_c`, `opsi_d`, `jawaban`, `poin`) VALUES
-(25, 12, 'qq', 'pilihan', 'qq', 'qq', 'qq', 'qq', 'a', 1),
-(30, 8, '123', 'pilihan', '1', '1', '1', '1', 'a', 1),
-(31, 8, '1', 'pilihan', '1', '1', '1', '1', 'a', 1),
-(32, 15, 'wdqwddq', 'pilihan', 'dqwqwd', 'dqddqqd', 'qwdqwdq', 'wqdq', 'a', 1),
-(33, 15, 'dqwdqd', 'pilihan', 'dqdq', 'dq', 'dqd', 'qdqdqd', 'a', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -2747,14 +2502,6 @@ CREATE TABLE `quiz_siswa` (
   `score` decimal(5,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `quiz_siswa`
---
-
-INSERT INTO `quiz_siswa` (`id`, `quiz_id`, `siswa_id`, `start_time`, `end_time`, `status`, `score`) VALUES
-(7, 8, '12345678', '2025-09-05 16:41:47', '2025-09-05 16:41:50', 'completed', '100.00'),
-(8, 8, '12345678999', '2025-11-15 10:28:24', '2025-11-15 10:28:28', 'completed', '100.00');
-
 -- --------------------------------------------------------
 
 --
@@ -2770,13 +2517,6 @@ CREATE TABLE `rps` (
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `rps`
---
-
-INSERT INTO `rps` (`id_rps`, `guru_mapel_id`, `kelas_id`, `file_rps`, `semester`, `created_at`, `updated_at`) VALUES
-(12, 58, 1, 'RPS_21101140_58_1_1762697120.pdf', '2025 genap', '2025-11-09 15:05:20', '2025-11-09 21:05:20');
 
 -- --------------------------------------------------------
 
@@ -2801,94 +2541,89 @@ CREATE TABLE `siswa` (
 --
 
 INSERT INTO `siswa` (`nis`, `nama`, `password`, `email`, `image`, `is_active`, `date_created`, `id_kelas`, `user_type`) VALUES
-('0014946300', 'AHMAD RAMADHAN', '$2y$10$tTHz4uu4lIIDhh/6ioP03OxjZesPnHwEuhyq9yJdGSILmVY.4WSvu', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0028290024', 'Gysen Wangsa', '$2y$10$03c2Ogjd.pjcUkgcUPZDlO2LyOWVQ9zRa.tfMlcYyz06Np57eG.KW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0031344056', 'Muhamad Safeih', '$2y$10$6XqssnCTCCVLN8AYQG87BO92Vx7fRam42xgrpCWHdo5vKusLzYsT2', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0039378456', 'Rimpi', '$2y$10$9Ge/nrPtX.iYnzVbdkCA5.MWnpujPwyLROrg.jbOBOkoGs3Bk64He', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0042184528', 'Michael Agustian', '$2y$10$vvsuScGTv04RIjycS34m1u7z4zfig3Y02940.7Vg.RZhghPeXKwP2', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0044795891', 'PUTRI SYAKILLAH ANASTASYAH', '$2y$10$fOQNokYNdDzBzOp9c0Hy2uLwmEJJMw4c8N35qdjo7r3imLpb8DX5q', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0044875032', 'Firda Atikah Putri', '$2y$10$8tX.zyAX4vA1oTpUQKo9XOF0BIJmyycS5Oio.RyTSAd175ZaocRvm', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0045351054', 'ADJIE ADITYA NUGRAHA', '$2y$10$y/bU.feIGomGb2okY3/eeudSIMbHIpLq0mgz/qLu0fJtzmPheeET6', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0045683849', 'Adelia Dian Megareta', '$2y$10$RXVshgafC5d8ZAjENvKlU.nE9sbCvjB4kefE9ICpF.rKUKlZ7g9Yi', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0046215859', 'PUTRA MARHAEN', '$2y$10$oynlAvxI9Rar3oGgBBiQtePasae9PEWQ/zZoW0L0F4e3gX544wJfq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0051192742', 'ANGGA ERLANGGA PUTRA', '$2y$10$i2TqPGqNJYyEZMH3YnJ12umNLZi1MoM9fjJznGeMT.bE/QS6N1DPO', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0052818825', 'Muhammad Rogib', '$2y$10$EmjEUih17YDHeBq5fqx7sOOqR8rhIRByPuum3/b6Y5h6ph1KfDWbG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0058595046', 'Muhamad Rizky Andrean', '$2y$10$kYwH5JcY6y4O2mmwuxZeSer5gkPjYWo45N73Vx6fPZw7RlxW.6Fiu', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0062303354', 'Lydia Listiawan', '$2y$10$qbK1xUNHRObdA74KQCsc8.BHevH/3FL3NGk/aGZsBmQGwMLiUgr8u', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0063301626', 'Muhammad Adi Saputra', '$2y$10$8K1RXvtI79zQot575Hp5bONzcMtRPQmCXNqbzvc2rtYtlT6sOed9y', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0064797771', 'MUHAMMAD DIKI MIFTACHHUDIN', '$2y$10$h/QnJMR3zsSyB9qjPch9TuItiVAmbE9E1cE/zGGrbQI52NmnCkDp6', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0065165563', 'Vazia Zulia vasha', '$2y$10$uhpWfnpV0XQzc9MfL8mwmuSvIyYUimTY.6sPXE1QzWQhNfCzYcAJS', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0066988913', 'Bunga Nur Aulia', '$2y$10$8mhG9bLPB.lNqu50k.rYcOd5kHbJJo9NklCd.R18t7UatIIfAnikq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0073601675', 'Rizky Agusti', '$2y$10$v4ikO7fT/BIALCGRnB17mePajvlb4WQZVu79VpGT0jZT3qQ0kDWv2', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0073767204', 'RHEVA DESFARINI', '$2y$10$FzD/LN/gAltJK1IikEMBsuHw496HH06U9JPocsB.qObeytye4ZskK', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0077490337', 'GADIS GITA LAUREN', '$2y$10$eiatmRJNktL.A7DVqsSAtOYM8/rGVD/P4j7XXpeCh3fLYDHEJobE6', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0079552543', 'VICKY DWI VERNANDA', '$2y$10$Oz92XviFvhN3hW8DMBqZke/KYRJ6Un1e/9oadwO1cRsOeRWF75Sve', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0079655473', 'M.TRISTAN RIVALDY', '$2y$10$CnCNbYen8uWstCAyri44t.QvS9XJThS78/fhUWZgvha.ojcwNYL52', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0079948350', 'NURJELANI', '$2y$10$kg8cWSiD8b2Y/5jk6fo08upSaKw5RmuEIFPkO.UrQelzlkcDXh4Pi', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0082779275', 'Putri aurelia', '$2y$10$WQ2F1ijuoiV9PBBUTQnWxeeePjuNOHohuxDtt1ralRZIZIPc61jxa', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0084276194', 'ALDI SUPARDI', '$2y$10$m6OCY62exhF2eYVwUBuriO8ZwzpbNL2WfWHlU1kVgd/btAUs/YvNG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0084617145', 'Washfi Faraz Kamilah', '$2y$10$oZmq5.pIPAjghKncGJ5tFeyI3XMec13Y09Uj7xFsLJ51Mq5LPHOEW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0084764574', 'Eva', '$2y$10$oLtnnomtpUsDvAGcMa3q2.Ej4ZK.aZYfpbuWw0iwh7dH3SoNez8jC', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0086207880', 'DIMAS YOGA RAMADHAN', '$2y$10$kG4YxdHxRh7ulUo5/Jt63.8qnC6MnI535njMDlqGZVKxTnrIhhPK.', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0086769753', 'SHEILA NATASYA', '$2y$10$XT0oeorIYMln56qANv8fvegC4Xe1p8Q7oPSNt7CU0DjrCoJBMuUp.', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0087211088', 'AZKIYATU ZAHRA', '$2y$10$DhAwTVBOAWcsjy7Bp.ddpuSlBSYzb3uR2Mi7Jk.Acxo0yT4W/NIJa', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0087217408', 'Zavio Rizki Saputra', '$2y$10$wjDTyFMBm0h5ZHQqrwNdlegqcv3Qkj0PeMTkVZoHbZ9gDgYpccmmS', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0087337628', 'KHAERUN NURI', '$2y$10$1vQhC21F9kWra2pIO52OauVhC4eHD1cYF0q5VW.3V.AnjGPYfNTwG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0089969128', 'AHMAD SYAHRONI', '$2y$10$KD2fMerNSSCjQSDXc.YAf.K5zY.UwfG5knDQG9WMstP/VLmq0rOUK', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0091031828', 'MEIDY MAQFIRAH', '$2y$10$XBMzkmoTwqLkHQPavrpyDe6VPqpH9f7qm/evM8FTI5R/HTUstmUVK', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0092516158', 'Kholilurohman', '$2y$10$.9qDcB..QGOtC.nNyO/19eZUlX6fMVyzxpN9buGSrc5XIkHGprRnq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0093590373', 'TAZKIYAH NURMALA', '$2y$10$R27lTpfImsKZ4MdByz0Vy.H4ytPUGb4hpAwvN3pDWf/GwXdEs6oP.', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0093801678', 'Arif Rahman Tiar', '$2y$10$MtM0hk4FFg4KM5sLjN6ykOQXAcMVJVzSMzGJnQqe6RD3accnUZknu', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0094063500', 'SONGO ABABIL', '$2y$10$MGoKqRbVrR0AXY8U6JIvluFNWCkJITjdVwiaOs5EO9.gbOdRJW7aC', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0095416290', 'FAHMI RIDHO', '$2y$10$cFBG1XgWLEecbbCzk7nwGOXvLAITPWkgoPNl8yllUASBNsPTsmbUy', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 1, 'siswa'),
-('0095454453', 'MUHAMAD FIRMANSYAH', '$2y$10$01UKK.cQszZTi9w9ecm5Nu/1NSgJkRM/rH0claDl21nraZeux60ta', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0096317085', 'RAISYA RAMADHANI', '$2y$10$K3xdFdUPg1PPt7HK7i5w8u9dXI/u2DZ/f5EXGulyak1S3ZgBms/By', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0096325350', 'Muhammad Raihan', '$2y$10$ZfeDlT7alkpGwICxKIUbzejxISI9SdMlAzLXrGDQW6bUaWHraa9BG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0098026915', 'SYAHRUL AL HAJJ DZULFIKAR', '$2y$10$2EzognR4ir8QWRGdzbl2qu7.zteT3PtZSEr5J94/QM72uwd7TJyRe', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0099268185', 'AHMAD FIRAS BAHIRA', '$2y$10$0Wp076hnYzAtwgLRwNAyJuSlkQ3U3QasyVuKsH2jWlMysptaqS6UK', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('0101839911', 'Sri Wahyuni', '$2y$10$vVtHOKtOe5fRZw1cTT7OUOXD6mPDAqdf0tGfO1nGzHsZJVhTw7CKG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0103361826', 'Noviyanti', '$2y$10$94ra5McZAsHGHWdzCGr/huGm/tHaI2P9lfXwHQ.BV9P80Sc6MH2He', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0104991736', 'MUHAMAD AUZAI', '$2y$10$T1nQr/K253yTuUCX6lGJxOTPjF80/EDUW5oIo0Xir0n1rxvqLLObi', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0105778035', 'SAIDA', '$2y$10$BqCIEkKARJ0urmZPqMacI.URaB69hwGjRYBymUWHcIsQfhTYA2bBi', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0107037461', 'Alvian Yusuf Handoko', '$2y$10$Hb1b6o2jfUgTxqNGtWVdyOIxocIyAU1i6uuxQeoRcsJfx5VMT7kxO', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('0128301889', 'MUHAMMAD DWI ANDRE ARAFAH', '$2y$10$SoyvO/bSlcn6qQj2gLvncel7ggiLECuiyh2ypHMZazFW88ciu/Rfa', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 1, 'siswa'),
-('12345678', 'Max Verstapen', '$2y$10$/Eh6H/5Hf8iA1VDqVdHUW.WcoVxzMb2BDbtIBtvDBnHawZ4l4Nu6a', 'maxverstapen123@gmail.com', 'default.jpg', 1, '2025-08-17', 1, 'siswa'),
-('123456789', 'Future', '$2y$10$Yma1z8TJEcyyichz44rdke2DPaKroKF7E3l.yzXFI.zFv4QQwD0C2', 'tesswswt@gmail.com', 'default.jpg', 1, '2025-08-24', 1, 'siswa'),
-('1234567899', 'John Doe', '$2y$10$gDYcqlj9INTKSybY6ttZjOYp1tjZrKuvCFpcwwfblV5NIKQMC2ZIG', 'lorem@example.com', 'default.jpg', 1, '2025-08-17', 1, 'siswa'),
-('12345678999', 'Lionel Messi', '$2y$10$xqDYcqzB/GolLvy4E0Hvtu33ZZ3ZfWhumpUWrRraOJVWLKN0DwhqC', 'loremas@example.com', 'default.jpg', 1, '2025-08-28', 1, 'siswa'),
-('1234678', 'xxxx', '$2y$10$9cTGJxLdsIqL7a6/ajuxa.uiIAnI5CRv7hlWmsN8QalmpH.X4/mUG', 'xxxxx@admin.com', 'default.jpg', 1, '2025-09-02', 1, 'siswa'),
-('2021383151', 'Fina Wardawiyah', '$2y$10$yxcqV7A4Ij4lVpoPiFvwTuekv5/M.rzbfZJQI1gaGbztKsy27lUlS', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('2052804732', 'Ibra Wimarta', '$2y$10$lvfH5Ja0VqUtTtcNu69CXuJENtgaY5xuyv51DaBm90KEoSWxtP6ha', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('2061010927', 'Sinta', '$2y$10$o/j.yiVic0MiEEH.GtIetO46rTYiSTGJQUBql4Mx2PdRNJajGMIRe', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('2065234615', 'Khairunnisa', '$2y$10$AA3cuqhftxR7bH532zliB.4VC6LZELsKXMtGKOjANEkTblxsWk0Rq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('2078814025', 'Maulana Indra Prama', '$2y$10$3A2nywhcVsAUVsGiIvlUiuaTrdtepKSo8wuSu891/9cMsmazeO5Ny', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('2082533938', 'Noval Adrian Wijaya', '$2y$10$S20Ol0Xg053tZk57pE6T4OgC/789J6SCeRwKNK9cA9Zyx8hI9lzLi', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('2098350667', 'Fitri', '$2y$10$gdZxMR.XAUeegQcX2VhX9uK.NoKsedBfQVgZNd346uL2Wdpr6D35K', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('211011400894', 'andika fahrezi', '$2y$10$eFREJ7KH68zQSCQ5fq8u2umg6o9e7hQWa7v/pf7Ja4GCcJ3OZAj4u', 'addust@gmail.com', 'default.jpg', 1, '2025-09-02', 1, 'siswa'),
-('3016839237', 'Siti Inayah Haq', '$2y$10$RGqQfddF9YLklemd6Z2wOeo9q3Q.Gf8coDMCQusNL6RMZAILaVs/W', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('3044755103', 'Ahmad Khorib', '$2y$10$5SQn5ehFilubXIJuvxo91ezIweHYN9ACubgjQDkjsv3YHaBnIzqz2', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('3045646933', 'Usli Imam Safei', '$2y$10$DrHHuY5XB8TM44G4lTXMJu0/dnXSLbqZroxI9DB7XkROCWkb4RIiq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('3061461498', 'MUHAMMAD SAYYID FATUR ROHMAN', '$2y$10$1.bMfAtrY8w3ym4II8IBAuep9xvBVs64l1HQo.n9AAmroxEzW559a', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('3063319075', 'Muhammad Maulana Ilyas', '$2y$10$f.7kRD80CbUQYXj5HwSl4Ooj7iaoQ1o4E2975RvhQIkvHPVo6SgsS', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('3068576912', 'Aida', '$2y$10$Ybh0Qsc5nPYm0imC8a1/aeT1s4one0eX9Gc4L/zXaB7UBPYCAoYs6', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('3072235768', 'Muhammad Taju Syarop Fauzi', '$2y$10$VYNkM2xOfljoopfK8U5T/.kMnrw5jQB6PlPnVwHLIflNT.MLzvBpm', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('3073203066', 'Muhammad Rynaldi', '$2y$10$0qB2qMboDJyejbpGDqH4WuS.p8FQbyHA/UbJaCLMNFpbzbrj2J9Ve', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('3080556625', 'HAPIZ YUSRI', '$2y$10$5VB2VlHUvGrrCumBVnN4LeLByJz4oHO5yoYhrtiaVNHxfkO4dxnwa', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('3091558263', 'Muhammad Husni Makki Sonhaji', '$2y$10$ZtZoSYWLIIR3eRdR4G1FIutY97FhxlqF3gaSecQB4lQquAi9KwYPW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('3107966544', 'Najwa Putri Awaliyah', '$2y$10$GU2b7kMCB/IqgkhG4JRHIu/g5ZE7M2p7lxgdkMttKvXO/5KHqRMtW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('3124368879', 'RIZKI FAUZI', '$2y$10$BESosJi.b8Wd9pt5lEolJ.9jBvxMM.mKbFhRgv8JqC7vn5tb8ONTW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('3128153661', 'MUHAMMAD SYAFIQ ZAKY ISKANDAR', '$2y$10$6s/PehvFniS8PnCXzxD3V.Jgb2Ixzzpu8C3FFUW1rH7/MWsQ9FniG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('3146882349', 'Laila Khanza Az Zahra', '$2y$10$qD9CH/atCzNDUMHCGufktuOcVrlDcriubZqCY5GCBESpsG76jB8Yi', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 1, 'siswa'),
-('3745065752', 'KARTONO', '$2y$10$xZtKC4dCkI07dd1YYVBKUummtWP9FPUFivhtui6kxKrmHJyPK5thy', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('3749766539', 'ZAINUDIN', '$2y$10$k7Llad7i8zkOSAtoE6aXW.gJntEu.BEQEUJ4/ww1Gf35miYNtEAFa', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('3762315024', 'Nurlaela', '$2y$10$6ZJ3duyRnyjueNsmDUkPxem22rBxVnVWGPp6uqSiBE//ZMDcEO3xW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('3839354749', 'SYAIPUDIN', '$2y$10$lAG1lPxELOCuIsGHDuU4zeh98FYw8w8zJspnRpbgZVj4mdC8PlFJq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('3898374246', 'Apiyah', '$2y$10$UikFYs2w9rO2dtzM0XulNu1O4yu79JkJOxU37TNF6RwKl/zBOoKCi', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('3957922406', 'Dwi Bayu Pribadi', '$2y$10$jV9uJ0k3iVsiYXzHUloCougVTGf59ZtV7DRgT12dQKvw8RPNuOB6G', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 2, 'siswa'),
-('3994681926', 'Khumaeratur Rodhiyah', '$2y$10$FBico9ArDuD9JA7ZwLWPb.9e.7AuHbAPoSkkWR6Uz56GuhjOLFRse', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('9779152739', 'Jamsuri', '$2y$10$HjCmLGWbRUQ3mSeM2fcm7.hCxSAM83bh76s74s1C/O/QLTQsYO20S', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('9804913006', 'Mukri', '$2y$10$yhZWr2fAidPm1jCEMVHX5uOmhoxlj3MEetZ5DRpu2NN/beLvQJP2q', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa'),
-('9996776172', 'Wiji Sanuri', '$2y$10$j/rWcoOALkIBkg5tVs.Esu3Wg4mrwxXvAHULT4Vcj2i/pmi9CksGq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-01', 3, 'siswa');
+('0014946300', 'AHMAD RAMADHAN', '$2y$10$phFsR2sUrcJ0EYdVi9v1BOhuFDObYoXyMZYyiEQ2gi6xTZsgVEovu', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0028290024', 'Gysen Wangsa', '$2y$10$x.Gb1B46ZmdGzfCN3Sd82.Xfn.gEeAFUiq5JLPh0A4/qqjk6mjtQ.', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0031344056', 'Muhamad Safeih', '$2y$10$bZ8wa/aNir5R0dy7Y2AEEuCsG6c0Oq55Es.xaB1xkSKzDoU.kcVY2', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0039378456', 'Rimpi', '$2y$10$CgzPEfMGfdxYndJv/aHENuIRbmEifqX56ODlBq0UrBoV9UmOROwS6', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0042184528', 'Michael Agustian', '$2y$10$fcN4Da7jGg3ErZ/.pLKvpeJrDPj7vTQUz3dsbuFqRsMytN5iSHon6', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0044795891', 'PUTRI SYAKILLAH ANASTASYAH', '$2y$10$aUgXz0MZXnEBZ9BVWAPux.Hp35N2j3QsWEUOkYsw3o7XPxaqY1XLy', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0044875032', 'Firda Atikah Putri', '$2y$10$GSUkU6bdBSoIdhgb8VGkgeopAKZSEdNYK5CVHX9l6Lta2iRmtNvpO', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0045351054', 'ADJIE ADITYA NUGRAHA', '$2y$10$fK0yAH/4ZVc.cGLJz4CDNewWP9zpF0KktNssEIKduPMwHETmGf9Dm', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0045683849', 'Adelia Dian Megareta', '$2y$10$gmCd3OwOc7sYLcB84KRmZeQdMk0//aXehjWc3TH8aHJCiydAcpjrC', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0046215859', 'PUTRA MARHAEN', '$2y$10$lHXY8/RkZSzFKlHV6jLHru/H2lqdHdgX.pW7CR7aqYKg.Gs/xI1i6', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0051192742', 'ANGGA ERLANGGA PUTRA', '$2y$10$RdqlXty57yRwtZjZwnUkTeB4pNXhEPTg37Us1.KNg44NYcPA8YL/i', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0052818825', 'Muhammad Rogib', '$2y$10$jvjve.8EI60ZyhEh6Hryh.gGM5J9wmCnUokpy4vO6cNJCHIMKrakO', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0058595046', 'Muhamad Rizky Andrean', '$2y$10$MKZyEVOsmsVszE73tDkgTenRGWN59Pis.12DhwDKbm9n/fNEnzMQe', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0062303354', 'Lydia Listiawan', '$2y$10$jJkKSOo/Jh53f6EjA5Fx0u7b.hHuRSYcesieqbZ1t4/C2JfVmUZrG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0063301626', 'Muhammad Adi Saputra', '$2y$10$bkJ.K4GeUoFAP7UJJEIUae8tFb71Ki48enEtoZxx7mJHPEICTPVxe', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0064797771', 'MUHAMMAD DIKI MIFTACHHUDIN', '$2y$10$1.b8oHg/bNRg8ActMoLSQeSDR06qm5lEnbYPevUcHB81tORpEsON.', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0065165563', 'Vazia Zulia vasha', '$2y$10$t/mnmyQQrSVEk65VkapmCuh8jCD0XpEJSh86HUClMwgoA09CUiahq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0066988913', 'Bunga Nur Aulia', '$2y$10$Ma4EiQNHwzkIrqrZnbVvwu55Q8EpCW3Si9fpRip8i31aGZNhVEWve', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0073601675', 'Rizky Agusti', '$2y$10$V2yw8qKlfMcnMoLJvpt1au9zqK/9MQkwvm55nDWqZ5mY7Mv2nbo7m', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0073767204', 'RHEVA DESFARINI', '$2y$10$MSjJMSY8k0GNrMv/Ad.0IOUVKDeeBYrMcjqcMAsUvlHAxm3ScMyW6', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0077490337', 'GADIS GITA LAUREN', '$2y$10$rB9NTvF4fDGyHlcAsOvOI.u2rr5WBWtkJ6jJ.ABTSafktIpyDa6J6', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0079552543', 'VICKY DWI VERNANDA', '$2y$10$QadT9D1AyJ.AqrvjM3I1CuCGUXiMtam2EYHg2tavJ4CyIHR7k5AH2', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0079655473', 'M.TRISTAN RIVALDY', '$2y$10$6dgst9Q3QVwpG5gsHA0Cpew2pU16rf3JiUp9HYbBHJoz4t5C8plve', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0079948350', 'NURJELANI', '$2y$10$etICx0cczEdZDRydomLXE.W7r9/.C1/LT6SWrEUuWLpL.bAruEGYy', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0082779275', 'Putri aurelia', '$2y$10$13AfpcEXC3MfUAgUa2as1u8XCXLR/ZcdUQrcHRILpqcDy0aU6boKa', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0084276194', 'ALDI SUPARDI', '$2y$10$OGvloFCB43gkezkXj1wzH.g8bu/PP/AQf5uiHtsb7OjC7jmd7vBjK', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0084617145', 'Washfi Faraz Kamilah', '$2y$10$DfnnHE1N5hxoTKoMB0L3RerGRbHtJ4fl8BCuik2BRXyhdB3XfMbaW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0084764574', 'Eva', '$2y$10$T7tCgWnTbNj7kP8NAD2KiuMCZ048eRA7faEtb96Jy4GplUi8kdF/2', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0086207880', 'DIMAS YOGA RAMADHAN', '$2y$10$G3tUmF5J7zTO2yl3vH78q.7FH3g9y9wbiqhbqlPrVlU8f8erIU0Cq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0086769753', 'SHEILA NATASYA', '$2y$10$hpkYQu0PgWEdFCbym1ZjR.o.fp6pYY0M/APaSSd7XV6.jrzj3ULau', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0087211088', 'AZKIYATU ZAHRA', '$2y$10$O5tVSpJDyPgBaVMc0kgL3uv1/Vpk4Rmo8TthfT8/EFZ.fJJuXqRXW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0087217408', 'Zavio Rizki Saputra', '$2y$10$rkKkH3ZayA5bGu4gBTYSz.qv.WM83nKuiBtxIxshvBY5O6WEsXHt.', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0087337628', 'KHAERUN NURI', '$2y$10$WzGbROD6KAqY.Kj7BezoxOTalqrdoMWJQZgakIctDOdnpI1dDB5mC', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0089969128', 'AHMAD SYAHRONI', '$2y$10$Dz4qMPskyYXSyX0wr6WNROYB6nkBYh8N6srlvlmUjPxDelRt6uhQa', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0091031828', 'MEIDY MAQFIRAH', '$2y$10$RsdUwR/lXg.9b6IffoSkduM8O08MDYvalK0YhLz3sbLREyHYPnl2K', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0092516158', 'Kholilurohman', '$2y$10$iZBGZ8yUJa1gWKM.zGc44.y79uWlQNnqPQz3KCYjleW0fBNXQHo9C', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0093590373', 'TAZKIYAH NURMALA', '$2y$10$wfBm5lHPNlJN4qj4ZIgSpOmlChu5rk3K8MtFaQQLE8O1bEGISMEaq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0093801678', 'Arif Rahman Tiar', '$2y$10$KgWPJkvhXidUoElGs0HVHeyMC0mTzHLXWT5m1EfkU/K5MOyWXN6Xu', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0094063500', 'SONGO ABABIL', '$2y$10$DA8rNIGFQWvUy3tPdwxwhep0gk60G2G.f454awVK75FyAGWAo90QO', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0095416290', 'FAHMI RIDHO', '$2y$10$8e.6TOt6xjOlwfYPhM8fgezP/wR2XPV8tTBQEl8QhRpr0M5Cevqtm', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 1, 'siswa'),
+('0095454453', 'MUHAMAD FIRMANSYAH', '$2y$10$gaLqC1i2yWSjaoEnfQoAouj/.MS.Pz3Q7v16qxWAjAoiszUw0I/em', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0096317085', 'RAISYA RAMADHANI', '$2y$10$DqRYtsmgT6vFhsZ3bMI.6u5Zk5NIhiTW8vsN/MGwx0JxUnRxVyes.', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0096325350', 'Muhammad Raihan', '$2y$10$x3FWvQbQz/BWMfZmBn/kg.0TqB1wUwCy1STwuTSwDboLKxkuF4EAq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0098026915', 'SYAHRUL AL HAJJ DZULFIKAR', '$2y$10$1UauzTwIwwE2M3zBwPsq6.S7P3QDdU4Fa2OPi4uLW1lJZjuy/TrMy', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0099268185', 'AHMAD FIRAS BAHIRA', '$2y$10$0.IHfSD/LLQYkfAci9t0Eeq.0.dHKNkz35tgeL8bq8kFNu48ZM3NK', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('0101839911', 'Sri Wahyuni', '$2y$10$8q6I4gX3KdvMJDLN/Xy3Ce1ziQ.pkNYKJmVsHE1fABoyzxBCYpqEG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0103361826', 'Noviyanti', '$2y$10$oAIM5eKj6u372otY/76pmexA4HH1sJHaE7ixqDd41RxTpo4DwviCy', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0104991736', 'MUHAMAD AUZAI', '$2y$10$A909OpZn8qVmy9rD5KyQrOt7eJfIIsbQb39sxKQ2QT8Ld0LCrpXie', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0105778035', 'SAIDA', '$2y$10$F3C4bdkpblPvLArbI9gIt.GxhNhZqnX4qwoMlz/6iPJ7YVtIJeJ6.', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0107037461', 'Alvian Yusuf Handoko', '$2y$10$mDjyzYyaaRiYBvo1G2ypHOQz/01uKcIjhub1yNd/HQ9M9B4XyQyr2', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('0128301889', 'MUHAMMAD DWI ANDRE ARAFAH', '$2y$10$wLhVUCy0rK4SAXt8As3JXOXxa0gzu6V6El9X/20.dVcgXmjM87Yhe', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 1, 'siswa'),
+('12345678', 'Muttakim Saefullah', '$2y$10$8ZZScX8w2UE/F6u8NfSp9eK/UGE2lh9MsRwNi0wQrFQOqeVkEZVUK', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('2021383151', 'Fina Wardawiyah', '$2y$10$0ksWxNM96uDILaFYB5pizO5RTNTXwX3IDu6rXo.fXkT6gTOCw5trO', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('2052804732', 'Ibra Wimarta', '$2y$10$LUNd.4FFuVR/wV93IcEawu.ZTJT/BZQQJ2/PjyRW3klI3xod5NBSa', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('2061010927', 'Sinta', '$2y$10$70TiVobwdYvkvjoTR0MvPukoXsWEGrzmh7kUjvjjXDTTCEvIj3Q5y', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('2065234615', 'Khairunnisa', '$2y$10$EOnKgsI88pyzh5ZaGGNWNOW5oLFxd1k58yea89eLx5r/JvK.Orfgq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('2078814025', 'Maulana Indra Prama', '$2y$10$DSa70CzMaujrIrawvEgc.egoYRN7sM85Dv0F14Cy1QVbKLxJIbdti', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('2082533938', 'Noval Adrian Wijaya', '$2y$10$qEsNBg0M57t8d/W9WJlh8erOzTInI8/rMsVp2SppdqMjCuj4iRxGW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('2098350667', 'Fitri', '$2y$10$UKUc1OZ/K8qffooYicXf3eEGUFvCYuTdiZbSM3vovcmprl949n1BW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('3016839237', 'Siti Inayah Haq', '$2y$10$/bW.PIxZ6i7.ZeV6eEOVD.fOSIlhvo0OYsOSlvQLdJkinDkJAxC6S', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('3044755103', 'Ahmad Khorib', '$2y$10$EzprManGmvv93XVean49HOKU4Nz6FN8V.WbeI160kfvsiOozM8y9.', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('3045646933', 'Usli Imam Safei', '$2y$10$EpmpVlSxBG7aALpMFfzc9eJmI4JTKbDpoMJuby10EEO.KkheoNaj2', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('3061461498', 'MUHAMMAD SAYYID FATUR ROHMAN', '$2y$10$L32H88xLRI0rAFN683Su0OUMOHs3TJpwk29BwmhO/xIydsPTQ5qnS', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('3063319075', 'Muhammad Maulana Ilyas', '$2y$10$A.fBtp/B0.v2VlVULRhiIOkx9luxDOJgiCWIJDHY9vIXX5wZvCYFq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('3068576912', 'Aida', '$2y$10$RTmugECn4IOUHNzvvFtPu.XVQ7A9qH4rIPhl9hmWsS9.LydUn8ED6', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('3072235768', 'Muhammad Taju Syarop Fauzi', '$2y$10$s8GzEB1/YtoNRYAxBGwz.uebsJ8W0cBY7/OaZfIzbXIlBG28vu0nS', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('3073203066', 'Muhammad Rynaldi', '$2y$10$3sCPfnLH9sEqPnDHDEwrGO7UftCXuo./HlixYrcPY8jODOPdQqag.', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('3080556625', 'HAPIZ YUSRI', '$2y$10$n3ia8USDpadwCgPNT6eMkOKVXO3YFM61C3r/xivq9hbs5INz4OsHq', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('3091558263', 'Muhammad Husni Makki Sonhaji', '$2y$10$ytYfcKvwcBxKnDX1kG/FnuUZRXJoFZ8wWB0SyPavHmbGfR7dDxWJ2', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('3107966544', 'Najwa Putri Awaliyah', '$2y$10$NsguXDN.NpKnR5D4PQAZFe5MJJe9f3q5WkSRM43gW3uGDABx7rBWe', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('3124368879', 'RIZKI FAUZI', '$2y$10$5f3i3pMRdV.aPWI.BAsCr.XqUleJJ4g6WTViWVL.v7V5ogWUSXQ7a', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('3128153661', 'MUHAMMAD SYAFIQ ZAKY ISKANDAR', '$2y$10$2qVFivxenryLwkSVqLYz9.TXLzCBGT.XYWXf9hL/.FzCWQyh4QHRy', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('3146882349', 'Laila Khanza Az Zahra', '$2y$10$SoCIJ9gqpoCc/62R59ZVP.FwObz9A/5lU3P1Mo.lB0wIi1hkZZaIS', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 1, 'siswa'),
+('3745065752', 'KARTONO', '$2y$10$HftMild/pxikyxo0XbHBIuOuZ1EbkXgok9TlDvfZxcUwX0quTnBia', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('3749766539', 'ZAINUDIN', '$2y$10$XJzOcy8mUPJJ9YIa0Th1l.RbYEVY9tvUvmBjNCLWMjXvaLcjml3uW', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('3762315024', 'Nurlaela', '$2y$10$6TWKlC419AHfwz1U9QPm/.vqjTaAceZnVN6yw.NBVXoGJm94aKYCm', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('3839354749', 'SYAIPUDIN', '$2y$10$NlpDAisz23DccJUshhsn7eyvdYHZTW3ONDt2gKVsKGUFql1.S84oO', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('3898374246', 'Apiyah', '$2y$10$HvNL3apZLq3hfuzsK9WJ5uodGMJPEKR5HjpYctgEOrK8r88v55i2C', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('3957922406', 'Dwi Bayu Pribadi', '$2y$10$ck1EoMFFGD6/wlcFBHn7F.f/GoYlBmgJWhvIJhteI6Mtl8vA.0fZS', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 2, 'siswa'),
+('3994681926', 'Khumaeratur Rodhiyah', '$2y$10$GX7FdSYDG.0E8CB72DsoJ.w1f27YGV1mRMndAtYeiTK0w6lXDcJ..', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('9779152739', 'Jamsuri', '$2y$10$rwfTgs3MmTBvxJazPvAgQ.Y4AIzxUFEIAPqjUDqZjsTK0KyLC0NMG', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('9804913006', 'Mukri', '$2y$10$001MyjX/dmXUYS8cMUElSeMqIkcf6jc/oEI7XUnYm1JkIMUkcAKiK', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa'),
+('9996776172', 'Wiji Sanuri', '$2y$10$B3vzKKZX/xDcAt8UzLOnJ./RDbpHGTvSACLbV2ura.wQ6dSE/dlHO', 'siswa@gmail.com', 'default.jpg', 1, '2025-09-10', 3, 'siswa');
 
 -- --------------------------------------------------------
 
@@ -2937,15 +2672,6 @@ CREATE TABLE `tbl_soal` (
   `tipe_soal` enum('pilihan','essay') NOT NULL DEFAULT 'pilihan'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `tbl_soal`
---
-
-INSERT INTO `tbl_soal` (`id_soal`, `id_ujian`, `pertanyaan`, `pilihan_a`, `pilihan_b`, `pilihan_c`, `pilihan_d`, `kunci_jawaban`, `tipe_soal`) VALUES
-(11, 16, 'aaa', 'aaa', 'aaa', 'aaa', 'aaa', 'A', 'pilihan'),
-(12, 16, 'aaa', 'aaa', 'aaa', 'aaa', 'aaa', 'A', 'pilihan'),
-(13, 16, 'aaa', 'aaa', 'aaa', 'aaa', 'aaa', 'A', 'pilihan');
-
 -- --------------------------------------------------------
 
 --
@@ -2965,13 +2691,6 @@ CREATE TABLE `tbl_ujian` (
   `bobot_pg` tinyint(3) DEFAULT 70,
   `bobot_essay` tinyint(3) DEFAULT 30
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tbl_ujian`
---
-
-INSERT INTO `tbl_ujian` (`id_ujian`, `nip_guru`, `nama_ujian`, `tanggal_mulai`, `tanggal_selesai`, `durasi`, `status`, `id_pertemuan`, `soal_source`, `bobot_pg`, `bobot_essay`) VALUES
-(16, '21101140', 'UTS', '2025-10-23', '2025-10-31', 30, 'aktif', 1, 'manual', 70, 30);
 
 -- --------------------------------------------------------
 
@@ -2993,14 +2712,6 @@ CREATE TABLE `tugas_siswa` (
   `diupdate_pada` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `tugas_siswa`
---
-
-INSERT INTO `tugas_siswa` (`id`, `siswa_id`, `id_pertemuan`, `file_path`, `original_filename`, `file_type`, `file_size`, `catatan`, `nilai`, `dikirim_pada`, `diupdate_pada`) VALUES
-(5, '123456789', 1, 'assets/tugas_uploads/7d71d572c6f0e74636ec4ba70261c941.jpeg', 'a-minimalist-logo-design-featuring-cipta_jAt9Jmy3QEuaw19ibe2qGg_st4LSp_bRmufrXTNLK6Hdg (JPEG)', 'image/jpeg', 39, '', '100.00', '2025-09-04 11:08:23', '2025-09-04 11:08:50'),
-(8, '12345678', 1, 'assets/tugas_uploads/06ad4a91a635bbc70d45a50d2c1bced7.PDF', 'TAGIHAN KEUANGAN (2) (PDF)', 'application/pdf', 159, NULL, NULL, '2025-11-09 15:36:19', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -3014,17 +2725,6 @@ CREATE TABLE `ujian_soal` (
   `bank_soal_id` int(11) DEFAULT NULL,
   `sumber` enum('bank_soal','tbl_soal') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `ujian_soal`
---
-
-INSERT INTO `ujian_soal` (`id`, `ujian_id`, `soal_id`, `bank_soal_id`, `sumber`) VALUES
-(40, 16, NULL, 24, 'bank_soal'),
-(41, 16, NULL, 15, 'bank_soal'),
-(42, 16, 11, NULL, 'tbl_soal'),
-(43, 16, 12, NULL, 'tbl_soal'),
-(44, 16, 13, NULL, 'tbl_soal');
 
 --
 -- Indexes for dumped tables
@@ -3234,37 +2934,37 @@ ALTER TABLE `ujian_soal`
 -- AUTO_INCREMENT for table `absensi_pertemuan`
 --
 ALTER TABLE `absensi_pertemuan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `bank_soal`
 --
 ALTER TABLE `bank_soal`
-  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `forum_diskusi`
 --
 ALTER TABLE `forum_diskusi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `guru_mapel`
 --
 ALTER TABLE `guru_mapel`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `jawaban_siswa`
 --
 ALTER TABLE `jawaban_siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `kuisioner`
@@ -3276,7 +2976,7 @@ ALTER TABLE `kuisioner`
 -- AUTO_INCREMENT for table `kuisioner_jawaban`
 --
 ALTER TABLE `kuisioner_jawaban`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2919;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2839;
 
 --
 -- AUTO_INCREMENT for table `kuisioner_pertanyaan`
@@ -3288,19 +2988,19 @@ ALTER TABLE `kuisioner_pertanyaan`
 -- AUTO_INCREMENT for table `kuisioner_status`
 --
 ALTER TABLE `kuisioner_status`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=146;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
 
 --
 -- AUTO_INCREMENT for table `mata_pelajaran`
 --
 ALTER TABLE `mata_pelajaran`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `materi`
 --
 ALTER TABLE `materi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `pengaturan_absensi`
@@ -3312,61 +3012,61 @@ ALTER TABLE `pengaturan_absensi`
 -- AUTO_INCREMENT for table `pertemuan`
 --
 ALTER TABLE `pertemuan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `quiz`
 --
 ALTER TABLE `quiz`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `quiz_questions`
 --
 ALTER TABLE `quiz_questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `quiz_siswa`
 --
 ALTER TABLE `quiz_siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `rps`
 --
 ALTER TABLE `rps`
-  MODIFY `id_rps` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_rps` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_jawaban_siswa`
 --
 ALTER TABLE `tbl_jawaban_siswa`
-  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_soal`
 --
 ALTER TABLE `tbl_soal`
-  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_ujian`
 --
 ALTER TABLE `tbl_ujian`
-  MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tugas_siswa`
 --
 ALTER TABLE `tugas_siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `ujian_soal`
 --
 ALTER TABLE `ujian_soal`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
