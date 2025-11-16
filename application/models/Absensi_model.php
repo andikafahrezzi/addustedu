@@ -89,10 +89,7 @@ class Absensi_model extends CI_Model {
         return 'tidak_hadir';
     }
 
-// Tambahkan method ini di Absensi_model
 
-// AMBIL SISWA YANG TERKAIT DENGAN PERTEMUAN
-// GANTI method get_siswa_by_pertemuan dengan ini:
 public function get_siswa_by_pertemuan($id_pertemuan) {
     // 1. Ambil data pertemuan untuk tahu kelasnya
     $pertemuan = $this->db->where('id', $id_pertemuan)->get('pertemuan')->row();
@@ -133,11 +130,10 @@ public function get_siswa_by_pertemuan($id_pertemuan) {
         }
     }
     
-    // 4. FALLBACK: Jika tidak ada relasi kelas, ambil semua siswa
-    // (Ini yang mungkin terjadi di sistem Anda)
+
     return $this->db->select('nis, nama')->get('siswa')->result_array();
 }
-// GANTI method hitung_absensi_pertemuan dengan yang BARU
+
 public function hitung_absensi_pertemuan($id_pertemuan) {
     // Validasi pertemuan exists
     $pertemuan = $this->db->where('id', $id_pertemuan)->get('pertemuan')->row();
@@ -187,7 +183,7 @@ public function hitung_absensi_pertemuan($id_pertemuan) {
     return true;
 }
 
-// Tambahkan method ini di class Absensi_model Anda
+
 
 // CEK BATAS WAKTU - PAKAI PENGATURAN YANG SUDAH ADA
 public function get_info_batas_waktu($id_pertemuan) {
@@ -400,6 +396,48 @@ public function get_statistik($id_pertemuan) {
             'current_version' => $this->generate_version_signature($id_pertemuan)
         ];
     }
+public function get_absensi_per_pertemuan($id_pertemuan)
+{
+    // Ambil semua siswa yang terdaftar di absensi_pertemuan
+    $this->db->select('a.siswa_id, a.status, s.nama');
+    $this->db->from('absensi_pertemuan a');
+    $this->db->join('siswa s', 's.nis = a.siswa_id');
+    $this->db->where('a.id_pertemuan', $id_pertemuan);
+    $list = $this->db->get()->result_array();
 
-    // ... method get_siswa_by_pertemuan(), get_statistik() tetap sama ...
+    $hasil = [];
+
+    foreach ($list as $row) {
+        // gunakan hitung_data_siswa PUNYA KAMU
+        $hitung = $this->hitung_data_siswa($id_pertemuan, $row['siswa_id']);
+
+        $hasil[] = [
+            'nis'            => $row['siswa_id'],
+            'nama'           => $row['nama'],
+            'status'         => $row['status'],
+            'total_komentar' => $hitung['total_komentar'],
+            'hari_berbeda'   => $hitung['hari_berbeda'],
+            'quiz_completed' => $hitung['quiz_completed']
+        ];
+    }
+
+    return $hasil;
+}
+
+
+    public function get_detail_pertemuan($id){
+        return $this->db->get_where('pertemuan', ['id' => $id])->row_array();
+    }
+    public function get_info_pertemuan($id_pertemuan)
+{
+    $this->db->select('mp.nama_mapel, k.nama_kelas');
+    $this->db->from('pertemuan p');
+    $this->db->join('kelas k', 'k.id = p.id_kelas');
+    $this->db->join('materi m', 'm.id = p.id_materi');
+    $this->db->join('mata_pelajaran mp', 'mp.id = m.id_mapel');
+    $this->db->where('p.id', $id_pertemuan);
+    return $this->db->get()->row_array();
+}
+
+
 }

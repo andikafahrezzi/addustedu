@@ -69,6 +69,9 @@
         <a href="<?= base_url('absensi/hitung/'.$id_pertemuan) ?>" class="btn btn-warning">
             🔄 Hitung Ulang Absensi
         </a>
+        <a href="<?= base_url('absensi/export_excel/' . $id_pertemuan) ?>" class="btn btn-success">
+            Export ke Excel
+        </a>
         <a href="<?= base_url('pertemuan/index') ?>" class="btn btn-secondary">
             ← Kembali
         </a>
