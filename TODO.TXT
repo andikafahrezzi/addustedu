@@ -17,6 +17,7 @@ PR
 - kedepannya jika ada form harus mengguna csrf
 - comment di slicing coba cari comment_replies
 - delete koneksi dan autofile di root dan folder admin (12/10/25)
+- hapus pertemuan tidak bisa jika quiz masih digunakan walaupu beda pertemuan (sama materi)
 
 
 next can be a problem
