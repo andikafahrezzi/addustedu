@@ -304,7 +304,7 @@ public function email_check($email)
     }
 }
     public function belajar($id_pertemuan = null) {
-        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);
+        $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model', 'Absensi_model']);
             if ($id_pertemuan === null) {
             show_404(); // atau redirect ke halaman aman
             }
@@ -319,9 +319,18 @@ public function email_check($email)
         if (!$pertemuan) {
         show_404(); // atau redirect('materi');
         }
+        $data['user'] = $this->db->get_where(
+            'siswa',
+            ['nis' => $this->session->userdata('nis')]
+        )->row_array();
+
+        if (!$data['user']) {
+            redirect('welcome/');
+        }
+        $nis_siswa = $data['user']['nis'];
         $id_materi = $pertemuan['id_materi'];
         $data['materi'] = $this->M_materi->get_materi_by_id($id_materi);
-
+        $data['status_absen_siswa'] = $this->Absensi_model->get_status_absen_siswa($id_pertemuan, $nis_siswa);
         $data['user'] = $this->db->get_where('siswa', ['nis' => $this->session->userdata('nis')])->row_array();
         $data['forum'] = $this->Forum_model->get_komentar_by_materi($id_pertemuan);
         $data['disqus'] = $this->disqus->get_html();

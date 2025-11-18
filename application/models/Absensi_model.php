@@ -438,6 +438,19 @@ public function get_absensi_per_pertemuan($id_pertemuan)
     $this->db->where('p.id', $id_pertemuan);
     return $this->db->get()->row_array();
 }
+public function get_status_absen_siswa($id_pertemuan, $nis)
+{
+    // Ambil semua pengaturan absensi
+    $pengaturan = $this->get_pengaturan();
+
+    // Hitung performa siswa di pertemuan (komentar, hari unik, quiz)
+    $data_siswa = $this->hitung_data_siswa($id_pertemuan, $nis);
+
+    // Tentukan status hadir/tidak hadir
+    $status = $this->tentukan_status($data_siswa, $pengaturan);
+
+    return $status; // 'hadir' atau 'tidak_hadir'
+}
 
 
 }

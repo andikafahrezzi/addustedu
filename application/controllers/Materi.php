@@ -40,7 +40,7 @@ class Materi extends CI_Controller
     //     $this->load->view('template/footer');
     // }
 public function belajar($id_pertemuan) {
-    $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model']);
+    $this->load->model(['M_materi', 'Forum_model', 'Quiz_model', 'Tugas_model', 'Absensi_model']);
 
     // Validasi 1: Parameter harus ada dan numeric
     if ($id_pertemuan === null || !is_numeric($id_pertemuan)) {
@@ -65,6 +65,9 @@ public function belajar($id_pertemuan) {
 
     $id_kelas_siswa = $data['user']['id_kelas'];
     $nis_siswa = $data['user']['nis'];
+    $data['status_absen_siswa'] = 
+    $this->Absensi_model->get_status_absen_siswa($id_pertemuan, $nis_siswa);
+
 
     // Validasi 3: Cek pertemuan exist dan milik kelas siswa
     $this->db->select('pertemuan.*, materi.deskripsi as deskripsi_materi, materi.id_kelas as materi_kelas');

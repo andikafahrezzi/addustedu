@@ -27,7 +27,19 @@
     <div class="learning-sidebar">
         <div class="resources-card">
             <h3><span class="lnr lnr-book"></span> Materi Pembelajaran</h3>
-            
+            <div class="resource-item">
+                <div class="resource-icon">
+                    <span class="lnr lnr lnr-flag"></span>
+                </div>
+                <div class="resource-content">
+                    <h4>Absensi</h4>
+                    <?php if ($status_absen_siswa == 'hadir'): ?>
+                        <button class="btn btn-secondary" disabled>Sudah Absen</button>
+                    <?php else: ?>
+                        <button class="btn btn-success" disabled>Belum Absen</button>
+                    <?php endif; ?>
+                </div>
+            </div>
             <!-- Module -->
             <div class="resource-item">
                 <div class="resource-icon">
@@ -141,35 +153,35 @@
                     <?php if ($tugas_saya): ?>
                         <!-- Pastikan tidak NULL -->
                        <div class="card mb-4">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-12">
-                <h6><?= $tugas_saya->original_filename ?></h6>
-                <small>Ukuran: <?= round($tugas_saya->file_size / 1024, 2) ?> KB</small><br>
-                <small>Dikirim: <?= date('d M Y H:i', strtotime($tugas_saya->dikirim_pada)) ?></small><br>
-                <small>Nilai: <?= number_format($tugas_saya->nilai) ?></small>
-            </div>
-        </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <h6><?= $tugas_saya->original_filename ?></h6>
+                                <small>Ukuran: <?= round($tugas_saya->file_size / 1024, 2) ?> KB</small><br>
+                                <small>Dikirim: <?= date('d M Y H:i', strtotime($tugas_saya->dikirim_pada)) ?></small><br>
+                                <small>Nilai: <?= number_format($tugas_saya->nilai) ?></small>
+                            </div>
+                        </div>
 
-        <!-- Tombol di bawah -->
-        <div class="row mt-3">
-            <div class="col-6.1">
-                <a href="<?= base_url($tugas_saya->file_path) ?>"
-                   class="btn btn-sm btn-success btn-block"
-                   download="<?= $tugas_saya->original_filename ?>.<?= pathinfo($tugas_saya->file_path, PATHINFO_EXTENSION) ?>">
-                   <i class="fa fa-download"></i> Unduh
-                </a>
-            </div>
-            <div class="col-6.1 text-right">
-                <a href="<?= base_url('siswa/delete_tugas/' . $tugas_saya->id) ?>"
-                   onclick="return confirm('Apakah kamu yakin ingin menghapus tugas ini?')"
-                   class="btn btn-sm btn-danger btn-block">
-                   <i class="fa fa-trash"></i> Hapus
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
+                        <!-- Tombol di bawah -->
+                        <div class="row mt-3">
+                            <div class="col-6.1">
+                                <a href="<?= base_url($tugas_saya->file_path) ?>"
+                                class="btn btn-sm btn-success btn-block"
+                                download="<?= $tugas_saya->original_filename ?>.<?= pathinfo($tugas_saya->file_path, PATHINFO_EXTENSION) ?>">
+                                <i class="fa fa-download"></i> Unduh
+                                </a>
+                            </div>
+                            <div class="col-6.1 text-right">
+                                <a href="<?= base_url('siswa/delete_tugas/' . $tugas_saya->id) ?>"
+                                onclick="return confirm('Apakah kamu yakin ingin menghapus tugas ini?')"
+                                class="btn btn-sm btn-danger btn-block">
+                                <i class="fa fa-trash"></i> Hapus
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                     <?php else: ?>
                         <p>Belum ada tugas terkirim</p>
