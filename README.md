@@ -1,77 +1,107 @@
-# 📘 AddustEdu – E-Learning (CodeIgniter 3)
-
-AddustEdu adalah sistem e-learning berbasis **PHP CodeIgniter 3** yang mendukung proses pembelajaran daring untuk Admin, Guru, dan Siswa.
-Fitur fokus: materi, pertemuan, forum, tugas, bank soal, quiz, dan ujian online.
+Berikut versi **lebih profesional**, singkat, formal, dan cocok untuk publik GitHub — tetap fokus pada fitur utama tanpa penjelasan berlebihan.
 
 ---
 
-## 🚀 Fitur Utama
+# 📘 AddustEdu – Web-Based E-Learning System (CodeIgniter 3)
 
-* **Materi & Pertemuan** – Guru mengunggah materi dan menjadwalkannya ke pertemuan.
-* **Forum Diskusi** – Forum otomatis per pertemuan, siswa dan guru dapat berkomentar.
-* **Tugas Siswa** – Siswa mengupload tugas, guru memberi nilai & catatan.
-* **Bank Soal** – Penyimpanan soal untuk dipakai pada ujian.
-* **Soal Pribadi** – Guru dapat menambah soal di luar bank soal.
-* **Ujian Online**
-
-  * Soal dari *bank soal* & *soal pribadi*
-  * Tersimpan di `ujian_soal`
-* **Quiz** – Status *start*, *lanjutkan*, *selesai* + shuffle soal.
-* **Multi-Role** – Admin, Guru, Siswa.
+**AddustEdu** is a structured and modular e-learning platform developed using **PHP CodeIgniter 3**.
+The system supports digital learning workflows for **Administrators**, **Teachers**, and **Students**, providing essential modules for instructional content, assessments, and interaction.
 
 ---
 
-## 🔐 Akses Role
+## 🚀 Key Features
 
-| Role  | URL                                        |
-| ----- | ----------------                           |
-| Admin | `http://localhost/addustedu/welcome/admin` |
-| Guru  | `http://localhost/addustedu/welcome/guru`  |
-| Siswa | `http://localhost/addustedu/welcome/`      |
+### Learning Management
+
+* Upload and manage learning materials.
+* Schedule materials into structured meetings.
+
+### Discussion Forum
+
+* Auto-generated discussion forums per meeting.
+* Supports student–teacher interaction through threaded comments.
+
+### Assignments
+
+* Students upload assignment files through the portal.
+* Teachers evaluate submissions and provide grades and feedback.
+
+### Question Bank & Private Questions
+
+* Centralized repository for reusable exam questions.
+* Teachers may add private/custom questions outside the bank.
+* All exam items are stored and linked through `ujian_soal`.
+
+### Online Examinations
+
+* Supports mixed question sources (bank + private).
+* Handles exam sessions, student answers, and evaluation logic.
+
+### Quiz Module
+
+* Quiz progression: *start*, *continue*, *finished*.
+* Supports randomized question order.
+
+### Multi-Role Access
+
+Dedicated interfaces for **Admin**, **Teacher**, and **Student**, each with role-specific workflows.
 
 ---
 
-## 🗂 Struktur Folder Penting
+## 🔐 Role Access URLs
 
-| Folder                      | Fungsi                               |
-| --------------------------- | ------------------------------------ |
-| `/application/controllers/` | Controller utama                     |
-| `/application/models/`      | Logic & query                        |
-| `/application/views/`       | Halaman untuk admin/guru/siswa       |
-| `/database/`                | File SQL                             |
-| `/assets/`                  | CSS, JS, vendor, template guru/siswa |
+| Role    | URL                                        |
+| ------- | ------------------------------------------ |
+| Admin   | `http://localhost/addustedu/welcome/admin` |
+| Teacher | `http://localhost/addustedu/welcome/guru`  |
+| Student | `http://localhost/addustedu/welcome/`      |
 
 ---
 
-## 🧩 Tabel Inti
+## 🗂 Project Structure
 
-| Tabel                                  | Deskripsi                    |
-| -------------------------------------- | ---------------------------- |
-| `siswa`, `guru`                        | Data pengguna                |
-| `mapel`, `guru_mapel`                  | Mata pelajaran & relasi guru |
-| `materi`                               | Materi pembelajaran          |
-| `pertemuan`                            | Jadwal pertemuan             |
-| `forum`, `forum_komentar`              | Diskusi                      |
-| `tugas`, `tugas_upload`, `tugas_nilai` | Tugas & penilaian            |
-| `bank_soal`, `tbl_soal`                | Bank soal & soal pribadi     |
-| `ujian`, `ujian_soal`, `ujian_jawaban` | Ujian                        |
-| `quiz`, `quiz_jawaban`                 | Quiz                         |
+| Directory                   | Description                             |
+| --------------------------- | --------------------------------------- |
+| `/application/controllers/` | Core application controllers            |
+| `/application/models/`      | Data access & business logic            |
+| `/application/views/`       | Interface templates for all user roles  |
+| `/database/`                | SQL schema & sample data                |
+| `/assets/`                  | Frontend resources (CSS, JS, templates) |
 
 ---
 
-## ⚙️ Instalasi Singkat
+## 🧩 Core Database Entities
 
-1. Clone repository
+| Table                                  | Purpose                       |
+| -------------------------------------- | ----------------------------- |
+| `siswa`, `guru`                        | User data                     |
+| `mapel`, `guru_mapel`                  | Subjects & teacher mapping    |
+| `materi`                               | Learning materials            |
+| `pertemuan`                            | Scheduled meetings            |
+| `forum`, `forum_komentar`              | Discussion forums             |
+| `tugas`, `tugas_upload`, `tugas_nilai` | Assignments & grading         |
+| `bank_soal`, `tbl_soal`                | Question bank & private items |
+| `ujian`, `ujian_soal`, `ujian_jawaban` | Examination system            |
+| `quiz`, `quiz_jawaban`                 | Quiz module                   |
+
+---
+
+## ⚙️ Installation Guide
+
+1. Clone the repository:
 
    ```bash
    git clone https://github.com/andikafahrezzi/addustedu
    ```
-2. Import database dari folder `/database/`
-3. Atur koneksi:
+
+2. Import the SQL file from the `/database/` directory.
+
+3. Configure the system:
 
    * `application/config/database.php`
    * `application/config/config.php`
-4. Jalankan:
+
+4. Launch the application:
 
    ```
    http://localhost/addustedu
@@ -79,11 +109,12 @@ Fitur fokus: materi, pertemuan, forum, tugas, bank soal, quiz, dan ujian online.
 
 ---
 
-## 🔑 Akun Testing (default)
+## 🔑 Default Test Accounts
 
-| Role  | Username                                  | Password |
-| ----- | ----------------------------------------- | -------- |
-| Admin | [admin@gmail.com](mailto:admin@gmail.com) | admin    |
-| Guru  | 12345678                                  | 12345678 |
-| Siswa | 12345678                                  | 2310203  |
+| Role    | Username                                  | Password |
+| ------- | ----------------------------------------- | -------- |
+| Admin   | [admin@gmail.com](mailto:admin@gmail.com) | admin    |
+| Teacher | 12345678                                  | 12345678 |
+| Student | 12345678                                  | 2310203  |
 
+---
