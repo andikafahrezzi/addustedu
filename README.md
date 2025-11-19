@@ -115,6 +115,6 @@ Dedicated interfaces for **Admin**, **Teacher**, and **Student**, each with role
 | ------- | ----------------------------------------- | -------- |
 | Admin   | [admin@gmail.com](mailto:admin@gmail.com) | admin    |
 | Teacher | 12345678                                  | 12345678 |
-| Student | 12345678                                  | 2310203  |
+| Student | 12345678                                  | 23102003 |
 
 ---
