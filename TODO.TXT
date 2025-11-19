@@ -24,7 +24,8 @@ next can be a problem
 - login and register siswa with nis, no longer use email
 - score yang dikirim langsung hasilnya melalui submit, tidak ada perhitungan diluar itu
 - sekarang pembagian materi(belajar) tidak melalui tabel materi secara langsung tapi di normalisasi menggunkan tabel pertemuan
-
+-  query untuk menentukan absen dari sisi siswa diambil melalui query langsung bukan dari database.
+    ini bisa menyebebabkan masalah di server
 
 
 ALTER TABLE bank_soal AUTO_INCREMENT = 1;
