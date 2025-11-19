@@ -452,5 +452,196 @@ public function get_status_absen_siswa($id_pertemuan, $nis)
     return $status; // 'hadir' atau 'tidak_hadir'
 }
 
+public function get_absensi_final_admin($id_pertemuan)
+{
+    return $this->db->select('a.*, s.nama')
+                    ->from('absensi_pertemuan a')
+                    ->join('siswa s', 's.nis = a.nis')
+                    ->where('a.id_pertemuan', $id_pertemuan)
+                    ->get()
+                    ->result();
+}
+
+public function admin_recalculate_absensi($id_pertemuan)
+{
+    $siswa = $this->get_siswa_pertemuan($id_pertemuan);
+    $pengaturan = $this->get_pengaturan();
+
+    foreach ($siswa as $row) {
+        $data_siswa = $this->hitung_data_siswa($id_pertemuan, $row->nis);
+        $status = $this->tentukan_status($data_siswa, $pengaturan);
+
+        $this->save_absensi_final($id_pertemuan, $row->nis, $status);
+    }
+}
+
+public function save_absensi_final($id_pertemuan, $nis, $status)
+{
+    $data = [
+        'id_pertemuan' => $id_pertemuan,
+        'siswa_id' => $nis,
+        'status' => $status,
+        'updated_at' => date('Y-m-d H:i:s')
+    ];
+
+    $exist = $this->db->where('id_pertemuan', $id_pertemuan)
+                      ->where('siswa_id', $nis)
+                      ->get('absensi_pertemuan')
+                      ->row();
+
+    if ($exist) {
+        $this->db->where('id', $exist->id)->update('absensi_pertemuan', $data);
+    } else {
+        $this->db->insert('absensi_pertemuan', $data);
+    }
+}
+
+public function admin_update_status($id_absen, $status)
+{
+    return $this->db->where('id', $id_absen)
+                    ->update('absensi_pertemuan', [
+                        'status' => $status,
+                        'manual_edit' => 1,
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ]);
+}
+public function get_detail_admin_pertemuan($id_pertemuan)
+{
+    return $this->db->select('
+            p.*,
+            k.nama_kelas,
+            m.deskripsi,
+            mp.nama_mapel,
+            g.nama_guru
+        ')
+        ->from('pertemuan p')
+        ->join('kelas k', 'k.id = p.id_kelas')
+        ->join('materi m', 'm.id = p.id_materi')
+        ->join('mata_pelajaran mp', 'mp.id = m.id_mapel')
+        ->join('guru g', 'g.nip = m.id_guru')
+        ->where('p.id', $id_pertemuan)
+        ->get()
+        ->row();
+}
+public function get_siswa_pertemuan($id_pertemuan)
+{
+    $p = $this->db->where('id', $id_pertemuan)->get('pertemuan')->row();
+
+    if (!$p) return [];
+
+    return $this->db->select('nis, nama')
+                    ->from('siswa')
+                    ->where('id_kelas', $p->id_kelas)
+                    ->order_by('nama', 'ASC')
+                    ->get()
+                    ->result();
+}
+public function get_absensi_final_admins($id_pertemuan)
+{
+    return $this->db->select('a.*, s.nama, s.nis')
+                    ->from('absensi_pertemuan a')
+                    ->join('siswa s', 's.nis = a.siswa_id')
+                    ->where('a.id_pertemuan', $id_pertemuan)
+                    ->order_by('s.nama', 'ASC')
+                    ->get()
+                    ->result();
+}
+public function update_status_absensi($id_absen, $status)
+{
+    return $this->db->where('id', $id_absen)
+        ->update('absensi_pertemuan', [
+            'status' => $status,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+}
+public function get_detail_pertemuans($id_pertemuan)
+{
+    return $this->db->select("p.*, g.nama_guru, m.nama_mapel, k.nama_kelas")
+                    ->from("pertemuan p")
+                    ->join("guru g", "p.id_guru = g.nis", "left")
+                    ->join("mata_pelajaran m", "p.id_mapel = m.id", "left")
+                    ->join("kelas k", "p.id_kelas = k.id", "left")
+                    ->where("p.id", $id_pertemuan)
+                    ->get()
+                    ->row();
+}
+
+public function get_absensi_pertemuans($id_pertemuan)
+{
+    return $this->db->select("ap.*, s.nama, s.nis")
+                    ->from("absensi_pertemuan ap")
+                    ->join("siswa s", "ap.id_siswa = s.id", "left")
+                    ->where("ap.id_pertemuan", $id_pertemuan)
+                    ->order_by("s.nama", "ASC")
+                    ->get()
+                    ->result();
+}
+
+public function get_pertemuan_semester($kelas_id, $mapel_id, $semester)
+{
+    return $this->db->select("id, pertemuan_ke, tanggal")
+                    ->from("pertemuan")
+                    ->where("id_kelas", $kelas_id)
+                    ->where("id_mapel", $mapel_id)
+                    ->where("semester", $semester)
+                    ->order_by("pertemuan_ke", "ASC")
+                    ->get()
+                    ->result();
+}
+
+public function get_absensi_by_pertemuan_ids($pertemuan_ids)
+{
+    return $this->db->select("ap.*, s.nama, s.nis")
+                    ->from("absensi_pertemuan ap")
+                    ->join("siswa s", "ap.siswa_id = s.nis", "left")
+                    ->where_in("ap.id_pertemuan", $pertemuan_ids)
+                    ->order_by("s.nama", "ASC")
+                    ->get()
+                    ->result();
+}
+public function get_pertemuan_range($kelas_id, $mapel_id, $start, $end)
+{
+    return $this->db->select("p.id, p.pertemuan_ke, p.tanggal, m.id_mapel, m.id_guru")
+                    ->from("pertemuan p")
+                    ->join("materi m", "m.id = p.id_materi", "left")
+                    ->where("p.id_kelas", $kelas_id)
+                    ->where("m.id_mapel", $mapel_id)
+                    ->where("p.pertemuan_ke >=", $start)
+                    ->where("p.pertemuan_ke <=", $end)
+                    ->order_by("p.pertemuan_ke", "ASC")
+                    ->get()
+                    ->result_array();
+}
+
+public function get_siswa_kelas($kelas_id)
+{
+    return $this->db->where("id_kelas", $kelas_id)
+                    ->get("siswa")
+                    ->result_array();
+}
+
+public function get_status_absensi($id_pertemuan, $nis)
+{
+    $row = $this->db->select("status")
+                    ->where("id_pertemuan", $id_pertemuan)
+                    ->where("siswa_id", $nis)
+                    ->get("absensi_pertemuan")
+                    ->row();
+
+    return $row ? $row->status : "tidak_hadir";
+}
+public function get_absensi_per_pertemuans($id_pertemuan)
+{
+    return $this->db->select("absensi_pertemuan.*, siswa.nama, siswa.nis")
+                    ->from("absensi_pertemuan")
+                    ->join("siswa", "siswa.nis = absensi_pertemuan.siswa_id")
+                    ->where("absensi_pertemuan.id_pertemuan", $id_pertemuan)
+                    ->order_by("siswa.nama", "ASC")
+                    ->get()
+                    ->result_array();
+}
+
+
+
 
 }

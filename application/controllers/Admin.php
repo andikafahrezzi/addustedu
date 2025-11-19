@@ -1,6 +1,11 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+
 class Admin extends CI_Controller
 {
     public function __construct()
@@ -2069,5 +2074,295 @@ public function hapus_mapel($id)
 
         redirect('admin/data_rps_admin');
     }
+public function absensi($id_pertemuan)
+{
+    $this->load->model('Absensi_model');
+
+    $data['pertemuan'] = $this->Absensi_model->get_detail_admin_pertemuan($id_pertemuan);
+    $data['absensi'] = $this->Absensi_model->get_absensi_final_admins($id_pertemuan);
+
+    $this->load->view('admin/partials/nava');
+    $this->load->view('admin/data_absensi', $data);
+    $this->load->view('admin/partials/foota');
+}
+
+public function hitung_ulang_absensi($id_pertemuan)
+{
+    $this->load->model('Absensi_model');
+
+    $this->Absensi_model->admin_recalculate_absensi($id_pertemuan);
+
+    $this->session->set_flashdata('success', 'Absensi berhasil dihitung ulang.');
+    redirect('admin/absensi/'.$id_pertemuan);
+}
+
+public function ubah_status_absensi()
+{
+    $this->load->model('Absensi_model');
+
+    $id_absen = $this->input->post('id');
+    $status = $this->input->post('status');
+
+    $this->Absensi_model->admin_update_status($id_absen, $status);
+
+    echo 'ok';
+}
+public function simpan_absensi_perubahan()
+{
+    $this->load->model('Absensi_model');
+
+    $id_pertemuan = $this->input->post('id_pertemuan');
+    $ids    = $this->input->post('absen_id');
+    $status = $this->input->post('status');
+
+    if (!$ids || !$status) {
+        $this->session->set_flashdata('error', 'Data tidak valid.');
+        redirect('admin/absensi/'.$id_pertemuan);
+        return;
+    }
+
+    foreach ($ids as $i => $absen_id) {
+        $this->Absensi_model->update_status_absensi($absen_id, $status[$i]);
+    }
+
+    $this->session->set_flashdata('success', 'Perubahan absensi berhasil disimpan.');
+    redirect('admin/absensi/'.$id_pertemuan);
+}
+
+public function export_pertemuan($id_pertemuan)
+{
+    $this->load->model("Absensi_model");
+
+    $pertemuan = $this->Absensi_model->get_detail_pertemuans($id_pertemuan);
+    $absensi = $this->Absensi_model->get_absensi_pertemuans($id_pertemuan);
+
+    require(APPPATH . 'third_party/PHPExcel.php');
+    $excel = new PHPExcel();
+
+    $excel->setActiveSheetIndex(0)->setTitle("Absensi Pertemuan");
+
+    // Header
+    $excel->getActiveSheet()->setCellValue("A1", "NIS");
+    $excel->getActiveSheet()->setCellValue("B1", "Nama");
+    $excel->getActiveSheet()->setCellValue("C1", "Status");
+
+    $row = 2;
+    foreach ($absensi as $a) {
+        $excel->getActiveSheet()->setCellValue("A".$row, $a->nis);
+        $excel->getActiveSheet()->setCellValue("B".$row, $a->nama);
+        $excel->getActiveSheet()->setCellValue("C".$row, strtoupper($a->status));
+        $row++;
+    }
+
+    header("Content-Type: application/vnd.ms-excel");
+    header("Content-Disposition: attachment; filename=absensi_pertemuan_".$id_pertemuan.".xls");
+    header("Cache-Control: max-age=0");
+
+    $writer = PHPExcel_IOFactory::createWriter($excel, "Excel5");
+    $writer->save("php://output");
+}
+
+public function export_rekap_absensi() {
+    $kelas_id  = $this->input->post("kelas_id");
+    $mapel_id  = $this->input->post("mapel_id");
+    $start     = $this->input->post("start");
+    $end       = $this->input->post("end");
+
+    $this->load->model("Absensi_model");
+
+    // Ambil nama kelas
+    $kelas = $this->db->where('id', $kelas_id)->get('kelas')->row();
+
+    // Ambil nama mapel
+    $mapel = $this->db->where('id', $mapel_id)->get('mata_pelajaran')->row();
+
+    $nama_kelas = $kelas ? $kelas->nama_kelas : "Kelas_".$kelas_id;
+    $nama_mapel = $mapel ? $mapel->nama_mapel : "Mapel_".$mapel_id;
+
+    // Format nama file
+    $nama_file = "Rekap_Absensi_" .
+                 str_replace(' ', '_', $nama_kelas) . "_" .
+                 str_replace(' ', '_', $nama_mapel) . "_P{$start}-P{$end}.xlsx";
+
+    // Ambil data pertemuan
+    $pertemuan_list = $this->Absensi_model->get_pertemuan_range($kelas_id, $mapel_id, $start, $end);
+    $siswa_list     = $this->Absensi_model->get_siswa_kelas($kelas_id);
+
+    // Spreadsheet
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+    $sheet->setTitle("Rekap Absensi");
+
+    // Format agar kolom A (NIS) adalah TEXT
+    $sheet->getStyle("A:A")->getNumberFormat()
+          ->setFormatCode(NumberFormat::FORMAT_TEXT);
+
+    // Header Kolom
+    $sheet->setCellValue("A1", "NIS");
+    $sheet->setCellValue("B1", "Nama");
+
+    $col = "C";
+    foreach ($pertemuan_list as $p) {
+        $sheet->setCellValue($col . "1", "P" . $p['pertemuan_ke']);
+        $col++;
+    }
+
+    // Isi data siswa
+    $row = 2;
+    foreach ($siswa_list as $s) {
+
+        // WAJIB: Explicit supaya Excel tidak mengubah format
+        $sheet->setCellValueExplicit(
+            "A{$row}",
+            (string) $s['nis'],     // cast dulu agar pure STRING
+            DataType::TYPE_STRING
+        );
+
+        $sheet->setCellValue("B".$row, $s['nama']);
+
+        // Status Hadir per Pertemuan
+        $col = "C";
+        foreach ($pertemuan_list as $p) {
+            $status = $this->Absensi_model->get_status_absensi($p['id'], $s['nis']);
+            $sheet->setCellValue($col.$row, $status == "hadir" ? "H" : "TH");
+            $col++;
+        }
+
+        $row++;
+    }
+
+    // Sheet 2: Detail Pertemuan
+    $spreadsheet->createSheet();
+    $spreadsheet->setActiveSheetIndex(1);
+    $sheet2 = $spreadsheet->getActiveSheet();
+    $sheet2->setTitle("Detail Pertemuan");
+
+    $sheet2->setCellValue("A1", "ID");
+    $sheet2->setCellValue("B1", "Pertemuan Ke");
+    $sheet2->setCellValue("C1", "Tanggal");
+
+    $r = 2;
+    foreach ($pertemuan_list as $p) {
+        $sheet2->setCellValue("A".$r, $p['id']);
+        $sheet2->setCellValue("B".$r, $p['pertemuan_ke']);
+        $sheet2->setCellValue("C".$r, $p['tanggal']);
+        $r++;
+    }
+
+    // Sheet 3: Legenda
+    $spreadsheet->createSheet();
+    $spreadsheet->setActiveSheetIndex(2);
+    $sheet3 = $spreadsheet->getActiveSheet();
+    $sheet3->setTitle("Legenda");
+
+    $sheet3->setCellValue("A1", "H = Hadir");
+    $sheet3->setCellValue("A2", "TH = Tidak Hadir");
+
+    // Kembali ke sheet utama
+    $spreadsheet->setActiveSheetIndex(0);
+
+    // Output ke browser
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment; filename="'.$nama_file.'"');
+    header('Cache-Control: max-age=0');
+
+    $writer = new Xlsx($spreadsheet);
+    $writer->save('php://output');
+    exit;
+}
+
+public function export_absensi_per_pertemuan($id_pertemuan)
+{
+    $this->load->model("Absensi_model");
+
+    // Ambil detail pertemuan
+    $pertemuan = $this->db->where('id', $id_pertemuan)->get('pertemuan')->row();
+
+    if (!$pertemuan) {
+        show_error("Pertemuan tidak ditemukan.");
+    }
+
+    // Ambil kelas
+    $kelas = $this->db->where('id', $pertemuan->id_kelas)
+                      ->get('kelas')->row();
+
+    // Ambil materi → karena mapel mengikuti materi
+    $materi = $this->db->where('id', $pertemuan->id_materi)
+                       ->get('materi')->row();
+
+    // Ambil mapel berdasarkan id_mapel di tabel materi
+    $mapel = $this->db->where('id', $materi->id_mapel)
+                      ->get('mata_pelajaran')->row();
+
+    // Nama kelas & mapel fallback
+    $nama_kelas = $kelas ? $kelas->nama_kelas : "Kelas_".$pertemuan->id_kelas;
+    $nama_mapel = $mapel ? $mapel->nama_mapel : "Mapel_".$materi->id_mapel;
+
+    // Ambil siswa + status absensi
+    $absensi = $this->Absensi_model->get_absensi_per_pertemuans($id_pertemuan);
+
+    // Nama file export
+    $nama_file = "Absensi_{$nama_kelas}_{$nama_mapel}_P{$pertemuan->pertemuan_ke}.xlsx";
+    $nama_file = str_replace(" ", "_", $nama_file);
+
+    // Spreadsheet
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+    $sheet->setTitle("Absensi Pertemuan");
+
+    // Kolom NIS sebagai TEXT
+    $sheet->getStyle("A:A")->getNumberFormat()
+          ->setFormatCode(NumberFormat::FORMAT_TEXT);
+
+    // Header
+    $sheet->setCellValue('A1', 'NIS');
+    $sheet->setCellValue('B1', 'Nama');
+    $sheet->setCellValue('C1', 'Status');
+
+    // Isi data
+    $row = 2;
+    foreach ($absensi as $a) {
+
+        // NIS aman sebagai string
+        $sheet->setCellValueExplicit(
+            "A{$row}",
+            (string) $a['nis'],
+            DataType::TYPE_STRING
+        );
+
+        $sheet->setCellValue("B{$row}", $a['nama']);
+        $sheet->setCellValue("C{$row}", $a['status'] == 'hadir' ? 'Hadir' : 'Tidak Hadir');
+
+        $row++;
+    }
+
+    // Download
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment; filename="'.$nama_file.'"');
+    header('Cache-Control: max-age=0');
+
+    $writer = new Xlsx($spreadsheet);
+    $writer->save('php://output');
+    exit;
+}
+
+
+
+public function rekap_absensi()
+{
+    $this->load->model("Absensi_model");
+
+    // ambil list kelas & mapel untuk dropdown
+    $data['kelas_list'] = $this->db->get("kelas")->result();
+    $data['mapel_list'] = $this->db->get("mata_pelajaran")->result();
+
+    $data['title'] = "Rekap Absensi Semester";
+
+    // load view
+
+    $this->load->view('admin/partials/nava');
+    $this->load->view('admin/data_rekap_absensi', $data);
+    $this->load->view('admin/partials/foota');
+}
 
 }

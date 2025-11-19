@@ -45,6 +45,9 @@
                                             <td><?= $p->deskripsi ?></td>
                                             <td><?= date('d-m-Y', strtotime($p->tanggal)) ?></td>
                                             <td class="text-center">
+                                                <a href="<?= base_url('admin/absensi/'.$p->id); ?>" class="btn btn-info btn-sm">
+                                                    Absensi
+                                                </a>
                                                 <a href="<?= base_url('admin/edit/'.$p->id) ?>" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
                                                 <a class="btn btn-sm btn-danger" onclick="confirmDeleteUjian('<?= $p->id ?>')"><i class="fas fa-trash"></i></a>
                                             </td>
