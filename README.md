@@ -1,44 +1,89 @@
-# AddustEdu 🎓 — Web E-Learning (CodeIgniter 3)
+# 📘 AddustEdu – E-Learning (CodeIgniter 3)
 
-**AddustEdu** adalah Learning Management System (LMS) berbasis **PHP CodeIgniter 3** yang dibuat untuk mendukung proses belajar-mengajar secara daring — cocok untuk PKBM, sekolah, dan lembaga kursus. README ini menekankan fitur nyata yang tersedia di repository, cara menjalankan secara lokal, dan catatan penting konfigurasi.
-
-> Catatan: isi README ini berdasarkan isi repository publik `andikafahrezzi/addustedu`. Untuk detail file referensi, lihat file dan folder di root repo. :contentReference[oaicite:1]{index=1}
-
----
-
-## 🎯 Fitur (yang tersedia di repo)
-- Multi-role: **Admin**, **Guru**, **Siswa** (login & pendaftaran). :contentReference[oaicite:2]{index=2}  
-- **Materi**: upload materi per kelas/mapel (pdf, video, dokumen). :contentReference[oaicite:3]{index=3}  
-- **Pertemuan**: penjadwalan materi per pertemuan (tanggal, pertemuan ke-n). :contentReference[oaicite:4]{index=4}  
-- **Forum Diskusi**: forum per materi; siswa dapat berkomentar dan melihat penulis komentar. :contentReference[oaicite:5]{index=5}  
-- **Tugas Siswa**: guru memberi tugas, siswa upload, guru melihat pengumpulan & memberi nilai/catatan. :contentReference[oaicite:6]{index=6}  
-- **Bank Soal**: penyimpanan soal untuk digunakan kembali pada ujian. (Tabel `bank_soal` / struktur terkait ada di repo). :contentReference[oaicite:7]{index=7}  
-- **Ujian Online**: pembuatan ujian oleh guru dengan soal yang diambil dari bank soal atau soal pribadi (`ujian`, `ujian_soal`, `tbl_soal`). :contentReference[oaicite:8]{index=8}  
-- **Quiz**: mekanisme quiz dengan status (start / lanjutkan / selesai) dan fitur shuffle soal (tersedia di kode). :contentReference[oaicite:9]{index=9}
+AddustEdu adalah sistem e-learning berbasis **PHP CodeIgniter 3** yang mendukung proses pembelajaran daring untuk Admin, Guru, dan Siswa.
+Fitur fokus: materi, pertemuan, forum, tugas, bank soal, quiz, dan ujian online.
 
 ---
 
-## 📁 Struktur penting (root repo)
-- `application/` — kode CodeIgniter (controllers, models, views). :contentReference[oaicite:10]{index=10}  
-- `database/` — file database / schema (import DB untuk menjalankan). :contentReference[oaicite:11]{index=11}  
-- `assets/` — gambar, css, js, vendor (tema & library). :contentReference[oaicite:12]{index=12}  
-- `README.md`, `TODO.TXT` — dokumentasi & daftar tugas. :contentReference[oaicite:13]{index=13}
+## 🚀 Fitur Utama
+
+* **Materi & Pertemuan** – Guru mengunggah materi dan menjadwalkannya ke pertemuan.
+* **Forum Diskusi** – Forum otomatis per pertemuan, siswa dan guru dapat berkomentar.
+* **Tugas Siswa** – Siswa mengupload tugas, guru memberi nilai & catatan.
+* **Bank Soal** – Penyimpanan soal untuk dipakai pada ujian.
+* **Soal Pribadi** – Guru dapat menambah soal di luar bank soal.
+* **Ujian Online**
+
+  * Soal dari *bank soal* & *soal pribadi*
+  * Tersimpan di `ujian_soal`
+* **Quiz** – Status *start*, *lanjutkan*, *selesai* + shuffle soal.
+* **Multi-Role** – Admin, Guru, Siswa.
 
 ---
 
-## Prasyarat
-- PHP 7.x / 8.x  
-- Web server (XAMPP, Laragon, MAMP)  
-- MySQL / MariaDB  
-- Composer (opsional, bila menggunakan vendor)  
-- Browser modern  
-- Pastikan `php.ini` diatur `upload_max_filesize` & `post_max_size` sesuai kebutuhan (upload materi/tugas). :contentReference[oaicite:14]{index=14}
+## 🔐 Akses Role
+
+| Role  | URL                                        |
+| ----- | ----------------                           |
+| Admin | `http://localhost/addustedu/welcome/admin` |
+| Guru  | `http://localhost/addustedu/welcome/guru`  |
+| Siswa | `http://localhost/addustedu/welcome/`      |
 
 ---
 
-## Instalasi (langkah teruji untuk lingkungan lokal)
+## 🗂 Struktur Folder Penting
 
-1. Clone repo:
+| Folder                      | Fungsi                               |
+| --------------------------- | ------------------------------------ |
+| `/application/controllers/` | Controller utama                     |
+| `/application/models/`      | Logic & query                        |
+| `/application/views/`       | Halaman untuk admin/guru/siswa       |
+| `/database/`                | File SQL                             |
+| `/assets/`                  | CSS, JS, vendor, template guru/siswa |
+
+---
+
+## 🧩 Tabel Inti
+
+| Tabel                                  | Deskripsi                    |
+| -------------------------------------- | ---------------------------- |
+| `siswa`, `guru`                        | Data pengguna                |
+| `mapel`, `guru_mapel`                  | Mata pelajaran & relasi guru |
+| `materi`                               | Materi pembelajaran          |
+| `pertemuan`                            | Jadwal pertemuan             |
+| `forum`, `forum_komentar`              | Diskusi                      |
+| `tugas`, `tugas_upload`, `tugas_nilai` | Tugas & penilaian            |
+| `bank_soal`, `tbl_soal`                | Bank soal & soal pribadi     |
+| `ujian`, `ujian_soal`, `ujian_jawaban` | Ujian                        |
+| `quiz`, `quiz_jawaban`                 | Quiz                         |
+
+---
+
+## ⚙️ Instalasi Singkat
+
+1. Clone repository
+
    ```bash
-   git clone https://github.com/andikafahrezzi/addustedu.git
-   cd addustedu
+   git clone https://github.com/andikafahrezzi/addustedu
+   ```
+2. Import database dari folder `/database/`
+3. Atur koneksi:
+
+   * `application/config/database.php`
+   * `application/config/config.php`
+4. Jalankan:
+
+   ```
+   http://localhost/addustedu
+   ```
+
+---
+
+## 🔑 Akun Testing (default)
+
+| Role  | Username                                  | Password |
+| ----- | ----------------------------------------- | -------- |
+| Admin | [admin@gmail.com](mailto:admin@gmail.com) | admin    |
+| Guru  | 12345678                                  | 12345678 |
+| Siswa | 12345678                                  | 2310203  |
+
