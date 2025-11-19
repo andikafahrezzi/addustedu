@@ -384,6 +384,11 @@ public function get_quizzes_by_guru($nip) {
 
     return $this->db->get()->result();
 }
+public function count_quiz_in_pertemuan($id_pertemuan)
+{
+    return $this->db->where('id_pertemuan', $id_pertemuan)
+                    ->count_all_results('quiz');
+}
 
 
 

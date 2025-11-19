@@ -935,16 +935,17 @@ public function delete_quiz($id)
 
     // ---------------- Cek jumlah jawaban siswa (lebih efisien) ----------------
     $this->db->where('quiz_siswa_id', $id);
-    $jumlah_jawaban = $this->db->count_all_results('jawaban_siswa');
+    $jumlah_quiz = $this->Quiz_model->count_quiz_in_pertemuan($id_pertemuan);
 
-    if ($jumlah_jawaban > 0) {
-        $this->session->set_flashdata(
-            'error',
-            "Quiz tidak bisa dihapus. Saat ini sudah ada $jumlah_jawaban siswa yang menjawab."
-        );
-        redirect('guru/data_quiz');
-        return;
-    }
+if ($jumlah_quiz > 0) {
+    $this->session->set_flashdata(
+        'error',
+        "Tidak dapat menghapus pertemuan. Masih terdapat $jumlah_quiz quiz terkait pertemuan ini."
+    );
+    redirect('guru/data_pertemuan');
+    return;
+}
+
 
     // ---------------- Hapus quiz jika aman ----------------
     $this->Quiz_model->delete_quiz($id);
