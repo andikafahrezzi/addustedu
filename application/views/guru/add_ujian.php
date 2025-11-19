@@ -1,3 +1,10 @@
+<?php 
+function limit_text($text, $limit = 10) {
+    return (strlen($text) > $limit) 
+        ? substr($text, 0, $limit) . '...' 
+        : $text;
+}
+?>
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-md-6">
@@ -25,7 +32,12 @@
                             <select name="id_pertemuan" id="materi_id" class="form-control">
                                 <option value="">-- Pilih Mata Pelajaran --</option>
                                 <?php foreach ($materi_list as $materi): ?>
-                                    <option value="<?= $materi->id_pertemuan ?>">[<?= $materi->nama_mapel ?>] - <?= $materi->nama_kelas ?> | <?= $materi->deskripsi ?></option>
+                                     <option value="<?= $materi->id_pertemuan ?>">
+                                        [<?= $materi->nama_mapel ?>] 
+                                        Kelas <?= $materi->tingkat . $materi->nama_kelas ?> 
+                                        | Ptm <?= $materi->pertemuan_ke ?> 
+                                        | Materi: <?= limit_text($materi->deskripsi, 10) ?>
+                                    </option>   
                                 <?php endforeach; ?>
                             </select>
                         </div>

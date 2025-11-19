@@ -1,7 +1,6 @@
 <div class="container">
     <h2>Tambah Soal untuk Ujian</h2>
     <form method="post" action="<?= site_url('guru/simpan_soal') ?>">
-    <?php echo $this->security->get_csrf_token_name(); ?>
                             <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" 
                         value="<?= $this->security->get_csrf_hash(); ?>" />
         <input type="hidden" name="id_ujian" value="<?= $id_ujian ?>">

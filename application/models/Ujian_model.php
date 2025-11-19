@@ -19,23 +19,27 @@ class Ujian_model extends CI_Model {
         $this->db->where('materi.id_guru', $nip);  // Menambahkan filter berdasarkan nip guru
         return $this->db->get()->result_array();  // Mengambil hasil sebagai array
     }
-    public function get_ujian_by_gurus($nip)
-    {
-        $this->db->select('
-            tbl_ujian.*, 
-            mata_pelajaran.nama_mapel,
-            kelas.nama_kelas,
-            kelas.tingkat,
-            pertemuan.pertemuan_ke
-        ');
-        $this->db->from('tbl_ujian');
-        $this->db->join('pertemuan', 'pertemuan.id = tbl_ujian.id_pertemuan');
-        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
-        $this->db->join('kelas', 'kelas.id = materi.id_kelas');
-        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
-        $this->db->where('materi.id_guru', $nip);
-        return $this->db->get()->result_array();
-    }
+public function get_ujian_by_gurus($nip)
+{
+    $this->db->select('
+        tbl_ujian.*, 
+        mata_pelajaran.nama_mapel,
+        kelas.nama_kelas,
+        kelas.tingkat,
+        pertemuan.pertemuan_ke
+    ');
+    $this->db->from('tbl_ujian');
+    $this->db->join('pertemuan', 'pertemuan.id = tbl_ujian.id_pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('kelas', 'kelas.id = materi.id_kelas');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+
+    // ✔ FIX UTAMA — gunakan pertemuan.id_guru, bukan materi.id_guru
+    $this->db->where('pertemuan.id_guru', $nip);
+
+    return $this->db->get()->result_array();
+}
+
 
     public function get_soal($id_ujian)
     {
@@ -105,18 +109,30 @@ public function hapus_ujian($id_ujian)
 
 
 
-    public function get_materi_options($nip) {
-        $this->db->select('pertemuan.id AS id_pertemuan, materi.deskripsi, kelas.nama_kelas, kelas.tingkat, mata_pelajaran.nama_mapel, pertemuan.pertemuan_ke');
-        $this->db->from('pertemuan');
-        $this->db->join('materi', 'materi.id = pertemuan.id_materi');
-        $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
-        $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
-        $this->db->where('materi.id_guru', $nip);
-        $this->db->order_by('kelas.tingkat', 'ASC');
-        $this->db->order_by('kelas.nama_kelas', 'ASC');
-        $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
-        return $this->db->get()->result();
-    }
+public function get_materi_options($nip) {
+    $this->db->select('
+        pertemuan.id AS id_pertemuan,
+        materi.deskripsi,
+        kelas.nama_kelas,
+        kelas.tingkat,
+        mata_pelajaran.nama_mapel,
+        pertemuan.pertemuan_ke
+    ');
+    $this->db->from('pertemuan');
+    $this->db->join('materi', 'materi.id = pertemuan.id_materi');
+    $this->db->join('kelas', 'kelas.id = pertemuan.id_kelas');
+    $this->db->join('mata_pelajaran', 'mata_pelajaran.id = materi.id_mapel');
+
+    // ✔ Ambil pertemuan berdasarkan guru yang membuat pertemuan
+    $this->db->where('pertemuan.id_guru', $nip);
+
+    // ✔ Urutkan rapi, tidak mempengaruhi fleksibilitas PKBM
+    $this->db->order_by('kelas.tingkat', 'ASC');
+    $this->db->order_by('kelas.nama_kelas', 'ASC');
+    $this->db->order_by('pertemuan.pertemuan_ke', 'ASC');
+
+    return $this->db->get()->result();
+}
 
 public function get_materi_optionss($nip)
 {
