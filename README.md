@@ -1,89 +1,44 @@
-<h1 align="center">Selamat datang di repository addustedu! 👋🏻</h1>
+# AddustEdu 🎓 — Web E-Learning (CodeIgniter 3)
 
-![addustedu-preview](https://user-images.githubusercontent.com/46257169/173141000-0a2346bf-adbc-41cb-9699-e7ffff1cba8e.png)
+**AddustEdu** adalah Learning Management System (LMS) berbasis **PHP CodeIgniter 3** yang dibuat untuk mendukung proses belajar-mengajar secara daring — cocok untuk PKBM, sekolah, dan lembaga kursus. README ini menekankan fitur nyata yang tersedia di repository, cara menjalankan secara lokal, dan catatan penting konfigurasi.
 
-<p></p>
+> Catatan: isi README ini berdasarkan isi repository publik `andikafahrezzi/addustedu`. Untuk detail file referensi, lihat file dan folder di root repo. :contentReference[oaicite:1]{index=1}
 
-<h4 align="center">Website e-learning untuk membantu belajar dimana saja dan kapan saja yang dibuat dengan <a href="https://codeigniter.com/" target="_blank">Codeigniter</a>.
-</h4>
+---
 
-<p></p>
+## 🎯 Fitur (yang tersedia di repo)
+- Multi-role: **Admin**, **Guru**, **Siswa** (login & pendaftaran). :contentReference[oaicite:2]{index=2}  
+- **Materi**: upload materi per kelas/mapel (pdf, video, dokumen). :contentReference[oaicite:3]{index=3}  
+- **Pertemuan**: penjadwalan materi per pertemuan (tanggal, pertemuan ke-n). :contentReference[oaicite:4]{index=4}  
+- **Forum Diskusi**: forum per materi; siswa dapat berkomentar dan melihat penulis komentar. :contentReference[oaicite:5]{index=5}  
+- **Tugas Siswa**: guru memberi tugas, siswa upload, guru melihat pengumpulan & memberi nilai/catatan. :contentReference[oaicite:6]{index=6}  
+- **Bank Soal**: penyimpanan soal untuk digunakan kembali pada ujian. (Tabel `bank_soal` / struktur terkait ada di repo). :contentReference[oaicite:7]{index=7}  
+- **Ujian Online**: pembuatan ujian oleh guru dengan soal yang diambil dari bank soal atau soal pribadi (`ujian`, `ujian_soal`, `tbl_soal`). :contentReference[oaicite:8]{index=8}  
+- **Quiz**: mekanisme quiz dengan status (start / lanjutkan / selesai) dan fitur shuffle soal (tersedia di kode). :contentReference[oaicite:9]{index=9}
 
+---
 
+## 📁 Struktur penting (root repo)
+- `application/` — kode CodeIgniter (controllers, models, views). :contentReference[oaicite:10]{index=10}  
+- `database/` — file database / schema (import DB untuk menjalankan). :contentReference[oaicite:11]{index=11}  
+- `assets/` — gambar, css, js, vendor (tema & library). :contentReference[oaicite:12]{index=12}  
+- `README.md`, `TODO.TXT` — dokumentasi & daftar tugas. :contentReference[oaicite:13]{index=13}
 
-<p align="center">
-  <a href="#tentang">Tentang Project</a> •
-  <a href="#fitur">Fitur</a> •
-  <a href="#download">Download & Install</a> •
-  <a href="#akun">Akun Default</a> •
-  <a href="#dukungan">Dukungan</a> •
-  <a href="#lisensi">Lisensi</a>
-</p>
+---
 
-<p></p>
+## Prasyarat
+- PHP 7.x / 8.x  
+- Web server (XAMPP, Laragon, MAMP)  
+- MySQL / MariaDB  
+- Composer (opsional, bila menggunakan vendor)  
+- Browser modern  
+- Pastikan `php.ini` diatur `upload_max_filesize` & `post_max_size` sesuai kebutuhan (upload materi/tugas). :contentReference[oaicite:14]{index=14}
 
-<h2 id="tentang">👨🏻‍🏫 Tentang addustedu</h2>
+---
 
-Website edukasi yang dibuat dalam rangka mengatasi solusi pembelajaran kala pandemi, addustedu dibuat agar para siswa dan guru dapat terus belajar dan mengajar dimana saja dan kapan saja.
+## Instalasi (langkah teruji untuk lingkungan lokal)
 
-<p></p>
-
-<h2 id="fitur">✨ Fitur Tersedia</h2>
-
-- Autentikasi
-  - Login siswa, guru dan admin
-  - Daftar sebagai siswa dan guru
-- Data Management
-  - Pengguna [akses video pembelajaran dan memberi comment juga reaksi]
-  - Guru [upload materi berdasarkan kelas dan mata pelajaran]
-  - Admin [mengatur data siswa, guru sekaligus materi]
-- Diskusi dan Reaksi Dengan Integrasi Disqus
-- Ujian Online [segera hadir]
-
-<p></p>
-
-<h2 id="demo">🏠 Halaman Demo</h2>
-
-Halaman demo untuk sementara tidak ada dikarenakan layanan hosting yang tidak tersedia untuk deploy aplikasi ini, kalian dapat mendownload aplikasi ini lalu menjalankan secara local di komputer anda.
-
-Update: anda dapat mengakses di http://programmer.smkn1ciamis.id/addustedu/ namun tolong berikan issues jika website tersebut tidak berjalan
-
-<p></p>
-
-<h2 id="akun">🔑 Daftar Akun Tersedia</h2>
-
-Berikut adalah daftar akun untuk keperluan testing saat anda mencoba aplikasi pertama kali, namun anda juga bisa membuat akun dengan daftar di halaman pendaftaran
-
-| Role  | Email                  | Password | URL                                      |
-| ----- | ---------------------- | -------- | ---------------------------------------- |
-| Admin | admin@gmail.com        | admin    | http://localhost/addustedu/welcome/admin |
-| Siswa | 123456                 | 123456   | http://localhost/addustedu/welcome       |
-| Guru  | 21010240               | 123456   | http://localhost/addustedu/welcome/guru  |
-
-<p></p>
-
-<h2 id="syarat">💾 Prasyarat yang Diperlukan</h2>
-
-Berikut adalah daftar layanan dan aplikasi yang wajib dan diperlukan selama anda menjalankan aplikasi addustedu jika anda belum menginstall nya maka disarankan untuk menginstall nya terlebih dahulu
-
-- PHP 7, 8 & Web Server [XAMPP, LAMPP, MAMP]
-- Web Browser [Chrome, Firefox, Safari & Opera]
-- Internet [Karena menggunakan banyak CDN]
-- Setting lanjutan PHP [max_upload & post_max di php.ini]
-
-<p></p>
-
-<p></p>
-
-<h2 id="dukungan">💌 Dukungan</h2>
-
-Kalian bisa mendukung saya di platform trakteer! Dukungan kalian akan sangat membantu untuk saya, namun dengan anda star project ini juga sudah sangat membantu lho!
-
-<p></p>
-
-<a href="paypal.me/AndikaFahrezi" target="_blank"><img id="wse-buttons-preview" src="https://cdn.trakteer.id/images/embed/trbtn-red-5.png" height="40" style="border:0px;height:40px;" alt="Trakteer Saya"></a>
-
-<p></p>
-
-image for backup schemas
-![alt text](image.png)
+1. Clone repo:
+   ```bash
+   git clone https://github.com/andikafahrezzi/addustedu.git
+   cd addustedu
