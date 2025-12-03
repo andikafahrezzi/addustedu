@@ -1,4 +1,3 @@
-Berikut versi **lebih profesional**, singkat, formal, dan cocok untuk publik GitHub — tetap fokus pada fitur utama tanpa penjelasan berlebihan.
 
 ---
 
