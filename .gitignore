@@ -8,6 +8,7 @@ vendor/
 application/cache/*
 !application/cache/index.html
 
+database/backup-db(new)/*
 assets/materi_modul/*
 assets/profile_picture/*
 assets/rps_uploads/*
