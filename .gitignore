@@ -9,6 +9,7 @@ application/cache/*
 !application/cache/index.html
 
 database/backup-db(new)/*
+database/backup-est/*
 assets/materi_modul/*
 assets/profile_picture/*
 assets/rps_uploads/*
